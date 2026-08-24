@@ -623,7 +623,7 @@ FOR EACH ROW EXECUTE FUNCTION notify_favoriters();
 -- ============================================================
 -- ============================================================
 -- SECURITY HARDENING — run in MARKETPLACE Supabase SQL Editor
--- Project: kqsqtasykdtpdrkqyaxp
+-- Project: spupfdclswjlpwiebwlq
 -- Safe to re-run.
 -- ============================================================
 
@@ -1164,7 +1164,7 @@ CREATE TRIGGER trg_enforce_listing_cap
 -- ============================================================
 -- ============================================================
 -- Seller PayFast subscriptions — run in the MARKETPLACE Supabase SQL Editor
--- Project: kqsqtasykdtpdrkqyaxp
+-- Project: spupfdclswjlpwiebwlq
 -- ============================================================
 
 -- Payment records (created when seller clicks Pay, completed by ITN webhook)

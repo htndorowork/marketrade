@@ -26,7 +26,13 @@
     .thread-preview { font-size: 12px; color: #888; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; margin-left: 6px; }
     .chat-panel { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; display: flex; flex-direction: column; height: 100%; min-height: 0; }
-    .chat-header { padding: 14px 18px; border-bottom: 2px solid #f5f5f5; font-weight: 800; font-size: 14px; display: flex; align-items: center; }
+    .chat-header { padding: 14px 18px; border-bottom: 2px solid #f5f5f5; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .chat-header #chat-header-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-header #chat-header-actions { flex-shrink: 0; }
+    @media (max-width: 420px) {
+      .chat-header #chat-header-text { flex-basis: 100%; white-space: normal; }
+      .chat-header #chat-header-actions { font-size: 11px; }
+    }
     .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; }
     .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; }
     .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
@@ -50,7 +56,7 @@
   <div class="msg-wrap" id="msg-wrap">
     <div class="thread-list" id="thread-list"><p class="loading-msg">Loading conversations... ⏳</p></div>
     <div class="chat-panel" id="chat-panel">
-      <div class="chat-header"><button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button><span id="chat-header-text" style="flex:1">Select a conversation</span><div id="chat-header-actions" style="display:none;gap:6px"><button class="btn-sm btn-toggle" id="mute-btn" onclick="toggleMute()">🔇 Mute</button><button class="btn-sm btn-delete" id="block-btn" onclick="toggleBlock()">🚫 Block</button></div>
+      <div class="chat-header"><button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button><span id="chat-header-text" style="flex:1">Select a conversation</span><div id="chat-header-actions" style="display:none;gap:6px"><button class="btn-sm btn-toggle" id="mute-btn" onclick="toggleMute()">🔇 Mute</button><button class="btn-sm btn-delete" id="block-btn" onclick="toggleBlock()">🚫 Block</button></div></div>
       <div class="chat-messages" id="chat-messages"><p class="loading-msg" style="margin:auto">Pick a conversation on the left, or message a seller from a listing 💬</p></div>
       <div class="chat-input-row" id="chat-input-row" style="display:none">
         <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()"/>

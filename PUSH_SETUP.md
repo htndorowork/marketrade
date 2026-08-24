@@ -5,11 +5,11 @@ is already built and live in the app. Three things only you can do, because
 they involve secrets and infrastructure outside this codebase:
 
 ## 1. Run the SQL
-In Supabase SQL Editor for `kqsqtasykdtpdrkqyaxp`, run:
+In Supabase SQL Editor for `spupfdclswjlpwiebwlq`, run:
 - `push_notifications_migration.sql` (requires `security_hardening.sql` already applied)
 
 Before running it, open the file and replace:
-- `YOUR_PROJECT` → your actual project ref (`kqsqtasykdtpdrkqyaxp`)
+- `YOUR_PROJECT` → your actual project ref (`spupfdclswjlpwiebwlq`)
 - `PUSH_SHARED_SECRET` → any random string you make up (e.g. a UUID) — this
   proves to the edge function that the call really came from your database.
   Use the **same string** in step 3 below.
@@ -18,7 +18,7 @@ Before running it, open the file and replace:
 The function code is in `supabase-functions/send-push/index.ts` in this project
 — copy it into your Supabase functions folder and deploy:
 ```bash
-supabase functions deploy send-push --no-verify-jwt --project-ref kqsqtasykdtpdrkqyaxp
+supabase functions deploy send-push --no-verify-jwt --project-ref spupfdclswjlpwiebwlq
 ```
 
 ## 3. Set the function's secrets
@@ -28,7 +28,7 @@ supabase secrets set \
   VAPID_PRIVATE_KEY=KN55JXLksD0ouQmEG6bhNuJiVgNJk0MWulBA4o79e6E \
   VAPID_SUBJECT=mailto:studentmarketplacehelp@gmail.com \
   PUSH_SHARED_SECRET=<the same string you used in the SQL file> \
-  --project-ref kqsqtasykdtpdrkqyaxp
+  --project-ref spupfdclswjlpwiebwlq
 ```
 
 The VAPID key pair above was generated for you and is ready to use as-is.
