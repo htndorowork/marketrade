@@ -331,7 +331,7 @@
           </div>
           <div class="form-group">
             <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" id="f-negotiable" style="width:16px;height:16px"/> Price is negotiable
+              <input type="checkbox" id="f-negotiable"/> Price is negotiable
             </label>
           </div>
           <div class="form-group">
@@ -420,7 +420,7 @@
             <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers can filter listings by their area, so tell us every area you deliver to.</p>
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
               <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
-                <input type="checkbox" id="p-sell-all-areas" style="width:16px;height:16px"/> 📍 Deliver anywhere in South Africa
+                <input type="checkbox" id="p-sell-all-areas"/> 📍 Deliver anywhere in South Africa
               </label>
             </div>
             <div id="p-area-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
@@ -916,7 +916,7 @@
         '<div class="inst-modal-title">Which suburbs?</div>'+
         '<div class="inst-modal-sub">'+areaAddDistrict+'</div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:10px 0;cursor:pointer">'+
-          '<input type="checkbox" id="area-suburb-all" '+(allSelected?'checked':'')+' onchange="toggleAreaAllSuburbs(this.checked)" style="width:16px;height:16px"/> All suburbs in this district'+
+          '<input type="checkbox" id="area-suburb-all" '+(allSelected?'checked':'')+' onchange="toggleAreaAllSuburbs(this.checked)"/> All suburbs in this district'+
         '</label>'+
         '<div class="tb-subject-grid" id="area-suburb-grid">'+
         list.map(s=>'<button type="button" class="tb-subject-btn'+(areaAddSuburbs.includes(s)?' active':'')+'" onclick="toggleAreaSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
@@ -947,6 +947,10 @@
     }
     const VALID_PLAN_KEYS=['flash','quicklister','casual','standard','power','quarter','semester'];
     window.startPayfastCheckout = async (planKey)=>{
+      document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
+      const pressedCard = document.getElementById('plan-'+planKey);
+      if (pressedCard) pressedCard.classList.add('plan-card-selected');
+
       const errEl = document.getElementById('payfast-error');
       errEl.style.display='none';
       if (!VALID_PLAN_KEYS.includes(planKey)) return;

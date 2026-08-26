@@ -79,7 +79,7 @@
           <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers filter listings by area, so tell us every area you'll deliver to. You can add more later from your dashboard.</p>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
             <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
-              <input type="checkbox" id="signup-sell-all-areas" style="width:16px;height:16px"/> 📍 Deliver anywhere in South Africa
+              <input type="checkbox" id="signup-sell-all-areas"/> 📍 Deliver anywhere in South Africa
             </label>
           </div>
           <div id="signup-area-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
@@ -306,7 +306,7 @@
         '<div class="inst-modal-title">Which suburbs?</div>'+
         '<div class="inst-modal-sub">'+sellerAddDistrict+'</div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:10px 0;cursor:pointer">'+
-          '<input type="checkbox" '+(allSelected?'checked':'')+' onchange="toggleSellerAllSuburbs(this.checked)" style="width:16px;height:16px"/> All suburbs in this district'+
+          '<input type="checkbox" '+(allSelected?'checked':'')+' onchange="toggleSellerAllSuburbs(this.checked)"/> All suburbs in this district'+
         '</label>'+
         '<div class="tb-subject-grid">'+
         list.map(s=>'<button type="button" class="tb-subject-btn'+(sellerAddSuburbs.includes(s)?' active':'')+'" onclick="toggleSellerSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
