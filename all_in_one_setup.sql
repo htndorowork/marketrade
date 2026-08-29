@@ -30,7 +30,7 @@
 --   1) setup.sql                       (core schema, RLS, storage)
 --   2) security_hardening.sql          (privilege guards, admin fns, order flow)
 --   3) seller_plans_migration.sql      (plan tiers: flash/quicklister/.../semester)
---   4) setup_payments.sql              (PayFast subscription_payments table)
+--   4) setup_payments.sql              (subscription_payments table — Paystack)
 --   5) listing_reviews_migration.sql   (auto-fill review listing_id)
 --   6) push_notifications_migration.sql(web push subscriptions + triggers)
 -- Every statement below is written to be safe to re-run.
@@ -1189,14 +1189,17 @@ CREATE TRIGGER trg_enforce_listing_cap
   FOR EACH ROW EXECUTE FUNCTION public.enforce_listing_cap();
 
 -- ============================================================
--- PART 4 — PAYFAST SUBSCRIPTION PAYMENTS (originally setup_payments.sql)
+-- PART 4 — SUBSCRIPTION PAYMENTS (originally setup_payments.sql)
 -- ============================================================
 -- ============================================================
--- Seller PayFast subscriptions — run in the MARKETPLACE Supabase SQL Editor
+-- Seller subscription payments, processed via Paystack — run in the
+-- MARKETPLACE Supabase SQL Editor
 -- Project: spupfdclswjlpwiebwlq
 -- ============================================================
 
--- Payment records (created when seller clicks Pay, completed by ITN webhook)
+-- Payment records (created when seller clicks Pay, completed by the
+-- Paystack webhook). pf_payment_id is a legacy column retained only for
+-- historical rows from the retired PayFast integration.
 CREATE TABLE IF NOT EXISTS subscription_payments (
   id text PRIMARY KEY,
   seller_id uuid REFERENCES profiles(id) ON DELETE SET NULL,
@@ -1327,7 +1330,7 @@ CREATE POLICY "push_subs_own_delete" ON push_subscriptions FOR DELETE USING (aut
 -- all automatically get pushed too — one trigger, one place.
 --
 -- NOTE: replace YOUR_PROJECT below with your actual Supabase project ref
--- (same one used in PAYFAST_FN in seller.html), and PUSH_SHARED_SECRET
+-- (same one used in PAYSTACK_FN in seller.html), and PUSH_SHARED_SECRET
 -- with a random string of your choosing — the same value must be set as
 -- a secret on the edge function so it can verify the call really came
 -- from your database and not a random request from the internet.
@@ -1823,17 +1826,20 @@ CREATE INDEX IF NOT EXISTS idx_reviews_seller_id ON reviews (seller_id);
 -- ============================================================
 -- MARKETRADE — PAYSTACK SUPPORT MIGRATION
 -- Run this once in the Supabase SQL Editor. Safe to re-run.
--- Adds columns so subscription_payments can track which gateway
--- (PayFast or Paystack) a payment came through, without touching
--- any existing PayFast data or behavior.
+-- Adds columns so subscription_payments can track which gateway a
+-- payment came through. Marketrade now processes all new subscription
+-- payments through Paystack only — the PayFast integration has been
+-- retired. The pf_payment_id column and any 'payfast' rows are kept
+-- purely as a historical record of payments made before the switch;
+-- no new PayFast payments will be created.
 -- ============================================================
 
-ALTER TABLE subscription_payments ADD COLUMN IF NOT EXISTS gateway text DEFAULT 'payfast';
+ALTER TABLE subscription_payments ADD COLUMN IF NOT EXISTS gateway text DEFAULT 'paystack';
 ALTER TABLE subscription_payments ADD COLUMN IF NOT EXISTS gateway_payment_id text;
 
--- Backfill: any existing row already has its PayFast reference in
--- pf_payment_id — copy it into the new generic column so admin views
--- can query one column regardless of gateway.
+-- Backfill: any pre-existing row from the retired PayFast integration had
+-- its reference in pf_payment_id — copy it into the new generic column so
+-- admin views can query one column regardless of which gateway was used.
 UPDATE subscription_payments
 SET gateway_payment_id = pf_payment_id
 WHERE gateway_payment_id IS NULL AND pf_payment_id IS NOT NULL;
@@ -1933,8 +1939,11 @@ ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicles_subcategory text;
 INSERT INTO settings (key, value) VALUES ('free_mode_active', 'false')
 ON CONFLICT (key) DO NOTHING;
 
--- Re-apply the listings insert policy one final time so it includes
--- both the rate limit (from Part 11) and the Free Mode check together.
+-- Re-apply the listings insert policy so it also allows posting when
+-- free_mode_active = 'true', on top of the existing checks. This
+-- mirrors whichever version of the policy is currently live for you
+-- (including the rate-limit clause, if you've applied that migration) —
+-- adjust the rate-limit clause below to match your setup if needed.
 DROP POLICY IF EXISTS "listings_insert" ON listings;
 CREATE POLICY "listings_insert" ON listings FOR INSERT WITH CHECK (
   auth.uid() = seller_id AND

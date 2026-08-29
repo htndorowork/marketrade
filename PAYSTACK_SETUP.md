@@ -3,21 +3,21 @@
 Your Supabase project ref is **`spupfdclswjlpwiebwlq`** — use that in every
 command below.
 
-Paystack coexists with the existing PayFast integration — sellers can pick
-either on the Change Plan screen (a toggle above the plan cards), and both
-write to the same `subscription_payments` table so admin views work either
-way.
+Paystack is Marketrade's only payment gateway — the PayFast integration
+has been retired and removed. All checkout traffic goes through Paystack
+and writes to the `subscription_payments` table.
 
 ## 1. Run the SQL
-In the Supabase SQL Editor, run `paystack_support_migration.sql` (adds a
-`gateway` column to `subscription_payments` — everything else already
-exists from the PayFast setup).
+In the Supabase SQL Editor, run `all_in_one_setup.sql` (or just
+`paystack_support_migration.sql` if you're only updating an existing
+database) — this adds the `gateway`/`gateway_payment_id` columns to
+`subscription_payments`.
 
 ## 2. Get your Paystack API keys
 Once your Paystack business account is approved: Dashboard → Settings →
 API Keys & Webhooks. You'll see a **test** secret key (`sk_test_...`) and,
-once live, a **live** secret key (`sk_live_...`). Unlike PayFast, there's
-no separate sandbox flag — whichever key you set determines the mode.
+once live, a **live** secret key (`sk_live_...`). There's no separate
+sandbox flag — whichever key you set determines the mode.
 
 ## 3. Set the secret
 ```
@@ -42,7 +42,7 @@ separate settings in Paystack's dashboard, and both need it.
 
 ## 6. Test it
 1. With the test secret key set, go to Seller Dashboard → Change Plan →
-   tap the "Paystack" toggle → pick a plan.
+   pick a plan.
 2. You'll be redirected straight to Paystack's hosted checkout (no form
    fields to fill in on our side — Paystack handles the whole page).
 3. Use one of Paystack's published test cards (check their docs for the
@@ -62,11 +62,9 @@ supabase secrets set PAYSTACK_SECRET_KEY=sk_live_xxxxxxxxxxxxx --project-ref spu
 Nothing else needs to change — the webhook URL and function code stay the
 same in test and live mode.
 
-## Which gateway is "default"?
-The toggle on Change Plan remembers the seller's last choice
-(`localStorage`), defaulting to PayFast. If you want Paystack to be the
-default for everyone, change the fallback in `seller.html`:
-```js
-let selectedGateway = localStorage.getItem('mt_pay_gateway') || 'payfast';
-```
-→ change `'payfast'` to `'paystack'`.
+## About the retired PayFast integration
+The `payfast-checkout` and `payfast-itn` edge functions, the gateway
+toggle in `seller.html`, and all PayFast copy across the site have been
+removed. The `pf_payment_id` column on `subscription_payments` is kept
+only as a historical record of payments made before the switch — no new
+rows will use it.

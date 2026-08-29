@@ -5,7 +5,7 @@
 --   1) setup.sql                       (core schema, RLS, storage)
 --   2) security_hardening.sql          (privilege guards, admin fns, order flow)
 --   3) seller_plans_migration.sql      (plan tiers: flash/quicklister/.../semester)
---   4) setup_payments.sql              (PayFast subscription_payments table)
+--   4) setup_payments.sql              (subscription_payments table — Paystack)
 --   5) listing_reviews_migration.sql   (auto-fill review listing_id)
 --   6) push_notifications_migration.sql(web push subscriptions + triggers)
 -- Every statement below is written to be safe to re-run.
@@ -1164,14 +1164,17 @@ CREATE TRIGGER trg_enforce_listing_cap
   FOR EACH ROW EXECUTE FUNCTION public.enforce_listing_cap();
 
 -- ============================================================
--- PART 4 — PAYFAST SUBSCRIPTION PAYMENTS (originally setup_payments.sql)
+-- PART 4 — SUBSCRIPTION PAYMENTS (originally setup_payments.sql)
 -- ============================================================
 -- ============================================================
--- Seller PayFast subscriptions — run in the MARKETPLACE Supabase SQL Editor
+-- Seller subscription payments, processed via Paystack — run in the
+-- MARKETPLACE Supabase SQL Editor
 -- Project: spupfdclswjlpwiebwlq
 -- ============================================================
 
--- Payment records (created when seller clicks Pay, completed by ITN webhook)
+-- Payment records (created when seller clicks Pay, completed by the
+-- Paystack webhook). pf_payment_id is a legacy column retained only for
+-- historical rows from the retired PayFast integration.
 CREATE TABLE IF NOT EXISTS subscription_payments (
   id text PRIMARY KEY,
   seller_id uuid REFERENCES profiles(id) ON DELETE SET NULL,
@@ -1302,7 +1305,7 @@ CREATE POLICY "push_subs_own_delete" ON push_subscriptions FOR DELETE USING (aut
 -- all automatically get pushed too — one trigger, one place.
 --
 -- NOTE: replace YOUR_PROJECT below with your actual Supabase project ref
--- (same one used in PAYFAST_FN in seller.html), and PUSH_SHARED_SECRET
+-- (same one used in PAYSTACK_FN in seller.html), and PUSH_SHARED_SECRET
 -- with a random string of your choosing — the same value must be set as
 -- a secret on the edge function so it can verify the call really came
 -- from your database and not a random request from the internet.

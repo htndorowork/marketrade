@@ -59,11 +59,7 @@
         <div id="paywall-plans">
           <div style="text-align:center;font-size:42px;margin-bottom:8px">💼</div>
           <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;text-align:center">Start selling</h2>
-          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:center">No free trial — pay securely to unlock your seller dashboard and post listings.</p>
-          <div id="gateway-toggle" style="display:flex;gap:8px;justify-content:center;margin-bottom:18px">
-            <button type="button" id="gw-payfast" class="btn-sm" onclick="setPaymentGateway('payfast')" style="padding:8px 18px;border-radius:50px;font-weight:800;border:2px solid #2563eb;background:#2563eb;color:#fff;cursor:pointer">PayFast</button>
-            <button type="button" id="gw-paystack" class="btn-sm" onclick="setPaymentGateway('paystack')" style="padding:8px 18px;border-radius:50px;font-weight:800;border:2px solid #eee;background:#fff;color:#555;cursor:pointer">Paystack</button>
-          </div>
+          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:center">No free trial — pay securely via Paystack to unlock your seller dashboard and post listings.</p>
           <div class="plan-grid" style="display:grid;gap:10px;margin-bottom:16px">
             <button type="button" class="plan-card" id="plan-flash" onclick="startCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
@@ -130,8 +126,8 @@
               </div>
             </button>
           </div>
-          <p id="payfast-error" style="display:none;color:#1d4ed8;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px"></p>
-          <p style="font-size:12px;color:#aaa;font-weight:600;text-align:center;line-height:1.5">Payments are processed by PayFast. After a successful payment your selling access activates automatically.</p>
+          <p id="checkout-error" style="display:none;color:#1d4ed8;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px"></p>
+          <p style="font-size:12px;color:#aaa;font-weight:600;text-align:center;line-height:1.5">Payments are processed by Paystack. After a successful payment your selling access activates automatically.</p>
           <div style="margin-top:16px;text-align:center">
             <a href="#" id="paywall-back-dashboard" style="display:none;color:#2563eb;font-size:13px;font-weight:800;text-decoration:none" onclick="event.preventDefault();closeUpgrade()">← Back to dashboard</a>
             <a href="index.html" id="paywall-back-browse" style="color:#aaa;font-size:13px;font-weight:700;text-decoration:none">← Back to browsing</a>
@@ -504,29 +500,10 @@
       'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
     );
 
-    // PayFast credentials live ONLY in Supabase Edge Function secrets (payfast-checkout / payfast-itn).
-    // Do not put merchant_key or passphrase in this file.
-    const PAYFAST_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/payfast-checkout';
     // Paystack secret key lives ONLY in Supabase Edge Function secrets (paystack-checkout / paystack-webhook).
     const PAYSTACK_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/paystack-checkout';
 
-    let selectedGateway = localStorage.getItem('mt_pay_gateway') || 'payfast';
-    window.setPaymentGateway = (gw) => {
-      selectedGateway = gw;
-      localStorage.setItem('mt_pay_gateway', gw);
-      const isPF = gw === 'payfast';
-      const pf = document.getElementById('gw-payfast'), ps = document.getElementById('gw-paystack');
-      pf.style.background = isPF ? '#2563eb' : '#fff';
-      pf.style.color = isPF ? '#fff' : '#555';
-      pf.style.borderColor = isPF ? '#2563eb' : '#eee';
-      ps.style.background = !isPF ? '#2563eb' : '#fff';
-      ps.style.color = !isPF ? '#fff' : '#555';
-      ps.style.borderColor = !isPF ? '#2563eb' : '#eee';
-    };
-    window.startCheckout = (planKey) => {
-      if (selectedGateway === 'paystack') return startPaystackCheckout(planKey);
-      return startPayfastCheckout(planKey);
-    };
+    window.startCheckout = (planKey) => startPaystackCheckout(planKey);
 
     let currentUser = null;
     const imgs = {1:null,2:null,3:null,4:null,5:null,6:null};
@@ -980,68 +957,13 @@
       return window.location.href.replace(/[^/]*$/, '');
     }
     const VALID_PLAN_KEYS=['flash','quicklister','casual','standard','power','quarter','semester'];
-    window.startPayfastCheckout = async (planKey)=>{
-      document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
-      const pressedCard = document.getElementById('plan-'+planKey);
-      if (pressedCard) pressedCard.classList.add('plan-card-selected');
-
-      const errEl = document.getElementById('payfast-error');
-      errEl.style.display='none';
-      if (!VALID_PLAN_KEYS.includes(planKey)) return;
-      if (!currentUser) {
-        errEl.style.display='block';
-        errEl.textContent='Please sign in first.';
-        return;
-      }
-      const {data:{session}}=await supabase.auth.getSession();
-      if (!session?.access_token) {
-        errEl.style.display='block';
-        errEl.textContent='Please sign in again.';
-        return;
-      }
-      errEl.style.display='block';
-      errEl.style.color='#555';
-      errEl.textContent='Redirecting to PayFast…';
-      try {
-        const res = await fetch(PAYFAST_FN, {
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'Authorization':'Bearer '+session.access_token,
-            'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
-          },
-          body: JSON.stringify({ plan: planKey, return_base: siteBase() })
-        });
-        const payload = await res.json().catch(()=>({}));
-        if (!res.ok) {
-          errEl.style.color='#1d4ed8';
-          errEl.textContent = payload.error || ('Checkout failed ('+res.status+')');
-          return;
-        }
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = payload.process_url;
-        Object.keys(payload.fields||{}).forEach(k=>{
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = k;
-          input.value = payload.fields[k];
-          form.appendChild(input);
-        });
-        document.body.appendChild(form);
-        form.submit();
-      } catch(e) {
-        errEl.style.color='#1d4ed8';
-        errEl.textContent = 'Could not start payment. Check that payfast-checkout is deployed.';
-      }
-    };
 
     window.startPaystackCheckout = async (planKey)=>{
       document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
       const pressedCard = document.getElementById('plan-'+planKey);
       if (pressedCard) pressedCard.classList.add('plan-card-selected');
 
-      const errEl = document.getElementById('payfast-error');
+      const errEl = document.getElementById('checkout-error');
       errEl.style.display='none';
       if (!VALID_PLAN_KEYS.includes(planKey)) return;
       if (!currentUser) {
@@ -1593,7 +1515,7 @@
       if (!isValidSAPhone(wa)) { err.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678'; return; }
       if (!allAreas && !sellerAreas.length) { err.textContent='❌ Choose at least one area you deliver to (tick "Deliver anywhere" or add a specific area)'; return; }
 
-      // No free trial — sellers must pay via PayFast before posting
+      // No free trial — sellers must pay via Paystack before posting
       const updatePayload = {
         full_name:name, whatsapp:wa, residence:res,
         deliver_all_areas:allAreas,

@@ -31,87 +31,89 @@
     </div>
 
     <div id="admin-content" style="display:none">
-      <div class="section-header" style="margin-bottom:20px">
-        <div class="section-title">Admin Panel 🛡️</div>
-        <span style="font-size:12px;background:#eff6ff;color:#2563eb;font-weight:700;padding:4px 12px;border-radius:50px">Admin</span>
-      </div>
-
-      <!-- PAYWALL CONTROL -->
-      <div class="form-card" style="margin-bottom:20px">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-size:16px;font-weight:800;margin-bottom:4px">🔒 Listing Paywall</div>
-            <div style="font-size:13px;color:#888;font-weight:600">Emergency pause: when ON, all sellers see a blocked screen. Turn OFF once PayFast is live so sellers can pay from R19 to unlock selling.</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="paywall-toggle" onchange="togglePaywall(this.checked)"/>
-            <span class="toggle-slider"></span>
-          </label>
+      <div class="profile-header-card">
+        <div class="profile-avatar">🛡️</div>
+        <div>
+          <div class="profile-header-name">Admin Panel</div>
+          <div class="profile-header-meta">Full access to listings, users &amp; orders</div>
         </div>
-        <div id="paywall-status" style="font-size:13px;font-weight:700;margin-top:12px;color:#888"></div>
       </div>
 
-      <!-- FREE MODE CONTROL -->
-      <div class="form-card" style="margin-bottom:20px">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-size:16px;font-weight:800;margin-bottom:4px">🎁 Free Mode</div>
-            <div style="font-size:13px;color:#888;font-weight:600">When ON, ALL sellers can post without paying, regardless of subscription status. Turn OFF to go back to requiring a paid plan.</div>
+      <!-- MENU -->
+      <div id="admin-menu">
+        <div class="profile-section-label">Controls</div>
+        <div class="profile-menu-card">
+          <div class="profile-menu-row profile-menu-row-static" style="align-items:center">
+            <span class="pmr-icon">🔒</span>
+            <span class="pmr-label">Listing Paywall<span class="pmr-desc">Emergency pause: when ON, all sellers see a blocked screen. Turn OFF once payments are live so sellers can pay from R19 to unlock selling.</span><span id="paywall-status" class="pmr-desc"></span></span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="paywall-toggle" onchange="togglePaywall(this.checked)"/>
+              <span class="toggle-slider"></span>
+            </label>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="free-mode-toggle" onchange="toggleFreeMode(this.checked)"/>
-            <span class="toggle-slider"></span>
-          </label>
+          <div class="profile-menu-row profile-menu-row-static" style="align-items:center">
+            <span class="pmr-icon">🎁</span>
+            <span class="pmr-label">Free Mode<span class="pmr-desc">When ON, ALL sellers can post without paying, regardless of subscription status. Turn OFF to go back to requiring a paid plan.</span><span id="free-mode-status" class="pmr-desc"></span></span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="free-mode-toggle" onchange="toggleFreeMode(this.checked)"/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
         </div>
-        <div id="free-mode-status" style="font-size:13px;font-weight:700;margin-top:12px;color:#888"></div>
+
+        <div class="profile-section-label">Overview</div>
+        <div class="stats" style="margin-bottom:0">
+          <div class="stat"><div class="stat-num" id="a-listings">0</div><div class="stat-label">Listings</div></div>
+          <div class="stat"><div class="stat-num" id="a-sellers">0</div><div class="stat-label">Users</div></div>
+          <div class="stat"><div class="stat-num" id="a-orders">0</div><div class="stat-label">Orders</div></div>
+        </div>
+
+        <div class="profile-section-label">Manage</div>
+        <div class="profile-menu-card">
+          <button class="profile-menu-row" onclick="showTab('listings')"><span class="pmr-icon">📦</span><span class="pmr-label">Listings</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('sellers')"><span class="pmr-icon">👥</span><span class="pmr-label">Users</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('paid')"><span class="pmr-icon">✅</span><span class="pmr-label">Paid Sellers</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('unpaid')"><span class="pmr-icon">❌</span><span class="pmr-label">Unpaid Sellers</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('reports')"><span class="pmr-icon">🚩</span><span class="pmr-label">Reports</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('analytics')"><span class="pmr-icon">📊</span><span class="pmr-label">Analytics</span><span class="pmr-chevron">›</span></button>
+          <button class="profile-menu-row" onclick="showTab('orders')"><span class="pmr-icon">🛒</span><span class="pmr-label">Orders</span><span class="pmr-chevron">›</span></button>
+        </div>
       </div>
 
-      <!-- STATS -->
-      <div class="stats" style="margin-bottom:24px">
-        <div class="stat"><div class="stat-num" id="a-listings">0</div><div class="stat-label">Listings</div></div>
-        <div class="stat"><div class="stat-num" id="a-sellers">0</div><div class="stat-label">Users</div></div>
-        <div class="stat"><div class="stat-num" id="a-orders">0</div><div class="stat-label">Orders</div></div>
-      </div>
+      <!-- DETAIL PANELS -->
+      <div id="admin-detail" style="display:none">
+        <button class="profile-back-btn" onclick="closeAdminDetail()">← Back</button>
 
-      <div class="admin-tabs">
-        <button class="admin-tab active" onclick="showTab('listings',this)">📦 Listings</button>
-        <button class="admin-tab" onclick="showTab('sellers',this)">👥 Users</button>
-        <button class="admin-tab" onclick="showTab('paid',this)">✅ Paid Sellers</button>
-        <button class="admin-tab" onclick="showTab('unpaid',this)">❌ Unpaid Sellers</button>
-        <button class="admin-tab" onclick="showTab('reports',this)">🚩 Reports</button>
-        <button class="admin-tab" onclick="showTab('analytics',this)">📊 Analytics</button>
-        <button class="admin-tab" onclick="showTab('orders',this)">🛒 Orders</button>
-      </div>
-
-      <div id="tab-listings">
-        <input class="search-admin" type="text" placeholder="Search listings..." oninput="searchListings(this.value)"/>
-        <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportListingsCSV()">⬇️ Export CSV</button>
-        <div id="all-listings-container"><p class="loading-msg">Loading...</p></div>
-      </div>
-      <div id="tab-sellers" style="display:none">
-        <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportSellersCSV()">⬇️ Export CSV</button>
-        <div id="all-sellers-container"><p class="loading-msg">Loading...</p></div>
-        <div id="sellers-load-more-wrap" style="display:none;text-align:center;margin-top:14px"><button class="btn-primary" style="padding:10px 26px;border-radius:50px" onclick="loadMoreSellers()">Load more users</button></div>
-      </div>
-      <div id="tab-paid" style="display:none">
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Sellers whose monthly subscription is active and not blocked.</p>
-        <div id="paid-sellers-container"><p class="loading-msg">Loading...</p></div>
-      </div>
-      <div id="tab-unpaid" style="display:none">
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">These sellers are automatically blocked from posting and hidden from buyers until marked as paid.</p>
-        <button class="btn-sm btn-delete" style="margin-bottom:12px" onclick="blockAllOverdue()">🚫 Block all overdue sellers now</button>
-        <div id="unpaid-sellers-container"><p class="loading-msg">Loading...</p></div>
-      </div>
-      <div id="tab-reports" style="display:none">
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Listings and sellers flagged by buyers.</p>
-        <div id="reports-container"><p class="loading-msg">Loading...</p></div>
-      </div>
-      <div id="tab-analytics" style="display:none">
-        <div id="analytics-container"><p class="loading-msg">Loading...</p></div>
-      </div>
-      <div id="tab-orders" style="display:none">
-        <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportOrdersCSV()">⬇️ Export CSV</button>
-        <div id="all-orders-container"><p class="loading-msg">Loading...</p></div>
+        <div id="tab-listings">
+          <input class="search-admin" type="text" placeholder="Search listings..." oninput="searchListings(this.value)"/>
+          <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportListingsCSV()">⬇️ Export CSV</button>
+          <div id="all-listings-container"><p class="loading-msg">Loading...</p></div>
+        </div>
+        <div id="tab-sellers" style="display:none">
+          <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportSellersCSV()">⬇️ Export CSV</button>
+          <div id="all-sellers-container"><p class="loading-msg">Loading...</p></div>
+          <div id="sellers-load-more-wrap" style="display:none;text-align:center;margin-top:14px"><button class="btn-primary" style="padding:10px 26px;border-radius:50px" onclick="loadMoreSellers()">Load more users</button></div>
+        </div>
+        <div id="tab-paid" style="display:none">
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Sellers whose monthly subscription is active and not blocked.</p>
+          <div id="paid-sellers-container"><p class="loading-msg">Loading...</p></div>
+        </div>
+        <div id="tab-unpaid" style="display:none">
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">These sellers are automatically blocked from posting and hidden from buyers until marked as paid.</p>
+          <button class="btn-sm btn-delete" style="margin-bottom:12px" onclick="blockAllOverdue()">🚫 Block all overdue sellers now</button>
+          <div id="unpaid-sellers-container"><p class="loading-msg">Loading...</p></div>
+        </div>
+        <div id="tab-reports" style="display:none">
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Listings and sellers flagged by buyers.</p>
+          <div id="reports-container"><p class="loading-msg">Loading...</p></div>
+        </div>
+        <div id="tab-analytics" style="display:none">
+          <div id="analytics-container"><p class="loading-msg">Loading...</p></div>
+        </div>
+        <div id="tab-orders" style="display:none">
+          <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportOrdersCSV()">⬇️ Export CSV</button>
+          <div id="all-orders-container"><p class="loading-msg">Loading...</p></div>
+        </div>
       </div>
     </div>
   </main>
@@ -588,15 +590,20 @@
       listingsHasMore=false; // search results aren't paginated further, keeps this simple
       renderListings(data||[]);
     };
-    window.showTab=(tab,el)=>{
+    window.showTab=(tab)=>{
+      document.getElementById('admin-menu').style.display='none';
+      document.getElementById('admin-detail').style.display='block';
       ['listings','sellers','paid','unpaid','reports','analytics','orders'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
-      document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
       if(tab==='sellers')loadSellers();
       if(tab==='paid')loadPaidSellers();
       if(tab==='unpaid')loadUnpaidSellers();
       if(tab==='reports')loadReports();
       if(tab==='analytics')loadAnalytics();
       if(tab==='orders')loadOrders();
+    };
+    window.closeAdminDetail=()=>{
+      document.getElementById('admin-detail').style.display='none';
+      document.getElementById('admin-menu').style.display='block';
     };
     init();
   </script>
