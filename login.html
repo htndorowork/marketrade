@@ -11,6 +11,7 @@
   <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="style.css"/>
   <script src="js/areas-data.js"></script>
@@ -365,7 +366,7 @@
       const {error}=await supabase.auth.signInWithPassword({email,password});
       if(error){
         if(error.message && error.message.toLowerCase().includes('email not confirmed')){
-          err.textContent='📩 Please check your notifications — we\'ve sent a confirmation email and SMS. Confirm your account before signing in.';
+          err.textContent='📩 Please check your email — we\'ve sent a confirmation link. Confirm your account before signing in.';
         } else {
           err.textContent='❌ '+error.message;
         }

@@ -12,6 +12,7 @@
   <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="style.css"/>
   <script src="js/areas-data.js"></script>
@@ -263,6 +264,7 @@
       <a class="footer-link" href="index.html">Browse listings</a>
       <a class="footer-link" href="faq.html">How It Works</a>
       <a class="footer-link" href="terms.html">Terms</a>
+      <a class="footer-link" href="how-payments-work.html">How Payments Work</a>
       <a class="footer-link" href="privacy.html">Privacy</a>
       <a class="footer-link" href="guidelines.html">Guidelines</a>
     </div>
@@ -664,27 +666,45 @@
       loadCart();
     }
 
-    const {data}=await supabase.from('listings').select('*,profiles(full_name,residence,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin)').eq('is_available',true).eq('is_draft',false).order('renewed_at',{ascending:false,nullsFirst:false});
-    const today=new Date().toISOString().slice(0,10);
-    all=(data||[]).filter(l=>{
-      const p=l.profiles;
-      if(!p) return false;
-      if(p.is_blocked===true) return false;
-      if(p.is_admin===true) return true;
-      return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
-    });
-    // push out-of-stock items to the end so they don't crowd out available ones
-    all.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+    // Bounded pagination: never pull the entire listings table in one go.
+    // Fetch a generous first page, then quietly fetch more pages on demand
+    // as the person scrolls past what's loaded (see loadMoreListings below).
+    const SERVER_PAGE_SIZE = 300;
+    let serverOffset = 0, serverHasMore = true;
 
-    // Verified-seller badge: sellers with 5+ completed sales
+    async function fetchListingsPage(offset){
+      const {data} = await supabase.from('listings')
+        .select('*,profiles(full_name,residence,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin)')
+        .eq('is_available',true).eq('is_draft',false)
+        .order('renewed_at',{ascending:false,nullsFirst:false})
+        .range(offset, offset+SERVER_PAGE_SIZE-1);
+      const today=new Date().toISOString().slice(0,10);
+      const filtered=(data||[]).filter(l=>{
+        const p=l.profiles;
+        if(!p) return false;
+        if(p.is_blocked===true) return false;
+        if(p.is_admin===true) return true;
+        return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
+      });
+      serverHasMore = (data||[]).length === SERVER_PAGE_SIZE;
+      serverOffset = offset + (data||[]).length;
+      return filtered;
+    }
+
     let verifiedSellers=new Set();
-    const sellerIds=[...new Set(all.map(l=>l.seller_id))];
-    if(sellerIds.length){
-      const {data:completedOrders}=await supabase.from('orders').select('seller_id').eq('status','completed').in('seller_id',sellerIds);
+    async function markVerifiedSellers(listingsBatch){
+      const ids=[...new Set(listingsBatch.map(l=>l.seller_id))];
+      if(!ids.length) return;
+      const {data:completedOrders}=await supabase.from('orders').select('seller_id').eq('status','completed').in('seller_id',ids);
       const counts={};
       (completedOrders||[]).forEach(o=>{counts[o.seller_id]=(counts[o.seller_id]||0)+1;});
-      verifiedSellers=new Set(Object.keys(counts).filter(id=>counts[id]>=5));
+      Object.keys(counts).filter(id=>counts[id]>=5).forEach(id=>verifiedSellers.add(id));
     }
+
+    all = await fetchListingsPage(0);
+    // push out-of-stock items to the end so they don't crowd out available ones
+    all.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+    await markVerifiedSellers(all);
 
     render(all);
     renderRecentlyViewed();
@@ -732,9 +752,23 @@
         g.insertAdjacentHTML('afterend','<div id="load-more-wrap" style="text-align:center;margin-top:16px"><button class="btn-primary" style="padding:11px 30px;border-radius:50px" onclick="loadMoreListings()">Load more ('+(list.length-renderLimit)+' more)</button></div>');
       }
     }
-    window.loadMoreListings=()=>{
+    window.loadMoreListings=async ()=>{
       renderLimit+=24;
       document.getElementById('load-more-wrap')?.remove();
+      // Running low on the locally-filtered buffer and the server has more
+      // rows beyond what we've fetched so far — pull the next page before
+      // the person actually hits the end, so filters/search still work
+      // beyond the first batch without ever loading the whole table.
+      if (renderLimit >= lastFilteredList.length - 12 && serverHasMore) {
+        const g=document.getElementById('listings-grid');
+        g.insertAdjacentHTML('afterend','<p id="load-more-spinner" class="loading-msg" style="text-align:center;margin-top:10px">Loading more... ⏳</p>');
+        const nextBatch = await fetchListingsPage(serverOffset);
+        document.getElementById('load-more-spinner')?.remove();
+        all = all.concat(nextBatch);
+        await markVerifiedSellers(nextBatch);
+        doFilter(false);
+        return;
+      }
       render(lastFilteredList);
     };
     window.resetFilters=()=>{
@@ -1201,8 +1235,8 @@
       el.classList.add('active');
       doFilter();
     };
-    window.doFilter=()=>{
-      renderLimit=24;
+    window.doFilter=(resetPage=true)=>{
+      if (resetPage) renderLimit=24;
       const q=(document.getElementById('search-input').value||'').toLowerCase();
       let f=all;
       if(cat==='Textbooks'){

@@ -11,6 +11,7 @@
   <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -75,6 +76,7 @@
       <div id="tab-sellers" style="display:none">
         <button class="btn-sm btn-toggle" style="margin:8px 0" onclick="exportSellersCSV()">⬇️ Export CSV</button>
         <div id="all-sellers-container"><p class="loading-msg">Loading...</p></div>
+        <div id="sellers-load-more-wrap" style="display:none;text-align:center;margin-top:14px"><button class="btn-primary" style="padding:10px 26px;border-radius:50px" onclick="loadMoreSellers()">Load more users</button></div>
       </div>
       <div id="tab-paid" style="display:none">
         <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Sellers whose monthly subscription is active and not blocked.</p>
@@ -126,6 +128,25 @@
     let allSellers=[];
     let currentAdminId=null;
 
+    // Shared helper: fetch a table in safe chunks instead of one unbounded
+    // request. Used by views that genuinely need the full/filtered result
+    // set (CSV exports, paid/unpaid seller lists) so a growing table can
+    // never trigger one giant multi-thousand-row payload in a single call.
+    // hardCap is a safety valve — stops after ~20k rows even if more exist,
+    // rather than letting the browser choke trying to load everything.
+    async function fetchAllPages(buildQuery, batchSize=1000, hardCap=20000){
+      let offset=0, out=[];
+      while(true){
+        const {data,error} = await buildQuery().range(offset, offset+batchSize-1);
+        if(error){ console.error('fetchAllPages error:', error.message); break; }
+        out = out.concat(data||[]);
+        if(!data || data.length < batchSize) break;
+        offset += batchSize;
+        if(offset >= hardCap) break;
+      }
+      return out;
+    }
+
     async function init(){
       const {data:{user}}=await supabase.auth.getUser();
       if(!user){window.location.href='login.html';return;}
@@ -162,10 +183,23 @@
       document.getElementById('a-orders').textContent=o||0;
     }
 
+    let listingsOffset=0, listingsHasMore=true;
+    const ADMIN_PAGE_SIZE=100;
     async function loadListings(){
-      const {data}=await supabase.from('listings').select('*,profiles(full_name)').order('created_at',{ascending:false});
-      allListings=data||[];renderListings(allListings);
+      listingsOffset=0; listingsHasMore=true; allListings=[];
+      const {data}=await supabase.from('listings').select('*,profiles(full_name)').order('created_at',{ascending:false}).range(0,ADMIN_PAGE_SIZE-1);
+      allListings=data||[];
+      listingsOffset=allListings.length;
+      listingsHasMore=allListings.length===ADMIN_PAGE_SIZE;
+      renderListings(allListings);
     }
+    window.loadMoreListingsAdmin=async()=>{
+      const {data}=await supabase.from('listings').select('*,profiles(full_name)').order('created_at',{ascending:false}).range(listingsOffset,listingsOffset+ADMIN_PAGE_SIZE-1);
+      allListings=allListings.concat(data||[]);
+      listingsOffset+=(data||[]).length;
+      listingsHasMore=(data||[]).length===ADMIN_PAGE_SIZE;
+      renderListings(allListings);
+    };
 
     function renderListings(list){
       const c=document.getElementById('all-listings-container');
@@ -188,7 +222,8 @@
           '<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._atoggle(\''+l.id+'\','+l.is_available+')">'+(l.is_available?'Hide':'Show')+'</button>'+
           '<button class="btn-sm btn-delete" onclick="event.stopPropagation();window._adelete(\''+l.id+'\')">Delete</button>'+
           '</div></div>';
-      }).join('');
+      }).join('') +
+      (listingsHasMore?'<div style="text-align:center;margin-top:14px"><button class="btn-primary" style="padding:10px 26px;border-radius:50px" onclick="loadMoreListingsAdmin()">Load more listings</button></div>':'');
     }
     let editingAdminListingId=null;
     window._aEditListing=async(id)=>{
@@ -241,11 +276,26 @@
       loadListings();loadStats();
     };
 
+    let sellersOffset=0, sellersHasMore=true;
     async function loadSellers(){
-      const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false});
+      sellersOffset=0; sellersHasMore=true; allSellers=[];
+      const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).range(0,ADMIN_PAGE_SIZE-1);
       allSellers=data||[];
+      sellersOffset=allSellers.length;
+      sellersHasMore=allSellers.length===ADMIN_PAGE_SIZE;
+      renderSellers();
+    }
+    window.loadMoreSellers=async()=>{
+      const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).range(sellersOffset,sellersOffset+ADMIN_PAGE_SIZE-1);
+      allSellers=allSellers.concat(data||[]);
+      sellersOffset+=(data||[]).length;
+      sellersHasMore=(data||[]).length===ADMIN_PAGE_SIZE;
+      renderSellers();
+    };
+    function renderSellers(){
+      const data=allSellers;
       const c=document.getElementById('all-sellers-container');
-      if(!data?.length){c.innerHTML='<div class="empty-msg">No users yet</div>';return;}
+      if(!data?.length){c.innerHTML='<div class="empty-msg">No users yet</div>';document.getElementById('sellers-load-more-wrap').style.display='none';return;}
       c.innerHTML=data.map(s=>{
         const isSeller = s.role==='seller';
         return '<div class="seller-row">'+
@@ -258,6 +308,7 @@
         '</div>';
       }
       ).join('');
+      document.getElementById('sellers-load-more-wrap').style.display=sellersHasMore?'block':'none';
     }
     window._toggleRole=async(id,curRole)=>{
       const newRole=curRole==='seller'?'buyer':'seller';
@@ -273,8 +324,24 @@
       loadSellers();
     };
 
+    let ordersOffset=0, ordersHasMore=true, allOrdersAdmin=[];
     async function loadOrders(){
-      const {data}=await supabase.from('orders').select('*,listings(title),profiles!orders_seller_id_fkey(full_name)').order('created_at',{ascending:false});
+      ordersOffset=0; ordersHasMore=true; allOrdersAdmin=[];
+      const {data}=await supabase.from('orders').select('*,listings(title),profiles!orders_seller_id_fkey(full_name)').order('created_at',{ascending:false}).range(0,ADMIN_PAGE_SIZE-1);
+      allOrdersAdmin=data||[];
+      ordersOffset=allOrdersAdmin.length;
+      ordersHasMore=allOrdersAdmin.length===ADMIN_PAGE_SIZE;
+      renderOrders();
+    }
+    window.loadMoreOrdersAdmin=async()=>{
+      const {data}=await supabase.from('orders').select('*,listings(title),profiles!orders_seller_id_fkey(full_name)').order('created_at',{ascending:false}).range(ordersOffset,ordersOffset+ADMIN_PAGE_SIZE-1);
+      allOrdersAdmin=allOrdersAdmin.concat(data||[]);
+      ordersOffset+=(data||[]).length;
+      ordersHasMore=(data||[]).length===ADMIN_PAGE_SIZE;
+      renderOrders();
+    };
+    function renderOrders(){
+      const data=allOrdersAdmin;
       const c=document.getElementById('all-orders-container');
       if(!data?.length){c.innerHTML='<div class="empty-msg">No orders yet</div>';return;}
       c.innerHTML=data.map(o=>'<div class="listing-row">'+
@@ -286,7 +353,8 @@
         '</div>'+
         (o.status==='confirmed'?'<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._adone(\''+o.id+'\')">Mark Done</button>':'')+
         '</div>'
-      ).join('');
+      ).join('') +
+      (ordersHasMore?'<div style="text-align:center;margin-top:14px"><button class="btn-primary" style="padding:10px 26px;border-radius:50px" onclick="loadMoreOrdersAdmin()">Load more orders</button></div>':'');
     }
 
     function sellerScopeSummary(s){
@@ -301,10 +369,11 @@
     function planLabel(plan){ return PLAN_LABELS[plan] || 'Legacy plan (∞ — pre-migration)'; }
 
     async function loadPaidSellers(){
-      const {data}=await supabase.from('profiles').select('*').eq('role','seller').order('full_name');
+      const c=document.getElementById('paid-sellers-container');
+      c.innerHTML='<p class="loading-msg">Loading...</p>';
+      const data=await fetchAllPages(()=>supabase.from('profiles').select('*').eq('role','seller').order('full_name'));
       const today=new Date().toISOString().slice(0,10);
       const paid=(data||[]).filter(s=>!s.is_blocked && (s.is_admin || (s.subscription_paid_until && s.subscription_paid_until>=today)));
-      const c=document.getElementById('paid-sellers-container');
       if(!paid.length){c.innerHTML='<div class="empty-msg">No sellers with an active paid subscription 📭</div>';return;}
       c.innerHTML=paid.map(s=>'<div class="seller-row">'+
         '<div class="seller-avatar">'+(s.store_logo_url?'<img loading="lazy" src="'+s.store_logo_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>':'👤')+'</div>'+
@@ -319,10 +388,11 @@
     }
 
     async function loadUnpaidSellers(){
-      const {data}=await supabase.from('profiles').select('*').eq('role','seller').order('full_name');
+      const c=document.getElementById('unpaid-sellers-container');
+      c.innerHTML='<p class="loading-msg">Loading...</p>';
+      const data=await fetchAllPages(()=>supabase.from('profiles').select('*').eq('role','seller').order('full_name'));
       const today=new Date().toISOString().slice(0,10);
       const unpaid=(data||[]).filter(s=>!s.is_admin && (s.is_blocked || !s.subscription_paid_until || s.subscription_paid_until<today));
-      const c=document.getElementById('unpaid-sellers-container');
       if(!unpaid.length){c.innerHTML='<div class="empty-msg">All sellers are paid up 🎉</div>';return;}
       c.innerHTML=unpaid.map(s=>{
         let reason;
@@ -438,15 +508,17 @@
       a.href=URL.createObjectURL(blob); a.download=filename; a.click();
       URL.revokeObjectURL(a.href);
     }
-    window.exportListingsCSV=()=>{
-      downloadCSV(toCSV(allListings,['id','title','category','price','quantity','condition','is_available','created_at']),'listings.csv');
+    window.exportListingsCSV=async()=>{
+      const rows=await fetchAllPages(()=>supabase.from('listings').select('id,title,category,price,quantity,condition,is_available,created_at').order('created_at',{ascending:false}));
+      downloadCSV(toCSV(rows,['id','title','category','price','quantity','condition','is_available','created_at']),'listings.csv');
     };
     window.exportOrdersCSV=async()=>{
-      const {data}=await supabase.from('orders').select('*');
+      const data=await fetchAllPages(()=>supabase.from('orders').select('*').order('created_at',{ascending:false}));
       downloadCSV(toCSV(data||[],['id','buyer_name','buyer_whatsapp','quantity','status','created_at']),'orders.csv');
     };
-    window.exportSellersCSV=()=>{
-      const rows=allSellers.map(s=>({
+    window.exportSellersCSV=async()=>{
+      const all=await fetchAllPages(()=>supabase.from('profiles').select('*').order('created_at',{ascending:false}));
+      const rows=all.map(s=>({
         id:s.id, full_name:s.full_name, store_name:s.store_name, role:s.role,
         whatsapp:s.whatsapp, residence:s.residence, province:s.province, city:s.city,
         district:s.district, suburb:s.suburb, seller_plan:s.seller_plan,
@@ -477,7 +549,16 @@
       loadSellers();loadStats();
     };
     window._adone=async(id)=>{await supabase.from('orders').update({status:'completed'}).eq('id',id);loadOrders();};
-    window.searchListings=(q)=>renderListings(allListings.filter(l=>l.title.toLowerCase().includes(q.toLowerCase())||(l.profiles?.full_name||'').toLowerCase().includes(q.toLowerCase())));
+    window.searchListings=async(q)=>{
+      if(!q.trim()){ loadListings(); return; }
+      // Search the whole table server-side, not just whatever page happens
+      // to be loaded locally — otherwise a search only finds matches within
+      // the first ~100 rows loaded so far.
+      const {data}=await supabase.from('listings').select('*,profiles(full_name)')
+        .ilike('title','%'+q+'%').order('created_at',{ascending:false}).range(0,ADMIN_PAGE_SIZE-1);
+      listingsHasMore=false; // search results aren't paginated further, keeps this simple
+      renderListings(data||[]);
+    };
     window.showTab=(tab,el)=>{
       ['listings','sellers','paid','unpaid','reports','analytics','orders'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
       document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');

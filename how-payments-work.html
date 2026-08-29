@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How Payments Work — Marketrade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <meta name="description" content="Marketrade only charges sellers a subscription fee for platform access. We never process, hold, or facilitate payment for goods sold between users."/>
+  <meta property="og:title" content="How Payments Work — Marketrade"/>
+  <meta property="og:description" content="Marketrade only charges sellers a subscription fee for platform access — we never process payment for goods sold between users."/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .legal{max-width:720px;margin:0 auto;padding:32px 20px;line-height:1.7;color:#333}
+    .legal h1{font-size:26px;font-weight:900;margin-bottom:6px}
+    .legal .updated{color:#aaa;font-weight:700;font-size:13px;margin-bottom:24px}
+    .legal h2{font-size:17px;font-weight:800;margin:26px 0 8px}
+    .legal p,.legal li{font-size:14px;color:#444}
+    .legal ul{padding-left:20px;margin-bottom:10px}
+    .pay-summary{background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:18px 20px;margin:20px 0}
+    .pay-summary p{color:#1e3a5f;font-weight:700;margin:0}
+    .pay-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+    .pay-table th,.pay-table td{border:1px solid #eee;padding:10px 12px;text-align:left}
+    .pay-table th{background:#f8f9fb;font-weight:800;color:#111}
+    .pay-table td{color:#444}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <div class="nav-links"><a href="index.html">Browse</a></div>
+  </nav>
+
+  <div class="legal">
+    <h1>How Payments Work on Marketrade</h1>
+    <div class="updated">Last updated: 2026</div>
+
+    <div class="pay-summary">
+      <p>In short: Marketrade only ever charges sellers a fixed subscription fee for access to selling tools. We do not process, hold, collect, or facilitate payment for any item sold between a buyer and a seller — that exchange happens directly between the two of them, entirely outside our systems.</p>
+    </div>
+
+    <h2>What Marketrade charges for</h2>
+    <p>Marketrade is a subscription platform. Sellers pay us directly for time-limited access to list items — plans currently range from R19 (48-hour Flash Sale) to R699 (6-month Semester Pass). This is the only thing our payment integration (PayFast) is used for. The fee is for the use of our software and listing visibility, not for any specific item a seller later sells.</p>
+
+    <h2>What Marketrade does not charge for, hold, or touch</h2>
+    <ul>
+      <li>We never process a card, EFT, or any other payment for the actual item a buyer is purchasing from a seller.</li>
+      <li>We never receive, hold, or move funds on behalf of a buyer or seller for a transaction between them.</li>
+      <li>We are not a party to that transaction and have no PayFast, banking, or escrow relationship covering it.</li>
+      <li>Buyers and sellers arrange and settle payment for goods directly with each other — typically via cash, EFT, or another method they agree on — coordinated through our in-app messaging or WhatsApp.</li>
+    </ul>
+
+    <h2>At a glance</h2>
+    <table class="pay-table">
+      <tr><th>Transaction type</th><th>Who is paid</th><th>Does Marketrade process this?</th></tr>
+      <tr><td>Seller subscription (Flash Sale, Standard, etc.)</td><td>Marketrade</td><td>Yes — via PayFast</td></tr>
+      <tr><td>Payment for an item listed on Marketrade</td><td>The seller, directly</td><td>No — arranged privately between buyer and seller</td></tr>
+    </table>
+
+    <h2>Why this distinction matters</h2>
+    <p>Marketrade is a classifieds-style listing platform with paid seller subscriptions — comparable to a SaaS subscription business. We are not a payment facilitator, payment aggregator, or marketplace payment processor: we never route, split, or hold funds intended for a third party. Any card or EFT payment made through Marketrade goes to Marketrade, for Marketrade's own subscription service, in full.</p>
+
+    <h2>Questions</h2>
+    <p>If you have questions about this — including as part of a payment provider's verification process — contact us via the "Report an issue" link in the footer.</p>
+  </div>
+
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

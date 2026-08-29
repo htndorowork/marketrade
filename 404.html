@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page not found — Marketrade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <meta name="robots" content="noindex"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .notfound-wrap{max-width:480px;margin:0 auto;padding:60px 24px;text-align:center}
+    .notfound-emoji{font-size:64px;margin-bottom:14px}
+    .notfound-wrap h1{font-size:26px;font-weight:900;margin-bottom:10px;color:#111}
+    .notfound-wrap p{font-size:14px;color:#666;font-weight:600;margin-bottom:28px;line-height:1.6}
+    .notfound-actions{display:flex;flex-direction:column;gap:10px;max-width:280px;margin:0 auto}
+    .notfound-actions a{display:block;padding:13px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none}
+    .notfound-actions .primary{background:#2563eb;color:#fff}
+    .notfound-actions .secondary{background:#eff6ff;color:#2563eb}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <div class="nav-links"><a href="index.html">Browse</a></div>
+  </nav>
+  <div class="notfound-wrap">
+    <div class="notfound-emoji">🧭</div>
+    <h1>Page not found</h1>
+    <p>That page doesn't exist, or the link's outdated. Let's get you back to browsing.</p>
+    <div class="notfound-actions">
+      <a class="primary" href="index.html">🔍 Browse listings</a>
+      <a class="secondary" href="categories.html">🗂️ View categories</a>
+    </div>
+  </div>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

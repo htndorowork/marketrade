@@ -24,8 +24,8 @@ supabase functions deploy send-push --no-verify-jwt --project-ref spupfdclswjlpw
 ## 3. Set the function's secrets
 ```bash
 supabase secrets set \
-  VAPID_PUBLIC_KEY=BMCQB-SziCpFZpfJ7VLwT4HmcXmqYs8JJ-t03A7Ra8MXsXeFmhIYGUIml5mZbNM2Ezzas1ZWl_k3qCA9gQR4YfY \
-  VAPID_PRIVATE_KEY=KN55JXLksD0ouQmEG6bhNuJiVgNJk0MWulBA4o79e6E \
+  VAPID_PUBLIC_KEY=BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM \
+  VAPID_PRIVATE_KEY=K9kaklXlYxhNGWjmIJsTxNN_30LoK_bG3MhI8238y8k \
   VAPID_SUBJECT=mailto:studentmarketplacehelp@gmail.com \
   PUSH_SHARED_SECRET=<the same string you used in the SQL file> \
   --project-ref spupfdclswjlpwiebwlq

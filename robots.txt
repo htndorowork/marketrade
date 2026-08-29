@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /seller.html
+Disallow: /profile.html
+Disallow: /messages.html
+Disallow: /payment-return.html
+Disallow: /payment-cancel.html
+Disallow: /receipt.html
+
+Sitemap: https://www.marketrade.co/sitemap.xml

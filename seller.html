@@ -11,6 +11,7 @@
   <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="style.css"/>
   <script src="js/areas-data.js"></script>
@@ -58,9 +59,13 @@
         <div id="paywall-plans">
           <div style="text-align:center;font-size:42px;margin-bottom:8px">💼</div>
           <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;text-align:center">Start selling</h2>
-          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:20px;text-align:center">No free trial — pay securely with PayFast to unlock your seller dashboard and post listings.</p>
+          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:center">No free trial — pay securely to unlock your seller dashboard and post listings.</p>
+          <div id="gateway-toggle" style="display:flex;gap:8px;justify-content:center;margin-bottom:18px">
+            <button type="button" id="gw-payfast" class="btn-sm" onclick="setPaymentGateway('payfast')" style="padding:8px 18px;border-radius:50px;font-weight:800;border:2px solid #2563eb;background:#2563eb;color:#fff;cursor:pointer">PayFast</button>
+            <button type="button" id="gw-paystack" class="btn-sm" onclick="setPaymentGateway('paystack')" style="padding:8px 18px;border-radius:50px;font-weight:800;border:2px solid #eee;background:#fff;color:#555;cursor:pointer">Paystack</button>
+          </div>
           <div class="plan-grid" style="display:grid;gap:10px;margin-bottom:16px">
-            <button type="button" class="plan-card" id="plan-flash" onclick="startPayfastCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-flash" onclick="startCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Flash Sale · 48 hours</div>
@@ -69,7 +74,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R19</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-quicklister" onclick="startPayfastCheckout('quicklister')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-quicklister" onclick="startCheckout('quicklister')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Quick Lister · 7 days</div>
@@ -78,7 +83,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R39</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-casual" onclick="startPayfastCheckout('casual')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-casual" onclick="startCheckout('casual')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Casual Seller · 1 month</div>
@@ -87,7 +92,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R89</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-standard" onclick="startPayfastCheckout('standard')" style="text-align:left;background:#f0f7ff;border:2.5px solid #2563eb;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit;position:relative">
+            <button type="button" class="plan-card" id="plan-standard" onclick="startCheckout('standard')" style="text-align:left;background:#f0f7ff;border:2.5px solid #2563eb;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit;position:relative">
               <div style="position:absolute;top:-10px;left:14px;background:#2563eb;color:#fff;font-size:10px;font-weight:800;padding:2px 10px;border-radius:50px;letter-spacing:0.3px">MOST POPULAR</div>
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
@@ -97,7 +102,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R159</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-power" onclick="startPayfastCheckout('power')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-power" onclick="startCheckout('power')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Power Seller · 1 month</div>
@@ -106,7 +111,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R249</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-quarter" onclick="startPayfastCheckout('quarter')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-quarter" onclick="startCheckout('quarter')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Quarter Pass · 3 months</div>
@@ -115,7 +120,7 @@
                 <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R399</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-semester" onclick="startPayfastCheckout('semester')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-semester" onclick="startCheckout('semester')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Semester Pass · 6 months</div>
@@ -502,6 +507,26 @@
     // PayFast credentials live ONLY in Supabase Edge Function secrets (payfast-checkout / payfast-itn).
     // Do not put merchant_key or passphrase in this file.
     const PAYFAST_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/payfast-checkout';
+    // Paystack secret key lives ONLY in Supabase Edge Function secrets (paystack-checkout / paystack-webhook).
+    const PAYSTACK_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/paystack-checkout';
+
+    let selectedGateway = localStorage.getItem('mt_pay_gateway') || 'payfast';
+    window.setPaymentGateway = (gw) => {
+      selectedGateway = gw;
+      localStorage.setItem('mt_pay_gateway', gw);
+      const isPF = gw === 'payfast';
+      const pf = document.getElementById('gw-payfast'), ps = document.getElementById('gw-paystack');
+      pf.style.background = isPF ? '#2563eb' : '#fff';
+      pf.style.color = isPF ? '#fff' : '#555';
+      pf.style.borderColor = isPF ? '#2563eb' : '#eee';
+      ps.style.background = !isPF ? '#2563eb' : '#fff';
+      ps.style.color = !isPF ? '#fff' : '#555';
+      ps.style.borderColor = !isPF ? '#2563eb' : '#eee';
+    };
+    window.startCheckout = (planKey) => {
+      if (selectedGateway === 'paystack') return startPaystackCheckout(planKey);
+      return startPayfastCheckout(planKey);
+    };
 
     let currentUser = null;
     const imgs = {1:null,2:null,3:null,4:null,5:null,6:null};
@@ -1002,6 +1027,52 @@
       }
     };
 
+    window.startPaystackCheckout = async (planKey)=>{
+      document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
+      const pressedCard = document.getElementById('plan-'+planKey);
+      if (pressedCard) pressedCard.classList.add('plan-card-selected');
+
+      const errEl = document.getElementById('payfast-error');
+      errEl.style.display='none';
+      if (!VALID_PLAN_KEYS.includes(planKey)) return;
+      if (!currentUser) {
+        errEl.style.display='block';
+        errEl.textContent='Please sign in first.';
+        return;
+      }
+      const {data:{session}}=await supabase.auth.getSession();
+      if (!session?.access_token) {
+        errEl.style.display='block';
+        errEl.textContent='Please sign in again.';
+        return;
+      }
+      errEl.style.display='block';
+      errEl.style.color='#555';
+      errEl.textContent='Redirecting to Paystack…';
+      try {
+        const res = await fetch(PAYSTACK_FN, {
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+session.access_token,
+            'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
+          },
+          body: JSON.stringify({ plan: planKey, return_base: siteBase() })
+        });
+        const payload = await res.json().catch(()=>({}));
+        if (!res.ok) {
+          errEl.style.color='#1d4ed8';
+          errEl.textContent = payload.error || ('Checkout failed ('+res.status+')');
+          return;
+        }
+        // Paystack hosts the whole checkout page — just redirect there.
+        window.location.href = payload.authorization_url;
+      } catch(e) {
+        errEl.style.color='#1d4ed8';
+        errEl.textContent = 'Could not start payment. Check that paystack-checkout is deployed.';
+      }
+    };
+
     async function init() {
       const {data:{user}} = await supabase.auth.getUser();
 
@@ -1361,7 +1432,7 @@
       window.location.href='login.html';
     };
 
-        const VAPID_PUBLIC_KEY = 'BMCQB-SziCpFZpfJ7VLwT4HmcXmqYs8JJ-t03A7Ra8MXsXeFmhIYGUIml5mZbNM2Ezzas1ZWl_k3qCA9gQR4YfY';
+        const VAPID_PUBLIC_KEY = 'BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM';
     function urlBase64ToUint8Array(base64String){
       const padding='='.repeat((4-base64String.length%4)%4);
       const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
@@ -1777,6 +1848,7 @@
       err.style.color='#2e7d32'; err.textContent='✅ Store updated!';
     }
 
+    setPaymentGateway(selectedGateway);
     init();
   </script>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
