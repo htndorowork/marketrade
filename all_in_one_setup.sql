@@ -15,6 +15,7 @@
 --   5. PART 10 — PAYSTACK SUPPORT (originally paystack_support_migration.sql)
 --   6. PART 11 — RATE LIMITING (originally rate_limiting_migration.sql)
 --   7. PART 12 — VEHICLES CATEGORY + FREE MODE (originally vehicles_and_free_mode_migration.sql)
+--   8. PART 13 — HARDWARE CATEGORY (originally hardware_category_migration.sql)
 -- ============================================================
 
 
@@ -170,6 +171,7 @@ CREATE TABLE IF NOT EXISTS listings (
   health_subcategory text,
   career_subcategory text,
   vehicles_subcategory text,
+  hardware_subcategory text,
   created_at timestamp DEFAULT now()
 );
 
@@ -209,6 +211,7 @@ ALTER TABLE listings ADD COLUMN IF NOT EXISTS data_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS health_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS career_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicles_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS hardware_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_4 text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_5 text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_6 text;
@@ -1962,3 +1965,18 @@ CREATE POLICY "listings_insert" ON listings FOR INSERT WITH CHECK (
     WHERE l.seller_id = auth.uid() AND l.created_at > now() - interval '5 minutes'
   ) < 8
 );
+
+
+-- ============================================================
+-- PART 13 — HARDWARE CATEGORY (originally hardware_category_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — HARDWARE CATEGORY MIGRATION
+-- Run this once in the Supabase SQL Editor. Safe to re-run.
+-- Adds the hardware_subcategory column to listings so the new
+-- 🔨 Hardware category can store its subcategory, the same way
+-- every other flat category does.
+-- ============================================================
+
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS hardware_subcategory text;

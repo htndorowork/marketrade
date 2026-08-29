@@ -47,6 +47,15 @@
       </div>
     </div>
 
+    <div id="load-error-guard" style="display:none">
+      <div class="form-card" style="text-align:center">
+        <div style="font-size:40px;margin-bottom:12px">⚠️</div>
+        <p style="font-weight:800;margin-bottom:6px">Something went wrong loading your profile.</p>
+        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This is usually a temporary connection hiccup. Try again below.</p>
+        <button class="btn-primary" style="padding:12px 28px;border-radius:50px" onclick="location.reload()">🔄 Try again</button>
+      </div>
+    </div>
+
     <div id="profile-content" style="display:none">
       <div class="profile-header-card">
         <div class="profile-avatar" id="profile-avatar">🙂</div>
@@ -242,6 +251,7 @@
     let currentUser=null;
 
     async function init(){
+     try {
       const {data:{user}}=await supabase.auth.getUser();
       if(!user){document.getElementById('auth-guard').style.display='block';return;}
       currentUser=user;
@@ -278,6 +288,13 @@
       loadFavoritesBadge();
       loadAlertsBadge();
       refreshMfaStatus();
+     } catch (err) {
+      console.error('Profile failed to load:', err);
+      document.getElementById('auth-guard').style.display='none';
+      document.getElementById('redirecting-guard').style.display='none';
+      document.getElementById('profile-content').style.display='none';
+      document.getElementById('load-error-guard').style.display='block';
+     }
     }
 
     async function loadAlertsBadge(){
@@ -336,7 +353,7 @@
       }
 
       container.innerHTML=data.map(o=>{
-        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
         const e=CAT_EMOJI[o.listings?.category]||'📦';
         const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
         const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
@@ -416,7 +433,7 @@
       const {data:favs}=await supabase.from('favorites').select('listing_id,listings(*)').eq('user_id',currentUser.id).order('created_at',{ascending:false});
       const items=(favs||[]).map(f=>f.listings).filter(Boolean);
       if(!items.length){c.innerHTML='<p class="loading-msg">No favorites yet — heart a listing while browsing! ❤️</p>';return;}
-      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
       c.innerHTML=items.map(l=>{
         const e=CAT_EMOJI[l.category]||'🛍️';
         const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
@@ -644,6 +661,12 @@
     });
 
     init();
+    setTimeout(()=>{
+      const stillHidden = document.getElementById('profile-content').style.display === 'none' &&
+        document.getElementById('auth-guard').style.display === 'none' &&
+        document.getElementById('redirecting-guard').style.display === 'none';
+      if (stillHidden) document.getElementById('load-error-guard').style.display = 'block';
+    }, 15000);
   </script>
   <nav class="bottom-nav">
     <a class="bottom-nav-item" href="index.html"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>

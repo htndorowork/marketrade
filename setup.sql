@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS listings (
   health_subcategory text,
   career_subcategory text,
   vehicles_subcategory text,
+  hardware_subcategory text,
   created_at timestamp DEFAULT now()
 );
 
@@ -184,6 +185,7 @@ ALTER TABLE listings ADD COLUMN IF NOT EXISTS data_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS health_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS career_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicles_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS hardware_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_4 text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_5 text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS image_url_6 text;

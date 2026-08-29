@@ -70,6 +70,7 @@
     <div class="cat" id="cat-decor" onclick="openFlatSubcats('Decor',this)">🖼️ Home Decor</div>
     <div class="cat" id="cat-appliances" onclick="openFlatSubcats('Appliances',this)">🔌 Appliances</div>
     <div class="cat" id="cat-tools" onclick="openFlatSubcats('Tools',this)">🔧 Tools</div>
+    <div class="cat" id="cat-hardware" onclick="openFlatSubcats('Hardware',this)">🔨 Hardware</div>
     <div class="cat" id="cat-sports" onclick="openFlatSubcats('Sports',this)">🏃 Sports & Outdoor</div>
     <div class="cat" id="cat-toys" onclick="openFlatSubcats('Toys',this)">🧸 Toys & Hobbies</div>
     <div class="cat" id="cat-books" onclick="openFlatSubcats('Books',this)">📖 Books & Media</div>
@@ -107,6 +108,7 @@
           <option value="newest">Newest first</option>
           <option value="price_asc">Price: Low to High</option>
           <option value="price_desc">Price: High to Low</option>
+          <option value="random">🔀 Random</option>
         </select>
       </div>
       <div class="filter-divider"></div>
@@ -293,8 +295,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
 
     const TB_YEARS=['1st Year','2nd Year','3rd Year','Postgraduate'];
     const TB_TAXONOMY={
@@ -508,6 +510,13 @@
       'Step stools','Wheelbarrows','Garden tools','Shovels','Rakes','Paint brushes','Paint rollers',
       'Sandpaper','Nails','Screws','Bolts & nuts','Cable ties','Duct tape','Super glue','Lubricants/WD-40'
     ];
+    const HARDWARE_SUBCATS=[
+      'Door handles & knobs','Door hinges','Locks & padlocks','Window fittings','Cabinet handles','Cabinet hinges',
+      'Chains & ropes','Wire mesh','Pipes & fittings','Plumbing fittings','Taps & fixtures','Electrical wiring',
+      'Switches & sockets','Light fittings','Bricks & blocks','Cement & building materials','Timber/Wood',
+      'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
+      'Insulation materials','Adhesives & sealants','Silicone & fillers'
+    ];
     const SNACKS_SUBCATS=[
       'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
       'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
@@ -588,6 +597,7 @@
       Toys:{field:'toys_subcategory',emoji:'🧸',items:TOYS_SUBCATS},
       Pets:{field:'pets_subcategory',emoji:'🐾',items:PETS_SUBCATS},
       Tools:{field:'tools_subcategory',emoji:'🔧',items:TOOLS_SUBCATS},
+      Hardware:{field:'hardware_subcategory',emoji:'🔨',items:HARDWARE_SUBCATS},
       Snacks:{field:'snacks_subcategory',emoji:'🍿',items:SNACKS_SUBCATS},
       Sports:{field:'sports_subcategory',emoji:'🏃',items:SPORTS_SUBCATS},
       Books:{field:'books_subcategory',emoji:'📖',items:BOOKS_SUBCATS},
@@ -1317,6 +1327,7 @@
       f=[...f];
       if(sortMode==='price_asc') f.sort((a,b)=>(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price)-(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price));
       else if(sortMode==='price_desc') f.sort((a,b)=>(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price)-(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price));
+      else if(sortMode==='random'){for(let i=f.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[f[i],f[j]]=[f[j],f[i]];}}
       else f.sort((a,b)=>new Date(b.renewed_at||b.created_at)-new Date(a.renewed_at||a.created_at));
 
       render(f);
