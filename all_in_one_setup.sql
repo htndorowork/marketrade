@@ -1,4 +1,29 @@
 -- ============================================================
+-- MARKETRADE — COMPLETE DATABASE SETUP (ALL-IN-ONE)
+-- Run this single file in the Supabase SQL Editor to set up or
+-- fully update your database. Safe to re-run top to bottom —
+-- every statement uses IF NOT EXISTS / IF EXISTS / ON CONFLICT /
+-- CREATE OR REPLACE / DROP+CREATE for policies, so re-running
+-- this file just brings your database up to the latest state
+-- without duplicating anything or erasing existing data.
+--
+-- This file merges, in dependency order:
+--   1. PART 1–6 — CORE SCHEMA THROUGH PUSH NOTIFICATIONS (originally setup.sql)
+--   2. PART 7 — SAVED SEARCHES, BLOCK/MUTE, REFERRALS (originally new_features_migration.sql)
+--   3. PART 8 — BUGFIXES + RESTOCK ALERTS (originally bugfixes_and_restock_migration.sql)
+--   4. PART 9 — SCALABILITY INDEXES (originally scalability_indexes_migration.sql)
+--   5. PART 10 — PAYSTACK SUPPORT (originally paystack_support_migration.sql)
+--   6. PART 11 — RATE LIMITING (originally rate_limiting_migration.sql)
+--   7. PART 12 — VEHICLES CATEGORY + FREE MODE (originally vehicles_and_free_mode_migration.sql)
+-- ============================================================
+
+
+
+-- ============================================================
+-- PART 1–6 — CORE SCHEMA THROUGH PUSH NOTIFICATIONS (originally setup.sql)
+-- ============================================================
+
+-- ============================================================
 -- MARKETRADE — FULL DATABASE SETUP (single file, run once)
 -- Run this whole file in the Supabase SQL Editor for a fresh
 -- project. It merges, in the correct dependency order:
@@ -1414,3 +1439,517 @@ SET subscription_paid_until = CURRENT_DATE + 180,
     role = 'seller',
     is_admin = true
 WHERE id = (SELECT id FROM auth.users WHERE email = 'htndorowork@gmail.com');
+
+
+-- ============================================================
+-- PART 7 — SAVED SEARCHES, BLOCK/MUTE, REFERRALS (originally new_features_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — NEW FEATURES MIGRATION
+-- Run this once in the Supabase SQL Editor, after setup.sql.
+-- Safe to re-run. Adds:
+--   1) Saved searches with price/search alerts (notifies buyers
+--      when a new listing matches a search they saved)
+--   2) Block & mute between users in Messages
+--   3) Invite / referral program (referral codes + reward)
+-- ============================================================
+
+-- ============================================================
+-- PART 1 — SAVED SEARCHES / PRICE ALERTS
+-- ============================================================
+CREATE TABLE IF NOT EXISTS saved_searches (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  keyword text,
+  category text,
+  max_price numeric,
+  area_only boolean DEFAULT false,
+  created_at timestamp DEFAULT now()
+);
+
+ALTER TABLE saved_searches ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "saved_searches_all" ON saved_searches;
+CREATE POLICY "saved_searches_all" ON saved_searches FOR ALL
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+-- Fire when a new listing is posted: notify everyone whose saved
+-- search matches it (keyword in title, category, and max price).
+CREATE OR REPLACE FUNCTION public.notify_saved_search_matches()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_seller profiles%ROWTYPE;
+BEGIN
+  SELECT * INTO v_seller FROM profiles WHERE id = NEW.seller_id;
+
+  INSERT INTO notifications (user_id, type, message, listing_id)
+  SELECT ss.user_id, 'search_alert',
+    '🔔 New match for your alert: ' || NEW.title || ' — R' || NEW.price,
+    NEW.id
+  FROM saved_searches ss
+  JOIN profiles p ON p.id = ss.user_id
+  WHERE (ss.keyword IS NULL OR ss.keyword = '' OR NEW.title ILIKE '%' || ss.keyword || '%')
+    AND (ss.category IS NULL OR ss.category = 'All' OR ss.category = NEW.category)
+    AND (ss.max_price IS NULL OR NEW.price <= ss.max_price)
+    AND (
+      ss.area_only IS NOT TRUE
+      OR v_seller.deliver_all_areas IS TRUE
+      OR EXISTS (
+        SELECT 1 FROM jsonb_array_elements(COALESCE(v_seller.seller_areas, '[]'::jsonb)) elem
+        WHERE elem->>'city' = p.city AND elem->>'district' = p.district
+      )
+    )
+    AND ss.user_id <> NEW.seller_id;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_notify_saved_search_matches ON listings;
+CREATE TRIGGER trg_notify_saved_search_matches
+  AFTER INSERT ON listings
+  FOR EACH ROW EXECUTE FUNCTION public.notify_saved_search_matches();
+
+-- ============================================================
+-- PART 2 — BLOCK & MUTE (Messages)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS blocked_users (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  blocker_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  blocked_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  is_blocked boolean DEFAULT false,
+  is_muted boolean DEFAULT false,
+  created_at timestamp DEFAULT now(),
+  UNIQUE(blocker_id, blocked_id)
+);
+
+ALTER TABLE blocked_users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "blocked_users_all" ON blocked_users;
+CREATE POLICY "blocked_users_all" ON blocked_users FOR ALL
+  USING (auth.uid() = blocker_id) WITH CHECK (auth.uid() = blocker_id);
+-- Let the OTHER party check whether they themselves are blocked (needed for the
+-- messages_insert check below, and so the UI can explain why sending failed).
+DROP POLICY IF EXISTS "blocked_users_read_as_target" ON blocked_users;
+CREATE POLICY "blocked_users_read_as_target" ON blocked_users FOR SELECT
+  USING (auth.uid() = blocked_id);
+
+-- Stop a blocked user from messaging the person who blocked them.
+DROP POLICY IF EXISTS "messages_insert" ON messages;
+CREATE POLICY "messages_insert" ON messages FOR INSERT WITH CHECK (
+  auth.uid() = sender_id AND (auth.uid() = buyer_id OR auth.uid() = seller_id)
+  AND NOT EXISTS (
+    SELECT 1 FROM blocked_users bu
+    WHERE bu.is_blocked = true
+      AND bu.blocked_id = sender_id
+      AND bu.blocker_id = (CASE WHEN sender_id = buyer_id THEN seller_id ELSE buyer_id END)
+  )
+);
+
+-- Don't create a "new message" notification for a thread the recipient muted.
+CREATE OR REPLACE FUNCTION public.notify_new_message()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_recipient uuid;
+  v_sender_name text;
+BEGIN
+  v_recipient := CASE WHEN NEW.sender_id = NEW.buyer_id THEN NEW.seller_id ELSE NEW.buyer_id END;
+
+  IF EXISTS (SELECT 1 FROM blocked_users WHERE blocker_id = v_recipient AND blocked_id = NEW.sender_id AND is_muted = true) THEN
+    RETURN NEW;
+  END IF;
+
+  SELECT COALESCE(store_name, full_name, 'Someone') INTO v_sender_name FROM profiles WHERE id = NEW.sender_id;
+  INSERT INTO notifications (user_id, type, message, listing_id)
+  VALUES (v_recipient, 'new_message', v_sender_name || ' sent you a message 💬', NEW.listing_id);
+  RETURN NEW;
+END;
+$$;
+
+-- ============================================================
+-- PART 3 — INVITE / REFERRAL PROGRAM
+-- ============================================================
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS referral_code text;
+UPDATE profiles SET referral_code = upper(substr(id::text, 1, 8)) WHERE referral_code IS NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS profiles_referral_code_idx ON profiles(referral_code);
+
+-- Give every new profile a code automatically going forward.
+CREATE OR REPLACE FUNCTION public.set_referral_code()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NEW.referral_code IS NULL THEN
+    NEW.referral_code := upper(substr(NEW.id::text, 1, 8));
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_set_referral_code ON profiles;
+CREATE TRIGGER trg_set_referral_code
+  BEFORE INSERT ON profiles
+  FOR EACH ROW EXECUTE FUNCTION public.set_referral_code();
+
+CREATE TABLE IF NOT EXISTS referrals (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  referrer_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  referred_id uuid NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
+  created_at timestamp DEFAULT now()
+);
+
+ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "referrals_read" ON referrals;
+CREATE POLICY "referrals_read" ON referrals FOR SELECT
+  USING (auth.uid() = referrer_id OR auth.uid() = referred_id);
+DROP POLICY IF EXISTS "referrals_insert" ON referrals;
+CREATE POLICY "referrals_insert" ON referrals FOR INSERT
+  WITH CHECK (auth.uid() = referred_id AND referrer_id <> referred_id);
+
+-- Reward: +3 days of active subscription for the referrer, and notify them,
+-- the moment a friend they invited signs up.
+CREATE OR REPLACE FUNCTION public.reward_referrer()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  UPDATE profiles
+  SET subscription_paid_until = GREATEST(COALESCE(subscription_paid_until, CURRENT_DATE), CURRENT_DATE) + 3
+  WHERE id = NEW.referrer_id;
+
+  INSERT INTO notifications (user_id, type, message)
+  VALUES (NEW.referrer_id, 'referral', '🎉 A friend joined using your invite link — you earned 3 free selling days!');
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_reward_referrer ON referrals;
+CREATE TRIGGER trg_reward_referrer
+  AFTER INSERT ON referrals
+  FOR EACH ROW EXECUTE FUNCTION public.reward_referrer();
+
+-- No extra policy needed here: profiles already has a public "profiles_read"
+-- SELECT policy (USING (true)) from setup.sql, so looking up a referral_code
+-- to resolve who invited a new signup already works.
+
+
+-- ============================================================
+-- PART 8 — BUGFIXES + RESTOCK ALERTS (originally bugfixes_and_restock_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — BUGFIXES + RESTOCK ALERTS MIGRATION
+-- Run this once in the Supabase SQL Editor, after setup.sql and
+-- new_features_migration.sql. Safe to re-run. Fixes:
+--   1) "Order failed: schema "net" does not exist" at checkout
+--   2) "Delete failed: Cannot modify message content" when deleting
+--      a listing that has messages attached to it
+-- Adds:
+--   3) "Notify me when back in stock" alerts on individual listings
+-- ============================================================
+
+-- ============================================================
+-- FIX 1 — Checkout failing because the push-notification trigger
+-- errors out (pg_net's "net" schema isn't enabled on this project).
+-- A notification failing to reach a phone should never block the
+-- order/message/etc. that caused it — so wrap the network call in
+-- its own exception handler.
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.trigger_push_on_notification()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  BEGIN
+    PERFORM net.http_post(
+      url := 'https://YOUR_PROJECT.supabase.co/functions/v1/send-push',
+      headers := jsonb_build_object(
+        'Content-Type', 'application/json',
+        'x-push-secret', 'PUSH_SHARED_SECRET'
+      ),
+      body := jsonb_build_object(
+        'user_id', NEW.user_id,
+        'title', 'Marketrade',
+        'body', NEW.message,
+        'listing_id', NEW.listing_id
+      )
+    );
+  EXCEPTION WHEN OTHERS THEN
+    -- Swallow any push-delivery error (extension not enabled, function
+    -- down, network hiccup, etc.) so it can never roll back whatever
+    -- action created this notification (an order, a message, ...).
+    NULL;
+  END;
+  RETURN NEW;
+END;
+$$;
+
+-- ============================================================
+-- FIX 2 — Deleting a listing needs to null out messages.listing_id
+-- (ON DELETE SET NULL), but the message-immutability trigger was
+-- blocking that legitimate system update along with real edits.
+-- Now it only blocks changing listing_id to a DIFFERENT listing,
+-- not clearing it to NULL.
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.protect_message_content()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NEW.content IS DISTINCT FROM OLD.content
+     OR NEW.sender_id IS DISTINCT FROM OLD.sender_id
+     OR NEW.buyer_id IS DISTINCT FROM OLD.buyer_id
+     OR NEW.seller_id IS DISTINCT FROM OLD.seller_id
+     OR (NEW.listing_id IS DISTINCT FROM OLD.listing_id AND NEW.listing_id IS NOT NULL) THEN
+    RAISE EXCEPTION 'Cannot modify message content';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+-- (trigger itself is unchanged — it already points at this function)
+
+-- ============================================================
+-- FEATURE — Restock alerts ("notify me when back in stock")
+-- ============================================================
+CREATE TABLE IF NOT EXISTS restock_alerts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  listing_id uuid NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+  created_at timestamp DEFAULT now(),
+  UNIQUE(user_id, listing_id)
+);
+
+ALTER TABLE restock_alerts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "restock_alerts_all" ON restock_alerts;
+CREATE POLICY "restock_alerts_all" ON restock_alerts FOR ALL
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+-- Fires when a listing's stock/availability changes back on. Notifies
+-- everyone who asked, then clears those alerts so they don't fire again.
+CREATE OR REPLACE FUNCTION public.notify_restock()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF (COALESCE(OLD.quantity,0) <= 0 AND COALESCE(NEW.quantity,0) > 0)
+     OR (OLD.is_available IS DISTINCT FROM NEW.is_available AND NEW.is_available = true AND COALESCE(NEW.quantity,0) > 0) THEN
+    INSERT INTO notifications (user_id, type, message, listing_id)
+    SELECT ra.user_id, 'restock', '🔔 Back in stock: ' || NEW.title, NEW.id
+    FROM restock_alerts ra
+    WHERE ra.listing_id = NEW.id;
+
+    DELETE FROM restock_alerts WHERE listing_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_notify_restock ON listings;
+CREATE TRIGGER trg_notify_restock
+  AFTER UPDATE ON listings
+  FOR EACH ROW EXECUTE FUNCTION public.notify_restock();
+
+
+-- ============================================================
+-- PART 9 — SCALABILITY INDEXES (originally scalability_indexes_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — INDEXES MIGRATION (scalability)
+-- Run this once in the Supabase SQL Editor. Safe to re-run
+-- (IF NOT EXISTS on everything). Doesn't change any behavior —
+-- purely speeds up the exact queries the app already runs, which
+-- matters more and more as the number of rows grows.
+-- ============================================================
+
+-- Listings: the homepage/browse feed filters on is_available + is_draft
+-- and sorts by renewed_at on almost every request — this composite index
+-- covers that exact pattern in one lookup instead of a full table scan.
+CREATE INDEX IF NOT EXISTS idx_listings_browse
+  ON listings (is_available, is_draft, renewed_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_listings_seller_id ON listings (seller_id);
+CREATE INDEX IF NOT EXISTS idx_listings_category ON listings (category);
+
+-- Profiles: every listing query joins profiles and checks subscription
+-- status; referral code lookups happen on every signup with ?ref=.
+CREATE INDEX IF NOT EXISTS idx_profiles_subscription ON profiles (subscription_paid_until);
+CREATE INDEX IF NOT EXISTS idx_profiles_referral_code ON profiles (referral_code);
+
+-- Orders: seller dashboard order lists, and the verified-seller badge
+-- calculation, both filter by seller_id (+status for the badge).
+CREATE INDEX IF NOT EXISTS idx_orders_seller_id ON orders (seller_id);
+CREATE INDEX IF NOT EXISTS idx_orders_buyer_id ON orders (buyer_id);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders (status);
+
+-- Messages: thread lookups filter by buyer_id/seller_id constantly, and
+-- the rate-limit check added earlier filters by sender_id + created_at.
+CREATE INDEX IF NOT EXISTS idx_messages_buyer_id ON messages (buyer_id);
+CREATE INDEX IF NOT EXISTS idx_messages_seller_id ON messages (seller_id);
+CREATE INDEX IF NOT EXISTS idx_messages_sender_created ON messages (sender_id, created_at);
+
+-- Notifications: the bell icon queries unread notifications per user
+-- constantly (polled or on every page load).
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications (user_id, is_read);
+
+-- Favorites: loaded on every signed-in homepage visit.
+CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites (user_id);
+
+-- Saved searches / restock alerts / blocked users: matched against on
+-- every new listing insert / listing update / message insert respectively.
+CREATE INDEX IF NOT EXISTS idx_saved_searches_user_id ON saved_searches (user_id);
+CREATE INDEX IF NOT EXISTS idx_restock_alerts_listing_id ON restock_alerts (listing_id);
+CREATE INDEX IF NOT EXISTS idx_blocked_users_lookup ON blocked_users (blocker_id, blocked_id);
+
+-- Reviews already has an index on listing_id from setup.sql; add seller_id
+-- since the verified-badge / store page also filter by it.
+CREATE INDEX IF NOT EXISTS idx_reviews_seller_id ON reviews (seller_id);
+
+
+-- ============================================================
+-- PART 10 — PAYSTACK SUPPORT (originally paystack_support_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — PAYSTACK SUPPORT MIGRATION
+-- Run this once in the Supabase SQL Editor. Safe to re-run.
+-- Adds columns so subscription_payments can track which gateway
+-- (PayFast or Paystack) a payment came through, without touching
+-- any existing PayFast data or behavior.
+-- ============================================================
+
+ALTER TABLE subscription_payments ADD COLUMN IF NOT EXISTS gateway text DEFAULT 'payfast';
+ALTER TABLE subscription_payments ADD COLUMN IF NOT EXISTS gateway_payment_id text;
+
+-- Backfill: any existing row already has its PayFast reference in
+-- pf_payment_id — copy it into the new generic column so admin views
+-- can query one column regardless of gateway.
+UPDATE subscription_payments
+SET gateway_payment_id = pf_payment_id
+WHERE gateway_payment_id IS NULL AND pf_payment_id IS NOT NULL;
+
+
+-- ============================================================
+-- PART 11 — RATE LIMITING (originally rate_limiting_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — RATE LIMITING MIGRATION
+-- Run this once in the Supabase SQL Editor, after the other
+-- migrations. Safe to re-run.
+--
+-- Adds lightweight abuse limits directly at the database level
+-- (RLS), so they apply no matter what client hits the API:
+--   - Messages: max 15 per rolling 60 seconds per sender
+--   - Reports:  max 5 per rolling 60 minutes per reporter
+--   - Listings: max 8 new listings per rolling 5 minutes per seller
+--     (on top of the existing active-subscription requirement)
+-- Limits are generous enough for normal use and only kick in for
+-- bot-speed abuse.
+-- ============================================================
+
+-- ---------- Messages ----------
+DROP POLICY IF EXISTS "messages_insert" ON messages;
+CREATE POLICY "messages_insert" ON messages FOR INSERT WITH CHECK (
+  auth.uid() = sender_id AND (auth.uid() = buyer_id OR auth.uid() = seller_id)
+  AND NOT EXISTS (
+    SELECT 1 FROM blocked_users bu
+    WHERE bu.is_blocked = true
+      AND bu.blocked_id = sender_id
+      AND bu.blocker_id = (CASE WHEN sender_id = buyer_id THEN seller_id ELSE buyer_id END)
+  )
+  AND (
+    SELECT count(*) FROM messages m
+    WHERE m.sender_id = auth.uid() AND m.created_at > now() - interval '60 seconds'
+  ) < 15
+);
+
+-- ---------- Reports ----------
+DROP POLICY IF EXISTS "reports_insert" ON reports;
+CREATE POLICY "reports_insert" ON reports FOR INSERT WITH CHECK (
+  auth.uid() = reporter_id
+  AND (
+    SELECT count(*) FROM reports r
+    WHERE r.reporter_id = auth.uid() AND r.created_at > now() - interval '60 minutes'
+  ) < 5
+);
+
+-- ---------- Listings ----------
+DROP POLICY IF EXISTS "listings_insert" ON listings;
+CREATE POLICY "listings_insert" ON listings FOR INSERT WITH CHECK (
+  auth.uid() = seller_id AND
+  EXISTS (
+    SELECT 1 FROM profiles
+    WHERE id = auth.uid()
+    AND COALESCE(is_blocked,false) = false
+    AND (
+      COALESCE(is_admin,false) = true
+      OR (subscription_paid_until IS NOT NULL AND subscription_paid_until >= CURRENT_DATE)
+      OR EXISTS (SELECT 1 FROM settings WHERE key = 'free_mode_active' AND value = 'true')
+    )
+  )
+  AND (
+    SELECT count(*) FROM listings l
+    WHERE l.seller_id = auth.uid() AND l.created_at > now() - interval '5 minutes'
+  ) < 8
+);
+
+
+-- ============================================================
+-- PART 12 — VEHICLES CATEGORY + FREE MODE (originally vehicles_and_free_mode_migration.sql)
+-- ============================================================
+
+-- ============================================================
+-- MARKETRADE — VEHICLES CATEGORY + FREE MODE MIGRATION
+-- Run this once in the Supabase SQL Editor, after setup.sql
+-- (and after rate_limiting_migration.sql, if you've already run
+-- that one). Safe to re-run.
+--
+-- 1) Adds a `vehicles_subcategory` column to `listings` so the
+--    new 🚗 Vehicles category can store its subcategory, the
+--    same way every other flat category does.
+--
+-- 2) Adds a `free_mode_active` row to `settings` (defaults to
+--    'false') and updates the `listings_insert` RLS policy so
+--    that when an admin flips Free Mode ON from the admin panel,
+--    ALL sellers can post without an active paid subscription —
+--    enforced at the database level, not just in the UI.
+-- ============================================================
+
+-- ---------- 1) Vehicles subcategory column ----------
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicles_subcategory text;
+
+-- ---------- 2) Free Mode setting ----------
+INSERT INTO settings (key, value) VALUES ('free_mode_active', 'false')
+ON CONFLICT (key) DO NOTHING;
+
+-- Re-apply the listings insert policy one final time so it includes
+-- both the rate limit (from Part 11) and the Free Mode check together.
+DROP POLICY IF EXISTS "listings_insert" ON listings;
+CREATE POLICY "listings_insert" ON listings FOR INSERT WITH CHECK (
+  auth.uid() = seller_id AND
+  EXISTS (
+    SELECT 1 FROM profiles
+    WHERE id = auth.uid()
+    AND COALESCE(is_blocked,false) = false
+    AND (
+      COALESCE(is_admin,false) = true
+      OR (subscription_paid_until IS NOT NULL AND subscription_paid_until >= CURRENT_DATE)
+      OR EXISTS (SELECT 1 FROM settings WHERE key = 'free_mode_active' AND value = 'true')
+    )
+  )
+  AND (
+    SELECT count(*) FROM listings l
+    WHERE l.seller_id = auth.uid() AND l.created_at > now() - interval '5 minutes'
+  ) < 8
+);

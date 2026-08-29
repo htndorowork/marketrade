@@ -50,6 +50,7 @@ CREATE POLICY "listings_insert" ON listings FOR INSERT WITH CHECK (
     AND (
       COALESCE(is_admin,false) = true
       OR (subscription_paid_until IS NOT NULL AND subscription_paid_until >= CURRENT_DATE)
+      OR EXISTS (SELECT 1 FROM settings WHERE key = 'free_mode_active' AND value = 'true')
     )
   )
   AND (

@@ -51,6 +51,21 @@
         <div id="paywall-status" style="font-size:13px;font-weight:700;margin-top:12px;color:#888"></div>
       </div>
 
+      <!-- FREE MODE CONTROL -->
+      <div class="form-card" style="margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <div style="font-size:16px;font-weight:800;margin-bottom:4px">🎁 Free Mode</div>
+            <div style="font-size:13px;color:#888;font-weight:600">When ON, ALL sellers can post without paying, regardless of subscription status. Turn OFF to go back to requiring a paid plan.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="free-mode-toggle" onchange="toggleFreeMode(this.checked)"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div id="free-mode-status" style="font-size:13px;font-weight:700;margin-top:12px;color:#888"></div>
+      </div>
+
       <!-- STATS -->
       <div class="stats" style="margin-bottom:24px">
         <div class="stat"><div class="stat-num" id="a-listings">0</div><div class="stat-label">Listings</div></div>
@@ -123,7 +138,7 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase=createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
     let allListings=[];
     let allSellers=[];
     let currentAdminId=null;
@@ -155,7 +170,7 @@
       currentAdminId=user.id;
       document.getElementById('admin-content').style.display='block';
       document.getElementById('signout-btn').onclick=async()=>{await supabase.auth.signOut();window.location.href='login.html';};
-      loadPaywall();loadStats();loadListings();
+      loadPaywall();loadFreeMode();loadStats();loadListings();
     }
 
     async function loadPaywall(){
@@ -170,6 +185,20 @@
       await supabase.from('settings').update({value:checked?'true':'false'}).eq('key','paywall_active');
       document.getElementById('paywall-status').textContent=checked?'🔴 Emergency pause ON — sellers cannot open the dashboard':'🟢 Emergency pause OFF — sellers must still have an active paid plan to post';
       document.getElementById('paywall-status').style.color=checked?'#1d4ed8':'#2e7d32';
+    };
+
+    async function loadFreeMode(){
+      const {data}=await supabase.from('settings').select('value').eq('key','free_mode_active').single();
+      const active=data?.value==='true';
+      document.getElementById('free-mode-toggle').checked=active;
+      document.getElementById('free-mode-status').textContent=active?'🎁 Free Mode ON — all sellers can post without paying':'Free Mode OFF — sellers need an active paid plan to post';
+      document.getElementById('free-mode-status').style.color=active?'#c2410c':'#888';
+    }
+
+    window.toggleFreeMode=async(checked)=>{
+      await supabase.from('settings').update({value:checked?'true':'false'}).eq('key','free_mode_active');
+      document.getElementById('free-mode-status').textContent=checked?'🎁 Free Mode ON — all sellers can post without paying':'Free Mode OFF — sellers need an active paid plan to post';
+      document.getElementById('free-mode-status').style.color=checked?'#c2410c':'#888';
     };
 
     async function loadStats(){

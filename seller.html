@@ -270,7 +270,7 @@
                 <option>Sports</option><option>Toys</option><option>Books</option><option>Music</option>
                 <option>Cameras</option><option>Pets</option><option>Baby</option><option>Plants</option>
                 <option>Events</option><option>Health</option><option>Data</option><option>Career</option>
-                <option>Transport</option><option>Accommodation</option><option>Tutoring</option>
+                <option>Transport</option><option>Vehicles</option><option>Accommodation</option><option>Tutoring</option>
                 <option>Services</option><option>Others</option>
               </select>
             </div>
@@ -683,6 +683,14 @@
       'Motorbike'
     ];
 
+    const VEHICLES_SUBCATS=[
+      'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
+      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan','Boat','Jet ski',
+      'Car parts & spares','Tyres & rims','Car batteries','Car audio & electronics','Dash cams',
+      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car care & cleaning products',
+      'Car jacks & tools','Helmets & riding gear','Number plates'
+    ];
+
     const SERVICES_SUBCATS=[
       'Haircuts','Braiding and hairstyling','Barber services','Makeup services','Nail services',
       'Massage services','Personal fitness training','Lift-sharing','Airport transfers','Bus station transfers',
@@ -823,6 +831,7 @@
       Tutoring:{field:'tutoring_subcategory',label:'Tutoring Subject *',items:TUTORING_SUBCATS},
       Accommodation:{field:'accommodation_subcategory',label:'Accommodation Type *',items:ACCOMMODATION_SUBCATS},
       Transport:{field:'transport_subcategory',label:'Transport Type *',items:TRANSPORT_SUBCATS},
+      Vehicles:{field:'vehicles_subcategory',label:'Vehicle Type *',items:VEHICLES_SUBCATS},
       Services:{field:'services_subcategory',label:'Service Type *',items:SERVICES_SUBCATS},
       Stationary:{field:'stationary_subcategory',label:'Stationary Item *',items:STATIONARY_SUBCATS},
       Appliances:{field:'appliances_subcategory',label:'Appliance Type *',items:APPLIANCES_SUBCATS},
@@ -1079,6 +1088,9 @@
       const {data:pw} = await supabase.from('settings').select('value').eq('key','paywall_active').single();
       const paywallOn = pw?.value === 'true';
 
+      const {data:fm} = await supabase.from('settings').select('value').eq('key','free_mode_active').single();
+      const freeModeOn = fm?.value === 'true';
+
       if (!user) {
         document.getElementById('main-dashboard').style.display = 'block';
         document.getElementById('auth-guard').style.display = 'block';
@@ -1096,7 +1108,7 @@
 
       const {data:p} = await supabase.from('profiles').select('*').eq('id',user.id).single();
       const today = new Date().toISOString().slice(0,10);
-      const paidActive = p?.subscription_paid_until && p.subscription_paid_until >= today;
+      const paidActive = (p?.subscription_paid_until && p.subscription_paid_until >= today) || freeModeOn;
       const blocked = p?.is_blocked === true;
 
       if (blocked) {
@@ -1136,10 +1148,10 @@
         loadOrders();
         loadMyListings();
 
-        if (p.is_admin || p.subscription_paid_until) {
+        if (p.is_admin || p.subscription_paid_until || freeModeOn) {
           const banner = document.createElement('div');
           banner.style.cssText = 'background:#eff6ff;color:#5b21b6;padding:10px 20px;font-weight:800;font-size:12.5px;text-align:center;border-bottom:2px solid #e9d5ff';
-          banner.textContent = p.is_admin ? '✅ Admin account — seller plan never expires' : '✅ Seller plan active until '+new Date(p.subscription_paid_until).toLocaleDateString('en-ZA');
+          banner.textContent = p.is_admin ? '✅ Admin account — seller plan never expires' : (p.subscription_paid_until && p.subscription_paid_until >= today) ? '✅ Seller plan active until '+new Date(p.subscription_paid_until).toLocaleDateString('en-ZA') : '🎁 Free Mode is ON — you can post without paying';
           document.body.insertBefore(banner, document.body.firstChild);
         }
       }
