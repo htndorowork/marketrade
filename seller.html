@@ -186,6 +186,14 @@
           </button>
         </div>
 
+        <div class="profile-section-label">Buying</div>
+        <div class="profile-menu-card">
+          <button class="profile-menu-row" onclick="showTab('purchases')">
+            <span class="pmr-icon">🛍️</span><span class="pmr-label">My Purchases</span>
+            <span class="pmr-badge" id="purchases-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </button>
+        </div>
+
         <div class="profile-section-label">Account</div>
         <div class="profile-menu-card">
           <a class="profile-menu-row" href="messages.html">
@@ -246,6 +254,11 @@
         <div id="orders-completed-container"><p class="loading-msg">Loading completed orders... ⏳</p></div>
       </div>
 
+      <!-- MY PURCHASES (things this seller bought from other sellers) -->
+      <div id="tab-purchases" style="display:none">
+        <div id="purchases-container"><p class="loading-msg">Loading purchases... ⏳</p></div>
+      </div>
+
       <!-- MY LISTINGS -->
       <div id="tab-listings" style="display:none">
         <div id="my-listings"><p class="loading-msg">Loading listings...</p></div>
@@ -276,7 +289,7 @@
                 <option>Cameras</option><option>Pets</option><option>Baby</option><option>Plants</option>
                 <option>Events</option><option>Health</option><option>Data</option><option>Career</option>
                 <option>Transport</option><option>Vehicles</option><option>Accommodation</option><option>Tutoring</option>
-                <option>Services</option><option>Hardware</option><option>Others</option>
+                <option>Services</option><option>Hardware</option><option>Gaming</option><option>Others</option>
               </select>
             </div>
           </div>
@@ -791,6 +804,12 @@
       'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
       'Insulation materials','Adhesives & sealants','Silicone & fillers'
     ];
+    const GAMING_SUBCATS=[
+      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
+      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
+      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
+      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
+    ];
     const SNACKS_SUBCATS=[
       'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
       'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
@@ -807,6 +826,7 @@
       Pets:{field:'pets_subcategory',label:'Pet Item Type *',items:PETS_SUBCATS},
       Tools:{field:'tools_subcategory',label:'Tool Type *',items:TOOLS_SUBCATS},
       Hardware:{field:'hardware_subcategory',label:'Hardware Type *',items:HARDWARE_SUBCATS},
+      Gaming:{field:'gaming_subcategory',label:'Gaming Item *',items:GAMING_SUBCATS},
       Snacks:{field:'snacks_subcategory',label:'Snack Type *',items:SNACKS_SUBCATS},
       Sports:{field:'sports_subcategory',label:'Sports/Outdoor Item *',items:SPORTS_SUBCATS},
       Books:{field:'books_subcategory',label:'Book/Media Type *',items:BOOKS_SUBCATS},
@@ -1087,6 +1107,9 @@
         loadNotifications();
         loadOrders();
         loadMyListings();
+        supabase.from('orders').select('id',{count:'exact',head:true}).eq('buyer_id',currentUser.id).eq('status','confirmed').then(({count})=>{
+          if(count>0){const b=document.getElementById('purchases-badge');b.textContent=count;b.style.display='inline-block';}
+        });
 
         if (p.is_admin || p.subscription_paid_until || freeModeOn) {
           const banner = document.createElement('div');
@@ -1612,6 +1635,95 @@
       loadCompletedOrders();
     };
 
+    // "My Purchases" — orders THIS seller placed as a buyer with other sellers.
+    async function loadMyPurchases(){
+      const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
+      const container=document.getElementById('purchases-container');
+      const activeCount=(data||[]).filter(o=>o.status==='confirmed').length;
+      const pb=document.getElementById('purchases-badge');
+      if(activeCount>0){pb.textContent=activeCount;pb.style.display='inline-block';} else pb.style.display='none';
+      if(!data?.length){container.innerHTML='<p class="loading-msg">No purchases yet — go browse! 🛍️</p>';return;}
+
+      const completedIds=data.filter(o=>o.status==='completed').map(o=>o.id);
+      let myReviews={};
+      if(completedIds.length){
+        const {data:revs}=await supabase.from('reviews').select('order_id,rating').eq('buyer_id',currentUser.id).in('order_id',completedIds);
+        (revs||[]).forEach(r=>{myReviews[r.order_id]=r.rating;});
+      }
+
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      container.innerHTML=data.map(o=>{
+        const e=CAT_EMOJI[o.listings?.category]||'📦';
+        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
+        const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+        let ratingHtml='';
+        if(o.status==='completed'){
+          if(myReviews[o.id]){
+            ratingHtml='<div class="order-detail" style="margin-top:6px">⭐ You rated this seller: <strong>'+myReviews[o.id]+'/5</strong></div>';
+          } else {
+            ratingHtml='<div class="order-detail" style="margin-top:6px">Rate this seller: '+
+              [1,2,3,4,5].map(n=>'<span style="cursor:pointer;font-size:18px" onclick="window._starClickBuy(this,'+n+')">☆</span>').join('')+
+              '<input type="hidden" class="rate-val" value="0"/>'+
+              '<textarea class="rate-comment" placeholder="Optional comment..." rows="2" style="width:100%;margin-top:6px;font-family:inherit;font-size:12px;padding:6px;border:2px solid #f0f0f0;border-radius:8px"></textarea>'+
+              '<button class="btn-sm btn-toggle" style="margin-top:4px" onclick="window._submitBuyerRating(this,\''+o.id+'\',\''+o.seller_id+'\')">Submit rating</button>'+
+              '</div>';
+          }
+        }
+        const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelPurchase(\''+o.id+'\')">Cancel Order</button>' : '';
+        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>' : '';
+        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" style="margin-top:8px;margin-left:6px" onclick="window._requestPurchaseDispute(\''+o.id+'\',\''+(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
+        const viewItem = o.listing_id ? "window._viewPurchasedItem('"+o.listing_id+"')" : '';
+        return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
+          '<div style="display:flex;gap:12px;align-items:flex-start">'+
+          (viewItem?'<div onclick="'+viewItem+'" style="cursor:pointer">'+img+'</div>':img)+
+          '<div style="flex:1">'+status+
+          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
+          '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
+          '<div style="font-size:13px;font-weight:800;color:#2563eb;margin-bottom:8px">Contact seller to arrange:</div>'+
+          '<div class="order-detail">👤 <strong>'+(o.profiles?.full_name||'Seller')+'</strong></div>'+
+          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+o.profiles.residence+'</strong></div>':'')+
+          '<div class="order-detail">📱 <strong>'+(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
+          '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
+          ratingHtml+cancelBtn+receiptBtn+disputeBtn+
+          '</div></div></div>';
+      }).join('');
+    }
+
+    window._viewPurchasedItem=(listingId)=>{
+      window.location.href='index.html?open='+listingId;
+    };
+    window._cancelPurchase=async(id)=>{
+      if(!confirm('Cancel this order? The seller will see it as cancelled.'))return;
+      const {error}=await supabase.rpc('buyer_cancel_order',{p_order_id:id});
+      if(error){alert('Error: '+error.message);return;}
+      loadMyPurchases();
+    };
+    window._requestPurchaseDispute=async(orderId,listingTitle)=>{
+      const details=prompt('Briefly describe the problem with this order ("'+listingTitle+'"):');
+      if(details===null) return;
+      const {data:o}=await supabase.from('orders').select('seller_id,listing_id').eq('id',orderId).single();
+      const {error}=await supabase.from('reports').insert({
+        reporter_id:currentUser.id, order_id:orderId, listing_id:o?.listing_id||null, reported_user_id:o?.seller_id||null,
+        reason:'Dispute or refund request', details:details||null
+      });
+      if(error){alert('Could not submit: '+error.message);return;}
+      alert('Thanks — our team will review this and reach out if needed.');
+    };
+    window._starClickBuy=(el,n)=>{
+      const wrap=el.parentElement;
+      wrap.querySelectorAll('.rate-val')[0].value=n;
+      wrap.querySelectorAll('span').forEach((s,i)=>s.textContent=(i<n)?'⭐':'☆');
+    };
+    window._submitBuyerRating=async(btn,orderId,sellerId)=>{
+      const wrap=btn.parentElement;
+      const rating=parseInt(wrap.querySelector('.rate-val').value)||0;
+      const comment=wrap.querySelector('.rate-comment').value.trim();
+      if(!rating){alert('Tap a star to choose a rating first');return;}
+      const {error}=await supabase.from('reviews').insert({order_id:orderId,seller_id:sellerId,buyer_id:currentUser.id,rating,comment:comment||null});
+      if(error){alert('Could not submit rating: '+error.message);return;}
+      loadMyPurchases();
+    };
+
     async function loadMyListings() {
       const c = document.getElementById('my-listings');
       const {data,error} = await supabase.from('listings').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
@@ -1687,10 +1799,11 @@
     window.showTab = (tab) => {
       document.getElementById('dashboard-menu').style.display='none';
       document.getElementById('dashboard-detail').style.display='block';
-      ['orders','orders-completed','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
+      ['orders','orders-completed','purchases','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
       if (tab==='listings') loadMyListings();
       if (tab==='orders') loadOrders();
       if (tab==='orders-completed') loadCompletedOrders();
+      if (tab==='purchases') loadMyPurchases();
       if (tab==='store') loadStoreTab();
       if (tab==='add') refreshPlanUsage();
       if (tab==='alerts') loadAlerts();

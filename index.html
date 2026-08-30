@@ -71,6 +71,7 @@
     <div class="cat" id="cat-appliances" onclick="openFlatSubcats('Appliances',this)">🔌 Appliances</div>
     <div class="cat" id="cat-tools" onclick="openFlatSubcats('Tools',this)">🔧 Tools</div>
     <div class="cat" id="cat-hardware" onclick="openFlatSubcats('Hardware',this)">🔨 Hardware</div>
+    <div class="cat" id="cat-gaming" onclick="openFlatSubcats('Gaming',this)">🎮 Gaming</div>
     <div class="cat" id="cat-sports" onclick="openFlatSubcats('Sports',this)">🏃 Sports & Outdoor</div>
     <div class="cat" id="cat-toys" onclick="openFlatSubcats('Toys',this)">🧸 Toys & Hobbies</div>
     <div class="cat" id="cat-books" onclick="openFlatSubcats('Books',this)">📖 Books & Media</div>
@@ -295,8 +296,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Gaming:{bg:'#ede7f6',text:'#4527a0'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
 
     const TB_YEARS=['1st Year','2nd Year','3rd Year','Postgraduate'];
     const TB_TAXONOMY={
@@ -517,6 +518,12 @@
       'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
       'Insulation materials','Adhesives & sealants','Silicone & fillers'
     ];
+    const GAMING_SUBCATS=[
+      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
+      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
+      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
+      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
+    ];
     const SNACKS_SUBCATS=[
       'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
       'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
@@ -598,6 +605,7 @@
       Pets:{field:'pets_subcategory',emoji:'🐾',items:PETS_SUBCATS},
       Tools:{field:'tools_subcategory',emoji:'🔧',items:TOOLS_SUBCATS},
       Hardware:{field:'hardware_subcategory',emoji:'🔨',items:HARDWARE_SUBCATS},
+      Gaming:{field:'gaming_subcategory',emoji:'🎮',items:GAMING_SUBCATS},
       Snacks:{field:'snacks_subcategory',emoji:'🍿',items:SNACKS_SUBCATS},
       Sports:{field:'sports_subcategory',emoji:'🏃',items:SPORTS_SUBCATS},
       Books:{field:'books_subcategory',emoji:'📖',items:BOOKS_SUBCATS},
