@@ -106,10 +106,10 @@
       <div class="filter-group">
         <span class="filter-label">🔀 Sort by</span>
         <select id="sort-select" onchange="doFilter()">
+          <option value="random">🔀 Random</option>
           <option value="newest">Newest first</option>
           <option value="price_asc">Price: Low to High</option>
           <option value="price_desc">Price: High to Low</option>
-          <option value="random">🔀 Random</option>
         </select>
       </div>
       <div class="filter-divider"></div>
@@ -820,7 +820,7 @@
       document.getElementById('search-input').value='';
       document.getElementById('price-min').value='';
       document.getElementById('price-max').value='';
-      document.getElementById('sort-select').value='newest';
+      document.getElementById('sort-select').value='random';
       document.getElementById('my-area-only').checked=false;
       selectCat('All',document.querySelector('.cat'));
     };
