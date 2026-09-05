@@ -694,7 +694,7 @@
         if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';const bb=document.getElementById('bnav-msg-badge');if(bb){bb.textContent=count;bb.style.display='flex';}}
       });
       // If the buyer hasn't picked an area on this device yet, use the one they set at signup
-      if(!localStorage.getItem('sm_area')){
+      if(!localStorage.getItem('sm_area') && localStorage.getItem('sm_area_all')!=='1'){
         supabase.from('profiles').select('province,city,district,suburb').eq('id',user.id).single().then(({data:pr})=>{
           if(pr?.province && pr?.city && pr?.district && pr?.suburb){
             localStorage.setItem('sm_area',JSON.stringify({province:pr.province,city:pr.city,district:pr.district,suburb:pr.suburb}));
@@ -1560,11 +1560,22 @@
 
     function updateAreaBtnLabel(){
       const btn=document.getElementById('area-select-btn');
+      if(localStorage.getItem('sm_area_all')==='1'){ btn.textContent='📍 All areas'; return; }
       const saved=JSON.parse(localStorage.getItem('sm_area')||'null');
       if(saved){ btn.textContent='📍 '+saved.suburb+', '+saved.district; }
       else { btn.textContent='📍 Select your area'; }
     }
     updateAreaBtnLabel();
+
+    window.pickAllAreas=()=>{
+      localStorage.removeItem('sm_area');
+      localStorage.setItem('sm_area_all','1');
+      const chk=document.getElementById('my-area-only');
+      if(chk) chk.checked=false;
+      updateAreaBtnLabel();
+      closeAreaModal();
+      if(typeof doFilter==='function') doFilter();
+    };
 
     window.openAreaModal=()=>{
       provincePicked=null; cityPicked=null; districtPicked=null;
@@ -1581,6 +1592,7 @@
       const list=areaProvinces();
       body.innerHTML='<div class="inst-modal-title">Select your area</div>'+
         '<div class="inst-modal-sub">What province are you in?</div>'+
+        '<button type="button" class="tb-year-btn tb-year-all" style="width:100%;margin-bottom:14px" onclick="pickAllAreas()">🌍 All areas — see every listing everywhere</button>'+
         '<div class="inst-count">'+list.length+' provinces</div>'+
         '<div class="tb-subject-grid">'+
         list.map(p=>'<button class="tb-subject-btn" onclick="pickProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
@@ -1652,6 +1664,7 @@
       document.getElementById('inst-list').innerHTML=filtered.map(s=>'<button class="tb-subject-btn" onclick="pickSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')||'<p class="loading-msg">No matches</p>';
     };
     window.pickSuburb=(suburb)=>{
+      localStorage.removeItem('sm_area_all');
       localStorage.setItem('sm_area',JSON.stringify({province:provincePicked,city:cityPicked,district:districtPicked,suburb}));
       updateAreaBtnLabel();
       closeAreaModal();
