@@ -151,7 +151,7 @@
       document.querySelectorAll('.thread-item').forEach(el=>el.classList.remove('active'));
       document.querySelector('.thread-item[data-idx="'+idx+'"]')?.classList.add('active');
       const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-      document.getElementById('chat-header-text').textContent = (window._names[counterpartId]||'User')+(t.listingTitle?' · '+t.listingTitle:'');
+      document.getElementById('chat-header-text').textContent = window._names[counterpartId]||'User';
       document.getElementById('chat-input-row').style.display='flex';
       updateHeaderActions(counterpartId);
       renderMessages();

@@ -15,7 +15,7 @@
   <link rel="icon" href="icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="style.css"/>
-  <script src="js/areas-data.js"></script>
+  <script src="js/areas-data.js" defer></script>
 </head>
 <body>
   <div id="toast-stack" aria-live="polite"></div>
@@ -634,6 +634,7 @@
     let flatChipsExpanded=false; // whether the full subcategory chip grid is currently revealed (only after "Show all" is pressed)
 
     let all=[], cat='All', currentListing=null, galleryIdx=0, modalQty=1, currentUser=null, cart=[], renderLimit=24, lastFilteredList=[];
+    let randomOrderSeed=new Map(); // listing id -> stable random value, so favoriting/re-filtering doesn't reshuffle the page
 
     // Lightweight typo tolerance: exact substring match first, then falls back to
     // per-word edit-distance <=1 for words of 4+ letters (catches things like "laptp" -> "laptop")
@@ -682,34 +683,6 @@
     const {data:{user}}=await supabase.auth.getUser();
     currentUser=user;
     let myFavorites=new Set();
-    if(user){
-      document.getElementById('nav-auth').textContent='Sign out';
-      document.getElementById('nav-auth').href='#';
-      document.getElementById('nav-auth').onclick=async()=>{await supabase.auth.signOut();location.reload();};
-      document.getElementById('nav-profile').style.display='inline';
-      document.getElementById('nav-favorites').style.display='inline';
-      document.getElementById('nav-messages').style.display='inline';
-      document.getElementById('nav-notif').style.display='inline';
-      supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).neq('sender_id',user.id).eq('is_read',false).then(({count})=>{
-        if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';const bb=document.getElementById('bnav-msg-badge');if(bb){bb.textContent=count;bb.style.display='flex';}}
-      });
-      // If the buyer hasn't picked an area on this device yet, use the one they set at signup
-      if(!localStorage.getItem('sm_area') && localStorage.getItem('sm_area_all')!=='1'){
-        supabase.from('profiles').select('province,city,district,suburb').eq('id',user.id).single().then(({data:pr})=>{
-          if(pr?.province && pr?.city && pr?.district && pr?.suburb){
-            localStorage.setItem('sm_area',JSON.stringify({province:pr.province,city:pr.city,district:pr.district,suburb:pr.suburb}));
-            if(typeof updateAreaBtnLabel==='function') updateAreaBtnLabel();
-          }
-        });
-      }
-      loadNotifications();
-      const {data:p}=await supabase.from('profiles').select('role').eq('id',user.id).single();
-      if(p?.role==='seller') document.getElementById('nav-profile').href='seller.html';
-      const {data:favs,error:favErr}=await supabase.from('favorites').select('listing_id').eq('user_id',user.id);
-      if(favErr) console.error('Could not load favorites:',favErr.message);
-      myFavorites=new Set((favs||[]).map(f=>f.listing_id));
-      loadCart();
-    }
 
     // Bounded pagination: never pull the entire listings table in one go.
     // Fetch a generous first page, then quietly fetch more pages on demand
@@ -736,6 +709,42 @@
       return filtered;
     }
 
+    // Kick off the listings fetch immediately — it's the actual content of this
+    // page, so it should never sit behind unrelated auth/profile round-trips.
+    const listingsPromise = fetchListingsPage(0);
+
+    if(user){
+      document.getElementById('nav-auth').textContent='Sign out';
+      document.getElementById('nav-auth').href='#';
+      document.getElementById('nav-auth').onclick=async()=>{await supabase.auth.signOut();location.reload();};
+      document.getElementById('nav-profile').style.display='inline';
+      document.getElementById('nav-favorites').style.display='inline';
+      document.getElementById('nav-messages').style.display='inline';
+      document.getElementById('nav-notif').style.display='inline';
+      supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).neq('sender_id',user.id).eq('is_read',false).then(({count})=>{
+        if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';const bb=document.getElementById('bnav-msg-badge');if(bb){bb.textContent=count;bb.style.display='flex';}}
+      });
+      // If the buyer hasn't picked an area on this device yet, use the one they set at signup
+      if(!localStorage.getItem('sm_area') && localStorage.getItem('sm_area_all')!=='1'){
+        supabase.from('profiles').select('province,city,district,suburb').eq('id',user.id).single().then(({data:pr})=>{
+          if(pr?.province && pr?.city && pr?.district && pr?.suburb){
+            localStorage.setItem('sm_area',JSON.stringify({province:pr.province,city:pr.city,district:pr.district,suburb:pr.suburb}));
+            if(typeof updateAreaBtnLabel==='function') updateAreaBtnLabel();
+          }
+        });
+      }
+      loadNotifications();
+      // Independent of each other and of the listings fetch above — run them together.
+      const [{data:p},{data:favs,error:favErr}]=await Promise.all([
+        supabase.from('profiles').select('role').eq('id',user.id).single(),
+        supabase.from('favorites').select('listing_id').eq('user_id',user.id)
+      ]);
+      if(p?.role==='seller') document.getElementById('nav-profile').href='seller.html';
+      if(favErr) console.error('Could not load favorites:',favErr.message);
+      myFavorites=new Set((favs||[]).map(f=>f.listing_id));
+      loadCart();
+    }
+
     let verifiedSellers=new Set();
     async function markVerifiedSellers(listingsBatch){
       const ids=[...new Set(listingsBatch.map(l=>l.seller_id))];
@@ -746,7 +755,7 @@
       Object.keys(counts).filter(id=>counts[id]>=5).forEach(id=>verifiedSellers.add(id));
     }
 
-    all = await fetchListingsPage(0);
+    all = await listingsPromise;
     // push out-of-stock items to the end so they don't crowd out available ones
     all.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
     await markVerifiedSellers(all);
@@ -1335,7 +1344,10 @@
       f=[...f];
       if(sortMode==='price_asc') f.sort((a,b)=>(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price)-(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price));
       else if(sortMode==='price_desc') f.sort((a,b)=>(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price)-(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price));
-      else if(sortMode==='random'){for(let i=f.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[f[i],f[j]]=[f[j],f[i]];}}
+      else if(sortMode==='random'){
+        f.forEach(l=>{ if(!randomOrderSeed.has(l.id)) randomOrderSeed.set(l.id, Math.random()); });
+        f.sort((a,b)=>randomOrderSeed.get(a.id)-randomOrderSeed.get(b.id));
+      }
       else f.sort((a,b)=>new Date(b.renewed_at||b.created_at)-new Date(a.renewed_at||a.created_at));
 
       render(f);

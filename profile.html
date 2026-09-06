@@ -238,8 +238,9 @@
       document.getElementById('profile-menu').style.display='none';
       document.getElementById('profile-detail').style.display='block';
       ['orders','favorites','alerts','invite','edit','security'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');
-      if(t==='favorites')window._loadFavorites();
-      if(t==='alerts')window._loadAlerts();
+      if(t==='orders'){markNotifsRead(['order_completed']).then(loadOrdersBadge);}
+      if(t==='favorites'){window._loadFavorites(); markNotifsRead(['back_in_stock','price_drop']).then(loadFavoritesBadge);}
+      if(t==='alerts'){window._loadAlerts(); markNotifsRead(['search_alert','restock']).then(loadAlertsBadge);}
       if(t==='invite')window._loadInvite();
       if(t==='security')refreshPushStatus();
     }
@@ -289,6 +290,7 @@
       }
       document.getElementById('btn-save-profile').onclick=saveProfile;
       loadBuyerOrders();
+      loadOrdersBadge();
       loadFavoritesBadge();
       loadAlertsBadge();
       refreshMfaStatus();
@@ -301,20 +303,31 @@
      }
     }
 
-    async function loadAlertsBadge(){
-      const [{count:c1},{count:c2}]=await Promise.all([
-        supabase.from('saved_searches').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id),
-        supabase.from('restock_alerts').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id)
-      ]);
-      const count=(c1||0)+(c2||0);
-      const b=document.getElementById('alerts-badge');
+    // Badges only reflect actual unread events (a match, a restock, a completed order) —
+    // never a static count of things you already know you have saved.
+    async function countUnreadNotifs(types){
+      const {count}=await supabase.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
+      return count||0;
+    }
+    async function markNotifsRead(types){
+      await supabase.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
+    }
+    function setBadge(id,count){
+      const b=document.getElementById(id);
       if(count>0){b.textContent=count;b.style.display='inline-block';}
+      else b.style.display='none';
+    }
+
+    async function loadOrdersBadge(){
+      setBadge('orders-badge', await countUnreadNotifs(['order_completed']));
+    }
+
+    async function loadAlertsBadge(){
+      setBadge('alerts-badge', await countUnreadNotifs(['search_alert','restock']));
     }
 
     async function loadFavoritesBadge(){
-      const {count}=await supabase.from('favorites').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id);
-      const b=document.getElementById('favorites-badge');
-      if(count>0){b.textContent=count;b.style.display='inline-block';}
+      setBadge('favorites-badge', await countUnreadNotifs(['back_in_stock','price_drop']));
     }
 
     // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)
@@ -348,9 +361,6 @@
     async function loadBuyerOrders(){
       const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
       const container=document.getElementById('orders-container');
-      const activeCount=(data||[]).filter(o=>o.status==='confirmed').length;
-      const ob=document.getElementById('orders-badge');
-      if(activeCount>0){ob.textContent=activeCount;ob.style.display='inline-block';}
       if(!data?.length){container.innerHTML='<p class="loading-msg">No orders yet — go browse! 🛍️</p>';return;}
 
       const completedIds=data.filter(o=>o.status==='completed').map(o=>o.id);
@@ -497,8 +507,6 @@
         }).join('');
       }
       c.innerHTML=html;
-      const badge=document.getElementById('alerts-badge');
-      if(totalCount){badge.textContent=totalCount;badge.style.display='inline-block';}
     };
     window._deleteAlert=async(id)=>{
       if(!confirm('Delete this alert?'))return;
@@ -578,7 +586,10 @@
       const statusEl=document.getElementById('push-status');
       btn.disabled=true;
       try{
-        const reg=await navigator.serviceWorker.ready;
+        const reg=await Promise.race([
+          navigator.serviceWorker.ready,
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+        ]);
         const existing=await reg.pushManager.getSubscription();
         if(existing){
           await existing.unsubscribe();
@@ -597,7 +608,11 @@
           if(error){ statusEl.textContent='Could not save subscription: '+error.message; btn.disabled=false; return; }
         }
       }catch(e){
-        statusEl.textContent='Error: '+e.message;
+        if(e && e.message==='timeout'){
+          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
+        } else {
+          statusEl.textContent='Error: '+e.message;
+        }
       }
       btn.disabled=false;
       refreshPushStatus();
