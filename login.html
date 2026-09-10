@@ -3,25 +3,58 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign In — Marketrade</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-    <meta property="og:title" content="Sign In — Marketrade"/>
-  <meta property="og:description" content="Buy and sell with your community — jobs, furniture, electronics and more."/>
+  <title>Sign In or Sign Up — Marketrade</title>
+  <meta name="description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://www.marketrade.co/login.html"/>
+  <meta property="og:title" content="Sign In or Sign Up — Marketrade"/>
+  <meta property="og:description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
   <meta property="og:type" content="website"/>
-  <meta name="twitter:card" content="summary"/>
+  <meta property="og:url" content="https://www.marketrade.co/login.html"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Sign In or Sign Up — Marketrade"/>
+  <meta name="twitter:description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
   <link rel="icon" href="icons/icon-192.png?v=2"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
   <link rel="stylesheet" href="style.css"/>
   <script src="js/areas-data.js" defer></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.marketrade.co/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sign In",
+      "item": "https://www.marketrade.co/login.html"
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <nav class="nav">
     <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
     <div class="nav-links"><a href="index.html">← Browse</a></div>
   </nav>
+
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current">Sign In</span>
+  </nav>
   <main class="auth-main">
+    <h1 class="sr-only">Sign In or Sign Up — Marketrade</h1>
     <div class="auth-card">
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Sign In</button>

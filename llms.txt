@@ -1,0 +1,26 @@
+# Marketrade
+
+> Marketrade is an online marketplace where people buy and sell directly with
+> one another — electronics, clothing, vehicles, textbooks, furniture,
+> gaming gear, hardware, and dozens of other categories. Sellers list items
+> for a small subscription fee (plans start at R19); buyers browse and
+> contact sellers directly to arrange payment and collection. Marketrade
+> does not process payment for goods sold between users — it only charges
+> sellers for platform access via Paystack.
+
+## Key pages
+
+- [Browse listings](https://www.marketrade.co/): Homepage — search and filter live listings by category, price, and area.
+- [All categories](https://www.marketrade.co/categories.html): Full directory of every category on Marketrade.
+- [How it works / FAQ](https://www.marketrade.co/faq.html): Common questions about buying, selling, and using the platform.
+- [How payments work](https://www.marketrade.co/how-payments-work.html): Explains that Marketrade only charges seller subscription fees, and does not process payment for the goods themselves.
+- [Community guidelines](https://www.marketrade.co/guidelines.html): Rules for safe, fair, and respectful buying and selling.
+- [Terms of Service](https://www.marketrade.co/terms.html): Seller plans, pricing, refunds, and platform rules.
+- [Privacy Policy](https://www.marketrade.co/privacy.html): How personal data is collected, used, and protected.
+
+## Notes
+
+- Buyer accounts and browsing are free. Selling requires an active paid
+  plan (from R19), unless the platform's Free Mode is temporarily enabled.
+- Marketrade is not a party to transactions between buyers and sellers and
+  does not offer escrow, delivery, or payment processing for goods sold.

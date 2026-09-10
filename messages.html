@@ -4,7 +4,18 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Messages — Marketrade</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <meta name="description" content="Chat with buyers and sellers on Marketrade."/>
+  <meta name="robots" content="noindex, follow"/>
+  <meta property="og:title" content="Messages — Marketrade"/>
+  <meta property="og:description" content="Chat with buyers and sellers on Marketrade."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Messages — Marketrade"/>
+  <meta name="twitter:description" content="Chat with buyers and sellers on Marketrade."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
   <link rel="icon" href="icons/icon-192.png?v=2"/>
@@ -16,33 +27,77 @@
       .msg-wrap { grid-template-columns: 1fr; height: calc(100vh - 128px); height: calc(100dvh - 128px); }
       .msg-wrap .chat-panel { display: none; }
       .msg-wrap.chat-open .chat-panel { display: flex; }
-      .msg-wrap.chat-open .thread-list { display: none; }
+      .msg-wrap.chat-open .thread-list-wrap { display: none; }
     }
     .chat-back-btn { display: none; background: none; border: none; cursor: pointer; font-size: 18px; font-weight: 900; color: #2563eb; padding: 0 12px 0 0; font-family: inherit; }
     @media (max-width: 700px) { .chat-back-btn { display: inline-block; } }
-    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .thread-item { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+    .thread-list-wrap { display: flex; flex-direction: column; height: 100%; min-height: 0; gap: 8px; }
+    .thread-search { border: 2px solid #f0f0f0; border-radius: 50px; padding: 9px 14px; font-family: inherit; font-size: 13px; font-weight: 600; flex-shrink: 0; -webkit-appearance: none; }
+    .thread-search:focus { outline: none; border-color: #2563eb; }
+    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .thread-item { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; }
     .thread-item:hover, .thread-item.active { background: #eff6ff; }
-    .thread-name { font-weight: 800; font-size: 13.5px; color: #111; }
-    .thread-preview { font-size: 12px; color: #888; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; margin-left: 6px; }
+    .thread-avatar { width: 36px; height: 36px; border-radius: 50%; background: #eef2ff; color: #2563eb; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; border: 2px solid #fff; position: absolute; bottom: -2px; right: -2px; }
+    .status-dot.online { background: #22c55e; }
+    .thread-main { min-width: 0; flex: 1; }
+    .thread-name-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .thread-name { font-weight: 800; font-size: 13.5px; color: #111; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-time { font-size: 10.5px; color: #aaa; font-weight: 700; flex-shrink: 0; }
+    .thread-preview-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 2px; }
+    .thread-preview { font-size: 12px; color: #888; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-item.has-unread .thread-preview { color: #333; font-weight: 700; }
+    .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; flex-shrink: 0; }
     .chat-panel { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; display: flex; flex-direction: column; height: 100%; min-height: 0; }
-    .chat-header { padding: 14px 18px; border-bottom: 2px solid #f5f5f5; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .chat-header #chat-header-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .chat-header #chat-header-actions { flex-shrink: 0; }
+    .chat-header { padding: 12px 18px; border-bottom: 2px solid #f5f5f5; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .chat-header-info { min-width: 0; flex: 1; }
+    .chat-header-name { font-weight: 800; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-header-status { font-size: 11px; font-weight: 700; color: #aaa; margin-top: 1px; min-height: 14px; }
+    .chat-header-status.online { color: #16a34a; }
+    .chat-header-status.typing { color: #2563eb; }
+    .chat-header-actions { flex-shrink: 0; display: flex; gap: 6px; }
     @media (max-width: 420px) {
-      .chat-header #chat-header-text { flex-basis: 100%; white-space: normal; }
-      .chat-header #chat-header-actions { font-size: 11px; }
+      .chat-header-actions { font-size: 11px; }
     }
+    .btn-icon { background: #f5f5f5; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+    .btn-icon:hover { background: #eee; }
+    .chat-search-row { display: none; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 2px solid #f5f5f5; flex-shrink: 0; }
+    .chat-search-row.open { display: flex; }
+    .chat-search-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 7px 14px; font-family: inherit; font-size: 13px; -webkit-appearance: none; }
+    .chat-search-row input:focus { outline: none; border-color: #2563eb; }
+    .chat-search-count { font-size: 11px; font-weight: 700; color: #aaa; white-space: nowrap; }
     .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; }
-    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+    .date-sep { text-align: center; font-size: 11px; font-weight: 800; color: #aaa; margin: 10px 0 4px; }
+    .date-sep span { background: #f5f5f5; padding: 3px 12px; border-radius: 50px; }
+    .bubble { max-width: 75%; padding: 8px 12px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; }
     .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
     .bubble.them { align-self: flex-start; background: #f5f5f5; color: #333; border-bottom-left-radius: 4px; }
-    .bubble-time { font-size: 10px; opacity: 0.7; margin-top: 4px; }
-    .chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 2px solid #f5f5f5; }
-    .chat-input-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 10px 16px; font-family: inherit; font-size: 16px; -webkit-appearance: none; }
+    .bubble mark.search-hit { background: #fde047; color: #111; border-radius: 3px; padding: 0 1px; }
+    .bubble-text { white-space: pre-wrap; word-break: break-word; }
+    .bubble-img { max-width: 220px; max-height: 260px; border-radius: 10px; display: block; margin-top: 4px; cursor: pointer; object-fit: cover; }
+    .bubble-file { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.06); border-radius: 10px; padding: 8px 10px; margin-top: 4px; text-decoration: none; color: inherit; }
+    .bubble.me .bubble-file { background: rgba(255,255,255,0.18); }
+    .bubble-file-icon { font-size: 18px; flex-shrink: 0; }
+    .bubble-file-name { font-size: 12px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bubble-file-size { font-size: 10.5px; opacity: 0.75; font-weight: 600; }
+    .bubble-meta { display: flex; align-items: center; gap: 4px; justify-content: flex-end; font-size: 10px; opacity: 0.7; margin-top: 4px; }
+    .bubble.them .bubble-meta { justify-content: flex-start; }
+    .typing-bubble { align-self: flex-start; display: flex; gap: 4px; padding: 10px 14px; background: #f5f5f5; border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; }
+    .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: #999; animation: typing-bounce 1.2s infinite ease-in-out; }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typing-bounce { 0%,60%,100%{transform:translateY(0);opacity:0.5;} 30%{transform:translateY(-4px);opacity:1;} }
+    .chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 2px solid #f5f5f5; align-items: center; }
+    .chat-input-row input[type="text"] { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 10px 16px; font-family: inherit; font-size: 16px; -webkit-appearance: none; }
+    .attach-preview { display: none; align-items: center; gap: 8px; padding: 8px 12px; background: #f9f9f9; border-top: 2px solid #f5f5f5; font-size: 12px; font-weight: 700; color: #444; }
+    .attach-preview.show { display: flex; }
+    .attach-preview img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+    .attach-preview-remove { margin-left: auto; background: none; border: none; color: #dc2626; font-weight: 800; cursor: pointer; font-size: 14px; }
     .msg-wrap { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
-    .chat-input-row button { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 50px; font-family: inherit; font-weight: 800; cursor: pointer; }
+    .chat-input-row button.send-btn { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 50px; font-family: inherit; font-weight: 800; cursor: pointer; flex-shrink: 0; }
+    .chat-input-row button.send-btn:disabled { background: #aaa; cursor: not-allowed; }
+    .lightbox-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox-overlay img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
   </style>
 </head>
 <body>
@@ -55,33 +110,107 @@
   </nav>
 
   <div class="msg-wrap" id="msg-wrap">
-    <div class="thread-list" id="thread-list"><p class="loading-msg">Loading conversations... ⏳</p></div>
+    <h1 class="sr-only">Messages — Marketrade</h1>
+    <div class="thread-list-wrap">
+      <input type="text" class="thread-search" id="thread-search" placeholder="🔍 Search conversations..." oninput="renderThreadList()"/>
+      <div class="thread-list" id="thread-list"><p class="loading-msg">Loading conversations... ⏳</p></div>
+    </div>
     <div class="chat-panel" id="chat-panel">
-      <div class="chat-header"><button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button><span id="chat-header-text" style="flex:1">Select a conversation</span><div id="chat-header-actions" style="display:none;gap:6px"><button class="btn-sm btn-toggle" id="mute-btn" onclick="toggleMute()">🔇 Mute</button><button class="btn-sm btn-delete" id="block-btn" onclick="toggleBlock()">🚫 Block</button></div></div>
+      <div class="chat-header">
+        <button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button>
+        <div class="chat-header-info">
+          <div class="chat-header-name" id="chat-header-text">Select a conversation</div>
+          <div class="chat-header-status" id="chat-header-status"></div>
+        </div>
+        <div class="chat-header-actions" id="chat-header-actions" style="display:none">
+          <button class="btn-icon" id="search-btn" onclick="toggleChatSearch()" title="Search this conversation">🔍</button>
+          <button class="btn-sm btn-toggle" id="mute-btn" onclick="toggleMute()">🔇 Mute</button>
+          <button class="btn-sm btn-delete" id="block-btn" onclick="toggleBlock()">🚫 Block</button>
+        </div>
+      </div>
+      <div class="chat-search-row" id="chat-search-row">
+        <input type="text" id="chat-search-input" placeholder="Search in this conversation..." oninput="runChatSearch()" onkeydown="if(event.key==='Enter'){event.shiftKey?jumpSearch(-1):jumpSearch(1);} if(event.key==='Escape')toggleChatSearch();"/>
+        <span class="chat-search-count" id="chat-search-count"></span>
+        <button class="btn-icon" onclick="jumpSearch(-1)" title="Previous match">↑</button>
+        <button class="btn-icon" onclick="jumpSearch(1)" title="Next match">↓</button>
+        <button class="btn-icon" onclick="toggleChatSearch()" title="Close search">✕</button>
+      </div>
       <div class="chat-messages" id="chat-messages"><p class="loading-msg" style="margin:auto">Pick a conversation on the left, or message a seller from a listing 💬</p></div>
+      <div class="attach-preview" id="attach-preview">
+        <img id="attach-preview-img" style="display:none"/>
+        <span id="attach-preview-name"></span>
+        <button class="attach-preview-remove" onclick="clearAttachment()">✕ Remove</button>
+      </div>
       <div class="chat-input-row" id="chat-input-row" style="display:none">
-        <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()"/>
-        <button onclick="sendMessage()">Send</button>
+        <input type="file" id="attach-input" style="display:none" onchange="handleAttachmentPick(event)"/>
+        <button class="btn-icon" id="attach-btn" onclick="document.getElementById('attach-input').click()" title="Attach a photo or file">📎</button>
+        <input type="text" id="chat-input" placeholder="Type a message..." oninput="onTypingInput()" onkeydown="if(event.key==='Enter')sendMessage()"/>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
+
+  <div class="lightbox-overlay" id="lightbox-overlay" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Attachment preview" onclick="event.stopPropagation()"/>
+  </div>
+  <div id="toast-stack" aria-live="polite"></div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    let currentUser=null, activeThread=null, pollTimer=null;
+    let currentUser=null, activeThread=null, pollTimer=null, heartbeatTimer=null;
     let blockState={}; // counterpart_id -> {is_blocked, is_muted}
+    let onlineIds = new Set(); // globally online user ids
+    let threadChannel=null; // per-active-thread broadcast+presence channel
+    let sendTypingCooldown=false;
+    let pendingAttachment=null; // {file, kind, name, size}
+    let chatSearchQuery='';
+    let searchMatchIds=[], searchMatchPos=-1;
+    const seenMsgIds = new Set();
 
     const {data:{user}} = await supabase.auth.getUser();
     if(!user){ window.location.href='login.html'; }
     currentUser=user;
+
+    window.showToast=(msg,type)=>{
+      const stack=document.getElementById('toast-stack');
+      if(!stack)return;
+      const el=document.createElement('div');
+      el.className='toast'+(type?' toast-'+type:'');
+      el.textContent=msg;
+      stack.appendChild(el);
+      requestAnimationFrame(()=>el.classList.add('toast-show'));
+      setTimeout(()=>{
+        el.classList.remove('toast-show');
+        setTimeout(()=>el.remove(),250);
+      },2400);
+    };
+
+    function escapeHtml(s){
+      return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+    function highlight(escapedText, rawQuery){
+      if(!rawQuery) return escapedText;
+      const re = new RegExp('('+escapeRegex(escapeHtml(rawQuery))+')','ig');
+      return escapedText.replace(re,'<mark class="search-hit">$1</mark>');
+    }
+    function formatSize(bytes){
+      if(!bytes) return '';
+      if(bytes<1024) return bytes+' B';
+      if(bytes<1024*1024) return Math.round(bytes/1024)+' KB';
+      return (bytes/(1024*1024)).toFixed(1)+' MB';
+    }
 
     async function loadBlockState(){
       const {data}=await supabase.from('blocked_users').select('*').eq('blocker_id',user.id);
       blockState={};
       (data||[]).forEach(r=>{ blockState[r.blocked_id]={is_blocked:r.is_blocked, is_muted:r.is_muted}; });
     }
+
+    function counterpartOf(t){ return t.buyer_id===user.id?t.seller_id:t.buyer_id; }
+
     function updateHeaderActions(counterpartId){
       const st=blockState[counterpartId]||{is_blocked:false,is_muted:false};
       document.getElementById('chat-header-actions').style.display='flex';
@@ -89,107 +218,492 @@
       const blockBtn=document.getElementById('block-btn');
       muteBtn.textContent=st.is_muted?'🔔 Unmute':'🔇 Mute';
       blockBtn.textContent=st.is_blocked?'✅ Unblock':'🚫 Block';
+      document.getElementById('attach-btn').style.display = st.is_blocked ? 'none' : '';
     }
     window.toggleMute=async()=>{
       if(!activeThread)return;
-      const counterpartId=activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
+      const counterpartId=counterpartOf(activeThread);
       const st=blockState[counterpartId]||{is_blocked:false,is_muted:false};
       const {error}=await supabase.from('blocked_users').upsert({blocker_id:user.id,blocked_id:counterpartId,is_blocked:st.is_blocked,is_muted:!st.is_muted},{onConflict:'blocker_id,blocked_id'});
-      if(error){alert('Could not update: '+error.message);return;}
+      if(error){showToast('❌ Could not update: '+error.message,'error');return;}
       await loadBlockState();
       updateHeaderActions(counterpartId);
+      showToast(st.is_muted?'🔔 Unmuted':'🔇 Muted');
     };
     window.toggleBlock=async()=>{
       if(!activeThread)return;
-      const counterpartId=activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
+      const counterpartId=counterpartOf(activeThread);
       const st=blockState[counterpartId]||{is_blocked:false,is_muted:false};
       if(!st.is_blocked && !confirm('Block this user? They will no longer be able to message you.'))return;
       const {error}=await supabase.from('blocked_users').upsert({blocker_id:user.id,blocked_id:counterpartId,is_blocked:!st.is_blocked,is_muted:st.is_muted},{onConflict:'blocker_id,blocked_id'});
-      if(error){alert('Could not update: '+error.message);return;}
+      if(error){showToast('❌ Could not update: '+error.message,'error');return;}
       await loadBlockState();
       updateHeaderActions(counterpartId);
+      showToast(st.is_blocked?'✅ Unblocked':'🚫 Blocked');
     };
 
+    // ---------------- Presence: who's online ----------------
+    const presenceChannel = supabase.channel('online-users', { config:{ presence:{ key:user.id } } });
+    presenceChannel
+      .on('presence',{event:'sync'}, ()=>{
+        const state = presenceChannel.presenceState();
+        onlineIds = new Set(Object.keys(state));
+        renderThreadList();
+        if(activeThread) updateChatHeaderStatus();
+      })
+      .subscribe(async status=>{
+        if(status==='SUBSCRIBED') await presenceChannel.track({online_at:Date.now()});
+      });
+
+    async function heartbeat(){
+      try{ await supabase.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',user.id); }catch(e){}
+    }
+    heartbeat();
+    heartbeatTimer = setInterval(heartbeat, 30000);
+
+    function relativeLastSeen(iso){
+      if(!iso) return '';
+      const mins = Math.max(0, Math.round((Date.now()-new Date(iso).getTime())/60000));
+      if(mins<1) return 'Active just now';
+      if(mins<60) return 'Active '+mins+'m ago';
+      const hrs = Math.round(mins/60);
+      if(hrs<24) return 'Active '+hrs+'h ago';
+      return 'Active '+Math.round(hrs/24)+'d ago';
+    }
+
+    // ---------------- Thread list ----------------
+    let allThreads = [];
     async function loadThreads(){
       const {data} = await supabase.from('messages').select('*,listings(title)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false});
       const msgs = data||[];
-      // Group into threads by buyer_id + seller_id + listing_id
       const threadMap = {};
       msgs.forEach(m=>{
         const key = m.buyer_id+'|'+m.seller_id+'|'+(m.listing_id||'none');
         if(!threadMap[key]) threadMap[key] = {buyer_id:m.buyer_id, seller_id:m.seller_id, listing_id:m.listing_id, listingTitle:m.listings?.title, messages:[]};
         threadMap[key].messages.push(m);
+        seenMsgIds.add(m.id);
       });
       const threads = Object.values(threadMap);
 
-      // Fetch counterpart names
-      const counterpartIds = [...new Set(threads.map(t=>t.buyer_id===user.id?t.seller_id:t.buyer_id))];
-      let names={};
+      const counterpartIds = [...new Set(threads.map(t=>counterpartOf(t)))];
+      let names={}, lastSeen={};
       if(counterpartIds.length){
-        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name').in('id',counterpartIds);
-        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User';});
+        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name,last_seen_at').in('id',counterpartIds);
+        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User'; lastSeen[p.id]=p.last_seen_at;});
       }
-
-      const list = document.getElementById('thread-list');
-      if(!threads.length){ list.innerHTML='<p class="loading-msg">No conversations yet</p>'; return; }
       threads.sort((a,b)=>new Date(b.messages[0].created_at)-new Date(a.messages[0].created_at));
-      list.innerHTML = threads.map((t,i)=>{
-        const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-        const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
-        return '<div class="thread-item" data-idx="'+i+'" onclick="openThread('+i+')">'+
-          '<div class="thread-name">'+(names[counterpartId]||'User')+(unread?'<span class="thread-unread">'+unread+'</span>':'')+'</div>'+
-          '</div>';
-      }).join('');
+
+      allThreads = threads;
       window._threads = threads;
       window._names = names;
+      window._lastSeen = lastSeen;
+      renderThreadList();
+
+      // Keep the open thread's message array in sync with the latest fetch
+      if(activeThread && !activeThread._isDraft){
+        const key = activeThread.buyer_id+'|'+activeThread.seller_id+'|'+(activeThread.listing_id||'none');
+        const fresh = threadMap[key];
+        if(fresh){ activeThread.messages = fresh.messages; renderMessages(); }
+      }
     }
+
+    function threadKey(t){ return t.buyer_id+'|'+t.seller_id+'|'+(t.listing_id||'none'); }
+
+    window.renderThreadList = function(){
+      const q = (document.getElementById('thread-search').value||'').trim().toLowerCase();
+      const list = document.getElementById('thread-list');
+      let threads = allThreads;
+      if(q){
+        threads = threads.filter(t=>{
+          const name = (window._names[counterpartOf(t)]||'User').toLowerCase();
+          return name.includes(q);
+        });
+      }
+      if(!allThreads.length){ list.innerHTML='<p class="loading-msg">No conversations yet</p>'; return; }
+      if(!threads.length){ list.innerHTML='<p class="loading-msg">No conversations match "'+escapeHtml(q)+'"</p>'; return; }
+
+      list.innerHTML = threads.map((t)=>{
+        const idx = allThreads.indexOf(t);
+        const counterpartId = counterpartOf(t);
+        const name = window._names[counterpartId]||'User';
+        const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
+        const last = [...t.messages].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0];
+        let preview = 'Say hi 👋';
+        if(last){
+          if(last.attachment_type==='image') preview = (last.sender_id===user.id?'You: ':'')+'📷 Photo';
+          else if(last.attachment_url) preview = (last.sender_id===user.id?'You: ':'')+'📎 '+(last.attachment_name||'File');
+          else preview = (last.sender_id===user.id?'You: ':'')+last.content;
+        }
+        const time = last ? new Date(last.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : '';
+        const isOnline = onlineIds.has(counterpartId);
+        const active = activeThread && threadKey(activeThread)===threadKey(t);
+        return '<div class="thread-item'+(active?' active':'')+(unread?' has-unread':'')+'" data-idx="'+idx+'" onclick="openThread('+idx+')">'+
+          '<div class="thread-avatar">'+escapeHtml(name.charAt(0).toUpperCase())+'<span class="status-dot'+(isOnline?' online':'')+'"></span></div>'+
+          '<div class="thread-main">'+
+            '<div class="thread-name-row"><span class="thread-name">'+escapeHtml(name)+'</span><span class="thread-time">'+time+'</span></div>'+
+            '<div class="thread-preview-row"><span class="thread-preview">'+escapeHtml(preview)+'</span>'+(unread?'<span class="thread-unread">'+unread+'</span>':'')+'</div>'+
+          '</div>'+
+        '</div>';
+      }).join('');
+    };
 
     window.openThread = async (idx) => {
       const t = window._threads[idx];
       activeThread = t;
       document.getElementById('msg-wrap').classList.add('chat-open');
-      document.querySelectorAll('.thread-item').forEach(el=>el.classList.remove('active'));
-      document.querySelector('.thread-item[data-idx="'+idx+'"]')?.classList.add('active');
-      const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
+      const counterpartId = counterpartOf(t);
       document.getElementById('chat-header-text').textContent = window._names[counterpartId]||'User';
       document.getElementById('chat-input-row').style.display='flex';
       updateHeaderActions(counterpartId);
+      updateChatHeaderStatus();
+      closeChatSearchUi();
+      clearAttachment();
+      await joinThreadChannel(t);
+      renderThreadList();
       renderMessages();
-      // Mark unread as read
       const unreadIds = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).map(m=>m.id);
-      if(unreadIds.length) await supabase.from('messages').update({is_read:true}).in('id',unreadIds);
+      if(unreadIds.length){
+        await supabase.from('messages').update({is_read:true}).in('id',unreadIds);
+        unreadIds.forEach(id=>{ const m=t.messages.find(mm=>mm.id===id); if(m) m.is_read=true; });
+        renderThreadList();
+      }
     };
 
     window.closeThread = () => {
       document.getElementById('msg-wrap').classList.remove('chat-open');
     };
 
-    function renderMessages(){
-      const box = document.getElementById('chat-messages');
-      const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-      box.innerHTML = sorted.map(m=>
-        '<div class="bubble '+(m.sender_id===user.id?'me':'them')+'">'+m.content+
-        '<div class="bubble-time">'+new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})+'</div></div>'
-      ).join('');
-      box.scrollTop = box.scrollHeight;
+    function updateChatHeaderStatus(){
+      if(!activeThread) return;
+      const counterpartId = counterpartOf(activeThread);
+      const el = document.getElementById('chat-header-status');
+      el.classList.remove('online','typing');
+      if(onlineIds.has(counterpartId)){
+        el.textContent='🟢 Online'; el.classList.add('online');
+      } else {
+        const ls = window._lastSeen && window._lastSeen[counterpartId];
+        el.textContent = ls ? relativeLastSeen(ls) : '';
+      }
     }
 
+    // ---------------- Per-thread channel: typing + presence ----------------
+    async function joinThreadChannel(t){
+      if(threadChannel){ await supabase.removeChannel(threadChannel); threadChannel=null; }
+      const ids=[t.buyer_id,t.seller_id].sort();
+      const name = 'chat:'+ids[0]+':'+ids[1]+':'+(t.listing_id||'none');
+      threadChannel = supabase.channel(name, { config:{ presence:{ key:user.id }, broadcast:{ self:false } } });
+      threadChannel
+        .on('broadcast',{event:'typing'}, ({payload})=>{
+          if(payload && payload.user===user.id) return;
+          showTypingIndicator();
+        })
+        .subscribe(async status=>{
+          if(status==='SUBSCRIBED') await threadChannel.track({in_chat:true});
+        });
+    }
+
+    let typingIndicatorTimeout=null;
+    function showTypingIndicator(){
+      const el = document.getElementById('chat-header-status');
+      el.classList.add('typing'); el.classList.remove('online');
+      el.textContent='typing…';
+      const box = document.getElementById('chat-messages');
+      if(!document.getElementById('typing-bubble-el')){
+        const div=document.createElement('div');
+        div.id='typing-bubble-el';
+        div.className='typing-bubble';
+        div.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+      }
+      clearTimeout(typingIndicatorTimeout);
+      typingIndicatorTimeout = setTimeout(()=>{
+        updateChatHeaderStatus();
+        const b=document.getElementById('typing-bubble-el'); if(b) b.remove();
+      },3000);
+    }
+
+    window.onTypingInput = ()=>{
+      if(!threadChannel || sendTypingCooldown) return;
+      sendTypingCooldown = true;
+      threadChannel.send({type:'broadcast',event:'typing',payload:{user:user.id}});
+      setTimeout(()=>{sendTypingCooldown=false;},1800);
+    };
+
+    // ---------------- Rendering messages ----------------
+    function dayLabel(d){
+      const today=new Date(); const y=new Date(); y.setDate(y.getDate()-1);
+      const dd=new Date(d);
+      const sameDay=(a,b)=>a.toDateString()===b.toDateString();
+      if(sameDay(dd,today)) return 'Today';
+      if(sameDay(dd,y)) return 'Yesterday';
+      return dd.toLocaleDateString('en-ZA',{day:'numeric',month:'short',year: dd.getFullYear()!==today.getFullYear()?'numeric':undefined});
+    }
+
+    function renderBubble(m){
+      const mine = m.sender_id===user.id;
+      let inner = '';
+      if(m.content && m.content.trim()){
+        inner += '<div class="bubble-text">'+highlight(escapeHtml(m.content), chatSearchQuery)+'</div>';
+      }
+      if(m.attachment_url){
+        if(m.attachment_type==='image'){
+          inner += '<img class="bubble-img" src="'+escapeHtml(m.attachment_url)+'" alt="Attachment" loading="lazy" onclick="openLightbox(\''+encodeURI(m.attachment_url).replace(/'/g,'%27')+'\')"/>';
+        } else {
+          inner += '<a class="bubble-file" href="'+escapeHtml(m.attachment_url)+'" target="_blank" rel="noopener">'+
+            '<span class="bubble-file-icon">📎</span>'+
+            '<span style="min-width:0"><div class="bubble-file-name">'+escapeHtml(m.attachment_name||'File')+'</div>'+
+            (m.attachment_size?'<div class="bubble-file-size">'+formatSize(m.attachment_size)+'</div>':'')+'</span>'+
+          '</a>';
+        }
+      }
+      const time = new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+      const receipt = mine ? (m.is_read ? '<span title="Read">✓✓</span>' : '<span title="Sent">✓</span>') : '';
+      inner += '<div class="bubble-meta">'+time+' '+receipt+'</div>';
+      return '<div class="bubble '+(mine?'me':'them')+'" data-msg-id="'+m.id+'">'+inner+'</div>';
+    }
+
+    function renderMessages(){
+      const box = document.getElementById('chat-messages');
+      if(!activeThread){ return; }
+      const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+      if(!sorted.length){
+        box.innerHTML = '<p class="loading-msg" style="margin:auto">Say hi 👋</p>';
+        return;
+      }
+      let html='', lastDay=null;
+      sorted.forEach(m=>{
+        const label = dayLabel(m.created_at);
+        if(label!==lastDay){ html += '<div class="date-sep"><span>'+label+'</span></div>'; lastDay=label; }
+        html += renderBubble(m);
+      });
+      box.innerHTML = html;
+      box.scrollTop = box.scrollHeight;
+      if(chatSearchQuery) runChatSearch(true);
+    }
+
+    // ---------------- Chat search ----------------
+    window.toggleChatSearch = ()=>{
+      const row = document.getElementById('chat-search-row');
+      const open = row.classList.toggle('open');
+      if(open){ document.getElementById('chat-search-input').focus(); }
+      else { document.getElementById('chat-search-input').value=''; chatSearchQuery=''; searchMatchIds=[]; searchMatchPos=-1; document.getElementById('chat-search-count').textContent=''; renderMessages(); }
+    };
+    function closeChatSearchUi(){
+      document.getElementById('chat-search-row').classList.remove('open');
+      document.getElementById('chat-search-input').value='';
+      chatSearchQuery=''; searchMatchIds=[]; searchMatchPos=-1;
+      document.getElementById('chat-search-count').textContent='';
+    }
+    window.runChatSearch = (keepPos)=>{
+      chatSearchQuery = document.getElementById('chat-search-input').value.trim();
+      if(!activeThread) return;
+      renderMessages();
+      if(!chatSearchQuery){ searchMatchIds=[]; searchMatchPos=-1; document.getElementById('chat-search-count').textContent=''; return; }
+      const q = chatSearchQuery.toLowerCase();
+      const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+      searchMatchIds = sorted.filter(m=>m.content && m.content.toLowerCase().includes(q)).map(m=>m.id);
+      if(!keepPos) searchMatchPos = searchMatchIds.length ? searchMatchIds.length-1 : -1;
+      updateSearchCount();
+      if(searchMatchPos>-1) scrollToMatch(searchMatchIds[searchMatchPos]);
+    };
+    function updateSearchCount(){
+      const el = document.getElementById('chat-search-count');
+      el.textContent = searchMatchIds.length ? (searchMatchPos+1)+' of '+searchMatchIds.length : (chatSearchQuery?'No matches':'');
+    }
+    window.jumpSearch = (dir)=>{
+      if(!searchMatchIds.length) return;
+      searchMatchPos = (searchMatchPos+dir+searchMatchIds.length)%searchMatchIds.length;
+      updateSearchCount();
+      scrollToMatch(searchMatchIds[searchMatchPos]);
+    };
+    function scrollToMatch(id){
+      const el = document.querySelector('.bubble[data-msg-id="'+id+'"]');
+      if(el) el.scrollIntoView({block:'center',behavior:'smooth'});
+    }
+
+    // ---------------- Attachments ----------------
+    function compressImage(file){
+      return new Promise((resolve,reject)=>{
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.onerror = reject;
+        img.onload = () => {
+          const MAX = 1280;
+          let {width,height} = img;
+          if (width>height && width>MAX) { height=Math.round(height*MAX/width); width=MAX; }
+          else if (height>MAX) { width=Math.round(width*MAX/height); height=MAX; }
+          const canvas = document.createElement('canvas');
+          canvas.width=width; canvas.height=height;
+          canvas.getContext('2d').drawImage(img,0,0,width,height);
+          canvas.toBlob(blob=>{
+            if(!blob) return reject(new Error('Compression failed'));
+            resolve(new File([blob], 'photo.jpg', {type:'image/jpeg'}));
+          }, 'image/jpeg', 0.8);
+        };
+        img.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    window.handleAttachmentPick = async (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const isImage = file.type.startsWith('image/');
+      const maxBytes = isImage ? 8*1024*1024 : 15*1024*1024;
+      if(file.size > maxBytes){ showToast('❌ Max '+(isImage?'8MB':'15MB')+' per '+(isImage?'photo':'file'),'error'); e.target.value=''; return; }
+      pendingAttachment = { file, kind: isImage?'image':'file', name:file.name, size:file.size };
+      const prevWrap = document.getElementById('attach-preview');
+      const prevImg = document.getElementById('attach-preview-img');
+      const prevName = document.getElementById('attach-preview-name');
+      prevWrap.classList.add('show');
+      if(isImage){
+        prevImg.style.display='inline-block';
+        prevImg.src = URL.createObjectURL(file);
+      } else {
+        prevImg.style.display='none';
+      }
+      prevName.textContent = (isImage?'📷 ':'📎 ')+file.name+' ('+formatSize(file.size)+')';
+    };
+    window.clearAttachment = ()=>{
+      pendingAttachment = null;
+      document.getElementById('attach-input').value='';
+      document.getElementById('attach-preview').classList.remove('show');
+    };
+    window.openLightbox = (url)=>{
+      document.getElementById('lightbox-img').src = url;
+      document.getElementById('lightbox-overlay').style.display='flex';
+    };
+    window.closeLightbox = ()=>{
+      document.getElementById('lightbox-overlay').style.display='none';
+    };
+
+    async function uploadAttachment(){
+      const {file, kind} = pendingAttachment;
+      let uploadFile = file;
+      if(kind==='image'){
+        try { uploadFile = await compressImage(file); } catch(err){ uploadFile = file; }
+      }
+      const safeExt = kind==='image' ? 'jpg' : (file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'');
+      const path = user.id+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+(safeExt?'.'+safeExt:'');
+      const {error} = await supabase.storage.from('message-attachments').upload(path, uploadFile);
+      if(error) throw error;
+      const {data:pub} = supabase.storage.from('message-attachments').getPublicUrl(path);
+      return { url: pub.publicUrl, type: kind, name: file.name, size: uploadFile.size||file.size };
+    }
+
+    // ---------------- Send ----------------
     window.sendMessage = async () => {
       const input = document.getElementById('chat-input');
       const content = input.value.trim();
-      if(!content || !activeThread) return;
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      if(blockState[counterpartId]?.is_blocked){ alert('You have blocked this user. Unblock them to send a message.'); return; }
-      const payload = {
+      if(!content && !pendingAttachment) return;
+      if(!activeThread) return;
+      const counterpartId = counterpartOf(activeThread);
+      if(blockState[counterpartId] && blockState[counterpartId].is_blocked){ showToast('You have blocked this user. Unblock them to send a message.','error'); return; }
+
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+      const originalLabel = sendBtn.textContent;
+
+      let attachmentFields = {};
+      try{
+        if(pendingAttachment){
+          sendBtn.textContent = 'Uploading...';
+          const up = await uploadAttachment();
+          attachmentFields = { attachment_url: up.url, attachment_type: up.type, attachment_name: up.name, attachment_size: up.size };
+        }
+      } catch(err){
+        showToast('❌ Attachment upload failed: '+err.message,'error');
+        sendBtn.disabled=false; sendBtn.textContent=originalLabel;
+        return;
+      }
+
+      const payload = Object.assign({
         buyer_id: activeThread.buyer_id, seller_id: activeThread.seller_id,
         listing_id: activeThread.listing_id, sender_id: user.id, content
-      };
+      }, attachmentFields);
+      sendBtn.textContent = 'Sending...';
       const {data,error} = await supabase.from('messages').insert(payload).select().single();
-      if(error){ alert(error.message.includes('row-level security')?'Could not send — this user has blocked you.':'Could not send: '+error.message); return; }
+      sendBtn.disabled = false; sendBtn.textContent = originalLabel;
+      if(error){ showToast(error.message.includes('row-level security')?'Could not send — this user has blocked you.':'Could not send: '+error.message,'error'); return; }
       input.value='';
+      clearAttachment();
+      seenMsgIds.add(data.id);
       activeThread.messages.unshift(data);
+      activeThread._isDraft = false;
       renderMessages();
+      renderThreadListAfterLocalChange();
     };
+
+    function renderThreadListAfterLocalChange(){
+      const key = threadKey(activeThread);
+      const idx = allThreads.findIndex(t=>threadKey(t)===key);
+      if(idx>-1){ allThreads.splice(idx,1); }
+      allThreads.unshift(activeThread);
+      window._threads = allThreads;
+      renderThreadList();
+    }
+
+    // ---------------- Realtime: incoming messages & read receipts ----------------
+    function findOrCreateThread(m){
+      const key = m.buyer_id+'|'+m.seller_id+'|'+(m.listing_id||'none');
+      let t = allThreads.find(x=>threadKey(x)===key);
+      if(!t){
+        t = { buyer_id:m.buyer_id, seller_id:m.seller_id, listing_id:m.listing_id, messages:[] };
+        allThreads.unshift(t);
+        window._threads = allThreads;
+      }
+      return t;
+    }
+
+    async function ensureName(id){
+      if(window._names[id]) return;
+      const {data} = await supabase.from('profiles').select('full_name,store_name').eq('id',id).single();
+      if(data) window._names[id] = data.store_name||data.full_name||'User';
+    }
+
+    async function handleIncomingInsert(m){
+      if(seenMsgIds.has(m.id)) return;
+      seenMsgIds.add(m.id);
+      const t = findOrCreateThread(m);
+      t.messages.unshift(m);
+      await ensureName(counterpartOf(t));
+
+      const isActive = activeThread && threadKey(activeThread)===threadKey(t);
+      if(isActive){
+        activeThread.messages = t.messages;
+        const b=document.getElementById('typing-bubble-el'); if(b) b.remove();
+        updateChatHeaderStatus();
+        renderMessages();
+        if(m.sender_id!==user.id){
+          await supabase.from('messages').update({is_read:true}).eq('id',m.id);
+          m.is_read=true;
+        }
+      } else if(m.sender_id!==user.id){
+        showToast('💬 New message from '+(window._names[m.sender_id]||'someone'));
+      }
+      renderThreadList();
+    }
+
+    function handleIncomingUpdate(m){
+      const t = allThreads.find(x=>threadKey(x)===threadKey(m));
+      if(!t) return;
+      const idx = t.messages.findIndex(x=>x.id===m.id);
+      if(idx>-1) t.messages[idx] = m;
+      if(activeThread && threadKey(activeThread)===threadKey(t)){
+        activeThread.messages = t.messages;
+        renderMessages();
+      }
+    }
+
+    supabase.channel('messages-as-buyer-'+user.id)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'buyer_id=eq.'+user.id}, p=>handleIncomingInsert(p.new))
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:'buyer_id=eq.'+user.id}, p=>handleIncomingUpdate(p.new))
+      .subscribe();
+    supabase.channel('messages-as-seller-'+user.id)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'seller_id=eq.'+user.id}, p=>handleIncomingInsert(p.new))
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:'seller_id=eq.'+user.id}, p=>handleIncomingUpdate(p.new))
+      .subscribe();
 
     // Start a new thread from ?seller=&listing= params
     const params = new URLSearchParams(location.search);
@@ -198,12 +712,13 @@
     await loadBlockState();
     if (toSeller && toSeller!==user.id) {
       const {data:sellerProfile} = await supabase.from('profiles').select('full_name,store_name').eq('id',toSeller).single();
-      activeThread = { buyer_id:user.id, seller_id:toSeller, listing_id:listingId||null, messages:[] };
+      activeThread = { buyer_id:user.id, seller_id:toSeller, listing_id:listingId||null, messages:[], _isDraft:true };
       document.getElementById('msg-wrap').classList.add('chat-open');
-      document.getElementById('chat-header-text').textContent = sellerProfile?.store_name||sellerProfile?.full_name||'Seller';
+      document.getElementById('chat-header-text').textContent = (sellerProfile && (sellerProfile.store_name||sellerProfile.full_name))||'Seller';
       document.getElementById('chat-input-row').style.display='flex';
       document.getElementById('chat-messages').innerHTML = '<p class="loading-msg" style="margin:auto">Say hi 👋</p>';
       updateHeaderActions(toSeller);
+      await joinThreadChannel(activeThread);
     }
 
     await loadThreads();
@@ -211,9 +726,12 @@
     if (toSeller) {
       const idx = (window._threads||[]).findIndex(t=>t.seller_id===toSeller && t.buyer_id===user.id && (t.listing_id||null)===(listingId||null));
       if (idx>-1) window.openThread(idx);
+      else updateChatHeaderStatus();
     }
 
-    pollTimer = setInterval(loadThreads, 10000);
+    // Light backstop poll in case realtime ever drops (e.g. flaky network)
+    pollTimer = setInterval(loadThreads, 45000);
+    window.addEventListener('beforeunload', ()=>{ clearInterval(pollTimer); clearInterval(heartbeatTimer); });
   </script>
   <nav class="bottom-nav">
     <a class="bottom-nav-item" href="index.html"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>

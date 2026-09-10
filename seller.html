@@ -4,11 +4,18 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Seller Dashboard — Marketrade</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-    <meta property="og:title" content="Seller Dashboard — Marketrade"/>
-  <meta property="og:description" content="Buy and sell with your community — jobs, furniture, electronics and more."/>
+  <meta name="description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <meta name="robots" content="noindex, follow"/>
+  <meta property="og:title" content="Seller Dashboard — Marketrade"/>
+  <meta property="og:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
   <meta property="og:type" content="website"/>
-  <meta name="twitter:card" content="summary"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Seller Dashboard — Marketrade"/>
+  <meta name="twitter:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
   <link rel="icon" href="icons/icon-192.png?v=2"/>
@@ -141,6 +148,7 @@
 
   <!-- MAIN DASHBOARD -->
   <main class="main" style="max-width:700px;display:none" id="main-dashboard">
+    <h1 class="sr-only">Seller Dashboard — Marketrade</h1>
     <div id="auth-guard" style="display:none">
       <div class="deposit-note">You need to <a href="login.html" style="color:#2563eb;font-weight:700">sign in</a> to access your dashboard.</div>
     </div>
@@ -495,7 +503,7 @@
             <div id="mfa-qr" style="margin-bottom:10px"></div>
             <div class="form-group"><label>Enter the 6-digit code from your authenticator app</label><input type="text" id="mfa-code" placeholder="123456" maxlength="6"/></div>
             <div style="display:flex;flex-wrap:wrap;gap:10px">
-              <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify & Enable</button>
+              <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify &amp; Enable</button>
               <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
             </div>
           </div>
@@ -1139,7 +1147,7 @@
           if (error) { err.textContent='❌ '+error.message; err.style.display='block'; slot.innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>'; return; }
           const {data:u} = supabase.storage.from('listing-images').getPublicUrl(fname);
           imgs[n] = u.publicUrl;
-          slot.innerHTML = '<img loading="lazy" src="'+u.publicUrl+'"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>';
+          slot.innerHTML = '<img loading="lazy" src="'+u.publicUrl+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>';
         });
       });
 
@@ -1423,7 +1431,7 @@
         imgs[n] = url||null;
         const slot = document.getElementById('slot-'+n);
         slot.innerHTML = url
-          ? '<img loading="lazy" src="'+url+'"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>'
+          ? '<img loading="lazy" src="'+url+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>'
           : '<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';
       });
       showTab('add');
@@ -1770,7 +1778,7 @@
       c.innerHTML = data.map(l => {
         const fp = l.discount_percent>0 ? Math.round(l.price*(1-l.discount_percent/100)) : l.price;
         const status = l.is_draft ? '<span style="color:#888;font-weight:700">📝 Draft</span>' : l.is_sold ? '<span style="color:#1d4ed8;font-weight:700">✅ Sold</span>' : l.is_available ? '<span style="color:#2e7d32;font-weight:700">Active</span>' : '<span style="color:#aaa;font-weight:700">Hidden</span>';
-        const thumb = l.image_url ? '<img loading="lazy" src="'+l.image_url+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>' : '<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>';
+        const thumb = l.image_url ? '<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>' : '<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>';
         const ageDays = Math.floor((Date.now()-new Date(l.renewed_at||l.created_at))/86400000);
         const isOld = ageDays >= 30 && !l.is_draft && !l.is_sold;
         const oldTag = isOld ? ' · <span style="color:#e65c00;font-weight:800">⏰ '+ageDays+'d old</span>' : '';
@@ -1861,7 +1869,7 @@
       if(restocks?.length){
         html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Restock alerts</p>';
         html+=restocks.map(r=>{
-          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
+          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+(r.listings?.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
           const title=r.listings?.title||'Listing no longer available';
           const price=r.listings?.price!=null?'R'+r.listings.price:'';
           return '<div class="seller-row">'+img+'<div class="listing-info" style="flex:1;margin-left:10px">'+
@@ -1938,7 +1946,7 @@
     function renderStoreLogoSlot(){
       const slot = document.getElementById('store-logo-slot');
       slot.innerHTML = storeLogoUrl
-        ? '<img loading="lazy" src="'+storeLogoUrl+'"/><button class="slot-remove" style="display:flex" onclick="window.removeStoreLogo(event)">✕</button>'
+        ? '<img loading="lazy" src="'+storeLogoUrl+'" alt="Store logo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeStoreLogo(event)">✕</button>'
         : '<div style="font-size:24px">🏪</div><div style="font-size:11px;font-weight:700;color:#aaa">Logo</div><button class="slot-remove" id="store-logo-remove" onclick="window.removeStoreLogo(event)">✕</button>';
     }
     window.removeStoreLogo = (e) => { e.stopPropagation(); storeLogoUrl=null; document.getElementById('store-logo-input').value=''; renderStoreLogoSlot(); };
