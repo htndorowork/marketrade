@@ -1601,6 +1601,35 @@
     window.lbGo=(i)=>{lbIdx=i;renderLightbox();};
     window.closeLightbox=()=>{document.getElementById('lightbox').style.display='none';document.body.style.overflow='hidden';};
 
+    // Swipe navigation for lightbox
+    (function(){
+      const lb=document.getElementById('lightbox');
+      let sx=0, sy=0, tracking=false;
+      lb.addEventListener('touchstart',(e)=>{
+        if(lbImgs.length<2)return;
+        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
+      },{passive:true});
+      lb.addEventListener('touchend',(e)=>{
+        if(!tracking)return; tracking=false;
+        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+        if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) lightboxSlide(dx<0?1:-1);
+      },{passive:true});
+    })();
+
+    // Swipe navigation for the in-page gallery
+    (function(){
+      const gal=document.getElementById('modal-gallery');
+      let sx=0, sy=0, tracking=false;
+      gal.addEventListener('touchstart',(e)=>{
+        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
+      },{passive:true});
+      gal.addEventListener('touchend',(e)=>{
+        if(!tracking)return; tracking=false;
+        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+        if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) slideGallery(dx<0?1:-1);
+      },{passive:true});
+    })();
+
     // Keyboard navigation for lightbox
     document.addEventListener('keydown',(e)=>{
       const lb=document.getElementById('lightbox');

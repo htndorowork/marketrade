@@ -439,6 +439,7 @@
           </div>
           <div class="form-group"><label>Store Name</label><input type="text" id="s-store-name" placeholder="e.g. Thabo's Textbook Corner"/></div>
           <div class="form-group"><label>Store Bio</label><textarea id="s-store-bio" placeholder="Tell buyers a bit about what you sell..." rows="3"></textarea></div>
+          <div class="form-group"><label>Store Link (optional)</label><input type="url" id="s-store-link" placeholder="https://instagram.com/yourstore or your WhatsApp/website link"/></div>
           <div class="form-error" id="store-error"></div>
           <button class="btn-primary" id="btn-save-store">Save Store ✅</button>
           <a id="store-public-link" href="#" target="_blank" style="display:block;text-align:center;margin-top:14px;font-weight:800;font-size:13px;color:#2563eb;text-decoration:none">🔗 View my public store page</a>
@@ -1838,8 +1839,8 @@
       document.getElementById('dashboard-menu').style.display='none';
       document.getElementById('dashboard-detail').style.display='block';
       ['orders','orders-completed','purchases','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
-      if (tab==='listings') loadMyListings();
-      if (tab==='orders') loadOrders();
+      if (tab==='listings'){ loadMyListings().then(()=>{document.getElementById('listings-badge').style.display='none';}); }
+      if (tab==='orders'){ loadOrders().then(()=>{document.getElementById('orders-badge').style.display='none';}); }
       if (tab==='orders-completed') loadCompletedOrders();
       if (tab==='purchases'){ loadMyPurchases(); markNotifsRead(['order_completed']).then(loadPurchasesBadge); }
       if (tab==='store') loadStoreTab();
@@ -1948,9 +1949,10 @@
     async function loadStoreTab(){
       document.getElementById('store-public-link').href = 'store.html?seller='+currentUser.id;
 
-      const {data:p} = await supabase.from('profiles').select('store_name,store_bio,store_logo_url').eq('id',currentUser.id).single();
+      const {data:p} = await supabase.from('profiles').select('store_name,store_bio,store_logo_url,store_link').eq('id',currentUser.id).single();
       document.getElementById('s-store-name').value = p?.store_name || '';
       document.getElementById('s-store-bio').value = p?.store_bio || '';
+      document.getElementById('s-store-link').value = p?.store_link || '';
       storeLogoUrl = p?.store_logo_url || null;
       renderStoreLogoSlot();
 
@@ -1971,15 +1973,20 @@
 
     async function saveStore(){
       const err = document.getElementById('store-error'); err.style.color='#1d4ed8'; err.textContent='';
+      let link = document.getElementById('s-store-link').value.trim();
+      if (link && !/^https?:\/\//i.test(link)) link = 'https://'+link;
+      if (link && !/^https?:\/\/[^\s]+\.[^\s]+/i.test(link)) { err.textContent='❌ Enter a valid link, e.g. https://instagram.com/yourstore'; return; }
       const btn = document.getElementById('btn-save-store');
       btn.textContent='Saving...'; btn.disabled=true;
       const {error} = await supabase.from('profiles').update({
         store_name: document.getElementById('s-store-name').value.trim() || null,
         store_bio: document.getElementById('s-store-bio').value.trim() || null,
-        store_logo_url: storeLogoUrl
+        store_logo_url: storeLogoUrl,
+        store_link: link || null
       }).eq('id',currentUser.id);
       btn.textContent='Save Store ✅'; btn.disabled=false;
       if (error) { err.textContent='❌ '+error.message; return; }
+      document.getElementById('s-store-link').value = link;
       err.style.color='#2e7d32'; err.textContent='✅ Store updated!';
     }
 

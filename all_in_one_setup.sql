@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   store_name text,
   store_bio text,
   store_logo_url text,
+  store_link text,
   university text,
   delivery_campuses text[] DEFAULT '{}',
   deliver_all_campuses boolean DEFAULT false,
@@ -72,6 +73,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS store_name text;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS store_bio text;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS store_logo_url text;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS store_link text;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS university text;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS delivery_campuses text[] DEFAULT '{}';
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS deliver_all_campuses boolean DEFAULT false;
