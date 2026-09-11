@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seller Dashboard — Marketrade</title>
+  <meta name="description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <meta name="robots" content="noindex, follow"/>
+  <meta property="og:title" content="Seller Dashboard — Marketrade"/>
+  <meta property="og:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Seller Dashboard — Marketrade"/>
+  <meta name="twitter:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=2"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="js/areas-data.js" defer></script>
+  <style>
+    .dash-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+    .dash-tab{border:2px solid #f0f0f0;background:#fff;padding:10px 20px;border-radius:50px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;color:#888}
+    .dash-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+    .upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
+    .upload-slot{border:2.5px dashed #f0f0f0;border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;transition:border-color 0.15s;position:relative;overflow:hidden}
+    .upload-slot:hover{border-color:#2563eb;background:#eff6ff}
+    .upload-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .slot-remove{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700;z-index:10}
+    .order-card{background:#fff;border:2px solid #f0f0f0;border-radius:16px;padding:16px;margin-bottom:12px}
+    .order-card.order-new{border-color:#2563eb;background:#fff9f9}
+    .order-card-title{font-size:15px;font-weight:800;margin-bottom:8px;color:#111}
+    .order-detail{font-size:13px;font-weight:600;color:#555;margin-bottom:4px}
+    .order-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;margin-bottom:10px}
+    .badge-new{background:#eff6ff;color:#2563eb}
+    .badge-done{background:#e8f5e9;color:#2e7d32}
+    .paywall-screen{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:24px}
+    .paywall-card{background:#fff;border:2.5px solid #bfdbfe;border-radius:20px;padding:40px 32px;max-width:400px;width:100%;text-align:center}
+    .qty-row-sm{display:flex;align-items:center;gap:8px}
+    .qty-btn-sm{background:#f0f0f0;border:none;border-radius:50%;width:28px;height:28px;font-size:15px;cursor:pointer;font-weight:800;display:flex;align-items:center;justify-content:center}
+    .qty-num-sm{font-size:15px;font-weight:800;min-width:28px;text-align:center}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <div class="nav-links">
+      <a href="index.html">Browse</a>
+    </div>
+  </nav>
+
+  <!-- SUBSCRIBE / PAYWALL SCREEN -->
+  <div id="paywall-screen" style="display:none">
+    <div class="paywall-screen">
+      <div class="paywall-card" style="max-width:520px;text-align:left">
+        <div id="paywall-emergency" style="display:none;text-align:center">
+          <div style="font-size:52px;margin-bottom:16px">🔒</div>
+          <h2 style="font-size:22px;font-weight:900;margin-bottom:10px;text-align:center">Listings Paused</h2>
+          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.7;margin-bottom:20px;text-align:center">New listings are temporarily paused. Contact admin if you need help.</p>
+          <div style="text-align:center"><a href="mailto:marketrade.co@gmail.com" style="display:inline-block;background:#2563eb;color:#fff;padding:12px 28px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none">📧 Contact Admin</a></div>
+        </div>
+        <div id="paywall-plans">
+          <div style="text-align:center;font-size:42px;margin-bottom:8px">💼</div>
+          <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;text-align:center">Start selling</h2>
+          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:center">No free trial — pay securely via Paystack to unlock your seller dashboard and post listings.</p>
+          <div class="plan-grid" style="display:grid;gap:10px;margin-bottom:16px">
+            <button type="button" class="plan-card" id="plan-flash" onclick="startCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Flash Sale · 48 hours</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">1 active listing — clear a single item fast</div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R19</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-quicklister" onclick="startCheckout('quicklister')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Quick Lister · 7 days</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">3 active listings — low-commitment entry point</div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R39</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-casual" onclick="startCheckout('casual')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Casual Seller · 1 month</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">5 active listings — budget-conscious</div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R89</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-standard" onclick="startCheckout('standard')" style="text-align:left;background:#f0f7ff;border:2.5px solid #2563eb;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit;position:relative">
+              <div style="position:absolute;top:-10px;left:14px;background:#2563eb;color:#fff;font-size:10px;font-weight:800;padding:2px 10px;border-radius:50px;letter-spacing:0.3px">MOST POPULAR</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Standard Monthly · 1 month</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">15 active listings — R10.60/listing, best value on the ladder</div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R159</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-power" onclick="startCheckout('power')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Power Seller · 1 month</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">Unlimited active listings — for full stores</div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R249</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-quarter" onclick="startCheckout('quarter')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Quarter Pass · 3 months</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">15 active listings, term-aligned <span style="color:#2e7d32">· SAVE ~R78</span></div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R399</div>
+              </div>
+            </button>
+            <button type="button" class="plan-card" id="plan-semester" onclick="startCheckout('semester')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <div>
+                  <div style="font-weight:900;font-size:15px;color:#111">Semester Pass · 6 months</div>
+                  <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">Unlimited active listings, best for established brands <span style="color:#2e7d32">· SAVE ~R255</span></div>
+                </div>
+                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R699</div>
+              </div>
+            </button>
+          </div>
+          <p id="checkout-error" style="display:none;color:#1d4ed8;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px"></p>
+          <p style="font-size:12px;color:#aaa;font-weight:600;text-align:center;line-height:1.5">Payments are processed by Paystack. After a successful payment your selling access activates automatically.</p>
+          <div style="margin-top:16px;text-align:center">
+            <a href="#" id="paywall-back-dashboard" style="display:none;color:#2563eb;font-size:13px;font-weight:800;text-decoration:none" onclick="event.preventDefault();closeUpgrade()">← Back to dashboard</a>
+            <a href="index.html" id="paywall-back-browse" style="color:#aaa;font-size:13px;font-weight:700;text-decoration:none">← Back to browsing</a>
+            <span style="color:#ddd;margin:0 8px">·</span>
+            <a href="#" id="paywall-signout" style="color:#aaa;font-size:13px;font-weight:700;text-decoration:none" onclick="event.preventDefault();paywallSignOut()">🚪 Sign out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD -->
+  <main class="main" style="max-width:700px;display:none" id="main-dashboard">
+    <h1 class="sr-only">Seller Dashboard — Marketrade</h1>
+    <div id="auth-guard" style="display:none">
+      <div class="deposit-note">You need to <a href="login.html" style="color:#2563eb;font-weight:700">sign in</a> to access your dashboard.</div>
+    </div>
+
+    <div id="load-error-guard" style="display:none">
+      <div class="form-card" style="text-align:center">
+        <div style="font-size:40px;margin-bottom:12px">⚠️</div>
+        <p style="font-weight:800;margin-bottom:6px">Something went wrong loading your dashboard.</p>
+        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This is usually a temporary connection hiccup. Try again below.</p>
+        <button class="btn-primary" style="padding:12px 28px;border-radius:50px" onclick="location.reload()">🔄 Try again</button>
+      </div>
+    </div>
+
+    <div id="seller-content" style="display:none">
+      <div class="profile-header-card">
+        <div class="profile-avatar" id="seller-avatar">🏪</div>
+        <div>
+          <div class="profile-header-name" id="seller-header-name">Dashboard</div>
+          <div class="profile-header-meta" id="seller-header-meta"></div>
+        </div>
+      </div>
+
+      <!-- MENU -->
+      <div id="dashboard-menu">
+        <div class="profile-section-label">Selling</div>
+        <div class="profile-menu-card">
+          <button class="profile-menu-row" onclick="showTab('orders')">
+            <span class="pmr-icon">📬</span><span class="pmr-label">Orders</span>
+            <span class="pmr-badge" id="orders-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('listings')">
+            <span class="pmr-icon">📦</span><span class="pmr-label">My Listings</span>
+            <span class="pmr-badge" id="listings-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('add')">
+            <span class="pmr-icon">➕</span><span class="pmr-label">Add Listing</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('store')">
+            <span class="pmr-icon">🏪</span><span class="pmr-label">My Store</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showUpgradeOptions()">
+            <span class="pmr-icon">💳</span><span class="pmr-label">Change Plan</span><span class="pmr-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="profile-section-label">Buying</div>
+        <div class="profile-menu-card">
+          <button class="profile-menu-row" onclick="showTab('purchases')">
+            <span class="pmr-icon">🛍️</span><span class="pmr-label">My Purchases</span>
+            <span class="pmr-badge" id="purchases-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="profile-section-label">Account</div>
+        <div class="profile-menu-card">
+          <a class="profile-menu-row" href="messages.html">
+            <span class="pmr-icon">💬</span><span class="pmr-label">Messages</span>
+            <span class="pmr-badge" id="msg-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </a>
+          <div style="position:relative" id="notif-wrap">
+            <button class="profile-menu-row" id="nav-notif" onclick="toggleNotifDropdown()">
+              <span class="pmr-icon">🔔</span><span class="pmr-label">Notifications</span>
+              <span class="pmr-badge" id="notif-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+            </button>
+            <div id="notif-dropdown" class="notif-dropdown" style="display:none"></div>
+          </div>
+          <button class="profile-menu-row" onclick="showTab('profile')">
+            <span class="pmr-icon">👤</span><span class="pmr-label">Profile</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('alerts')">
+            <span class="pmr-icon">🔔</span><span class="pmr-label">My Alerts</span>
+            <span class="pmr-badge" id="alerts-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('invite')">
+            <span class="pmr-icon">🎁</span><span class="pmr-label">Invite Friends</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('security')">
+            <span class="pmr-icon">🔐</span><span class="pmr-label">Security</span><span class="pmr-chevron">›</span>
+          </button>
+          <a class="profile-menu-row" href="admin.html" id="admin-link" style="display:none">
+            <span class="pmr-icon">🛠️</span><span class="pmr-label">Admin</span><span class="pmr-chevron">›</span>
+          </a>
+        </div>
+
+        <div class="profile-section-label">Support</div>
+        <div class="profile-menu-card">
+          <a class="profile-menu-row" href="faq.html"><span class="pmr-icon">❓</span><span class="pmr-label">Help &amp; How It Works</span><span class="pmr-chevron">›</span></a>
+          <a class="profile-menu-row" href="https://wa.me/27694520629" target="_blank" rel="noopener"><span class="pmr-icon">📱</span><span class="pmr-label">WhatsApp Support</span><span class="pmr-chevron">›</span></a>
+          <a class="profile-menu-row" href="mailto:marketrade.co@gmail.com"><span class="pmr-icon">📧</span><span class="pmr-label">Report an Issue</span><span class="pmr-chevron">›</span></a>
+        </div>
+
+        <button class="profile-logout-btn" id="dashboard-logout-btn">🚪 Sign out</button>
+        <div class="profile-version">Marketrade 🛍️</div>
+      </div>
+
+      <!-- DETAIL PANELS -->
+      <div id="dashboard-detail" style="display:none">
+        <button class="profile-back-btn" onclick="closeTab()">← Back to Dashboard</button>
+
+
+      <!-- ORDERS -->
+      <div id="tab-orders" style="display:none">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <button class="btn-sm btn-toggle" onclick="showTab('orders-completed')">✅ Completed Orders</button>
+        </div>
+        <div id="orders-container"><p class="loading-msg">Loading orders... ⏳</p></div>
+      </div>
+
+      <div id="tab-orders-completed" style="display:none">
+        <button class="profile-back-btn" style="padding-bottom:12px" onclick="showTab('orders')">← Back to Orders</button>
+        <div id="orders-completed-container"><p class="loading-msg">Loading completed orders... ⏳</p></div>
+      </div>
+
+      <!-- MY PURCHASES (things this seller bought from other sellers) -->
+      <div id="tab-purchases" style="display:none">
+        <div id="purchases-container"><p class="loading-msg">Loading purchases... ⏳</p></div>
+      </div>
+
+      <!-- MY LISTINGS -->
+      <div id="tab-listings" style="display:none">
+        <div id="my-listings"><p class="loading-msg">Loading listings...</p></div>
+      </div>
+
+      <!-- ADD LISTING -->
+      <div id="tab-add" style="display:none">
+        <div class="form-card" id="plan-usage-card" style="display:none;margin-bottom:14px;padding:14px 16px">
+          <div id="plan-usage-text" style="font-size:13px;font-weight:800;color:#555"></div>
+          <div style="background:#f0f0f0;border-radius:50px;height:6px;margin-top:8px;overflow:hidden"><div id="plan-usage-bar" style="height:100%;background:#2563eb;border-radius:50px;width:0%"></div></div>
+        </div>
+        <div class="form-card">
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:16px" id="add-form-heading">Add New Listing</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product Title *</label>
+              <input type="text" id="f-title" placeholder="e.g. Calculus Textbook"/>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="f-cat">
+                <option value="">Select category</option>
+                <option>Textbooks</option><option>Stationary</option><option>Electronics</option>
+                <option>Clothing</option><option>Beauty</option><option>Jewellery</option><option>Bags</option>
+                <option>Food</option><option>Snacks</option><option>Utensils</option>
+                <option>Furniture</option><option>Decor</option><option>Appliances</option><option>Tools</option>
+                <option>Sports</option><option>Toys</option><option>Books</option><option>Music</option>
+                <option>Cameras</option><option>Pets</option><option>Baby</option><option>Plants</option>
+                <option>Events</option><option>Health</option><option>Data</option><option>Career</option>
+                <option>Transport</option><option>Vehicles</option><option>Accommodation</option><option>Tutoring</option>
+                <option>Services</option><option>Hardware</option><option>Gaming</option><option>Others</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row" id="f-tb-row" style="display:none">
+            <div class="form-group">
+              <label>Study Year *</label>
+              <select id="f-tb-year">
+                <option value="">Select year</option>
+                <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>Postgraduate</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Subject *</label>
+              <select id="f-tb-subject">
+                <option value="">Select subject</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="f-flat-row" style="display:none">
+            <label id="f-flat-label">Type *</label>
+            <select id="f-flat-subcat">
+              <option value="">Select type</option>
+            </select>
+          </div>
+          <div class="form-group" id="f-flat-other-row" style="display:none">
+            <label>Please describe the item *</label>
+            <input type="text" id="f-flat-other" placeholder="e.g. Cheese grater with wooden handle"/>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="f-desc" placeholder="Describe your item — condition, size, etc." rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Price (R) *</label>
+              <input type="number" id="f-price" placeholder="150" min="1"/>
+            </div>
+            <div class="form-group">
+              <label>Quantity in stock *</label>
+              <input type="number" id="f-qty" placeholder="1" min="1" value="1"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Discount % (optional)</label>
+            <input type="number" id="f-discount" placeholder="0" min="0" max="90"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Condition *</label>
+              <select id="f-condition">
+                <option value="">Select condition</option>
+                <option>New</option>
+                <option>Like New</option>
+                <option>Used</option>
+                <option>For Parts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Delivery fee (R, optional)</label>
+              <input type="number" id="f-delivery-fee" placeholder="0" min="0"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" id="f-negotiable"/> Price is negotiable
+            </label>
+          </div>
+          <div class="form-group">
+            <label>Photos — up to 6 (optional)</label>
+            <div class="upload-grid">
+              <div class="upload-slot" id="slot-1" onclick="document.getElementById('fi-1').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 1</div>
+                <button class="slot-remove" id="sr-1" onclick="window.removeImg(event,1)">✕</button>
+              </div>
+              <div class="upload-slot" id="slot-2" onclick="document.getElementById('fi-2').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 2</div>
+                <button class="slot-remove" id="sr-2" onclick="window.removeImg(event,2)">✕</button>
+              </div>
+              <div class="upload-slot" id="slot-3" onclick="document.getElementById('fi-3').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 3</div>
+                <button class="slot-remove" id="sr-3" onclick="window.removeImg(event,3)">✕</button>
+              </div>
+              <div class="upload-slot" id="slot-4" onclick="document.getElementById('fi-4').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 4</div>
+                <button class="slot-remove" id="sr-4" onclick="window.removeImg(event,4)">✕</button>
+              </div>
+              <div class="upload-slot" id="slot-5" onclick="document.getElementById('fi-5').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 5</div>
+                <button class="slot-remove" id="sr-5" onclick="window.removeImg(event,5)">✕</button>
+              </div>
+              <div class="upload-slot" id="slot-6" onclick="document.getElementById('fi-6').click()">
+                <div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo 6</div>
+                <button class="slot-remove" id="sr-6" onclick="window.removeImg(event,6)">✕</button>
+              </div>
+            </div>
+            <input type="file" id="fi-1" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <input type="file" id="fi-2" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <input type="file" id="fi-3" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <input type="file" id="fi-4" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <input type="file" id="fi-5" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <input type="file" id="fi-6" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+            <div style="font-size:12px;color:#aaa;font-weight:600;margin-top:4px">JPG, PNG or WEBP · Max 2MB each</div>
+            <div id="upload-err" style="display:none;font-size:13px;font-weight:700;color:#1d4ed8;margin-top:6px"></div>
+          </div>
+          <div class="form-error" id="form-error"></div>
+          <button class="btn-primary" id="btn-post">Post Listing 🚀</button>
+          <button class="btn-primary" id="btn-draft" style="background:#888;margin-top:8px">Save as Draft 📝</button>
+          <button class="btn-primary" id="btn-cancel-edit" style="background:#f0f0f0;color:#555;margin-top:8px;display:none">Cancel Edit</button>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="tab-store" style="display:none">
+        <div class="form-card">
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your Store 🏪</h3>
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This is what buyers see when they visit your store page.</p>
+
+          <div class="stats" id="store-stats" style="margin-bottom:20px">
+            <div class="stat"><div class="stat-num" id="stat-my-listings">0</div><div class="stat-label">Listings 📦</div></div>
+            <div class="stat"><div class="stat-num" id="stat-my-sales">0</div><div class="stat-label">Sales 💰</div></div>
+            <div class="stat"><div class="stat-num" id="stat-my-rating">–</div><div class="stat-label">Rating ⭐</div></div>
+          </div>
+
+          <div class="form-group">
+            <label>Store Logo</label>
+            <div class="upload-grid" style="max-width:120px">
+              <div class="upload-slot" id="store-logo-slot" onclick="document.getElementById('store-logo-input').click()">
+                <div style="font-size:24px">🏪</div><div style="font-size:11px;font-weight:700;color:#aaa">Logo</div>
+                <button class="slot-remove" id="store-logo-remove" onclick="window.removeStoreLogo(event)">✕</button>
+              </div>
+            </div>
+            <input type="file" id="store-logo-input" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+          </div>
+          <div class="form-group"><label>Store Name</label><input type="text" id="s-store-name" placeholder="e.g. Thabo's Textbook Corner"/></div>
+          <div class="form-group"><label>Store Bio</label><textarea id="s-store-bio" placeholder="Tell buyers a bit about what you sell..." rows="3"></textarea></div>
+          <div class="form-error" id="store-error"></div>
+          <button class="btn-primary" id="btn-save-store">Save Store ✅</button>
+          <a id="store-public-link" href="#" target="_blank" style="display:block;text-align:center;margin-top:14px;font-weight:800;font-size:13px;color:#2563eb;text-decoration:none">🔗 View my public store page</a>
+        </div>
+      </div>
+
+      <div id="tab-profile" style="display:none">
+        <div class="form-card">
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your Profile 👤</h3>
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This shows on your listings so buyers can find you.</p>
+          <div class="form-group"><label>Full Name *</label><input type="text" id="p-name" placeholder="Thabo Mokoena"/></div>
+          <div class="form-group"><label>WhatsApp *</label><input type="text" inputmode="tel" id="p-whatsapp" placeholder="0812345678 or +27812345678"/></div>
+          <div class="form-group"><label>Residence</label><input type="text" id="p-residence" placeholder="e.g. 12 Church Street, Potchefstroom"/></div>
+          <div class="form-group">
+            <label>Where do you deliver? *</label>
+            <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers can filter listings by their area, so tell us every area you deliver to.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+              <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
+                <input type="checkbox" id="p-sell-all-areas"/> 📍 Deliver anywhere in South Africa
+              </label>
+            </div>
+            <div id="p-area-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+            <button type="button" class="btn-sm btn-toggle" onclick="openAreaAddModal()">+ Add a specific area</button>
+          </div>
+          <div class="form-error" id="profile-error"></div>
+          <button class="btn-primary" id="btn-save">Save Profile ✅</button>
+        </div>
+      </div>
+
+      <div id="tab-alerts" style="display:none">
+        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">We'll notify you when a new listing matches one of these, or when an out-of-stock item you're watching is back. Save searches from the 🔔 Alert me button on the search/filter bar, or tap "We'll notify you" on any out-of-stock listing.</p>
+        <div id="alerts-container"><p class="loading-msg">Loading alerts... ⏳</p></div>
+      </div>
+
+      <div id="tab-invite" style="display:none">
+        <div class="form-card" style="text-align:center">
+          <div style="font-size:36px;margin-bottom:8px">🎁</div>
+          <h3 style="font-size:17px;font-weight:800;margin-bottom:6px">Invite friends, earn free selling days</h3>
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">Share your link — when a friend signs up with it, you get <b>3 free selling days</b> added to your account.</p>
+          <div style="display:flex;gap:8px;align-items:center;background:#eff6ff;border-radius:12px;padding:10px 14px;margin-bottom:14px">
+            <input type="text" id="invite-link" readonly style="flex:1;border:none;background:transparent;font-weight:700;font-size:13px;color:#2563eb"/>
+            <button class="btn-sm btn-toggle" onclick="copyInviteLink()">📋 Copy</button>
+          </div>
+          <a class="btn-sm btn-toggle" id="invite-whatsapp-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📱 Share on WhatsApp</a>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:13px;font-weight:700;color:#2563eb">🎉 <span id="invite-count">0</span> friend(s) joined using your link</div>
+        </div>
+      </div>
+
+      <div id="tab-security" style="display:none">
+        <div class="form-card">
+          <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">🔔 Push Notifications</h3>
+          <p id="push-status" style="font-size:13px;color:#888;font-weight:600;margin-bottom:10px">Checking status...</p>
+          <button class="btn-sm btn-toggle" id="btn-push-toggle" onclick="togglePush()" style="display:none"></button>
+        </div>
+
+        <div class="form-card" style="margin-top:16px">
+          <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">🔑 Change Password</h3>
+          <div class="form-group"><label>New password</label><input type="password" id="pw-new" placeholder="At least 6 characters"/></div>
+          <div class="form-group"><label>Confirm new password</label><input type="password" id="pw-confirm" placeholder="Re-enter new password"/></div>
+          <div class="form-error" id="pw-error"></div>
+          <button class="btn-sm btn-toggle" onclick="changePassword()">Update Password</button>
+        </div>
+
+        <div class="form-card" style="margin-top:16px">
+          <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">🔐 Two-Factor Authentication</h3>
+          <div id="mfa-status" style="font-size:13px;color:#888;font-weight:600;margin-bottom:10px">Checking status...</div>
+          <div id="mfa-enroll-box" style="display:none">
+            <div id="mfa-qr" style="margin-bottom:10px"></div>
+            <div class="form-group"><label>Enter the 6-digit code from your authenticator app</label><input type="text" id="mfa-code" placeholder="123456" maxlength="6"/></div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify &amp; Enable</button>
+              <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
+            </div>
+          </div>
+          <button class="btn-sm btn-toggle" id="btn-mfa-toggle" style="display:none"></button>
+
+          <div style="margin-top:24px;padding-top:16px;border-top:1px solid #f0f0f0">
+            <button class="btn-sm btn-toggle" onclick="signOutEverywhere()">🔒 Sign out of all devices</button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="area-modal-overlay" onclick="closeAreaAddModal()">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+      <button class="modal-close" onclick="closeAreaAddModal()">✕</button>
+      <div class="modal-body" id="area-modal-body"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient(
+      'https://spupfdclswjlpwiebwlq.supabase.co',
+      'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
+    );
+
+    // Paystack secret key lives ONLY in Supabase Edge Function secrets (paystack-checkout / paystack-webhook).
+    const PAYSTACK_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/paystack-checkout';
+
+    window.startCheckout = (planKey) => startPaystackCheckout(planKey);
+
+    let currentUser = null;
+    const imgs = {1:null,2:null,3:null,4:null,5:null,6:null};
+
+    const TB_TAXONOMY={
+      'Economic and Management Sciences (EMS)':['Accounting & Auditing','Statistics','Business & Financial Management','Actuarial Science & Quantitative Finance'],
+      'Natural and Agricultural Sciences':['Mathematics & Applied Mathematics','Physics','Computer Science & IT','Chemistry & Biochemistry','Agricultural Sciences'],
+      'Engineering':['Chemical Engineering','Electrical, Electronic & Computer Engineering','Mechanical Engineering'],
+      'Law (Faculty of Law)':['Private & Public Law','Mercantile & Criminal Law'],
+      'Health Sciences':['Physiology & Anatomy','Nursing & Pharmacy','Human Movement Sciences'],
+      'Humanities & Social Sciences':['Languages & Linguistics','Social Sciences','Psychology'],
+      'Education':['Pedagogy & Curriculum Studies'],
+      'Theology':['Biblical & Systematic Studies']
+    };
+    function populateTbSubjects(){
+      const sel=document.getElementById('f-tb-subject');
+      sel.innerHTML='<option value="">Select subject</option>'+
+        Object.keys(TB_TAXONOMY).map(fac=>
+          '<optgroup label="'+fac+'">'+
+          TB_TAXONOMY[fac].map(sub=>'<option>'+sub+'</option>').join('')+
+          '</optgroup>'
+        ).join('');
+    }
+    populateTbSubjects();
+
+    const ELECTRONICS_SUBCATS=[
+      'Laptops (Windows laptops, MacBooks, Chromebooks)','Tablets (iPads, Samsung Galaxy Tabs)','Smartphones',
+      'Wireless earbuds (AirPods, Galaxy Buds)','Headphones (noise-cancelling and gaming)','Bluetooth speakers',
+      'Power banks','Phone chargers and fast chargers','Laptop chargers','USB flash drives',
+      'External hard drives and SSDs','Wireless mouse','Keyboard (especially for laptop users)','Laptop stands',
+      'USB-C hubs and adapters','Monitors for studying or gaming','Printers',
+      'Calculators (especially scientific and graphing calculators)','Smartwatches','Fitness trackers','Webcams',
+      'Microphones (for online classes or content creation)','Portable projectors','Ring lights',
+      'Portable Wi-Fi routers or MiFi devices','Extension cords and surge protectors','Smart desk lamps',
+      'E-readers (such as Kindle)','Gaming consoles (PlayStation, Xbox, Nintendo Switch)',
+      'Gaming accessories (controllers, gaming mice, mechanical keyboards)'
+    ];
+
+    const CLOTHING_SUBCATS=[
+      'T-shirt','Shirt','Blouse','Polo shirt','Tank top','Sweater','Hoodie','Jacket','Coat','Jeans',
+      'Trousers (pants)','Shorts','Skirt','Leggings','Joggers','Dress','Gown','Jumpsuit','Saree','Kimono',
+      'Hanbok','Abaya','Kilt','Raincoat','Blazer','Cardigan','Windbreaker','Overcoat','Underwear','Bra',
+      'Vest','Pajamas','Nightgown','Sneakers','Sandals','Boots','Slippers','High heels','Shoes','Hat',
+      'Cap','Skull cap','Durag','Scarf','Gloves','Belt','Tie','Socks'
+    ];
+
+    const FOOD_SUBCATS=[
+      'Instant noodles','Rice','Bread','Eggs','Chicken','Beef','Sausages','Mince','Tuna','Baked beans',
+      'Peanut butter','Cheese','Milk','Yogurt','Breakfast cereal','Oats','Pasta','Potatoes','Sweet potatoes',
+      'Frozen vegetables','Fresh vegetables','Fruits','Apples','Bananas','Oranges','Tomatoes','Onions',
+      'Lettuce','Avocados','Cooking oil','Butter','Margarine','Salt','Sugar','Coffee','Tea','Juice',
+      'Bottled water','Soft drinks','Energy drinks','Biscuits','Chips (crisps)','Popcorn','Chocolate',
+      'Cookies','Muffins','Pizza','Burgers','Sandwiches','Wraps','Frozen meals','Soup','Canned vegetables',
+      'Canned fruit','Instant porridge','Protein bars','Trail mix','Nuts','Dried fruit','Spices and seasonings'
+    ];
+
+    const BEAUTY_SUBCATS=[
+      'Face wash','Cleanser','Toner','Moisturizer','Sunscreen','Face serum','Face mask','Lip balm','Lipstick',
+      'Lip gloss','Lip liner','Foundation','Concealer','Powder','Blush','Bronzer','Highlighter','Primer',
+      'Setting spray','Mascara','Eyeliner','Eyeshadow','Eyebrow pencil','Eyebrow gel','False eyelashes',
+      'Makeup remover','Makeup wipes','Beauty sponge','Makeup brushes','Nail polish','Nail polish remover',
+      'Cuticle oil','Hand cream','Body lotion','Body butter','Body scrub','Shower gel','Bar soap','Shampoo',
+      'Conditioner','Hair oil','Hair serum','Hair gel','Hair wax','Hair spray','Hair mousse','Dry shampoo',
+      'Hair dye',"Men's Perfume","Women's Perfume",'Body mist','Deodorant','Roll-on deodorant','Antiperspirant','Cotton pads',
+      'Cotton buds','Tweezers','Razor','Shaving cream','Wax strips','Facial cleansing brush',
+      'Straight wig','Body wave wig','Loose wave wig','Deep wave wig','Water wave wig','Curly wig',
+      'Kinky curly wig','Afro kinky wig','Yaki straight wig','Bob wig','Pixie cut wig','Lace front wig',
+      'Full lace wig','360 lace wig','HD lace wig','Closure wig','U-part wig','V-part wig','Headband wig',
+      'Glueless wig','Human hair wig','Synthetic wig','Colored wig','Braiding hair','Hair extensions'
+    ];
+
+    const SPORTS_SUBCATS=[
+      'Dumbbells','Resistance bands','Yoga mats','Gym gloves','Skipping ropes','Weight plates',
+      'Treadmills','Exercise bikes','Soccer balls','Rugby balls','Netballs','Basketballs','Cricket bats',
+      'Team jerseys','Cycling helmets','Running shoes','Sports water bottles','Shaker bottles',
+      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
+      'Hiking backpacks','Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
+      'Boxing gloves','Sports/gym bags'
+    ];
+    const BOOKS_SUBCATS=[
+      'Fiction novels','Non-fiction books','Comics & manga','Magazines','Poetry collections',
+      'Self-help books','Biographies','Vinyl records','CDs','DVDs & Blu-rays','Audiobooks',
+      'Journals & diaries','Bookmarks','Book series/box sets'
+    ];
+    const MUSIC_SUBCATS=[
+      'Acoustic guitars','Electric guitars','Bass guitars','Keyboards/pianos','Drum kits','Violins',
+      'Ukuleles','Microphones','DJ equipment','Amplifiers','Guitar picks & straps','Sheet music',
+      'Music stands','Instrument cases','Cajons/percussion','Turntables'
+    ];
+    const CAMERAS_SUBCATS=[
+      'DSLR cameras','Mirrorless cameras','Point-and-shoot cameras','Instant/Polaroid cameras',
+      'Camera lenses','Tripods','Ring lights','Photo backdrops','Camera bags','Memory cards',
+      'Drones','GoPros/action cameras','Camera batteries & chargers','Gimbals/stabilizers'
+    ];
+    const EVENTS_SUBCATS=[
+      'Balloons','Party decorations','Banners & bunting','Costumes','Party lighting',
+      'Speakers for events','Disposable cups & plates','Photo booth props','Candles',
+      'Gift wrapping supplies','Fairy lights','Table linens','Party favors','Cake toppers'
+    ];
+    const PLANTS_SUBCATS=[
+      'Indoor plants','Succulents','Cacti','Plant pots','Hanging planters','Fertilizer','Potting soil',
+      'Gardening tools','Seeds','Watering cans','Outdoor plants','Herb gardens','Plant stands','Artificial plants'
+    ];
+    const DECOR_SUBCATS=[
+      'Wall art & posters','Photo frames','Fairy lights','Canvas prints','Tapestries','Wall mirrors',
+      'Wall clocks','Candles & holders','Decorative cushions','Throw blankets','Room dividers','Rugs',
+      'Vases','Wall stickers'
+    ];
+    const BABY_SUBCATS=[
+      'Baby clothing','Kids clothing','School uniforms','Prams & strollers','Car seats',
+      'Baby feeding gear','Baby bottles','Nappies/diapers','Baby toys','Cots & cribs','Baby monitors',
+      'Baby carriers','High chairs','Baby bathing supplies'
+    ];
+    const DATA_SUBCATS=[
+      'Data bundles','Airtime vouchers','SIM cards','WiFi routers/MiFi devices',
+      'Prepaid electricity vouchers','Shared streaming subscriptions','Mobile banking assistance',
+      'Data-saving device setup'
+    ];
+    const HEALTH_SUBCATS=[
+      'First aid supplies','Vitamins & supplements','Pain relief medication','Feminine hygiene products',
+      'Contact lenses','Contact lens solution','Face masks','Hand sanitizer','Thermometers',
+      'Fitness trackers','Reading glasses','Sunscreen (medical/SPF)','Braces & supports','Ear plugs'
+    ];
+    const CAREER_SUBCATS=[
+      'CV/resume templates','Portfolio folders','Interview attire','Business cards',
+      'Laptop bags for work','Office/desk organizers','Name badges','Networking event tickets',
+      'Graduation attire','Internship starter kits'
+    ];
+
+    const TUTORING_SUBCATS=[
+      'Mathematics tutoring','Statistics tutoring','Physics tutoring','Chemistry tutoring','Biology tutoring',
+      'Accounting tutoring','Economics tutoring','Finance tutoring','Computer Science tutoring',
+      'Programming tutoring','Data Science tutoring','Engineering tutoring','Business Studies tutoring',
+      'English tutoring','Academic writing tutoring','Essay writing support','Assignment guidance',
+      'Research project assistance','Test and exam preparation','Revision classes','Past paper sessions',
+      'Study skills coaching','Time management coaching','Group tutoring','One-on-one tutoring',
+      'Online tutoring','In-person tutoring','Homework help','Presentation preparation',
+      'Microsoft Excel tutoring','Microsoft Word tutoring','PowerPoint tutoring','SPSS tutoring',
+      'Python programming tutoring','Calculus tutoring','Linear Algebra tutoring','Probability tutoring',
+      'Academic mentoring','First-year support tutoring','Final-year project support'
+    ];
+
+    const ACCOMMODATION_SUBCATS=[
+      'Single room','Shared room','Bachelor (studio) apartment','One-bedroom apartment','Two-bedroom apartment',
+      'Three-bedroom apartment','Shared flat/apartment','Shared house','Commune house',
+      'Private student residence room','Ensuite room','Non-ensuite room','Self-catering apartment',
+      'Furnished apartment','Unfurnished apartment','Loft apartment','Duplex apartment'
+    ];
+
+    const TRANSPORT_SUBCATS=[
+      'Skateboard','Longboard','Penny board','Kick scooter','Electric scooter','Bicycle','Folding bicycle',
+      'Electric bicycle','Roller skates','Inline skates (Rollerblades)','Hoverboard','Electric skateboard',
+      'Unicycle','Electric unicycle','Drift trike','Mini bike','Balance bike','Ripstik','Car','Quadbike',
+      'Motorbike'
+    ];
+
+    const VEHICLES_SUBCATS=[
+      'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
+      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan','Boat','Jet ski',
+      'Car parts & spares','Tyres & rims','Car batteries','Car audio & electronics','Dash cams',
+      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car care & cleaning products',
+      'Car jacks & tools','Helmets & riding gear','Number plates'
+    ];
+
+    const SERVICES_SUBCATS=[
+      'Haircuts','Braiding and hairstyling','Barber services','Makeup services','Nail services',
+      'Massage services','Personal fitness training','Lift-sharing','Airport transfers','Bus station transfers',
+      'Grocery delivery','Food delivery','Pharmacy pickups',
+      'Parcel collection','Laundry pickup and delivery','Campus errand service','Room cleaning',
+      'Laundry and ironing','Carpet cleaning','Move-in/move-out cleaning','Graphic design','Logo design',
+      'Photography','Videography','Social media management','Website creation',
+      'Printing business cards and flyers','Water delivery','Gas refill delivery','Convenience Services',
+      'Transport services','Dj services',
+      'Rental: Bicycle','Rental: Electric scooter','Rental: Skateboard','Rental: Motorcycle/Moped',
+      'Rental: Car','Rental: Laptop','Rental: Projector','Rental: Speaker/PA system',
+      'Rental: Camera/Photography gear','Rental: Furniture','Rental: Costume','Rental: Event equipment',
+      'Rental: Tools'
+    ];
+
+    const STATIONARY_GROUPS={
+      'Pens':['Ballpoint pens','Gel pens','Fountain pens'],
+      'Pencils':['HB pencils','2B pencils','Mechanical pencils'],
+      'Markers & highlighters':['Highlighters','Permanent markers','Whiteboard markers','Fine liners','Technical drawing pens'],
+      'Erasers & correction':['Erasers','Correction fluid/correction tape','Pencil sharpeners'],
+      'Glue & adhesives':['Glue sticks','Liquid glue','Tape','Tape dispensers'],
+      'Cutting & measuring':['Scissors','Rulers','Protractors','Compasses','Set squares','Geometry sets','Craft knives','Cutting mats'],
+      'Notebooks & paper':['Notebooks','Exercise books','Writing pads','Loose-leaf paper','Graph paper','Index cards','Sticky notes','Page markers/sticky tabs','Printer paper','Tracing paper','Flashcards'],
+      'Files & folders':['Folders','Lever arch files','Ring binders','Display files','Plastic sleeves','Dividers','Clipboards','Document wallets','Envelopes'],
+      'Desk essentials':['Calculators','Staplers','Staples','Staple removers','Paper clips','Binder clips','Rubber bands','Hole punches','Pencil cases','Desk organizers','Labels','Book covers','Bookmarks','Printer ink cartridges'],
+      'Art supplies':['Drawing books','Sketchbooks','Coloured pencils','Crayons','Oil pastels','Watercolour paints','Paint brushes','Palettes','Charcoal pencils','Whiteboard erasers','Chalk']
+    };
+    const STATIONARY_SUBCATS=Object.values(STATIONARY_GROUPS).flat();
+
+    const APPLIANCES_SUBCATS=[
+      'Fridge','Microwave','Electric kettle','Rice cooker','Air fryer','Toaster','Sandwich maker',
+      'Electric stove/hot plate','Induction cooker','Blender','Coffee maker','Electric fan',
+      'Portable air conditioner','Heater','Iron','Washing machine','Tumble dryer','Vacuum cleaner',
+      'Water dispenser','Hair dryer','Electric shaver','Electric toothbrush','Humidifier','Air purifier',
+      'Electric blanket','Sewing machine'
+    ];
+
+    const RENTALS_SUBCATS=[
+      'Bicycle','Electric bicycle (e-bike)','Scooter','Electric scooter (e-scooter)','Skateboard',
+      'Electric skateboard','Longboard','Roller skates','Inline skates (rollerblades)','Kick scooter',
+      'Motorcycle','Moped','Motor scooter','Car','Van','Minibus','Pickup truck (bakkie)',
+      'Campervan (for trips)','Golf cart (on some campuses)','Quad bike (where permitted)','Segway',
+      'Electric unicycle (EUC)','Laptops','Desktop computers','Tablets','Printers','Scanners','Projectors',
+      'Scientific calculators','Graphics calculators','Computer monitors','Keyboards','Wireless mice',
+      'Headphones','Webcams','Microphones','Wi-Fi routers','Pocket Wi-Fi devices','Power banks',
+      'Extension cords','Mini fridges','Microwaves','Electric kettles','Rice cookers','Air fryers',
+      'Toasters','Sandwich makers','Electric hot plates','Induction cookers','Blenders','Coffee makers',
+      'Washing machines','Tumble dryers','Vacuum cleaners','Irons','Fans','Portable heaters',
+      'Portable air conditioners','Water dispensers','Air purifiers','Humidifiers','Electric blankets',
+      'Study desks','Office chairs','Bookshelves','Wardrobes','Bed frames','Mattresses','Bedside tables',
+      'Lamps','Projectors and screens','Speakers','Extension cables','Foldable tables','Folding chairs',
+      'Gazebos','Portable fans','Portable lighting'
+    ];
+
+    const FURNITURE_SUBCATS=[
+      'Bed frame','Mattress','Mattress topper','Headboard','Bunk bed','Sofa bed','Couch','Bean bag',
+      'Study desk','Computer desk','Standing desk','Office chair','Gaming chair','Desk stool',
+      'Bedside table','Coffee table','Dining table','Folding table','Dining chairs','Folding chairs',
+      'Bookshelf','Bookcase','Storage shelves','Wardrobe','Clothing rack','Chest of drawers','Dresser',
+      'TV stand','Cabinet','Filing cabinet','Shoe rack','Coat rack','Wall shelves','Storage ottoman',
+      'Storage bench','Laundry hamper','Under-bed storage drawers','Mirror','Vanity table','Desk organizer',
+      'Floating shelves','Room divider','Laptop table','Monitor stand','Footrest','Ottoman','Recliner chair',
+      'Kitchen trolley','Bar stools','Plastic storage drawers','Storage cubes','Foldable wardrobe'
+    ];
+
+    const UTENSILS_SUBCATS=[
+      'Forks','Tablespoons','Teaspoons','Dessert spoons','Serving spoons','Ladles','Salad servers',
+      'Butter knives','Steak knives','Bread knives','Chef\'s knives','Paring knives','Cutlery sets',
+      'Chopsticks','Spatulas','Tongs','Whisks','Can openers','Bottle openers','Peelers','Graters',
+      'Garlic press','Pizza cutters','Cutting boards','Mixing bowls','Colanders/Strainers',
+      'Measuring cups','Measuring spoons','Rolling pins','Kitchen scissors','Plates','Bowls',
+      'Cups','Mugs','Drinking glasses','Lunch boxes','Food storage containers','Tupperware',
+      'Thermos flasks','Water bottles','Baking trays','Pots','Frying pans','Saucepans',
+      'Stove-top kettles','Trivets','Oven mitts','Dish racks','Placemats','Coasters'
+    ];
+    const JEWELLERY_SUBCATS=[
+      'Necklaces','Chains','Pendants','Earrings','Studs','Hoops','Rings','Bracelets',
+      'Bangles','Anklets','Watches','Brooches','Cufflinks','Charms','Jewellery sets',
+      'Body jewellery','Piercing jewellery','Hair jewellery','Jewellery boxes','Jewellery cleaning kits'
+    ];
+    const BAGS_SUBCATS=[
+      'Backpacks','Laptop bags','Handbags','Tote bags','Crossbody bags','Shoulder bags',
+      'Clutch bags','Sling bags','Duffel bags','Gym bags','Sports bags','Drawstring bags',
+      'Waist bags/Fanny packs','Wallets','Purses','Makeup bags','Toiletry bags','Lunch bags',
+      'Suitcases','Travel bags','School bags','Tote/Grocery bags','Pouches'
+    ];
+    const TOYS_SUBCATS=[
+      'Board games','Card games','Puzzles','Building blocks/Lego','Action figures','Dolls',
+      'Plush toys/Stuffed animals','Remote control toys','Educational toys','Outdoor toys',
+      'Water toys','Toy cars','Play sets','Art & craft kits','Musical toys','Party games',
+      'Fidget toys','Baby toys','Video game consoles','Video games'
+    ];
+    const PETS_SUBCATS=[
+      'Dog food','Cat food','Fish food','Bird food','Small pet food','Pet treats',
+      'Leashes & collars','Pet carriers','Pet beds','Pet bowls','Litter boxes','Cat litter',
+      'Aquariums & tanks','Bird cages','Pet toys','Pet grooming supplies','Pet clothing',
+      'Pet training supplies','Fish tank accessories','Pet health & supplements'
+    ];
+    const TOOLS_SUBCATS=[
+      'Hammers','Screwdrivers','Screwdriver sets','Pliers','Wrenches/Spanners','Adjustable wrenches',
+      'Allen keys/Hex keys','Tape measures','Spirit levels','Utility knives','Hand saws','Hacksaws',
+      'Cordless drills','Corded drills','Drill bits','Angle grinders','Electric sanders','Jigsaws',
+      'Circular saws','Soldering irons','Multimeters','Staple guns','Glue guns','Tool belts',
+      'Tool boxes','Tool bags','Work gloves','Safety goggles','Extension cords','Ladders',
+      'Step stools','Wheelbarrows','Garden tools','Shovels','Rakes','Paint brushes','Paint rollers',
+      'Sandpaper','Nails','Screws','Bolts & nuts','Cable ties','Duct tape','Super glue','Lubricants/WD-40'
+    ];
+    const HARDWARE_SUBCATS=[
+      'Door handles & knobs','Door hinges','Locks & padlocks','Window fittings','Cabinet handles','Cabinet hinges',
+      'Chains & ropes','Wire mesh','Pipes & fittings','Plumbing fittings','Taps & fixtures','Electrical wiring',
+      'Switches & sockets','Light fittings','Bricks & blocks','Cement & building materials','Timber/Wood',
+      'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
+      'Insulation materials','Adhesives & sealants','Silicone & fillers'
+    ];
+    const GAMING_SUBCATS=[
+      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
+      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
+      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
+      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
+    ];
+    const SNACKS_SUBCATS=[
+      'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
+      'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
+      'Pretzels','Beef jerky/Biltong','Chewing gum','Mints','Ice lollies/Ice cream','Cupcakes/Muffins','Doughnuts'
+    ];
+
+    // Generic config: category -> {DB field name, dropdown label, options}
+    const FLAT_SUBCATS={
+      Electronics:{field:'electronics_subcategory',label:'Electronics Type *',items:ELECTRONICS_SUBCATS},
+      Utensils:{field:'utensils_subcategory',label:'Utensil Type *',items:UTENSILS_SUBCATS},
+      Jewellery:{field:'jewellery_subcategory',label:'Jewellery Type *',items:JEWELLERY_SUBCATS},
+      Bags:{field:'bags_subcategory',label:'Bag Type *',items:BAGS_SUBCATS},
+      Toys:{field:'toys_subcategory',label:'Toy/Hobby Type *',items:TOYS_SUBCATS},
+      Pets:{field:'pets_subcategory',label:'Pet Item Type *',items:PETS_SUBCATS},
+      Tools:{field:'tools_subcategory',label:'Tool Type *',items:TOOLS_SUBCATS},
+      Hardware:{field:'hardware_subcategory',label:'Hardware Type *',items:HARDWARE_SUBCATS},
+      Gaming:{field:'gaming_subcategory',label:'Gaming Item *',items:GAMING_SUBCATS},
+      Snacks:{field:'snacks_subcategory',label:'Snack Type *',items:SNACKS_SUBCATS},
+      Sports:{field:'sports_subcategory',label:'Sports/Outdoor Item *',items:SPORTS_SUBCATS},
+      Books:{field:'books_subcategory',label:'Book/Media Type *',items:BOOKS_SUBCATS},
+      Music:{field:'music_subcategory',label:'Music Item Type *',items:MUSIC_SUBCATS},
+      Cameras:{field:'cameras_subcategory',label:'Camera Item Type *',items:CAMERAS_SUBCATS},
+      Events:{field:'events_subcategory',label:'Event/Party Item *',items:EVENTS_SUBCATS},
+      Plants:{field:'plants_subcategory',label:'Plant/Garden Item *',items:PLANTS_SUBCATS},
+      Decor:{field:'decor_subcategory',label:'Home Decor Item *',items:DECOR_SUBCATS},
+      Baby:{field:'baby_subcategory',label:'Baby/Kids Item *',items:BABY_SUBCATS},
+      Data:{field:'data_subcategory',label:'Data/Airtime Item *',items:DATA_SUBCATS},
+      Health:{field:'health_subcategory',label:'Health Item *',items:HEALTH_SUBCATS},
+      Career:{field:'career_subcategory',label:'Career Item *',items:CAREER_SUBCATS},
+      Clothing:{field:'clothing_subcategory',label:'Clothing Type *',items:CLOTHING_SUBCATS},
+      Food:{field:'food_subcategory',label:'Food Item *',items:FOOD_SUBCATS},
+      Beauty:{field:'beauty_subcategory',label:'Beauty Item *',items:BEAUTY_SUBCATS},
+      Tutoring:{field:'tutoring_subcategory',label:'Tutoring Subject *',items:TUTORING_SUBCATS},
+      Accommodation:{field:'accommodation_subcategory',label:'Accommodation Type *',items:ACCOMMODATION_SUBCATS},
+      Transport:{field:'transport_subcategory',label:'Transport Type *',items:TRANSPORT_SUBCATS},
+      Vehicles:{field:'vehicles_subcategory',label:'Vehicle Type *',items:VEHICLES_SUBCATS},
+      Services:{field:'services_subcategory',label:'Service Type *',items:SERVICES_SUBCATS},
+      Stationary:{field:'stationary_subcategory',label:'Stationary Item *',items:STATIONARY_SUBCATS},
+      Appliances:{field:'appliances_subcategory',label:'Appliance Type *',items:APPLIANCES_SUBCATS},
+      Furniture:{field:'furniture_subcategory',label:'Furniture Item *',items:FURNITURE_SUBCATS}
+    };
+
+    document.getElementById('f-cat').addEventListener('change',e=>{
+      const v=e.target.value;
+      document.getElementById('f-tb-row').style.display = v==='Textbooks' ? 'grid' : 'none';
+      const conf=FLAT_SUBCATS[v];
+      const flatRow=document.getElementById('f-flat-row');
+      document.getElementById('f-flat-other-row').style.display='none';
+      document.getElementById('f-flat-other').value='';
+      if(conf){
+        document.getElementById('f-flat-label').textContent=conf.label;
+        if(v==='Stationary'){
+          document.getElementById('f-flat-subcat').innerHTML='<option value="">Select type</option>'+
+            Object.keys(STATIONARY_GROUPS).map(g=>
+              '<optgroup label="'+g+'">'+STATIONARY_GROUPS[g].map(s=>'<option>'+s+'</option>').join('')+'</optgroup>'
+            ).join('')+'<option value="Other">Other</option>';
+        } else {
+          document.getElementById('f-flat-subcat').innerHTML='<option value="">Select type</option>'+conf.items.map(s=>'<option>'+s+'</option>').join('')+'<option value="Other">Other</option>';
+        }
+        flatRow.style.display='block';
+      } else {
+        flatRow.style.display='none';
+      }
+    });
+
+    document.getElementById('f-flat-subcat').addEventListener('change',e=>{
+      const otherRow=document.getElementById('f-flat-other-row');
+      otherRow.style.display = e.target.value==='Other' ? 'block' : 'none';
+      if(e.target.value!=='Other') document.getElementById('f-flat-other').value='';
+    });
+
+    // ===== AREA DELIVERY COVERAGE (Province > City > District > Suburb) =====
+    let sellerAreas=[]; // [{province,city,district,suburbs:[...]}]
+    let areaAddProvince=null, areaAddCity=null, areaAddDistrict=null, areaAddSuburbs=[];
+
+    function renderAreaList(){
+      const box=document.getElementById('p-area-list');
+      if(!sellerAreas.length){ box.innerHTML=''; return; }
+      box.innerHTML=sellerAreas.map((a,i)=>
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#f0f7ff;border:1.5px solid #eadcfb;border-radius:12px;padding:10px 12px">'+
+          '<div><div style="font-weight:800;font-size:13px;color:#111">📍 '+a.district+', '+a.city+'</div>'+
+          '<div style="font-size:12px;color:#888;font-weight:600;margin-top:2px">'+(a.suburbs||[]).join(', ')+'</div></div>'+
+          '<button type="button" onclick="removeArea('+i+')" style="border:none;background:none;color:#c62828;font-weight:900;font-size:16px;cursor:pointer;line-height:1">✕</button>'+
+        '</div>'
+      ).join('');
+    }
+    window.removeArea=(i)=>{ sellerAreas.splice(i,1); renderAreaList(); };
+
+    window.openAreaAddModal=()=>{
+      areaAddProvince=null; areaAddCity=null; areaAddDistrict=null; areaAddSuburbs=[];
+      renderAreaProvinceStep();
+      document.getElementById('area-modal-overlay').style.display='flex';
+      document.body.style.overflow='hidden';
+    };
+    window.closeAreaAddModal=()=>{
+      document.getElementById('area-modal-overlay').style.display='none';
+      document.body.style.overflow='';
+    };
+    function renderAreaProvinceStep(){
+      const list=areaProvinces();
+      document.getElementById('area-modal-body').innerHTML=
+        '<div class="inst-modal-title">Add an area</div>'+
+        '<div class="inst-modal-sub">What province?</div>'+
+        '<div class="tb-subject-grid">'+
+        list.map(p=>'<button type="button" class="tb-subject-btn" onclick="pickAreaProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
+        '</div>';
+    }
+    window.pickAreaProvince=(p)=>{ areaAddProvince=p; renderAreaCityStep(); };
+    function renderAreaCityStep(){
+      const list=areaCities(areaAddProvince);
+      document.getElementById('area-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderAreaProvinceStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select the city</div>'+
+        '<div class="inst-modal-sub">'+areaAddProvince+'</div>'+
+        '<input type="text" class="inst-search" placeholder="Search cities..." oninput="filterAreaCityList(this.value)"/>'+
+        '<div class="inst-count" id="area-pick-count">'+list.length+' cities</div>'+
+        '<div class="tb-subject-grid" id="area-pick-list">'+
+        list.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickAreaCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+        '</div>';
+    }
+    window.renderAreaProvinceStep=renderAreaProvinceStep;
+    window.filterAreaCityList=(q)=>{
+      const list=areaCities(areaAddProvince);
+      q=(q||'').trim().toLowerCase();
+      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
+      document.getElementById('area-pick-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
+      document.getElementById('area-pick-list').innerHTML=filtered.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickAreaCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+    };
+    window.pickAreaCity=(c)=>{ areaAddCity=c; renderAreaDistrictStep(); };
+    function renderAreaDistrictStep(){
+      const list=areaDistricts(areaAddProvince,areaAddCity);
+      document.getElementById('area-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderAreaCityStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select the district</div>'+
+        '<div class="inst-modal-sub">'+areaAddCity+'</div>'+
+        '<div class="tb-subject-grid">'+
+        list.map(d=>'<button type="button" class="tb-subject-btn" onclick="pickAreaDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
+        '</div>';
+    }
+    window.renderAreaCityStep=renderAreaCityStep;
+    window.pickAreaDistrict=(d)=>{
+      areaAddDistrict=d;
+      const existing=sellerAreas.find(a=>a.province===areaAddProvince && a.city===areaAddCity && a.district===areaAddDistrict);
+      areaAddSuburbs = existing ? [...existing.suburbs] : [];
+      renderAreaSuburbStep();
+    };
+    function renderAreaSuburbStep(){
+      const list=areaSuburbs(areaAddProvince,areaAddCity,areaAddDistrict);
+      const allSelected = list.every(s=>areaAddSuburbs.includes(s));
+      document.getElementById('area-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderAreaDistrictStep()">← Back</button>'+
+        '<div class="inst-modal-title">Which suburbs?</div>'+
+        '<div class="inst-modal-sub">'+areaAddDistrict+'</div>'+
+        '<label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:10px 0;cursor:pointer">'+
+          '<input type="checkbox" id="area-suburb-all" '+(allSelected?'checked':'')+' onchange="toggleAreaAllSuburbs(this.checked)"/> All suburbs in this district'+
+        '</label>'+
+        '<div class="tb-subject-grid" id="area-suburb-grid">'+
+        list.map(s=>'<button type="button" class="tb-subject-btn'+(areaAddSuburbs.includes(s)?' active':'')+'" onclick="toggleAreaSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
+        '</div>'+
+        '<button type="button" class="btn-primary" style="margin-top:14px" onclick="confirmAreaAdd()">Add ✅</button>';
+    }
+    window.renderAreaDistrictStep=renderAreaDistrictStep;
+    window.toggleAreaAllSuburbs=(checked)=>{
+      const list=areaSuburbs(areaAddProvince,areaAddCity,areaAddDistrict);
+      areaAddSuburbs = checked ? [...list] : [];
+      renderAreaSuburbStep();
+    };
+    window.toggleAreaSuburb=(s)=>{
+      areaAddSuburbs = areaAddSuburbs.includes(s) ? areaAddSuburbs.filter(x=>x!==s) : [...areaAddSuburbs,s];
+      renderAreaSuburbStep();
+    };
+    window.confirmAreaAdd=()=>{
+      if(!areaAddSuburbs.length){ alert('Select at least one suburb (or tick "All suburbs in this district").'); return; }
+      sellerAreas = sellerAreas.filter(a=>!(a.province===areaAddProvince && a.city===areaAddCity && a.district===areaAddDistrict));
+      sellerAreas.push({province:areaAddProvince,city:areaAddCity,district:areaAddDistrict,suburbs:areaAddSuburbs});
+      renderAreaList();
+      closeAreaAddModal();
+    };
+
+
+    function siteBase(){
+      return window.location.href.replace(/[^/]*$/, '');
+    }
+    const VALID_PLAN_KEYS=['flash','quicklister','casual','standard','power','quarter','semester'];
+
+    window.startPaystackCheckout = async (planKey)=>{
+      document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
+      const pressedCard = document.getElementById('plan-'+planKey);
+      if (pressedCard) pressedCard.classList.add('plan-card-selected');
+
+      const errEl = document.getElementById('checkout-error');
+      errEl.style.display='none';
+      if (!VALID_PLAN_KEYS.includes(planKey)) return;
+      if (!currentUser) {
+        errEl.style.display='block';
+        errEl.textContent='Please sign in first.';
+        return;
+      }
+      const {data:{session}}=await supabase.auth.getSession();
+      if (!session?.access_token) {
+        errEl.style.display='block';
+        errEl.textContent='Please sign in again.';
+        return;
+      }
+      errEl.style.display='block';
+      errEl.style.color='#555';
+      errEl.textContent='Redirecting to Paystack…';
+      try {
+        const res = await fetch(PAYSTACK_FN, {
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+session.access_token,
+            'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
+          },
+          body: JSON.stringify({ plan: planKey, return_base: siteBase() })
+        });
+        const payload = await res.json().catch(()=>({}));
+        if (!res.ok) {
+          errEl.style.color='#1d4ed8';
+          errEl.textContent = payload.error || ('Checkout failed ('+res.status+')');
+          return;
+        }
+        // Paystack hosts the whole checkout page — just redirect there.
+        window.location.href = payload.authorization_url;
+      } catch(e) {
+        errEl.style.color='#1d4ed8';
+        errEl.textContent = 'Could not start payment. Check that paystack-checkout is deployed.';
+      }
+    };
+
+    async function init() {
+     try {
+      const {data:{user}} = await supabase.auth.getUser();
+
+      if (!user) {
+        document.getElementById('main-dashboard').style.display = 'block';
+        document.getElementById('auth-guard').style.display = 'block';
+        return;
+      }
+      currentUser = user;
+      document.getElementById('dashboard-logout-btn').onclick = async () => { await supabase.auth.signOut(); window.location.href='login.html'; };
+
+      // These three are independent of each other — fetch together instead of
+      // three sequential round-trips before anything can render.
+      const [{data:settingsRows},{data:p}] = await Promise.all([
+        supabase.from('settings').select('key,value').in('key',['paywall_active','free_mode_active']),
+        supabase.from('profiles').select('*').eq('id',user.id).single()
+      ]);
+      const paywallOn = settingsRows?.find(r=>r.key==='paywall_active')?.value === 'true';
+      const freeModeOn = settingsRows?.find(r=>r.key==='free_mode_active')?.value === 'true';
+
+      if (paywallOn) {
+        document.getElementById('paywall-screen').style.display = 'block';
+        document.getElementById('paywall-emergency').style.display = 'block';
+        document.getElementById('paywall-plans').style.display = 'none';
+        return;
+      }
+
+      const today = new Date().toISOString().slice(0,10);
+      const paidActive = (p?.subscription_paid_until && p.subscription_paid_until >= today) || freeModeOn;
+      const blocked = p?.is_blocked === true;
+
+      if (blocked) {
+        document.getElementById('paywall-screen').style.display = 'block';
+        document.getElementById('paywall-emergency').style.display = 'block';
+        document.getElementById('paywall-plans').style.display = 'none';
+        document.querySelector('#paywall-emergency h2').textContent = 'Store blocked';
+        document.querySelector('#paywall-emergency p').textContent = 'Your store is temporarily blocked by the admin. Contact support for help.';
+        return;
+      }
+
+      if (!paidActive && !p?.is_admin) {
+        document.getElementById('paywall-screen').style.display = 'block';
+        document.getElementById('paywall-emergency').style.display = 'none';
+        document.getElementById('paywall-plans').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('main-dashboard').style.display = 'block';
+      document.getElementById('seller-content').style.display = 'block';
+
+      if (p) {
+        document.getElementById('seller-header-name').textContent = p.full_name||'Seller';
+        document.getElementById('seller-avatar').textContent = (p.full_name||p.store_name||'?').trim().charAt(0).toUpperCase()||'🏪';
+        document.getElementById('seller-header-meta').textContent = [p.store_name,'Seller'].filter(Boolean).join(' · ');
+        document.getElementById('p-name').value = p.full_name||'';
+        document.getElementById('p-whatsapp').value = p.whatsapp||'';
+        document.getElementById('p-residence').value = p.residence||'';
+        document.getElementById('p-sell-all-areas').checked = !!p.deliver_all_areas;
+        sellerAreas = Array.isArray(p.seller_areas) ? p.seller_areas : [];
+        renderAreaList();
+        if (p.is_admin) document.getElementById('admin-link').style.display = 'flex';
+        supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+currentUser.id+',seller_id.eq.'+currentUser.id).neq('sender_id',currentUser.id).eq('is_read',false).then(({count})=>{
+          if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';}
+        });
+        loadNotifications();
+        loadOrders();
+        loadMyListings();
+        loadPurchasesBadge();
+        loadAlertsBadge();
+
+        if (p.is_admin || p.subscription_paid_until || freeModeOn) {
+          const banner = document.createElement('div');
+          banner.style.cssText = 'background:#eff6ff;color:#5b21b6;padding:10px 20px;font-weight:800;font-size:12.5px;text-align:center;border-bottom:2px solid #e9d5ff';
+          banner.textContent = p.is_admin ? '✅ Admin account — seller plan never expires' : (p.subscription_paid_until && p.subscription_paid_until >= today) ? '✅ Seller plan active until '+new Date(p.subscription_paid_until).toLocaleDateString('en-ZA') : '🎁 Free Mode is ON — you can post without paying';
+          document.body.insertBefore(banner, document.body.firstChild);
+        }
+      }
+
+      [1,2,3,4,5,6].forEach(n => {
+        document.getElementById('fi-'+n).addEventListener('change', async e => {
+          const file = e.target.files[0]; if(!file) return;
+          const err = document.getElementById('upload-err'); err.style.display='none';
+          if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { err.textContent='❌ Only JPG/PNG/WEBP'; err.style.display='block'; return; }
+          if (file.size > 8*1024*1024) { err.textContent='❌ Max 8MB per photo (before compression)'; err.style.display='block'; return; }
+          const slot = document.getElementById('slot-'+n);
+          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Compressing...</div>';
+          let uploadFile;
+          try { uploadFile = await compressImage(file); }
+          catch(compressErr) { uploadFile = file; }
+          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Uploading...</div>';
+          const fname = currentUser.id+'/'+n+'-'+Date.now()+'.jpg';
+          const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile);
+          if (error) { err.textContent='❌ '+error.message; err.style.display='block'; slot.innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>'; return; }
+          const {data:u} = supabase.storage.from('listing-images').getPublicUrl(fname);
+          imgs[n] = u.publicUrl;
+          slot.innerHTML = '<img loading="lazy" src="'+u.publicUrl+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>';
+        });
+      });
+
+      document.getElementById('btn-post').onclick = ()=>addListing(false);
+      document.getElementById('btn-draft').onclick = ()=>addListing(true);
+      document.getElementById('btn-cancel-edit').onclick = window._cancelEdit;
+      document.getElementById('btn-save').onclick = saveProfile;
+      document.getElementById('btn-save-store').onclick = saveStore;
+      loadOrders();
+      refreshMfaStatus();
+     } catch (err) {
+      console.error('Seller dashboard failed to load:', err);
+      document.getElementById('main-dashboard').style.display = 'block';
+      document.getElementById('auth-guard').style.display = 'none';
+      document.getElementById('seller-content').style.display = 'none';
+      document.getElementById('load-error-guard').style.display = 'block';
+     }
+    }
+
+    // Resizes to max 1280px on the longest side and re-encodes as JPEG ~0.8 quality,
+    // keeping uploads small and fast on the free storage tier.
+    function compressImage(file){
+      return new Promise((resolve,reject)=>{
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.onerror = reject;
+        img.onload = () => {
+          const MAX = 1280;
+          let {width,height} = img;
+          if (width>height && width>MAX) { height=Math.round(height*MAX/width); width=MAX; }
+          else if (height>MAX) { width=Math.round(width*MAX/height); height=MAX; }
+          const canvas = document.createElement('canvas');
+          canvas.width=width; canvas.height=height;
+          canvas.getContext('2d').drawImage(img,0,0,width,height);
+          canvas.toBlob(blob=>{
+            if(!blob) return reject(new Error('Compression failed'));
+            resolve(new File([blob], 'photo.jpg', {type:'image/jpeg'}));
+          }, 'image/jpeg', 0.8);
+        };
+        img.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    window.removeImg = (e,n) => {
+      e.stopPropagation();
+      imgs[n]=null;
+      document.getElementById('fi-'+n).value='';
+      document.getElementById('slot-'+n).innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';
+    };
+
+    let editingListingId = null;
+
+    async function loadNotifications(){
+      if(!currentUser)return;
+      const {data}=await supabase.from('notifications').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+      window._notifs=data||[];
+      const unread=(data||[]).filter(n=>!n.is_read).length;
+      const badge=document.getElementById('notif-badge');
+      if(unread>0){badge.textContent=unread;badge.style.display='inline-flex';}
+      else badge.style.display='none';
+    }
+
+    // Badges only reflect actual unread events — never a static count of things already saved.
+    async function countUnreadNotifs(types){
+      const {count}=await supabase.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
+      return count||0;
+    }
+    async function markNotifsRead(types){
+      await supabase.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
+    }
+    function setBadge(id,count){
+      const b=document.getElementById(id);
+      if(count>0){b.textContent=count;b.style.display='inline-block';}
+      else b.style.display='none';
+    }
+    async function loadAlertsBadge(){
+      setBadge('alerts-badge', await countUnreadNotifs(['search_alert','restock']));
+    }
+    async function loadPurchasesBadge(){
+      setBadge('purchases-badge', await countUnreadNotifs(['order_completed']));
+    }
+    window.toggleNotifDropdown=async()=>{
+      const dd=document.getElementById('notif-dropdown');
+      if(dd.style.display==='block'){dd.style.display='none';return;}
+      await loadNotifications();
+      const notifs=window._notifs||[];
+      dd.innerHTML=notifs.length
+        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+n.message+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
+        : '<div class="notif-empty">No notifications yet 🔔</div>';
+      dd.style.display='block';
+    };
+    window._openNotif=async(id,listingId)=>{
+      await supabase.from('notifications').update({is_read:true}).eq('id',id);
+      document.getElementById('notif-dropdown').style.display='none';
+      if(listingId) window.location.href='index.html?open='+listingId;
+      else loadNotifications();
+    };
+    document.addEventListener('click',(e)=>{
+      const wrap=document.getElementById('notif-wrap');
+      if(wrap && !wrap.contains(e.target)) document.getElementById('notif-dropdown').style.display='none';
+    });
+
+    async function addListing(isDraft) {
+      const title = document.getElementById('f-title').value.trim();
+      const cat   = document.getElementById('f-cat').value;
+      const desc  = document.getElementById('f-desc').value.trim();
+      const price = parseFloat(document.getElementById('f-price').value);
+      const qty   = parseInt(document.getElementById('f-qty').value) || 1;
+      const disc  = parseFloat(document.getElementById('f-discount').value) || 0;
+      const condition = document.getElementById('f-condition').value;
+      const deliveryFee = parseFloat(document.getElementById('f-delivery-fee').value) || 0;
+      const negotiable = document.getElementById('f-negotiable').checked;
+      const tbYear = document.getElementById('f-tb-year').value;
+      const tbSubject = document.getElementById('f-tb-subject').value;
+      const flatConf = FLAT_SUBCATS[cat];
+      let flatVal = document.getElementById('f-flat-subcat').value;
+      const flatOtherDesc = document.getElementById('f-flat-other').value.trim();
+      const err   = document.getElementById('form-error');
+      err.style.color='#1d4ed8'; err.textContent='';
+
+      // Fix 4 — check profile is complete first
+      const {data:p} = await supabase.from('profiles').select('full_name,whatsapp,residence,deliver_all_areas,seller_areas').eq('id',currentUser.id).single();
+      if (!p?.full_name || !p?.whatsapp) {
+        err.textContent='❌ Please complete your profile (name & WhatsApp) before listing. Go to the Profile tab.';
+        showTab('profile');
+        return;
+      }
+      const hasDeliveryScope = p?.deliver_all_areas || (Array.isArray(p?.seller_areas) && p.seller_areas.length>0);
+      if (!hasDeliveryScope) {
+        err.textContent='❌ Set which areas you deliver to before listing. Go to the Profile tab.';
+        showTab('profile');
+        return;
+      }
+
+      if (!title) { err.textContent='❌ Enter a product title'; return; }
+      if (!cat)   { err.textContent='❌ Select a category'; return; }
+      if (!price || price<=0) { err.textContent='❌ Enter a valid price'; return; }
+      if (!qty || qty<1) { err.textContent='❌ Enter quantity (at least 1)'; return; }
+      if (!isDraft && !condition) { err.textContent='❌ Select the item\'s condition'; return; }
+      if (cat==='Textbooks' && (!tbYear || !tbSubject)) { err.textContent='❌ Select a study year and subject for this textbook'; return; }
+      if (flatConf && !flatVal) { err.textContent='❌ Select a '+flatConf.label.replace(' *','').toLowerCase(); return; }
+      if (flatConf && flatVal==='Other' && !flatOtherDesc) { err.textContent='❌ Please describe the item since you selected "Other"'; return; }
+      if (flatConf && flatVal==='Other') { flatVal = flatOtherDesc; }
+      const btn = document.getElementById(isDraft?'btn-draft':'btn-post');
+      const origTxt = btn.textContent;
+      btn.textContent=editingListingId?'Saving...':(isDraft?'Saving...':'Posting...'); btn.disabled=true;
+      const payload = {
+        seller_id: currentUser.id, title, category: cat, description: desc,
+        price, quantity: qty, discount_percent: disc,
+        condition: condition||null, is_negotiable: negotiable, delivery_fee: deliveryFee,
+        image_url: imgs[1]||null, image_url_2: imgs[2]||null, image_url_3: imgs[3]||null,
+        image_url_4: imgs[4]||null, image_url_5: imgs[5]||null, image_url_6: imgs[6]||null,
+        textbook_year: cat==='Textbooks' ? tbYear : null,
+        textbook_subject: cat==='Textbooks' ? tbSubject : null
+      };
+      if (!editingListingId) { payload.is_available = !isDraft; payload.is_draft = !!isDraft; }
+      // set every flat-category DB field to null, then fill in the one that applies
+      Object.values(FLAT_SUBCATS).forEach(c=>{payload[c.field]=null;});
+      if (flatConf) payload[flatConf.field] = flatVal;
+
+      const {error} = editingListingId
+        ? await supabase.from('listings').update(payload).eq('id',editingListingId)
+        : await supabase.from('listings').insert(payload);
+
+      btn.textContent=origTxt; btn.disabled=false;
+      if (error) {
+        if (error.message && error.message.includes('LISTING_CAP_REACHED')) {
+          err.innerHTML = '❌ You\'ve hit your plan\'s active listing limit. <a href="#" onclick="event.preventDefault();showUpgradeOptions()" style="color:#2563eb;font-weight:800;text-decoration:underline">Upgrade your plan →</a>';
+        } else {
+          err.textContent='❌ '+error.message;
+        }
+        return;
+      }
+      const wasEditing = !!editingListingId;
+      resetAddForm();
+      err.style.color='#2e7d32'; err.textContent=wasEditing?'✅ Listing updated!':(isDraft?'✅ Saved as draft!':'✅ Listing posted!');
+      setTimeout(()=>{err.textContent=''; showTab('listings'); loadMyListings();},1500);
+      refreshPlanUsage();
+    }
+
+    const PLAN_CAPS={flash:1,quicklister:3,casual:5,standard:15,power:null,quarter:15,semester:null};
+    const PLAN_NAMES={flash:'Flash Sale',quicklister:'Quick Lister',casual:'Casual Seller',standard:'Standard Monthly',power:'Power Seller',quarter:'Quarter Pass',semester:'Semester Pass'};
+    async function refreshPlanUsage(){
+      const card=document.getElementById('plan-usage-card');
+      const {data:p}=await supabase.from('profiles').select('seller_plan,is_admin').eq('id',currentUser.id).single();
+      if (p?.is_admin || !p?.seller_plan) { card.style.display='none'; return; }
+      const cap=PLAN_CAPS[p.seller_plan];
+      if (cap==null) { card.style.display='none'; return; } // unlimited plan
+      const {count}=await supabase.from('listings').select('id',{count:'exact',head:true})
+        .eq('seller_id',currentUser.id).eq('is_draft',false).eq('is_sold',false).eq('is_available',true);
+      const used=count||0;
+      card.style.display='block';
+      document.getElementById('plan-usage-text').textContent = (PLAN_NAMES[p.seller_plan]||'Your plan')+': '+used+' of '+cap+' active listings used';
+      document.getElementById('plan-usage-bar').style.width = Math.min(100,(used/cap)*100)+'%';
+      document.getElementById('plan-usage-bar').style.background = used>=cap ? '#dc2626' : '#2563eb';
+    }
+    window.showUpgradeOptions=()=>{
+      document.getElementById('seller-content').style.display='none';
+      document.getElementById('paywall-screen').style.display='block';
+      document.getElementById('paywall-emergency').style.display='none';
+      document.getElementById('paywall-plans').style.display='block';
+      document.getElementById('paywall-back-dashboard').style.display='inline';
+      document.getElementById('paywall-back-browse').style.display='none';
+      document.querySelector('#paywall-plans h2').textContent='Change your plan';
+      document.querySelector('#paywall-plans p').textContent='Pick a new plan — your remaining time carries over and the new listing cap applies right away.';
+    };
+    window.closeUpgrade=()=>{
+      document.getElementById('paywall-screen').style.display='none';
+      document.getElementById('seller-content').style.display='block';
+      refreshPlanUsage();
+    };
+    window.paywallSignOut=async()=>{
+      await supabase.auth.signOut();
+      window.location.href='login.html';
+    };
+
+    function resetAddForm(){
+      editingListingId = null;
+      document.getElementById('add-form-heading').textContent='Add New Listing';
+      document.getElementById('btn-post').style.display='inline-block';
+      document.getElementById('btn-post').textContent='Post Listing 🚀';
+      document.getElementById('btn-draft').style.display='inline-block';
+      document.getElementById('btn-cancel-edit').style.display='none';
+      ['f-title','f-desc','f-price','f-qty','f-discount','f-delivery-fee'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('f-cat').value='';
+      document.getElementById('f-condition').value='';
+      document.getElementById('f-negotiable').checked=false;
+      document.getElementById('f-tb-year').value='';
+      document.getElementById('f-tb-subject').value='';
+      document.getElementById('f-tb-row').style.display='none';
+      document.getElementById('f-flat-subcat').value='';
+      document.getElementById('f-flat-row').style.display='none';
+      document.getElementById('f-flat-other').value='';
+      document.getElementById('f-flat-other-row').style.display='none';
+      [1,2,3,4,5,6].forEach(n=>{imgs[n]=null;document.getElementById('fi-'+n).value='';document.getElementById('slot-'+n).innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';});
+    }
+
+    window._editListing = async (id) => {
+      const {data:l} = await supabase.from('listings').select('*').eq('id',id).single();
+      if(!l) return;
+      editingListingId = id;
+      document.getElementById('add-form-heading').textContent='Edit Listing ✏️';
+      document.getElementById('btn-post').style.display='inline-block';
+      document.getElementById('btn-post').textContent='Save Changes 💾';
+      document.getElementById('btn-draft').style.display='none';
+      document.getElementById('btn-cancel-edit').style.display='inline-block';
+      document.getElementById('f-title').value = l.title||'';
+      document.getElementById('f-cat').value = l.category||'';
+      document.getElementById('f-cat').dispatchEvent(new Event('change'));
+      document.getElementById('f-desc').value = l.description||'';
+      document.getElementById('f-price').value = l.price||'';
+      document.getElementById('f-qty').value = l.quantity||1;
+      document.getElementById('f-discount').value = l.discount_percent||'';
+      document.getElementById('f-condition').value = l.condition||'';
+      document.getElementById('f-delivery-fee').value = l.delivery_fee||'';
+      document.getElementById('f-negotiable').checked = !!l.is_negotiable;
+      if (l.category==='Textbooks') {
+        document.getElementById('f-tb-year').value = l.textbook_year||'';
+        document.getElementById('f-tb-subject').value = l.textbook_subject||'';
+      }
+      const flatConf = FLAT_SUBCATS[l.category];
+      if (flatConf) {
+        const sel = document.getElementById('f-flat-subcat');
+        const storedVal = l[flatConf.field]||'';
+        sel.value = storedVal;
+        const otherRow = document.getElementById('f-flat-other-row');
+        if (storedVal && sel.value !== storedVal) {
+          // stored value isn't one of the preset options — it was a custom "Other" description
+          sel.value = 'Other';
+          otherRow.style.display = 'block';
+          document.getElementById('f-flat-other').value = storedVal;
+        } else {
+          otherRow.style.display = 'none';
+          document.getElementById('f-flat-other').value = '';
+        }
+      }
+      [1,2,3,4,5,6].forEach(n=>{
+        const url = l['image_url'+(n===1?'':'_'+n)];
+        imgs[n] = url||null;
+        const slot = document.getElementById('slot-'+n);
+        slot.innerHTML = url
+          ? '<img loading="lazy" src="'+url+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>'
+          : '<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';
+      });
+      showTab('add');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    window._cancelEdit = resetAddForm;
+
+    window.signOutEverywhere=async()=>{
+      if(!confirm('This signs you out on every device where you\'re logged in, not just this one. Continue?'))return;
+      await supabase.auth.signOut({scope:'global'});
+      window.location.href='login.html';
+    };
+
+        const VAPID_PUBLIC_KEY = 'BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM';
+    function urlBase64ToUint8Array(base64String){
+      const padding='='.repeat((4-base64String.length%4)%4);
+      const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+      const rawData=atob(base64);
+      const outputArray=new Uint8Array(rawData.length);
+      for(let i=0;i<rawData.length;i++) outputArray[i]=rawData.charCodeAt(i);
+      return outputArray;
+    }
+    async function refreshPushStatus(){
+      const statusEl=document.getElementById('push-status');
+      const btn=document.getElementById('btn-push-toggle');
+      if(!statusEl) return;
+      if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+        statusEl.textContent='Push notifications aren\'t supported in this browser.';
+        btn.style.display='none';
+        return;
+      }
+      if(Notification.permission==='denied'){
+        statusEl.textContent='❌ Blocked — you\'ve denied notification permission for this site in your browser settings.';
+        btn.style.display='none';
+        return;
+      }
+      try{
+        const reg=await Promise.race([
+          navigator.serviceWorker.ready,
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))
+        ]);
+        const sub=await reg.pushManager.getSubscription();
+        if(sub){
+          statusEl.textContent='✅ Push notifications are enabled on this device.';
+          btn.textContent='Disable on this device';
+          btn.style.display='inline-block';
+        } else {
+          statusEl.textContent='Get notified instantly for new messages and orders, even when the app is closed.';
+          btn.textContent='🔔 Enable Push Notifications';
+          btn.style.display='inline-block';
+        }
+      }catch(e){
+        if(e && e.message==='timeout'){
+          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
+        } else {
+          statusEl.textContent='Could not check push status: '+e.message;
+        }
+        btn.style.display='none';
+      }
+    }
+    window.togglePush=async()=>{
+      const btn=document.getElementById('btn-push-toggle');
+      const statusEl=document.getElementById('push-status');
+      btn.disabled=true;
+      try{
+        const reg=await Promise.race([
+          navigator.serviceWorker.ready,
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+        ]);
+        const existing=await reg.pushManager.getSubscription();
+        if(existing){
+          await existing.unsubscribe();
+          await supabase.from('push_subscriptions').delete().eq('endpoint',existing.endpoint);
+        } else {
+          const perm=await Notification.requestPermission();
+          if(perm!=='granted'){ statusEl.textContent='Permission was not granted.'; btn.disabled=false; return; }
+          const sub=await reg.pushManager.subscribe({
+            userVisibleOnly:true,
+            applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+          const j=sub.toJSON();
+          const {error}=await supabase.from('push_subscriptions').upsert({
+            user_id:currentUser.id, endpoint:j.endpoint, p256dh:j.keys.p256dh, auth:j.keys.auth
+          }, {onConflict:'endpoint'});
+          if(error){ statusEl.textContent='Could not save subscription: '+error.message; btn.disabled=false; return; }
+        }
+      }catch(e){
+        if(e && e.message==='timeout'){
+          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
+        } else {
+          statusEl.textContent='Error: '+e.message;
+        }
+      }
+      btn.disabled=false;
+      refreshPushStatus();
+    };
+
+    window.changePassword=async()=>{
+      const pw=document.getElementById('pw-new').value;
+      const pw2=document.getElementById('pw-confirm').value;
+      const err=document.getElementById('pw-error');
+      err.style.color='#1d4ed8';err.textContent='';
+      if(!pw||pw.length<6){err.textContent='❌ Password must be at least 6 characters';return;}
+      if(pw!==pw2){err.textContent='❌ Passwords don\'t match';return;}
+      const {error}=await supabase.auth.updateUser({password:pw});
+      if(error){err.textContent='❌ '+error.message;return;}
+      err.style.color='#2e7d32';err.textContent='✅ Password updated!';
+      document.getElementById('pw-new').value='';document.getElementById('pw-confirm').value='';
+      setTimeout(()=>err.textContent='',3000);
+    };
+
+    let pendingMfaFactorId=null;
+    async function refreshMfaStatus(){
+      const {data} = await supabase.auth.mfa.listFactors();
+      const verified = (data?.totp||[]).filter(f=>f.status==='verified');
+      const statusEl = document.getElementById('mfa-status');
+      const btn = document.getElementById('btn-mfa-toggle');
+      document.getElementById('mfa-enroll-box').style.display='none';
+      if(verified.length){
+        statusEl.textContent='✅ Two-factor authentication is enabled.';
+        btn.textContent='Disable 2FA';
+        btn.style.display='inline-block';
+        btn.onclick=()=>disableMfa(verified[0].id);
+      } else {
+        statusEl.textContent='2FA adds an extra layer of security using an authenticator app.';
+        btn.textContent='Enable 2FA';
+        btn.style.display='inline-block';
+        btn.onclick=startMfaEnroll;
+      }
+    }
+    window.startMfaEnroll=async()=>{
+      const {data,error}=await supabase.auth.mfa.enroll({factorType:'totp'});
+      if(error){alert('Could not start 2FA setup: '+error.message);return;}
+      pendingMfaFactorId=data.id;
+      document.getElementById('mfa-qr').innerHTML=data.totp.qr_code;
+      document.getElementById('mfa-enroll-box').style.display='block';
+    };
+    window.cancelMfaEnroll=async()=>{
+      if(pendingMfaFactorId) await supabase.auth.mfa.unenroll({factorId:pendingMfaFactorId});
+      pendingMfaFactorId=null;
+      document.getElementById('mfa-enroll-box').style.display='none';
+    };
+    window.verifyMfa=async()=>{
+      const code=document.getElementById('mfa-code').value.trim();
+      if(!code||!pendingMfaFactorId){alert('Enter the 6-digit code first');return;}
+      const {data:ch,error:chErr}=await supabase.auth.mfa.challenge({factorId:pendingMfaFactorId});
+      if(chErr){alert('Error: '+chErr.message);return;}
+      const {error}=await supabase.auth.mfa.verify({factorId:pendingMfaFactorId,challengeId:ch.id,code});
+      if(error){alert('Invalid code, try again: '+error.message);return;}
+      pendingMfaFactorId=null;
+      alert('✅ 2FA enabled!');
+      refreshMfaStatus();
+    };
+    window.disableMfa=async(factorId)=>{
+      if(!confirm('Turn off two-factor authentication?'))return;
+      const {error}=await supabase.auth.mfa.unenroll({factorId});
+      if(error){alert('Error: '+error.message);return;}
+      refreshMfaStatus();
+    };
+
+    // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)
+    function isValidSAPhone(v){
+      const cleaned=(v||'').replace(/[\s-]/g,'');
+      return /^(0\d{9}|\+27\d{9})$/.test(cleaned);
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('p-name').value.trim();
+      const wa   = document.getElementById('p-whatsapp').value.trim();
+      const res  = document.getElementById('p-residence').value.trim();
+      const allAreas = document.getElementById('p-sell-all-areas').checked;
+      const err  = document.getElementById('profile-error');
+      err.style.color='#1d4ed8'; err.textContent='';
+      if (!name||!wa) { err.textContent='❌ Name and WhatsApp are required'; return; }
+      if (!isValidSAPhone(wa)) { err.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678'; return; }
+      if (!allAreas && !sellerAreas.length) { err.textContent='❌ Choose at least one area you deliver to (tick "Deliver anywhere" or add a specific area)'; return; }
+
+      // No free trial — sellers must pay via Paystack before posting
+      const updatePayload = {
+        full_name:name, whatsapp:wa, residence:res,
+        deliver_all_areas:allAreas,
+        seller_areas:sellerAreas
+      };
+
+      const {error} = await supabase.from('profiles').update(updatePayload).eq('id',currentUser.id);
+      if (error) { err.textContent='❌ '+error.message; return; }
+      document.getElementById('seller-header-name').textContent=name;
+      document.getElementById('seller-avatar').textContent=name.trim().charAt(0).toUpperCase()||'🏪';
+      err.style.color='#2e7d32'; err.textContent='✅ Profile saved!';
+      setTimeout(()=>err.textContent='',3000);
+    }
+
+    function renderOrderCard(o, myBuyerRatings) {
+      const isNew = o.status==='confirmed';
+      const isCancelled = o.status==='cancelled';
+      let ratingHtml='';
+      if (o.status==='completed'){
+        if (myBuyerRatings[o.id]) ratingHtml='<div class="order-detail" style="margin-top:6px">⭐ You rated this buyer: <strong>'+myBuyerRatings[o.id]+'/5</strong></div>';
+        else ratingHtml='<div class="order-detail" style="margin-top:6px">Rate this buyer: '+
+          [1,2,3,4,5].map(n=>'<span style="cursor:pointer;font-size:18px" onclick="window._rateBuyer(\''+o.id+'\',\''+o.buyer_id+'\','+n+')">☆</span>').join('')+
+          '</div>';
+      }
+      const badge = isNew?'<span class="order-badge badge-new">🆕 New Order</span>':isCancelled?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+      return '<div class="order-card '+(isNew?'order-new':'')+'">'+
+        badge+
+        '<div class="order-card-title">'+(o.listings?.title||'Unknown listing')+'</div>'+
+        '<div class="order-detail">👤 Buyer: <strong>'+o.buyer_name+'</strong></div>'+
+        '<div class="order-detail">📱 WhatsApp: <strong>'+o.buyer_whatsapp+'</strong></div>'+
+        '<div class="order-detail">📦 Quantity: <strong>'+o.quantity+'</strong></div>'+
+        '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:4px">🕐 '+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
+        (isNew?'<button class="btn-sm btn-toggle" style="margin-top:10px" onclick="window._done(\''+o.id+'\')">Mark as Done ✓</button>':'')+
+        (o.status==='completed'?'<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>':'')+
+        ratingHtml+
+        '</div>';
+    }
+
+    async function loadOrders() {
+      const c = document.getElementById('orders-container');
+      const {data,error} = await supabase.from('orders').select('*,listings(title)').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
+      const newCount = (data||[]).filter(o=>o.status==='confirmed').length;
+      const ob = document.getElementById('orders-badge');
+      if (newCount>0){ob.textContent=newCount;ob.style.display='inline-block';} else ob.style.display='none';
+      if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No orders yet 📬</p>'; return; }
+
+      const newOrders = data.filter(o=>o.status==='confirmed');
+      if (!newOrders.length) { c.innerHTML='<p class="loading-msg">No new orders right now 📬 — check Completed Orders for your history.</p>'; return; }
+      c.innerHTML = newOrders.map(o => renderOrderCard(o, {})).join('');
+    }
+
+    async function loadCompletedOrders() {
+      const c = document.getElementById('orders-completed-container');
+      const {data,error} = await supabase.from('orders').select('*,listings(title)').eq('seller_id',currentUser.id).in('status',['completed','cancelled']).order('created_at',{ascending:false});
+      if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No completed orders yet.</p>'; return; }
+
+      const completedIds = data.filter(o=>o.status==='completed').map(o=>o.id);
+      let myBuyerRatings={};
+      if (completedIds.length){
+        const {data:revs}=await supabase.from('buyer_reviews').select('order_id,rating').eq('seller_id',currentUser.id).in('order_id',completedIds);
+        (revs||[]).forEach(r=>{myBuyerRatings[r.order_id]=r.rating;});
+      }
+      c.innerHTML = data.map(o => renderOrderCard(o, myBuyerRatings)).join('');
+    }
+
+    window._rateBuyer = async (orderId,buyerId,rating) => {
+      const {error} = await supabase.from('buyer_reviews').insert({order_id:orderId,seller_id:currentUser.id,buyer_id:buyerId,rating});
+      if (error) { alert('Could not submit rating: '+error.message); return; }
+      loadCompletedOrders();
+    };
+
+    // "My Purchases" — orders THIS seller placed as a buyer with other sellers.
+    async function loadMyPurchases(){
+      const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
+      const container=document.getElementById('purchases-container');
+      if(!data?.length){container.innerHTML='<p class="loading-msg">No purchases yet — go browse! 🛍️</p>';return;}
+
+      const completedIds=data.filter(o=>o.status==='completed').map(o=>o.id);
+      let myReviews={};
+      if(completedIds.length){
+        const {data:revs}=await supabase.from('reviews').select('order_id,rating').eq('buyer_id',currentUser.id).in('order_id',completedIds);
+        (revs||[]).forEach(r=>{myReviews[r.order_id]=r.rating;});
+      }
+
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      container.innerHTML=data.map(o=>{
+        const e=CAT_EMOJI[o.listings?.category]||'📦';
+        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
+        const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+        let ratingHtml='';
+        if(o.status==='completed'){
+          if(myReviews[o.id]){
+            ratingHtml='<div class="order-detail" style="margin-top:6px">⭐ You rated this seller: <strong>'+myReviews[o.id]+'/5</strong></div>';
+          } else {
+            ratingHtml='<div class="order-detail" style="margin-top:6px">Rate this seller: '+
+              [1,2,3,4,5].map(n=>'<span style="cursor:pointer;font-size:18px" onclick="window._starClickBuy(this,'+n+')">☆</span>').join('')+
+              '<input type="hidden" class="rate-val" value="0"/>'+
+              '<textarea class="rate-comment" placeholder="Optional comment..." rows="2" style="width:100%;margin-top:6px;font-family:inherit;font-size:12px;padding:6px;border:2px solid #f0f0f0;border-radius:8px"></textarea>'+
+              '<button class="btn-sm btn-toggle" style="margin-top:4px" onclick="window._submitBuyerRating(this,\''+o.id+'\',\''+o.seller_id+'\')">Submit rating</button>'+
+              '</div>';
+          }
+        }
+        const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelPurchase(\''+o.id+'\')">Cancel Order</button>' : '';
+        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>' : '';
+        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" onclick="window._requestPurchaseDispute(\''+o.id+'\',\''+(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
+        const actionRow = (receiptBtn||disputeBtn) ? '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px">'+receiptBtn+disputeBtn+'</div>' : '';
+        const viewItem = o.listing_id ? "window._viewPurchasedItem('"+o.listing_id+"')" : '';
+        return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
+          '<div style="display:flex;gap:12px;align-items:flex-start">'+
+          (viewItem?'<div onclick="'+viewItem+'" style="cursor:pointer">'+img+'</div>':img)+
+          '<div style="flex:1">'+status+
+          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
+          '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
+          '<a href="messages.html?seller='+o.seller_id+'&listing='+(o.listing_id||'')+'" style="display:inline-block;font-size:13px;font-weight:800;color:#2563eb;margin-bottom:8px;text-decoration:none">💬 Contact seller to arrange</a>'+
+          '<div class="order-detail">👤 <strong>'+(o.profiles?.full_name||'Seller')+'</strong></div>'+
+          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+o.profiles.residence+'</strong></div>':'')+
+          '<div class="order-detail">📱 <strong>'+(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
+          '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
+          ratingHtml+cancelBtn+actionRow+
+          '</div></div></div>';
+      }).join('');
+    }
+
+    window._viewPurchasedItem=(listingId)=>{
+      window.location.href='index.html?open='+listingId;
+    };
+    window._cancelPurchase=async(id)=>{
+      if(!confirm('Cancel this order? The seller will see it as cancelled.'))return;
+      const {error}=await supabase.rpc('buyer_cancel_order',{p_order_id:id});
+      if(error){alert('Error: '+error.message);return;}
+      loadMyPurchases();
+    };
+    window._requestPurchaseDispute=async(orderId,listingTitle)=>{
+      const details=prompt('Briefly describe the problem with this order ("'+listingTitle+'"):');
+      if(details===null) return;
+      const {data:o}=await supabase.from('orders').select('seller_id,listing_id').eq('id',orderId).single();
+      const {error}=await supabase.from('reports').insert({
+        reporter_id:currentUser.id, order_id:orderId, listing_id:o?.listing_id||null, reported_user_id:o?.seller_id||null,
+        reason:'Dispute or refund request', details:details||null
+      });
+      if(error){alert('Could not submit: '+error.message);return;}
+      alert('Thanks — our team will review this and reach out if needed.');
+    };
+    window._starClickBuy=(el,n)=>{
+      const wrap=el.parentElement;
+      wrap.querySelectorAll('.rate-val')[0].value=n;
+      wrap.querySelectorAll('span').forEach((s,i)=>s.textContent=(i<n)?'⭐':'☆');
+    };
+    window._submitBuyerRating=async(btn,orderId,sellerId)=>{
+      const wrap=btn.parentElement;
+      const rating=parseInt(wrap.querySelector('.rate-val').value)||0;
+      const comment=wrap.querySelector('.rate-comment').value.trim();
+      if(!rating){alert('Tap a star to choose a rating first');return;}
+      const {error}=await supabase.from('reviews').insert({order_id:orderId,seller_id:sellerId,buyer_id:currentUser.id,rating,comment:comment||null});
+      if(error){alert('Could not submit rating: '+error.message);return;}
+      loadMyPurchases();
+    };
+
+    async function loadMyListings() {
+      const c = document.getElementById('my-listings');
+      const {data,error} = await supabase.from('listings').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
+      const activeCount = (data||[]).filter(l=>l.is_available && !l.is_draft && !l.is_sold).length;
+      const lb = document.getElementById('listings-badge');
+      if (activeCount>0){lb.textContent=activeCount;lb.style.display='inline-block';} else lb.style.display='none';
+      if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No listings yet.</p>'; return; }
+      c.innerHTML = data.map(l => {
+        const fp = l.discount_percent>0 ? Math.round(l.price*(1-l.discount_percent/100)) : l.price;
+        const status = l.is_draft ? '<span style="color:#888;font-weight:700">📝 Draft</span>' : l.is_sold ? '<span style="color:#1d4ed8;font-weight:700">✅ Sold</span>' : l.is_available ? '<span style="color:#2e7d32;font-weight:700">Active</span>' : '<span style="color:#aaa;font-weight:700">Hidden</span>';
+        const thumb = l.image_url ? '<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>' : '<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>';
+        const ageDays = Math.floor((Date.now()-new Date(l.renewed_at||l.created_at))/86400000);
+        const isOld = ageDays >= 30 && !l.is_draft && !l.is_sold;
+        const oldTag = isOld ? ' · <span style="color:#e65c00;font-weight:800">⏰ '+ageDays+'d old</span>' : '';
+        return '<div class="listing-row">'+thumb+
+          '<div class="listing-info"><div class="listing-title">'+l.title+'</div>'+
+          '<div class="listing-meta">'+l.category+(l.textbook_year?' ('+l.textbook_year+(l.textbook_subject?' · '+l.textbook_subject:'')+')':'')+((FLAT_SUBCATS[l.category]&&l[FLAT_SUBCATS[l.category].field])?' ('+l[FLAT_SUBCATS[l.category].field]+')':'')+' · R'+fp+' · '+status+oldTag+' · 👁️ '+(l.view_count||0)+' views</div>'+
+          '<div class="listing-meta" style="margin-top:4px">Stock: <strong>'+l.quantity+'</strong> &nbsp;'+
+          '<button class="btn-sm btn-toggle" style="padding:3px 10px" onclick="window._adjQty(\''+l.id+'\','+l.quantity+',1)">+ Add</button> '+
+          '<button class="btn-sm btn-delete" style="padding:3px 10px" onclick="window._adjQty(\''+l.id+'\','+l.quantity+',-1)">− Remove</button>'+
+          '</div></div>'+
+          '<div class="listing-actions">'+
+          '<button class="btn-sm btn-toggle" onclick="window._editListing(\''+l.id+'\')">✏️ Edit</button>'+
+          (l.is_draft?'<button class="btn-sm btn-toggle" onclick="window._publishDraft(\''+l.id+'\')">Publish</button>':
+            '<button class="btn-sm btn-toggle" onclick="window._toggle(\''+l.id+'\','+l.is_available+')">'+(l.is_available?'Hide':'Show')+'</button>')+
+          (!l.is_draft?'<button class="btn-sm btn-toggle" onclick="window._toggleSold(\''+l.id+'\','+!!l.is_sold+')">'+(l.is_sold?'Unmark Sold':'Mark Sold')+'</button>':'')+
+          (isOld?'<button class="btn-sm btn-toggle" onclick="window._renewListing(\''+l.id+'\')">🔄 Renew</button>':'')+
+          '<button class="btn-sm btn-toggle" onclick="window._duplicate(\''+l.id+'\')">Duplicate</button>'+
+          '<button class="btn-sm btn-delete" onclick="window._delete(\''+l.id+'\')">Delete</button>'+
+          '</div></div>';
+      }).join('');
+    }
+
+    window._renewListing = async (id) => {
+      const {error} = await supabase.from('listings').update({renewed_at:new Date().toISOString()}).eq('id',id);
+      if(error)alert('Error: '+error.message); else loadMyListings();
+    };
+
+    window._done   = async id => { await supabase.from('orders').update({status:'completed'}).eq('id',id); loadOrders(); };
+    window._toggle = async (id,cur) => { const {error} = await supabase.from('listings').update({is_available:!cur}).eq('id',id); if(error)alert('Error: '+error.message); else loadMyListings(); };
+    window._toggleSold = async (id,cur) => {
+      const {error} = await supabase.from('listings').update({is_sold:!cur, is_available: cur}).eq('id',id);
+      if(error)alert('Error: '+error.message); else loadMyListings();
+    };
+    window._publishDraft = async (id) => {
+      const {error} = await supabase.from('listings').update({is_draft:false, is_available:true}).eq('id',id);
+      if(error)alert('Error: '+error.message); else loadMyListings();
+    };
+    window._duplicate = async (id) => {
+      const {data:orig} = await supabase.from('listings').select('*').eq('id',id).single();
+      if(!orig) return;
+      const copy = {...orig};
+      delete copy.id; delete copy.created_at;
+      copy.title = copy.title + ' (copy)';
+      copy.is_sold = false; copy.is_available = true; copy.is_draft = false;
+      copy.renewed_at = new Date().toISOString();
+      const {error} = await supabase.from('listings').insert(copy);
+      if(error) alert('Error: '+error.message); else loadMyListings();
+    };
+    window._delete = async id => {
+      if (!confirm('Delete this listing permanently?')) return;
+      const {error} = await supabase.from('listings').delete().eq('id',id);
+      if (error) alert('Delete failed: '+error.message);
+      else loadMyListings();
+    };
+    window._adjQty = async (id,cur,dir) => {
+      const nq = Math.max(0,cur+dir);
+      const {error} = await supabase.from('listings').update({quantity:nq}).eq('id',id);
+      if (error) alert('Update failed: '+error.message);
+      else loadMyListings();
+    };
+
+    window.showTab = (tab) => {
+      document.getElementById('dashboard-menu').style.display='none';
+      document.getElementById('dashboard-detail').style.display='block';
+      ['orders','orders-completed','purchases','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
+      if (tab==='listings') loadMyListings();
+      if (tab==='orders') loadOrders();
+      if (tab==='orders-completed') loadCompletedOrders();
+      if (tab==='purchases'){ loadMyPurchases(); markNotifsRead(['order_completed']).then(loadPurchasesBadge); }
+      if (tab==='store') loadStoreTab();
+      if (tab==='add') refreshPlanUsage();
+      if (tab==='alerts'){ loadAlerts(); markNotifsRead(['search_alert','restock']).then(loadAlertsBadge); }
+      if (tab==='invite') loadInvite();
+      if (tab==='security') refreshPushStatus();
+    };
+
+    async function loadAlerts(){
+      const c=document.getElementById('alerts-container');
+      c.innerHTML='<p class="loading-msg">Loading alerts... ⏳</p>';
+      const [{data:searches},{data:restocks}]=await Promise.all([
+        supabase.from('saved_searches').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}),
+        supabase.from('restock_alerts').select('id,created_at,listings(id,title,price,image_url)').eq('user_id',currentUser.id).order('created_at',{ascending:false})
+      ]);
+      const totalCount=(searches?.length||0)+(restocks?.length||0);
+      if(!totalCount){c.innerHTML='<p class="loading-msg">No alerts saved yet — use the 🔔 Alert me button while browsing 🔍</p>';return;}
+
+      let html='';
+      if(restocks?.length){
+        html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Restock alerts</p>';
+        html+=restocks.map(r=>{
+          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+(r.listings?.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
+          const title=r.listings?.title||'Listing no longer available';
+          const price=r.listings?.price!=null?'R'+r.listings.price:'';
+          return '<div class="seller-row">'+img+'<div class="listing-info" style="flex:1;margin-left:10px">'+
+            (r.listings?.id?'<div class="listing-title" style="cursor:pointer" onclick="window.location.href=\'index.html?open='+r.listings.id+'\'">'+title+'</div>':'<div class="listing-title">'+title+'</div>')+
+            '<div class="listing-meta">'+(price?price+' · ':'')+'We\'ll notify you when it\'s back</div></div>'+
+            '<button class="btn-sm btn-delete" onclick="deleteRestockAlert(\''+r.id+'\')">Delete</button></div>';
+        }).join('');
+      }
+      if(searches?.length){
+        if(restocks?.length) html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px">Search alerts</p>';
+        html+=searches.map(a=>{
+          const parts=[];
+          if(a.keyword)parts.push('"'+a.keyword+'"');
+          if(a.category)parts.push(a.category);
+          if(a.max_price)parts.push('under R'+a.max_price);
+          if(a.area_only)parts.push('my area only');
+          return '<div class="seller-row"><div class="listing-info" style="flex:1"><div class="listing-title">'+(parts.join(' · ')||'Any new listing')+'</div>'+
+            '<div class="listing-meta">Saved '+new Date(a.created_at).toLocaleDateString('en-ZA')+'</div></div>'+
+            '<button class="btn-sm btn-delete" onclick="deleteAlert(\''+a.id+'\')">Delete</button></div>';
+        }).join('');
+      }
+      c.innerHTML=html;
+    }
+    window.deleteAlert=async(id)=>{
+      if(!confirm('Delete this alert?'))return;
+      await supabase.from('saved_searches').delete().eq('id',id);
+      loadAlerts();
+    };
+    window.deleteRestockAlert=async(id)=>{
+      if(!confirm('Delete this restock alert?'))return;
+      await supabase.from('restock_alerts').delete().eq('id',id);
+      loadAlerts();
+    };
+
+    async function loadInvite(){
+      const {data:p}=await supabase.from('profiles').select('referral_code').eq('id',currentUser.id).single();
+      const code=p?.referral_code||'';
+      const link=location.origin+location.pathname.replace('seller.html','index.html')+'?ref='+code;
+      document.getElementById('invite-link').value=link;
+      document.getElementById('invite-whatsapp-btn').href='https://wa.me/?text='+encodeURIComponent('Come check out Marketrade — buy & sell jobs, furniture, electronics and more with your community! '+link);
+      const {count}=await supabase.from('referrals').select('id',{count:'exact',head:true}).eq('referrer_id',currentUser.id);
+      document.getElementById('invite-count').textContent=count||0;
+    }
+    window.copyInviteLink=()=>{
+      const el=document.getElementById('invite-link');
+      el.select();
+      navigator.clipboard?.writeText(el.value).then(()=>alert('Link copied!')).catch(()=>document.execCommand('copy'));
+    };
+    window.closeTab = () => {
+      document.getElementById('dashboard-detail').style.display='none';
+      document.getElementById('dashboard-menu').style.display='block';
+    };
+
+    let storeLogoUrl = null;
+
+    document.getElementById('store-logo-input').addEventListener('change', async e => {
+      const file = e.target.files[0]; if(!file) return;
+      const err = document.getElementById('store-error'); err.textContent='';
+      if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { err.textContent='❌ Only JPG/PNG/WEBP'; return; }
+      if (file.size > 8*1024*1024) { err.textContent='❌ Max 8MB (before compression)'; return; }
+      const slot = document.getElementById('store-logo-slot');
+      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Compressing...</div>';
+      let uploadFile;
+      try { uploadFile = await compressImage(file); }
+      catch(compressErr) { uploadFile = file; }
+      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Uploading...</div>';
+      const fname = currentUser.id+'/store-'+Date.now()+'.jpg';
+      const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile);
+      if (error) { err.textContent='❌ '+error.message; renderStoreLogoSlot(); return; }
+      const {data:u} = supabase.storage.from('listing-images').getPublicUrl(fname);
+      storeLogoUrl = u.publicUrl;
+      renderStoreLogoSlot();
+    });
+    function renderStoreLogoSlot(){
+      const slot = document.getElementById('store-logo-slot');
+      slot.innerHTML = storeLogoUrl
+        ? '<img loading="lazy" src="'+storeLogoUrl+'" alt="Store logo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeStoreLogo(event)">✕</button>'
+        : '<div style="font-size:24px">🏪</div><div style="font-size:11px;font-weight:700;color:#aaa">Logo</div><button class="slot-remove" id="store-logo-remove" onclick="window.removeStoreLogo(event)">✕</button>';
+    }
+    window.removeStoreLogo = (e) => { e.stopPropagation(); storeLogoUrl=null; document.getElementById('store-logo-input').value=''; renderStoreLogoSlot(); };
+
+    async function loadStoreTab(){
+      document.getElementById('store-public-link').href = 'store.html?seller='+currentUser.id;
+
+      const {data:p} = await supabase.from('profiles').select('store_name,store_bio,store_logo_url').eq('id',currentUser.id).single();
+      document.getElementById('s-store-name').value = p?.store_name || '';
+      document.getElementById('s-store-bio').value = p?.store_bio || '';
+      storeLogoUrl = p?.store_logo_url || null;
+      renderStoreLogoSlot();
+
+      const [{count:listingCount},{count:salesCount},{data:reviews}] = await Promise.all([
+        supabase.from('listings').select('id',{count:'exact',head:true}).eq('seller_id',currentUser.id),
+        supabase.from('orders').select('id',{count:'exact',head:true}).eq('seller_id',currentUser.id).eq('status','completed'),
+        supabase.from('reviews').select('rating').eq('seller_id',currentUser.id)
+      ]);
+      document.getElementById('stat-my-listings').textContent = listingCount||0;
+      document.getElementById('stat-my-sales').textContent = salesCount||0;
+      if (reviews && reviews.length) {
+        const avg = reviews.reduce((s,r)=>s+r.rating,0)/reviews.length;
+        document.getElementById('stat-my-rating').textContent = avg.toFixed(1)+' ('+reviews.length+')';
+      } else {
+        document.getElementById('stat-my-rating').textContent = '–';
+      }
+    }
+
+    async function saveStore(){
+      const err = document.getElementById('store-error'); err.style.color='#1d4ed8'; err.textContent='';
+      const btn = document.getElementById('btn-save-store');
+      btn.textContent='Saving...'; btn.disabled=true;
+      const {error} = await supabase.from('profiles').update({
+        store_name: document.getElementById('s-store-name').value.trim() || null,
+        store_bio: document.getElementById('s-store-bio').value.trim() || null,
+        store_logo_url: storeLogoUrl
+      }).eq('id',currentUser.id);
+      btn.textContent='Save Store ✅'; btn.disabled=false;
+      if (error) { err.textContent='❌ '+error.message; return; }
+      err.style.color='#2e7d32'; err.textContent='✅ Store updated!';
+    }
+
+    init();
+    setTimeout(()=>{
+      const dash = document.getElementById('main-dashboard');
+      const stillHidden = dash && dash.style.display === 'none' &&
+        document.getElementById('paywall-screen').style.display === 'none';
+      if (stillHidden) {
+        dash.style.display = 'block';
+        document.getElementById('auth-guard').style.display = 'none';
+        document.getElementById('seller-content').style.display = 'none';
+        document.getElementById('load-error-guard').style.display = 'block';
+      }
+    }, 15000);
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

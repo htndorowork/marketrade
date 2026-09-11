@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marketrade — Buy and Sell Near You</title>
+  <meta name="description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://www.marketrade.co/"/>
+  <meta property="og:title" content="Marketrade — Buy and Sell Near You"/>
+  <meta property="og:description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Marketrade — Buy and Sell Near You"/>
+  <meta name="twitter:description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=2"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.marketrade.co/#website",
+        "url": "https://www.marketrade.co/",
+        "name": "Marketrade",
+        "description": "The marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture and more with real people near you.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.marketrade.co/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://www.marketrade.co/#business",
+        "name": "Marketrade",
+        "url": "https://www.marketrade.co/",
+        "logo": "https://www.marketrade.co/icons/icon-512.png",
+        "image": "https://www.marketrade.co/social-share.png",
+        "description": "Marketrade is an online marketplace where people buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and more directly with one another.",
+        "telephone": "+27623584921",
+        "areaServed": "South Africa",
+        "sameAs": [
+          "https://instagram.com/marketrade.co",
+          "https://www.facebook.com/share/1EvtMfWTCg/",
+          "https://tiktok.com/@marketrade.co"
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="js/areas-data.js" defer></script>
+</head>
+<body>
+  <div id="toast-stack" aria-live="polite"></div>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <div class="nav-links nav-links-simple">
+      <a href="index.html">Browse</a>
+      <a href="favorites.html" id="nav-favorites" style="display:none">❤️ Favorites</a>
+      <a href="messages.html" id="nav-messages" style="display:none">💬 Messages<span class="inline-badge" id="msg-badge" style="display:none">0</span></a>
+      <div style="position:relative;display:inline-block" id="notif-wrap">
+        <a href="#" id="nav-notif" onclick="toggleNotifDropdown();return false" style="display:none">🔔 Notifications<span class="inline-badge" id="notif-badge" style="display:none">0</span></a>
+        <div id="notif-dropdown" class="notif-dropdown" style="display:none"></div>
+      </div>
+      
+      <a href="profile.html" id="nav-profile" style="display:none">My Profile</a>
+      <a href="login.html" id="nav-auth">Sign in</a>
+    </div>
+    <div class="nav-cart" onclick="openCart()" title="Cart">🛒<span class="cart-badge" id="cart-badge" style="display:none">0</span></div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+      <button class="hero-tag" id="area-select-btn" onclick="openAreaModal()" style="border:none;cursor:pointer;font-family:inherit">📍 Select your area</button>
+      <h1>Your area,<br/>your <span>marketplace.</span></h1>
+      <p>Buy &amp; sell with your community — fast, easy &amp; safe 🙌</p>
+      <div style="position:relative;max-width:500px;margin:0 auto">
+        <div class="search-bar" style="max-width:none;margin:0">
+          <input type="text" id="search-input" placeholder="What are you looking for?" autocomplete="off" onkeydown="if(event.key==='Enter'){hideSuggestions();doFilter()}" oninput="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,150)"/>
+          <button onclick="hideSuggestions();doFilter()">Search 🔍</button>
+        </div>
+        <div id="search-suggestions" class="search-suggestions" style="display:none"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cats-wrap" id="categories">
+    <button class="cats-arrow cats-arrow-left" onclick="scrollCats(-1)" aria-label="Scroll left">‹</button>
+    <div class="cats" id="cats-bar">
+    <div class="cat active" onclick="selectCat('All',this)">All 🛍️</div>
+    <div class="cat" id="cat-textbooks" onclick="openTextbookYears(this)">📚 Textbooks</div>
+    <div class="cat" id="cat-stationary" onclick="openFlatSubcats('Stationary',this)">✏️ Stationary</div>
+    <div class="cat" id="cat-electronics" onclick="openFlatSubcats('Electronics',this)">📱 Electronics</div>
+    <div class="cat" id="cat-clothing" onclick="openFlatSubcats('Clothing',this)">👗 Clothing</div>
+    <div class="cat" id="cat-beauty" onclick="openFlatSubcats('Beauty',this)">💄 Beauty</div>
+    <div class="cat" id="cat-jewellery" onclick="openFlatSubcats('Jewellery',this)">💍 Jewellery</div>
+    <div class="cat" id="cat-bags" onclick="openFlatSubcats('Bags',this)">👜 Bags</div>
+    <div class="cat" id="cat-food" onclick="openFlatSubcats('Food',this)">🍱 Food</div>
+    <div class="cat" id="cat-snacks" onclick="openFlatSubcats('Snacks',this)">🍿 Snacks</div>
+    <div class="cat" id="cat-utensils" onclick="openFlatSubcats('Utensils',this)">🍴 Utensils</div>
+    <div class="cat" id="cat-furniture" onclick="openFlatSubcats('Furniture',this)">🛋️ Furniture</div>
+    <div class="cat" id="cat-decor" onclick="openFlatSubcats('Decor',this)">🖼️ Home Decor</div>
+    <div class="cat" id="cat-appliances" onclick="openFlatSubcats('Appliances',this)">🔌 Appliances</div>
+    <div class="cat" id="cat-tools" onclick="openFlatSubcats('Tools',this)">🔧 Tools</div>
+    <div class="cat" id="cat-hardware" onclick="openFlatSubcats('Hardware',this)">🔨 Hardware</div>
+    <div class="cat" id="cat-gaming" onclick="openFlatSubcats('Gaming',this)">🎮 Gaming</div>
+    <div class="cat" id="cat-sports" onclick="openFlatSubcats('Sports',this)">🏃 Sports &amp; Outdoor</div>
+    <div class="cat" id="cat-toys" onclick="openFlatSubcats('Toys',this)">🧸 Toys &amp; Hobbies</div>
+    <div class="cat" id="cat-books" onclick="openFlatSubcats('Books',this)">📖 Books &amp; Media</div>
+    <div class="cat" id="cat-music" onclick="openFlatSubcats('Music',this)">🎸 Music</div>
+    <div class="cat" id="cat-cameras" onclick="openFlatSubcats('Cameras',this)">📸 Cameras</div>
+    <div class="cat" id="cat-pets" onclick="openFlatSubcats('Pets',this)">🐾 Pets</div>
+    <div class="cat" id="cat-baby" onclick="openFlatSubcats('Baby',this)">👶 Baby &amp; Kids</div>
+    <div class="cat" id="cat-plants" onclick="openFlatSubcats('Plants',this)">🌱 Plants &amp; Garden</div>
+    <div class="cat" id="cat-events" onclick="openFlatSubcats('Events',this)">🎉 Events &amp; Party</div>
+    <div class="cat" id="cat-health" onclick="openFlatSubcats('Health',this)">🩹 Health &amp; Wellness</div>
+    <div class="cat" id="cat-data" onclick="openFlatSubcats('Data',this)">📶 Data &amp; Airtime</div>
+    <div class="cat" id="cat-career" onclick="openFlatSubcats('Career',this)">💼 Career</div>
+    <div class="cat" id="cat-transport" onclick="openFlatSubcats('Transport',this)">🚲 Transport</div>
+    <div class="cat" id="cat-vehicles" onclick="openFlatSubcats('Vehicles',this)">🚗 Vehicles</div>
+    <div class="cat" id="cat-accommodation" onclick="openFlatSubcats('Accommodation',this)">🏠 Accommodation</div>
+    <div class="cat" id="cat-tutoring" onclick="openFlatSubcats('Tutoring',this)">🎓 Tutoring</div>
+    <div class="cat" id="cat-services" onclick="openFlatSubcats('Services',this)">🛠️ Services</div>
+    <div class="cat" id="cat-others" onclick="selectCat('Others',this)">🔀 Others</div>
+    </div>
+    <button class="cats-arrow cats-arrow-right" onclick="scrollCats(1)" aria-label="Scroll right">›</button>
+    <a href="categories.html" class="cats-all-btn" title="All categories">🗂️ All</a>
+  </div>
+
+  <div class="tb-panel" id="tb-panel" style="display:none"></div>
+
+  <main class="main">
+    <button class="filter-toggle-btn" id="filter-toggle-btn" onclick="toggleFilterPanel()" type="button">
+      <span>🔀 Sort &amp; Filter</span>
+      <span class="filter-toggle-btn-chevron" id="filter-toggle-chevron">▾</span>
+    </button>
+    <div class="filter-toolbar" id="filter-toolbar">
+      <div class="filter-group">
+        <span class="filter-label">🔀 Sort by</span>
+        <select id="sort-select" onchange="doFilter()">
+          <option value="random">🔀 Random</option>
+          <option value="newest">Newest first</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+        </select>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-group">
+        <span class="filter-label">💰 Price range (R)</span>
+        <div class="filter-price-inputs">
+          <input type="number" id="price-min" placeholder="Min" min="0" onchange="doFilter()"/>
+          <span class="filter-price-sep">–</span>
+          <input type="number" id="price-max" placeholder="Max" min="0" onchange="doFilter()"/>
+        </div>
+      </div>
+      <div class="filter-divider"></div>
+      <label class="filter-toggle">
+        <input type="checkbox" id="my-area-only" onchange="doFilter()"/>
+        <span class="filter-toggle-track"><span class="filter-toggle-thumb"></span></span>
+        <span class="filter-toggle-text">📍 Only my area</span>
+      </label>
+      <button class="filter-reset" onclick="resetFilters()" type="button">↺ Reset</button>
+      <button class="filter-apply" onclick="applyFilters()" type="button">Apply ✓</button>
+      <button class="filter-apply" style="background:#fff;color:#2563eb;border:2px solid #2563eb" onclick="saveSearchAlert()" type="button">🔔 Alert me</button>
+    </div>
+
+    <div class="grid" id="listings-grid">
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+    </div>
+
+    <div id="recently-viewed-section" style="display:none;margin-top:28px">
+      <div class="section-header"><div class="section-title" id="recently-viewed-title" style="font-size:15px">🕐 Recently viewed</div></div>
+      <div class="grid" id="recently-viewed-grid"></div>
+    </div>
+  </main>
+
+  <!-- AREA SELECTOR MODAL (Province > City > District > Town/Suburb) -->
+  <div class="modal-overlay" id="area-modal-overlay" onclick="closeAreaModal()">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+      <button class="modal-close" onclick="closeAreaModal()">✕</button>
+      <div style="padding:22px 20px" id="area-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- LISTING MODAL -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="gallery" id="modal-gallery">
+        <div class="gallery-slides" id="gallery-slides"></div>
+        <button class="gallery-prev" id="gallery-prev" onclick="slideGallery(-1)">‹</button>
+        <button class="gallery-next" id="gallery-next" onclick="slideGallery(1)">›</button>
+        <div class="gallery-dots" id="gallery-dots"></div>
+      </div>
+      <div class="modal-body">
+        <div id="modal-badge"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-price" id="modal-price"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="seller-info-box" id="modal-seller-info"></div>
+        <div class="qty-row">
+          <span class="qty-label">Quantity:</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-num" id="modal-qty">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <span id="modal-stock-note" style="font-size:12px;color:#888;font-weight:600"></span>
+        </div>
+        <div id="modal-signin-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;font-size:13px;font-weight:700;color:#1d4ed8">
+          🔒 <a href="login.html" style="color:#2563eb;text-decoration:none">Sign in</a> to order this item
+        </div>
+        <button class="btn-order" id="btn-add-to-cart">🛒 Add to Cart</button>
+        <button class="btn-order-cart" id="btn-order-now">Order Now</button>
+        <button class="btn-order" id="btn-restock-alert" style="display:none;background:#fff;color:#2563eb;border:2px solid #2563eb" onclick="requestRestockAlert()">🔔 Notify me when back in stock</button>
+        <div id="modal-similar-section" style="display:none;margin-top:18px">
+          <div style="font-size:13px;font-weight:800;color:#888;margin-bottom:8px">You might also like</div>
+          <div class="grid" id="modal-similar-grid" style="grid-template-columns:repeat(2,1fr);gap:8px"></div>
+        </div>
+        <div style="text-align:center;margin-top:12px">
+          <a href="#" onclick="event.preventDefault();openReportModal()" style="font-size:12px;color:#aaa;font-weight:700;text-decoration:none">🚩 Report this listing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT MODAL -->
+  <div class="modal-overlay" id="report-modal-overlay" onclick="closeReportModal()">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+      <button class="modal-close" onclick="closeReportModal()">✕</button>
+      <div style="padding:22px 20px">
+        <div class="tb-heading">🚩 Report this listing</div>
+        <div class="form-group">
+          <label>Reason</label>
+          <select id="report-reason">
+            <option>Scam or fraud</option>
+            <option>Prohibited item</option>
+            <option>Misleading listing</option>
+            <option>Inappropriate content</option>
+            <option>Seller unresponsive / no-show</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Details (optional)</label>
+          <textarea id="report-details" rows="3" placeholder="Tell us more..."></textarea>
+        </div>
+        <div class="form-error" id="report-error"></div>
+        <button class="btn-primary" onclick="submitReport()">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center" onclick="closeLightbox()">
+    <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;font-weight:800;z-index:10">✕</button>
+    <button onclick="event.stopPropagation();lightboxSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-prev">‹</button>
+    <button onclick="event.stopPropagation();lightboxSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-next">›</button>
+    <img id="lightbox-img" src="" alt="Listing photo" onclick="event.stopPropagation()" style="max-width:92vw;max-height:78vh;object-fit:contain;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.5)"/>
+    <div style="display:flex;gap:8px;margin-top:16px" id="lb-dots"></div>
+    <div style="color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;margin-top:8px" id="lb-counter"></div>
+  </div>
+
+  <!-- CONTACT MODAL -->
+  <div class="modal-overlay" id="contact-overlay">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-body" style="text-align:center;padding:32px 24px">
+        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <h2 style="font-size:20px;font-weight:900;margin-bottom:8px">Order Confirmed!</h2>
+        <p style="font-size:14px;color:#666;font-weight:600;margin-bottom:20px">Contact the seller to arrange collection &amp; payment</p>
+        <div class="contact-box" id="contact-box"></div>
+        <button class="btn-order" style="margin-top:20px" onclick="document.getElementById('contact-overlay').style.display='none'">Done ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h2>Your Cart 🛒</h2>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cart-body"><div class="cart-empty">Your cart is empty 🛍️</div></div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-total"><span class="cart-total-label">Total</span><span class="cart-total-price" id="cart-total">R0</span></div>
+      <button class="btn-checkout" onclick="checkout()">Checkout &amp; Order All 🚀</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col footer-social-col">
+        <div class="footer-col-label">Follow Us</div>
+        <div class="footer-social">
+          <a href="https://instagram.com/marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg><span>marketrade.co</span></a>
+          <a href="https://www.facebook.com/share/1EvtMfWTCg/" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><span>Marketrade</span></a>
+          <a href="https://tiktok.com/@marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.66-.58-1.08-1.4-1.16-2.32h-2.75v11.55c0 1.24-1 2.25-2.24 2.25a2.25 2.25 0 0 1-.85-4.34 2.24 2.24 0 0 1 .85-.16c.24 0 .48.03.7.1v-2.8a5.06 5.06 0 0 0-5.79 4.99 5.07 5.07 0 0 0 8.63 3.6 5.06 5.06 0 0 0 1.51-3.6V9.7a7.7 7.7 0 0 0 4.5 1.45V8.4a4.85 4.85 0 0 1-3.4-2.58z"/></svg><span>marketrade.co</span></a>
+        </div>
+      </div>
+      <div class="footer-col footer-center">
+        <div class="footer-title">Marketrade 🛍️</div>
+        <div class="footer-sub">The marketplace for everyone</div>
+        <div class="footer-links">
+          <a class="footer-link" href="mailto:marketrade.co@gmail.com">📧 Report an issue</a>
+          <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
+          <a class="footer-link" href="index.html">Browse listings</a>
+          <a class="footer-link" href="faq.html">How It Works</a>
+          <a class="footer-link" href="terms.html">Terms</a>
+          <a class="footer-link" href="how-payments-work.html">How Payments Work</a>
+          <a class="footer-link" href="privacy.html">Privacy</a>
+          <a class="footer-link" href="guidelines.html">Guidelines</a>
+        </div>
+        <div class="footer-copy">© 2025 Marketrade · Built for everyone</div>
+      </div>
+      <div class="footer-col footer-business">
+        <div class="footer-col-label">Business Info</div>
+        <a href="tel:+27623584921">📞 062 358 4921</a>
+        <a href="terms.html#refunds">📄 Refund &amp; Return Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Gaming:{bg:'#ede7f6',text:'#4527a0'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
+
+    const TB_YEARS=['1st Year','2nd Year','3rd Year','Postgraduate'];
+    const TB_TAXONOMY={
+      'Economic and Management Sciences (EMS)':['Accounting & Auditing','Statistics','Business & Financial Management','Actuarial Science & Quantitative Finance'],
+      'Natural and Agricultural Sciences':['Mathematics & Applied Mathematics','Physics','Computer Science & IT','Chemistry & Biochemistry','Agricultural Sciences'],
+      'Engineering':['Chemical Engineering','Electrical, Electronic & Computer Engineering','Mechanical Engineering'],
+      'Law (Faculty of Law)':['Private & Public Law','Mercantile & Criminal Law'],
+      'Health Sciences':['Physiology & Anatomy','Nursing & Pharmacy','Human Movement Sciences'],
+      'Humanities & Social Sciences':['Languages & Linguistics','Social Sciences','Psychology'],
+      'Education':['Pedagogy & Curriculum Studies'],
+      'Theology':['Biblical & Systematic Studies']
+    };
+
+    const ELECTRONICS_SUBCATS=[
+      'Laptops (Windows laptops, MacBooks, Chromebooks)','Tablets (iPads, Samsung Galaxy Tabs)','Smartphones',
+      'Wireless earbuds (AirPods, Galaxy Buds)','Headphones (noise-cancelling and gaming)','Bluetooth speakers',
+      'Power banks','Phone chargers and fast chargers','Laptop chargers','USB flash drives',
+      'External hard drives and SSDs','Wireless mouse','Keyboard (especially for laptop users)','Laptop stands',
+      'USB-C hubs and adapters','Monitors for studying or gaming','Printers',
+      'Calculators (especially scientific and graphing calculators)','Smartwatches','Fitness trackers','Webcams',
+      'Microphones (for online classes or content creation)','Portable projectors','Ring lights',
+      'Portable Wi-Fi routers or MiFi devices','Extension cords and surge protectors','Smart desk lamps',
+      'E-readers (such as Kindle)','Gaming consoles (PlayStation, Xbox, Nintendo Switch)',
+      'Gaming accessories (controllers, gaming mice, mechanical keyboards)'
+    ];
+
+    const CLOTHING_SUBCATS=[
+      'T-shirt','Shirt','Blouse','Polo shirt','Tank top','Sweater','Hoodie','Jacket','Coat','Jeans',
+      'Trousers (pants)','Shorts','Skirt','Leggings','Joggers','Dress','Gown','Jumpsuit','Saree','Kimono',
+      'Hanbok','Abaya','Kilt','Raincoat','Blazer','Cardigan','Windbreaker','Overcoat','Underwear','Bra',
+      'Vest','Pajamas','Nightgown','Sneakers','Sandals','Boots','Slippers','High heels','Shoes','Hat',
+      'Cap','Skull cap','Durag','Scarf','Gloves','Belt','Tie','Socks'
+    ];
+
+    const FOOD_SUBCATS=[
+      'Instant noodles','Rice','Bread','Eggs','Chicken','Beef','Sausages','Mince','Tuna','Baked beans',
+      'Peanut butter','Cheese','Milk','Yogurt','Breakfast cereal','Oats','Pasta','Potatoes','Sweet potatoes',
+      'Frozen vegetables','Fresh vegetables','Fruits','Apples','Bananas','Oranges','Tomatoes','Onions',
+      'Lettuce','Avocados','Cooking oil','Butter','Margarine','Salt','Sugar','Coffee','Tea','Juice',
+      'Bottled water','Soft drinks','Energy drinks','Biscuits','Chips (crisps)','Popcorn','Chocolate',
+      'Cookies','Muffins','Pizza','Burgers','Sandwiches','Wraps','Frozen meals','Soup','Canned vegetables',
+      'Canned fruit','Instant porridge','Protein bars','Trail mix','Nuts','Dried fruit','Spices and seasonings'
+    ];
+
+    const BEAUTY_SUBCATS=[
+      'Face wash','Cleanser','Toner','Moisturizer','Sunscreen','Face serum','Face mask','Lip balm','Lipstick',
+      'Lip gloss','Lip liner','Foundation','Concealer','Powder','Blush','Bronzer','Highlighter','Primer',
+      'Setting spray','Mascara','Eyeliner','Eyeshadow','Eyebrow pencil','Eyebrow gel','False eyelashes',
+      'Makeup remover','Makeup wipes','Beauty sponge','Makeup brushes','Nail polish','Nail polish remover',
+      'Cuticle oil','Hand cream','Body lotion','Body butter','Body scrub','Shower gel','Bar soap','Shampoo',
+      'Conditioner','Hair oil','Hair serum','Hair gel','Hair wax','Hair spray','Hair mousse','Dry shampoo',
+      'Hair dye','Perfume','Body mist','Deodorant','Roll-on deodorant','Antiperspirant','Cotton pads',
+      'Cotton buds','Tweezers','Razor','Shaving cream','Wax strips','Facial cleansing brush',
+      'Men\'s Perfume','Women\'s Perfume','Straight wig','Body wave wig','Loose wave wig','Deep wave wig',
+      'Water wave wig','Curly wig','Kinky curly wig','Afro kinky wig','Yaki straight wig','Bob wig',
+      'Pixie cut wig','Lace front wig','Full lace wig','360 lace wig','HD lace wig','Closure wig',
+      'U-part wig','V-part wig','Headband wig','Glueless wig','Human hair wig','Synthetic wig',
+      'Colored wig','Braiding hair','Hair extensions'
+    ];
+
+    const WIGS_SUBCATS=[
+      'Straight wig','Body wave wig','Loose wave wig','Deep wave wig','Water wave wig','Curly wig',
+      'Kinky curly wig','Afro kinky wig','Yaki straight wig','Bob wig','Pixie cut wig','Long wig','Short wig',
+      'Layered wig','Bangs (fringe) wig','Lace front wig','Full lace wig','360 lace wig','HD lace wig',
+      'Transparent lace wig','Closure wig','U-part wig','V-part wig','Headband wig','Glueless wig',
+      'Human hair wig','Synthetic wig','Heat-resistant synthetic wig','Colored wig','Highlight wig',
+      'Ombre wig','Blonde wig','Black wig','Brown wig','Red wig','Burgundy wig','Custom-made wig',
+      'Machine-made wig','Hand-tied wig','Medical wig'
+    ];
+
+    const PERFUMES_SUBCATS=["Men's Perfume","Women's Perfume"];
+
+    const TUTORING_SUBCATS=[
+      'Mathematics tutoring','Statistics tutoring','Physics tutoring','Chemistry tutoring','Biology tutoring',
+      'Accounting tutoring','Economics tutoring','Finance tutoring','Computer Science tutoring',
+      'Programming tutoring','Data Science tutoring','Engineering tutoring','Business Studies tutoring',
+      'English tutoring','Academic writing tutoring','Essay writing support','Assignment guidance',
+      'Research project assistance','Test and exam preparation','Revision classes','Past paper sessions',
+      'Study skills coaching','Time management coaching','Group tutoring','One-on-one tutoring',
+      'Online tutoring','In-person tutoring','Homework help','Presentation preparation',
+      'Microsoft Excel tutoring','Microsoft Word tutoring','PowerPoint tutoring','SPSS tutoring',
+      'Python programming tutoring','Calculus tutoring','Linear Algebra tutoring','Probability tutoring',
+      'Academic mentoring','First-year support tutoring','Final-year project support'
+    ];
+
+    const ACCOMMODATION_SUBCATS=[
+      'Single room','Shared room','Bachelor (studio) apartment','One-bedroom apartment','Two-bedroom apartment',
+      'Three-bedroom apartment','Shared flat/apartment','Shared house','Commune house',
+      'Private student residence room','Ensuite room','Non-ensuite room','Self-catering apartment',
+      'Furnished apartment','Unfurnished apartment','Loft apartment','Duplex apartment'
+    ];
+
+    const TRANSPORT_SUBCATS=[
+      'Skateboard','Longboard','Penny board','Kick scooter','Electric scooter','Bicycle','Folding bicycle',
+      'Electric bicycle','Roller skates','Inline skates (Rollerblades)','Hoverboard','Electric skateboard',
+      'Unicycle','Electric unicycle','Drift trike','Mini bike','Balance bike','Ripstik','Car','Quadbike',
+      'Motorbike'
+    ];
+
+    const SERVICES_SUBCATS=[
+      'Haircuts','Braiding and hairstyling','Barber services','Makeup services','Nail services',
+      'Massage services','Personal fitness training','Lift-sharing','Airport transfers','Bus station transfers',
+      'Grocery delivery','Food delivery','Pharmacy pickups',
+      'Parcel collection','Laundry pickup and delivery','Campus errand service','Room cleaning',
+      'Laundry and ironing','Carpet cleaning','Move-in/move-out cleaning','Graphic design','Logo design',
+      'Photography','Videography','Social media management','Website creation',
+      'Printing business cards and flyers','Water delivery','Gas refill delivery','Convenience Services',
+      'Transport services','Dj services',
+      'Rental: Bicycle','Rental: Electric scooter','Rental: Skateboard','Rental: Motorcycle/Moped',
+      'Rental: Car','Rental: Laptop','Rental: Projector','Rental: Speaker/PA system',
+      'Rental: Camera/Photography gear','Rental: Furniture','Rental: Costume','Rental: Event equipment',
+      'Rental: Tools'
+    ];
+
+    const STATIONARY_GROUPS={
+      'Pens':['Ballpoint pens','Gel pens','Fountain pens'],
+      'Pencils':['HB pencils','2B pencils','Mechanical pencils'],
+      'Markers & highlighters':['Highlighters','Permanent markers','Whiteboard markers','Fine liners','Technical drawing pens'],
+      'Erasers & correction':['Erasers','Correction fluid/correction tape','Pencil sharpeners'],
+      'Glue & adhesives':['Glue sticks','Liquid glue','Tape','Tape dispensers'],
+      'Cutting & measuring':['Scissors','Rulers','Protractors','Compasses','Set squares','Geometry sets','Craft knives','Cutting mats'],
+      'Notebooks & paper':['Notebooks','Exercise books','Writing pads','Loose-leaf paper','Graph paper','Index cards','Sticky notes','Page markers/sticky tabs','Printer paper','Tracing paper','Flashcards'],
+      'Files & folders':['Folders','Lever arch files','Ring binders','Display files','Plastic sleeves','Dividers','Clipboards','Document wallets','Envelopes'],
+      'Desk essentials':['Calculators','Staplers','Staples','Staple removers','Paper clips','Binder clips','Rubber bands','Hole punches','Pencil cases','Desk organizers','Labels','Book covers','Bookmarks','Printer ink cartridges'],
+      'Art supplies':['Drawing books','Sketchbooks','Coloured pencils','Crayons','Oil pastels','Watercolour paints','Paint brushes','Palettes','Charcoal pencils','Whiteboard erasers','Chalk']
+    };
+    const STATIONARY_SUBCATS=Object.values(STATIONARY_GROUPS).flat();
+    const STATIONARY_LEGACY={
+      'Pens (ballpoint, gel, fountain)':STATIONARY_GROUPS['Pens'],
+      'Pencils (HB, 2B, mechanical)':STATIONARY_GROUPS['Pencils'],
+      'Craft knives (for art/design students)':['Craft knives'],
+      'Chalk (where applicable)':['Chalk']
+    };
+    let stationaryGroup=null;
+
+    const APPLIANCES_SUBCATS=[
+      'Fridge','Microwave','Electric kettle','Rice cooker','Air fryer','Toaster','Sandwich maker',
+      'Electric stove/hot plate','Induction cooker','Blender','Coffee maker','Electric fan',
+      'Portable air conditioner','Heater','Iron','Washing machine','Tumble dryer','Vacuum cleaner',
+      'Water dispenser','Hair dryer','Electric shaver','Electric toothbrush','Humidifier','Air purifier',
+      'Electric blanket','Sewing machine'
+    ];
+
+    const RENTALS_SUBCATS=[
+      'Bicycle','Electric bicycle (e-bike)','Scooter','Electric scooter (e-scooter)','Skateboard',
+      'Electric skateboard','Longboard','Roller skates','Inline skates (rollerblades)','Kick scooter',
+      'Motorcycle','Moped','Motor scooter','Car','Van','Minibus','Pickup truck (bakkie)',
+      'Campervan (for trips)','Golf cart (on some campuses)','Quad bike (where permitted)','Segway',
+      'Electric unicycle (EUC)','Laptops','Desktop computers','Tablets','Printers','Scanners','Projectors',
+      'Scientific calculators','Graphics calculators','Computer monitors','Keyboards','Wireless mice',
+      'Headphones','Webcams','Microphones','Wi-Fi routers','Pocket Wi-Fi devices','Power banks',
+      'Extension cords','Mini fridges','Microwaves','Electric kettles','Rice cookers','Air fryers',
+      'Toasters','Sandwich makers','Electric hot plates','Induction cookers','Blenders','Coffee makers',
+      'Washing machines','Tumble dryers','Vacuum cleaners','Irons','Fans','Portable heaters',
+      'Portable air conditioners','Water dispensers','Air purifiers','Humidifiers','Electric blankets',
+      'Study desks','Office chairs','Bookshelves','Wardrobes','Bed frames','Mattresses','Bedside tables',
+      'Lamps','Projectors and screens','Speakers','Extension cables','Foldable tables','Folding chairs',
+      'Gazebos','Portable fans','Portable lighting'
+    ];
+
+    const FURNITURE_SUBCATS=[
+      'Bed frame','Mattress','Mattress topper','Headboard','Bunk bed','Sofa bed','Couch','Bean bag',
+      'Study desk','Computer desk','Standing desk','Office chair','Gaming chair','Desk stool',
+      'Bedside table','Coffee table','Dining table','Folding table','Dining chairs','Folding chairs',
+      'Bookshelf','Bookcase','Storage shelves','Wardrobe','Clothing rack','Chest of drawers','Dresser',
+      'TV stand','Cabinet','Filing cabinet','Shoe rack','Coat rack','Wall shelves','Storage ottoman',
+      'Storage bench','Laundry hamper','Under-bed storage drawers','Mirror','Vanity table','Desk organizer',
+      'Floating shelves','Room divider','Laptop table','Monitor stand','Footrest','Ottoman','Recliner chair',
+      'Kitchen trolley','Bar stools','Plastic storage drawers','Storage cubes','Foldable wardrobe'
+    ];
+
+    const UTENSILS_SUBCATS=[
+      'Forks','Tablespoons','Teaspoons','Dessert spoons','Serving spoons','Ladles','Salad servers',
+      'Butter knives','Steak knives','Bread knives','Chef\'s knives','Paring knives','Cutlery sets',
+      'Chopsticks','Spatulas','Tongs','Whisks','Can openers','Bottle openers','Peelers','Graters',
+      'Garlic press','Pizza cutters','Cutting boards','Mixing bowls','Colanders/Strainers',
+      'Measuring cups','Measuring spoons','Rolling pins','Kitchen scissors','Plates','Bowls',
+      'Cups','Mugs','Drinking glasses','Lunch boxes','Food storage containers','Tupperware',
+      'Thermos flasks','Water bottles','Baking trays','Pots','Frying pans','Saucepans',
+      'Stove-top kettles','Trivets','Oven mitts','Dish racks','Placemats','Coasters'
+    ];
+    const JEWELLERY_SUBCATS=[
+      'Necklaces','Chains','Pendants','Earrings','Studs','Hoops','Rings','Bracelets',
+      'Bangles','Anklets','Watches','Brooches','Cufflinks','Charms','Jewellery sets',
+      'Body jewellery','Piercing jewellery','Hair jewellery','Jewellery boxes','Jewellery cleaning kits'
+    ];
+    const BAGS_SUBCATS=[
+      'Backpacks','Laptop bags','Handbags','Tote bags','Crossbody bags','Shoulder bags',
+      'Clutch bags','Sling bags','Duffel bags','Gym bags','Sports bags','Drawstring bags',
+      'Waist bags/Fanny packs','Wallets','Purses','Makeup bags','Toiletry bags','Lunch bags',
+      'Suitcases','Travel bags','School bags','Tote/Grocery bags','Pouches'
+    ];
+    const TOYS_SUBCATS=[
+      'Board games','Card games','Puzzles','Building blocks/Lego','Action figures','Dolls',
+      'Plush toys/Stuffed animals','Remote control toys','Educational toys','Outdoor toys',
+      'Water toys','Toy cars','Play sets','Art & craft kits','Musical toys','Party games',
+      'Fidget toys','Baby toys','Video game consoles','Video games'
+    ];
+    const PETS_SUBCATS=[
+      'Dog food','Cat food','Fish food','Bird food','Small pet food','Pet treats',
+      'Leashes & collars','Pet carriers','Pet beds','Pet bowls','Litter boxes','Cat litter',
+      'Aquariums & tanks','Bird cages','Pet toys','Pet grooming supplies','Pet clothing',
+      'Pet training supplies','Fish tank accessories','Pet health & supplements'
+    ];
+    const TOOLS_SUBCATS=[
+      'Hammers','Screwdrivers','Screwdriver sets','Pliers','Wrenches/Spanners','Adjustable wrenches',
+      'Allen keys/Hex keys','Tape measures','Spirit levels','Utility knives','Hand saws','Hacksaws',
+      'Cordless drills','Corded drills','Drill bits','Angle grinders','Electric sanders','Jigsaws',
+      'Circular saws','Soldering irons','Multimeters','Staple guns','Glue guns','Tool belts',
+      'Tool boxes','Tool bags','Work gloves','Safety goggles','Extension cords','Ladders',
+      'Step stools','Wheelbarrows','Garden tools','Shovels','Rakes','Paint brushes','Paint rollers',
+      'Sandpaper','Nails','Screws','Bolts & nuts','Cable ties','Duct tape','Super glue','Lubricants/WD-40'
+    ];
+    const HARDWARE_SUBCATS=[
+      'Door handles & knobs','Door hinges','Locks & padlocks','Window fittings','Cabinet handles','Cabinet hinges',
+      'Chains & ropes','Wire mesh','Pipes & fittings','Plumbing fittings','Taps & fixtures','Electrical wiring',
+      'Switches & sockets','Light fittings','Bricks & blocks','Cement & building materials','Timber/Wood',
+      'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
+      'Insulation materials','Adhesives & sealants','Silicone & fillers'
+    ];
+    const GAMING_SUBCATS=[
+      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
+      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
+      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
+      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
+    ];
+    const SNACKS_SUBCATS=[
+      'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
+      'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
+      'Pretzels','Beef jerky/Biltong','Chewing gum','Mints','Ice lollies/Ice cream','Cupcakes/Muffins','Doughnuts'
+    ];
+    const SPORTS_SUBCATS=[
+      'Dumbbells','Resistance bands','Yoga mats','Gym gloves','Skipping ropes','Weight plates',
+      'Treadmills','Exercise bikes','Soccer balls','Rugby balls','Netballs','Basketballs','Cricket bats',
+      'Team jerseys','Cycling helmets','Running shoes','Sports water bottles','Shaker bottles',
+      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
+      'Hiking backpacks','Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
+      'Boxing gloves','Sports/gym bags'
+    ];
+    const BOOKS_SUBCATS=[
+      'Fiction novels','Non-fiction books','Comics & manga','Magazines','Poetry collections',
+      'Self-help books','Biographies','Vinyl records','CDs','DVDs & Blu-rays','Audiobooks',
+      'Journals & diaries','Bookmarks','Book series/box sets'
+    ];
+    const MUSIC_SUBCATS=[
+      'Acoustic guitars','Electric guitars','Bass guitars','Keyboards/pianos','Drum kits','Violins',
+      'Ukuleles','Microphones','DJ equipment','Amplifiers','Guitar picks & straps','Sheet music',
+      'Music stands','Instrument cases','Cajons/percussion','Turntables'
+    ];
+    const CAMERAS_SUBCATS=[
+      'DSLR cameras','Mirrorless cameras','Point-and-shoot cameras','Instant/Polaroid cameras',
+      'Camera lenses','Tripods','Ring lights','Photo backdrops','Camera bags','Memory cards',
+      'Drones','GoPros/action cameras','Camera batteries & chargers','Gimbals/stabilizers'
+    ];
+    const EVENTS_SUBCATS=[
+      'Balloons','Party decorations','Banners & bunting','Costumes','Party lighting',
+      'Speakers for events','Disposable cups & plates','Photo booth props','Candles',
+      'Gift wrapping supplies','Fairy lights','Table linens','Party favors','Cake toppers'
+    ];
+    const PLANTS_SUBCATS=[
+      'Indoor plants','Succulents','Cacti','Plant pots','Hanging planters','Fertilizer','Potting soil',
+      'Gardening tools','Seeds','Watering cans','Outdoor plants','Herb gardens','Plant stands','Artificial plants'
+    ];
+    const DECOR_SUBCATS=[
+      'Wall art & posters','Photo frames','Fairy lights','Canvas prints','Tapestries','Wall mirrors',
+      'Wall clocks','Candles & holders','Decorative cushions','Throw blankets','Room dividers','Rugs',
+      'Vases','Wall stickers'
+    ];
+    const BABY_SUBCATS=[
+      'Baby clothing','Kids clothing','School uniforms','Prams & strollers','Car seats',
+      'Baby feeding gear','Baby bottles','Nappies/diapers','Baby toys','Cots & cribs','Baby monitors',
+      'Baby carriers','High chairs','Baby bathing supplies'
+    ];
+    const DATA_SUBCATS=[
+      'Data bundles','Airtime vouchers','SIM cards','WiFi routers/MiFi devices',
+      'Prepaid electricity vouchers','Shared streaming subscriptions','Mobile banking assistance',
+      'Data-saving device setup'
+    ];
+    const HEALTH_SUBCATS=[
+      'First aid supplies','Vitamins & supplements','Pain relief medication','Feminine hygiene products',
+      'Contact lenses','Contact lens solution','Face masks','Hand sanitizer','Thermometers',
+      'Fitness trackers','Reading glasses','Sunscreen (medical/SPF)','Braces & supports','Ear plugs'
+    ];
+    const CAREER_SUBCATS=[
+      'CV/resume templates','Portfolio folders','Interview attire','Business cards',
+      'Laptop bags for work','Office/desk organizers','Name badges','Networking event tickets',
+      'Graduation attire','Internship starter kits'
+    ];
+
+    const VEHICLES_SUBCATS=[
+      'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
+      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan','Boat','Jet ski',
+      'Car parts & spares','Tyres & rims','Car batteries','Car audio & electronics','Dash cams',
+      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car care & cleaning products',
+      'Car jacks & tools','Helmets & riding gear','Number plates'
+    ];
+
+    // Generic config for every category that gets a flat (single-level) subcategory drill-down
+    const FLAT_SUBCATS={
+      Electronics:{field:'electronics_subcategory',emoji:'📱',items:ELECTRONICS_SUBCATS},
+      Utensils:{field:'utensils_subcategory',emoji:'🍴',items:UTENSILS_SUBCATS},
+      Jewellery:{field:'jewellery_subcategory',emoji:'💍',items:JEWELLERY_SUBCATS},
+      Bags:{field:'bags_subcategory',emoji:'👜',items:BAGS_SUBCATS},
+      Toys:{field:'toys_subcategory',emoji:'🧸',items:TOYS_SUBCATS},
+      Pets:{field:'pets_subcategory',emoji:'🐾',items:PETS_SUBCATS},
+      Tools:{field:'tools_subcategory',emoji:'🔧',items:TOOLS_SUBCATS},
+      Hardware:{field:'hardware_subcategory',emoji:'🔨',items:HARDWARE_SUBCATS},
+      Gaming:{field:'gaming_subcategory',emoji:'🎮',items:GAMING_SUBCATS},
+      Snacks:{field:'snacks_subcategory',emoji:'🍿',items:SNACKS_SUBCATS},
+      Sports:{field:'sports_subcategory',emoji:'🏃',items:SPORTS_SUBCATS},
+      Books:{field:'books_subcategory',emoji:'📖',items:BOOKS_SUBCATS},
+      Music:{field:'music_subcategory',emoji:'🎸',items:MUSIC_SUBCATS},
+      Cameras:{field:'cameras_subcategory',emoji:'📸',items:CAMERAS_SUBCATS},
+      Events:{field:'events_subcategory',emoji:'🎉',items:EVENTS_SUBCATS},
+      Plants:{field:'plants_subcategory',emoji:'🌱',items:PLANTS_SUBCATS},
+      Decor:{field:'decor_subcategory',emoji:'🖼️',items:DECOR_SUBCATS},
+      Baby:{field:'baby_subcategory',emoji:'👶',items:BABY_SUBCATS},
+      Data:{field:'data_subcategory',emoji:'📶',items:DATA_SUBCATS},
+      Health:{field:'health_subcategory',emoji:'🩹',items:HEALTH_SUBCATS},
+      Career:{field:'career_subcategory',emoji:'💼',items:CAREER_SUBCATS},
+      Clothing:{field:'clothing_subcategory',emoji:'👗',items:CLOTHING_SUBCATS},
+      Food:{field:'food_subcategory',emoji:'🍱',items:FOOD_SUBCATS},
+      Beauty:{field:'beauty_subcategory',emoji:'💄',items:BEAUTY_SUBCATS},
+      Tutoring:{field:'tutoring_subcategory',emoji:'🎓',items:TUTORING_SUBCATS},
+      Accommodation:{field:'accommodation_subcategory',emoji:'🏠',items:ACCOMMODATION_SUBCATS},
+      Transport:{field:'transport_subcategory',emoji:'🚲',items:TRANSPORT_SUBCATS},
+      Vehicles:{field:'vehicles_subcategory',emoji:'🚗',items:VEHICLES_SUBCATS},
+      Services:{field:'services_subcategory',emoji:'🛠️',items:SERVICES_SUBCATS},
+      Stationary:{field:'stationary_subcategory',emoji:'✏️',items:STATIONARY_SUBCATS,groups:STATIONARY_GROUPS},
+      Appliances:{field:'appliances_subcategory',emoji:'🔌',items:APPLIANCES_SUBCATS},
+      Furniture:{field:'furniture_subcategory',emoji:'🛋️',items:FURNITURE_SUBCATS}
+    };
+    let flatSubcat=null; // currently selected subcategory value for whichever flat category is active
+    let flatChipsExpanded=false; // whether the full subcategory chip grid is currently revealed (only after "Show all" is pressed)
+
+    let all=[], cat='All', currentListing=null, galleryIdx=0, modalQty=1, currentUser=null, cart=[], renderLimit=24, lastFilteredList=[];
+    let randomOrderSeed=new Map(); // listing id -> stable random value, so favoriting/re-filtering doesn't reshuffle the page
+
+    // Lightweight typo tolerance: exact substring match first, then falls back to
+    // per-word edit-distance <=1 for words of 4+ letters (catches things like "laptp" -> "laptop")
+    function levenshtein(a,b){
+      const m=a.length,n=b.length;
+      if(!m)return n; if(!n)return m;
+      const dp=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+      for(let j=0;j<=n;j++)dp[0][j]=j;
+      for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
+        dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+      return dp[m][n];
+    }
+    function fuzzyMatch(text,query){
+      text=text.toLowerCase(); query=query.toLowerCase().trim();
+      if(!query) return true;
+      if(text.includes(query)) return true;
+      const textWords=text.split(/\s+/);
+      const queryWords=query.split(/\s+/);
+      return queryWords.every(qw=>{
+        if(qw.length<4) return text.includes(qw);
+        return textWords.some(tw=>tw.includes(qw)||(tw.length>=4&&levenshtein(tw,qw)<=1));
+      });
+    }
+
+    // Does this seller (profile) deliver to the buyer's saved {province,city,district,suburb}?
+    function sellerDeliversTo(p,saved){
+      if(!p||!saved) return false;
+      if(p.deliver_all_areas) return true;
+      const list=Array.isArray(p.seller_areas)?p.seller_areas:[];
+      return list.some(a=>a.province===saved.province && a.city===saved.city && a.district===saved.district && (a.suburbs||[]).includes(saved.suburb));
+    }
+
+    // Human-readable summary of where a seller delivers, for the listing modal
+    function describeDeliveryScope(p){
+      if(!p) return null;
+      const parts=[];
+      if(p.deliver_all_areas) parts.push('all areas');
+      const list=Array.isArray(p.seller_areas)?p.seller_areas:[];
+      list.forEach(a=>parts.push(a.district+' ('+(a.suburbs||[]).join(', ')+')'));
+      return parts.length ? parts.join(' · ') : null;
+    }
+    let tbYear=null, tbSubject=null;
+    let tbSubjectsExpanded=false; // whether the faculty/subject grid is currently revealed (only after "View all X textbooks" is pressed)
+
+    // Init
+    const {data:{user}}=await supabase.auth.getUser();
+    currentUser=user;
+    let myFavorites=new Set();
+
+    // Bounded pagination: never pull the entire listings table in one go.
+    // Fetch a generous first page, then quietly fetch more pages on demand
+    // as the person scrolls past what's loaded (see loadMoreListings below).
+    const SERVER_PAGE_SIZE = 300;
+    let serverOffset = 0, serverHasMore = true;
+
+    async function fetchListingsPage(offset){
+      const {data} = await supabase.from('listings')
+        .select('*,profiles(full_name,residence,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin)')
+        .eq('is_available',true).eq('is_draft',false)
+        .order('renewed_at',{ascending:false,nullsFirst:false})
+        .range(offset, offset+SERVER_PAGE_SIZE-1);
+      const today=new Date().toISOString().slice(0,10);
+      const filtered=(data||[]).filter(l=>{
+        const p=l.profiles;
+        if(!p) return false;
+        if(p.is_blocked===true) return false;
+        if(p.is_admin===true) return true;
+        return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
+      });
+      serverHasMore = (data||[]).length === SERVER_PAGE_SIZE;
+      serverOffset = offset + (data||[]).length;
+      return filtered;
+    }
+
+    // Kick off the listings fetch immediately — it's the actual content of this
+    // page, so it should never sit behind unrelated auth/profile round-trips.
+    const listingsPromise = fetchListingsPage(0);
+
+    if(user){
+      document.getElementById('nav-auth').textContent='Sign out';
+      document.getElementById('nav-auth').href='#';
+      document.getElementById('nav-auth').onclick=async()=>{await supabase.auth.signOut();location.reload();};
+      document.getElementById('nav-profile').style.display='inline';
+      document.getElementById('nav-favorites').style.display='inline';
+      document.getElementById('nav-messages').style.display='inline';
+      document.getElementById('nav-notif').style.display='inline';
+      supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).neq('sender_id',user.id).eq('is_read',false).then(({count})=>{
+        if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';const bb=document.getElementById('bnav-msg-badge');if(bb){bb.textContent=count;bb.style.display='flex';}}
+      });
+      // If the buyer hasn't picked an area on this device yet, use the one they set at signup
+      if(!localStorage.getItem('sm_area') && localStorage.getItem('sm_area_all')!=='1'){
+        supabase.from('profiles').select('province,city,district,suburb').eq('id',user.id).single().then(({data:pr})=>{
+          if(pr?.province && pr?.city && pr?.district && pr?.suburb){
+            localStorage.setItem('sm_area',JSON.stringify({province:pr.province,city:pr.city,district:pr.district,suburb:pr.suburb}));
+            if(typeof updateAreaBtnLabel==='function') updateAreaBtnLabel();
+          }
+        });
+      }
+      loadNotifications();
+      // Independent of each other and of the listings fetch above — run them together.
+      const [{data:p},{data:favs,error:favErr}]=await Promise.all([
+        supabase.from('profiles').select('role').eq('id',user.id).single(),
+        supabase.from('favorites').select('listing_id').eq('user_id',user.id)
+      ]);
+      if(p?.role==='seller') document.getElementById('nav-profile').href='seller.html';
+      if(favErr) console.error('Could not load favorites:',favErr.message);
+      myFavorites=new Set((favs||[]).map(f=>f.listing_id));
+      loadCart();
+    }
+
+    let verifiedSellers=new Set();
+    async function markVerifiedSellers(listingsBatch){
+      const ids=[...new Set(listingsBatch.map(l=>l.seller_id))];
+      if(!ids.length) return;
+      const {data:completedOrders}=await supabase.from('orders').select('seller_id').eq('status','completed').in('seller_id',ids);
+      const counts={};
+      (completedOrders||[]).forEach(o=>{counts[o.seller_id]=(counts[o.seller_id]||0)+1;});
+      Object.keys(counts).filter(id=>counts[id]>=5).forEach(id=>verifiedSellers.add(id));
+    }
+
+    all = await listingsPromise;
+    // push out-of-stock items to the end so they don't crowd out available ones
+    all.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+    await markVerifiedSellers(all);
+
+    // Apply whichever sort is selected (defaults to Random) right away, so the
+    // page never shows one order and then reshuffles on the first interaction.
+    doFilter();
+    const pendingOpenId=new URLSearchParams(location.search).get('open');
+    const pendingCat=new URLSearchParams(location.search).get('cat');
+
+    function render(list){
+      const g=document.getElementById('listings-grid');
+      lastFilteredList=list;
+      if(!list.length){
+        g.innerHTML='<div class="loading-msg" style="text-align:center">'+
+          '<p>No listings match your filters 🤔</p>'+
+          '<button class="btn-primary" style="margin-top:10px;padding:10px 24px;border-radius:50px" onclick="resetFilters()">Reset filters</button>'+
+          '</div>';
+        return;
+      }
+      const pageList=list.slice(0,renderLimit);
+      g.innerHTML=pageList.map(l=>{
+        const c=CAT_COLOR[l.category]||{bg:'#f5f5f5',text:'#555'};
+        const e=CAT_EMOJI[l.category]||'🛍️';
+        const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+        const db=l.discount_percent>0?'<div class="discount-tag">-'+l.discount_percent+'% OFF</div>':'';
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
+        const photoCount=[l.image_url,l.image_url_2,l.image_url_3,l.image_url_4,l.image_url_5,l.image_url_6].filter(Boolean).length;
+        const photoDots=photoCount>1?'<div class="photo-dots">'+Array(photoCount).fill('•').join('')+'</div>':'';
+        const stock=l.quantity>5?'<div class="card-stock">'+l.quantity+' in stock</div>':l.quantity>0?'<div class="card-stock low">Only '+l.quantity+' left!</div>':'<div class="card-stock out">Out of stock</div>';
+        const outOfStock=l.quantity<=0;
+        const isFav=myFavorites.has(l.id);
+        const heart=currentUser?'<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Favorite">'+(isFav?'❤️':'🤍')+'</button>':'';
+        const condTag=l.condition?'<span class="condition-tag">'+l.condition+'</span>':'';
+        const negTag=l.is_negotiable?'<span class="negotiable-tag">💬 Negotiable</span>':'';
+        const verifiedTag=verifiedSellers.has(l.seller_id)?'<span class="verified-badge">✅ Verified</span>':'';
+        return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
+          '<div class="card-img" style="background:'+c.bg+'">'+db+heart+img+photoDots+'</div>'+
+          '<div class="card-body">'+
+          '<div class="card-title">'+l.title+'</div>'+
+          (verifiedTag?'<div class="card-seller">'+verifiedTag+'</div>':'')+
+          (negTag?'<div>'+negTag+'</div>':'')+
+          stock+
+          '<div class="card-footer"><span class="price">R'+fp+'</span>'+
+          '<button class="btn-add-cart" '+(outOfStock?'disabled':'')+' onclick="event.stopPropagation();window._quickAdd(\''+l.id+'\')">'+(outOfStock?'Out of stock':'+ Cart')+'</button>'+
+          '</div></div></div>';
+      }).join('');
+      if(list.length>renderLimit){
+        g.insertAdjacentHTML('afterend','<div id="load-more-wrap" style="text-align:center;margin-top:16px"><button class="btn-primary" style="padding:11px 30px;border-radius:50px" onclick="loadMoreListings()">Load more ('+(list.length-renderLimit)+' more)</button></div>');
+      }
+    }
+    window.loadMoreListings=async ()=>{
+      renderLimit+=24;
+      document.getElementById('load-more-wrap')?.remove();
+      // Running low on the locally-filtered buffer and the server has more
+      // rows beyond what we've fetched so far — pull the next page before
+      // the person actually hits the end, so filters/search still work
+      // beyond the first batch without ever loading the whole table.
+      if (renderLimit >= lastFilteredList.length - 12 && serverHasMore) {
+        const g=document.getElementById('listings-grid');
+        g.insertAdjacentHTML('afterend','<p id="load-more-spinner" class="loading-msg" style="text-align:center;margin-top:10px">Loading more... ⏳</p>');
+        const nextBatch = await fetchListingsPage(serverOffset);
+        document.getElementById('load-more-spinner')?.remove();
+        all = all.concat(nextBatch);
+        await markVerifiedSellers(nextBatch);
+        doFilter(false);
+        return;
+      }
+      render(lastFilteredList);
+    };
+    window.resetFilters=()=>{
+      document.getElementById('search-input').value='';
+      document.getElementById('price-min').value='';
+      document.getElementById('price-max').value='';
+      document.getElementById('sort-select').value='random';
+      document.getElementById('my-area-only').checked=false;
+      selectCat('All',document.querySelector('.cat'));
+    };
+    window.checkRestockAlertState=async(listingId)=>{
+      const btn=document.getElementById('btn-restock-alert');
+      if(!currentUser){ btn.textContent='🔔 Sign in to get notified'; return; }
+      const {data}=await supabase.from('restock_alerts').select('id').eq('user_id',currentUser.id).eq('listing_id',listingId).maybeSingle();
+      btn.textContent = data ? '🔔 We\'ll notify you — tap to cancel' : '🔔 Notify me when back in stock';
+      btn.dataset.subscribed = data ? '1' : '0';
+    };
+    window.requestRestockAlert=async()=>{
+      if(!currentListing)return;
+      if(!currentUser){ showToast('Sign in to get notified 🔔'); window.location.href='login.html'; return; }
+      const btn=document.getElementById('btn-restock-alert');
+      if(btn.dataset.subscribed==='1'){
+        await supabase.from('restock_alerts').delete().eq('user_id',currentUser.id).eq('listing_id',currentListing.id);
+        showToast('Alert cancelled');
+      } else {
+        const {error}=await supabase.from('restock_alerts').insert({user_id:currentUser.id, listing_id:currentListing.id});
+        if(error && !error.message.includes('duplicate')){ showToast('Could not save alert: '+error.message); return; }
+        showToast('🔔 We\'ll message you the moment it\'s back in stock!');
+      }
+      checkRestockAlertState(currentListing.id);
+    };
+    window.saveSearchAlert=async()=>{
+      if(!currentUser){ showToast('Sign in to save a price/search alert 🔔'); window.location.href='login.html'; return; }
+      const keyword=(document.getElementById('search-input').value||'').trim();
+      const maxPrice=parseFloat(document.getElementById('price-max').value)||null;
+      const areaOnly=document.getElementById('my-area-only').checked;
+      if(!keyword && cat==='All' && !maxPrice){ showToast('Type a keyword, pick a category, or set a max price first'); return; }
+      const {error}=await supabase.from('saved_searches').insert({
+        user_id:currentUser.id, keyword:keyword||null, category:cat==='All'?null:cat,
+        max_price:maxPrice, area_only:areaOnly
+      });
+      if(error){ showToast('Could not save alert: '+error.message); return; }
+      showToast('🔔 Alert saved! We will notify you when a matching item is posted.');
+    };
+    window.toggleFilterPanel=()=>{
+      document.getElementById('filter-toolbar').classList.toggle('open');
+      document.getElementById('filter-toggle-btn').classList.toggle('open');
+    };
+    window.applyFilters=()=>{
+      doFilter();
+      document.getElementById('filter-toolbar').classList.remove('open');
+      document.getElementById('filter-toggle-btn').classList.remove('open');
+      document.getElementById('listings-grid').scrollIntoView({block:'start'});
+    };
+    window._toggleFav=async(id)=>{
+      if(!currentUser){location.href='login.html';return;}
+      if(myFavorites.has(id)){
+        myFavorites.delete(id);
+        const {error}=await supabase.from('favorites').delete().eq('user_id',currentUser.id).eq('listing_id',id);
+        if(error){myFavorites.add(id);alert('Could not remove favorite: '+error.message);return;}
+      } else {
+        myFavorites.add(id);
+        const {error}=await supabase.from('favorites').insert({user_id:currentUser.id,listing_id:id});
+        if(error){myFavorites.delete(id);alert('Could not save favorite: '+error.message);return;}
+      }
+      doFilter();
+    };
+    function renderRecentlyViewed(){
+      let recent=JSON.parse(localStorage.getItem('sm_recently_viewed')||'[]');
+      let items=recent.map(id=>all.find(l=>l.id===id)).filter(Boolean);
+      if(cat!=='All') items=items.filter(l=>l.category===cat);
+      items=items.slice(0,8);
+      const section=document.getElementById('recently-viewed-section');
+      if(!items.length){section.style.display='none';return;}
+      section.style.display='block';
+      document.getElementById('recently-viewed-title').textContent = cat==='All' ? '🕐 Recently viewed' : '🕐 Recently viewed in '+cat;
+      document.getElementById('recently-viewed-grid').innerHTML=items.map(l=>{
+        const c=CAT_COLOR[l.category]||{bg:'#f5f5f5'};
+        const e=CAT_EMOJI[l.category]||'🛍️';
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
+        return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
+          '<div class="card-img" style="background:'+c.bg+'">'+img+'</div>'+
+          '<div class="card-body"><div class="card-title">'+l.title+'</div>'+
+          '<div class="card-footer"><span class="price">R'+(l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price)+'</span></div></div></div>';
+      }).join('');
+    }
+
+    async function loadNotifications(){
+      if(!currentUser)return;
+      const {data}=await supabase.from('notifications').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+      window._notifs=data||[];
+      const unread=(data||[]).filter(n=>!n.is_read).length;
+      const badge=document.getElementById('notif-badge');
+      if(unread>0){badge.textContent=unread;badge.style.display='inline-flex';}
+      else badge.style.display='none';
+    }
+    window.toggleNotifDropdown=async()=>{
+      const dd=document.getElementById('notif-dropdown');
+      if(dd.style.display==='block'){dd.style.display='none';return;}
+      await loadNotifications();
+      const notifs=window._notifs||[];
+      dd.innerHTML=notifs.length
+        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+n.message+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
+        : '<div class="notif-empty">No notifications yet 🔔</div>';
+      dd.style.display='block';
+    };
+    window._openNotif=async(id,listingId)=>{
+      await supabase.from('notifications').update({is_read:true}).eq('id',id);
+      document.getElementById('notif-dropdown').style.display='none';
+      if(listingId) window.location.href='index.html?open='+listingId;
+      else loadNotifications();
+    };
+    document.addEventListener('click',(e)=>{
+      const wrap=document.getElementById('notif-wrap');
+      if(wrap && !wrap.contains(e.target)) document.getElementById('notif-dropdown').style.display='none';
+    });
+
+    window.shareListing=async()=>{
+      if(!currentListing)return;
+      const url=location.origin+location.pathname.replace(/[^/]*$/,'')+'index.html?open='+currentListing.id;
+      const shareData={title:currentListing.title,text:'Check this out on Marketrade: '+currentListing.title,url};
+      if(navigator.share){
+        try{ await navigator.share(shareData); }catch(e){/* user cancelled, ignore */}
+      } else {
+        try{
+          await navigator.clipboard.writeText(url);
+          alert('🔗 Link copied! Paste it anywhere to share.');
+        }catch(e){ prompt('Copy this link to share:',url); }
+      }
+    };
+
+    window._open=(id)=>{
+      const l=all.find(x=>x.id===id);if(!l)return;
+      currentListing=l;modalQty=1;galleryIdx=0;
+
+      // Increment view count once per browser session per listing
+      let seenViews=JSON.parse(sessionStorage.getItem('sm_viewed_this_session')||'[]');
+      if(!seenViews.includes(id)){
+        seenViews.push(id);
+        sessionStorage.setItem('sm_viewed_this_session',JSON.stringify(seenViews));
+        supabase.rpc('increment_listing_views',{p_listing_id:id}).then(()=>{l.view_count=(l.view_count||0)+1;});
+      }
+
+      const c=CAT_COLOR[l.category]||{bg:'#f5f5f5',text:'#555'};
+      const e=CAT_EMOJI[l.category]||'🛍️';
+      const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+      // Build gallery
+      const imgs=[l.image_url,l.image_url_2,l.image_url_3,l.image_url_4,l.image_url_5,l.image_url_6].filter(Boolean);
+      const slides=document.getElementById('gallery-slides');
+      const dots=document.getElementById('gallery-dots');
+      if(imgs.length){
+        slides.innerHTML=imgs.map((u,i)=>'<div class="gallery-slide"><img loading="lazy" src="'+u+'" alt="'+(l.title||'Listing').replace(/"/g,'')+' — photo '+(i+1)+'" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox('+i+')" /></div>').join('');
+        dots.innerHTML=imgs.map((_,i)=>'<div class="gallery-dot'+(i===0?' active':'')+'" onclick="goSlide('+i+')"></div>').join('');
+        document.getElementById('gallery-prev').style.display=imgs.length>1?'flex':'none';
+        document.getElementById('gallery-next').style.display=imgs.length>1?'flex':'none';
+      } else {
+        slides.innerHTML='<div class="gallery-slide" style="background:'+c.bg+'">'+e+'</div>';
+        dots.innerHTML='';
+        document.getElementById('gallery-prev').style.display='none';
+        document.getElementById('gallery-next').style.display='none';
+      }
+      slides.style.transform='translateX(0)';
+      document.getElementById('modal-badge').innerHTML='<span class="badge" style="background:'+c.bg+';color:'+c.text+'">'+l.category+'</span>';
+      document.getElementById('modal-title').textContent=l.title;
+      document.getElementById('modal-price').innerHTML=l.discount_percent>0?'<span style="text-decoration:line-through;color:#aaa;font-size:14px">R'+l.price+'</span> <span style="color:#2563eb;font-weight:900;font-size:20px">R'+fp+'</span>':'<span style="font-size:22px;font-weight:900">R'+fp+'</span>';
+      document.getElementById('modal-desc').textContent=l.description||'No description.';
+      const flatConf2=FLAT_SUBCATS[l.category];
+      const flatVal2=flatConf2?l[flatConf2.field]:null;
+      const deliveryTxt = describeDeliveryScope(l.profiles);
+      const extraTags = (l.condition?'<div><strong>🏷️ Condition:</strong> '+l.condition+'</div>':'')+(l.is_negotiable?'<div><strong>💬 Price is negotiable</strong></div>':'')+(l.delivery_fee>0?'<div><strong>🚚 Delivery fee:</strong> R'+l.delivery_fee+'</div>':'');
+      document.getElementById('modal-seller-info').innerHTML='<div><strong>👤 Seller:</strong> '+(l.profiles?.full_name||'Unknown')+'</div>'+(l.profiles?.residence?'<div><strong>📍 Residence:</strong> '+l.profiles.residence+'</div>':'')+((l.category==='Textbooks'&&l.textbook_year)?'<div><strong>🎓 Year:</strong> '+l.textbook_year+'</div>'+(l.textbook_subject?'<div><strong>📖 Subject:</strong> '+l.textbook_subject+'</div>':''):'')+(flatVal2?'<div><strong>'+flatConf2.emoji+' Type:</strong> '+flatVal2+'</div>':'')+extraTags+(deliveryTxt?'<div><strong>🚚 Delivers to:</strong> '+deliveryTxt+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="store.html?seller='+l.seller_id+'" style="font-weight:800;color:#2563eb;text-decoration:none">🏪 Visit store</a><a href="listing-reviews.html?listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">⭐ Reviews</a><a href="messages.html?seller='+l.seller_id+'&listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">💬 Message seller</a><a href="#" onclick="event.preventDefault();shareListing()" style="font-weight:800;color:#2563eb;text-decoration:none">🔗 Share</a></div>';
+      document.getElementById('modal-qty').textContent=1;
+      document.getElementById('modal-stock-note').textContent=l.quantity>0?l.quantity+' available':'Out of stock';
+      document.getElementById('btn-add-to-cart').disabled=l.quantity<=0;
+      document.getElementById('btn-order-now').disabled=l.quantity<=0;
+      const restockBtn=document.getElementById('btn-restock-alert');
+      if(l.quantity<=0){
+        document.getElementById('btn-add-to-cart').style.display='none';
+        document.getElementById('btn-order-now').style.display='none';
+        restockBtn.style.display='block';
+        checkRestockAlertState(l.id);
+      } else {
+        document.getElementById('btn-add-to-cart').style.display='block';
+        document.getElementById('btn-order-now').style.display='block';
+        restockBtn.style.display='none';
+      }
+      // Show sign in notice if not logged in
+      const signInNote = document.getElementById('modal-signin-note');
+      if(!currentUser){
+        signInNote.style.display='block';
+        document.getElementById('btn-add-to-cart').disabled=true;
+        document.getElementById('btn-order-now').disabled=true;
+      } else {
+        signInNote.style.display='none';
+      }
+      document.getElementById('modal-overlay').style.display='flex';
+      document.body.style.overflow='hidden';
+
+      // Track recently viewed
+      let recent=JSON.parse(localStorage.getItem('sm_recently_viewed')||'[]');
+      recent=recent.filter(x=>x!==id);
+      recent.unshift(id);
+      localStorage.setItem('sm_recently_viewed',JSON.stringify(recent.slice(0,12)));
+
+      // Similar listings (same category, excluding this one)
+      const similar=all.filter(x=>x.category===l.category&&x.id!==l.id).slice(0,4);
+      const simSection=document.getElementById('modal-similar-section');
+      if(similar.length){
+        simSection.style.display='block';
+        document.getElementById('modal-similar-grid').innerHTML=similar.map(s=>{
+          const sc=CAT_COLOR[s.category]||{bg:'#f5f5f5'};
+          const se=CAT_EMOJI[s.category]||'🛍️';
+          const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+(s.title||'Listing').replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
+          return '<div class="card" onclick="window._open(\''+s.id+'\')" style="cursor:pointer">'+
+            '<div class="card-img" style="background:'+sc.bg+';height:90px">'+simg+'</div>'+
+            '<div class="card-body" style="padding:8px"><div class="card-title" style="font-size:12px">'+s.title+'</div>'+
+            '<div class="card-footer"><span class="price" style="font-size:13px">R'+(s.discount_percent>0?Math.round(s.price*(1-s.discount_percent/100)):s.price)+'</span></div></div></div>';
+        }).join('');
+      } else {
+        simSection.style.display='none';
+      }
+    };
+
+    // ===== REPORT LISTING =====
+    window.openReportModal=()=>{
+      if(!currentUser){location.href='login.html';return;}
+      document.getElementById('report-error').textContent='';
+      document.getElementById('report-modal-overlay').style.display='flex';
+    };
+    window.closeReportModal=()=>{document.getElementById('report-modal-overlay').style.display='none';};
+    window.submitReport=async()=>{
+      const err=document.getElementById('report-error');
+      err.style.color='#1d4ed8';err.textContent='';
+      if(!currentListing){err.textContent='❌ No listing selected';return;}
+      const {error}=await supabase.from('reports').insert({
+        reporter_id:currentUser.id,
+        listing_id:currentListing.id,
+        reported_user_id:currentListing.seller_id,
+        reason:document.getElementById('report-reason').value,
+        details:document.getElementById('report-details').value.trim()||null
+      });
+      if(error){err.textContent='❌ '+error.message;return;}
+      err.style.color='#2e7d32';err.textContent='✅ Report submitted. Thanks for helping keep the marketplace safe!';
+      document.getElementById('report-details').value='';
+      setTimeout(closeReportModal,1800);
+    };
+
+    window.slideGallery=(dir)=>{
+      const imgs=[currentListing?.image_url,currentListing?.image_url_2,currentListing?.image_url_3,currentListing?.image_url_4,currentListing?.image_url_5,currentListing?.image_url_6].filter(Boolean);
+      if(imgs.length<=1)return;
+      galleryIdx=(galleryIdx+dir+imgs.length)%imgs.length;
+      document.getElementById('gallery-slides').style.transform='translateX(-'+galleryIdx*100+'%)';
+      document.querySelectorAll('.gallery-dot').forEach((d,i)=>d.classList.toggle('active',i===galleryIdx));
+    };
+    window.goSlide=(i)=>{galleryIdx=i;document.getElementById('gallery-slides').style.transform='translateX(-'+i*100+'%)';document.querySelectorAll('.gallery-dot').forEach((d,j)=>d.classList.toggle('active',j===i));};
+
+    window.changeQty=(dir)=>{
+      if(!currentListing)return;
+      const max=currentListing.quantity||1;
+      modalQty=Math.max(1,Math.min(max,modalQty+dir));
+      document.getElementById('modal-qty').textContent=modalQty;
+    };
+
+    window._quickAdd=(id)=>{
+      if(!currentUser){window.location.href='login.html';return;}
+      const l=all.find(x=>x.id===id);if(!l||l.quantity<=0)return;
+      addToCart(l,1);
+    };
+
+    document.getElementById('btn-add-to-cart').onclick=()=>{
+      if(!currentUser){window.location.href='login.html';return;}
+      if(!currentListing)return;
+      addToCart(currentListing,modalQty);
+      closeModal();
+      openCart();
+    };
+
+    document.getElementById('btn-order-now').onclick=async()=>{
+      if(!currentUser){window.location.href='login.html';return;}
+      if(!currentListing)return;
+      const btn=document.getElementById('btn-order-now');
+      if(btn.dataset.busy==='1')return; // guard against double-clicks
+      btn.dataset.busy='1';
+      const origTxt=btn.textContent;
+      btn.textContent='Placing order...';btn.disabled=true;
+      try{
+        await placeOrder([{listing:currentListing,qty:modalQty}]);
+      } finally {
+        btn.dataset.busy='0';
+        btn.textContent=origTxt;
+        btn.disabled = currentListing ? currentListing.quantity<=0 : false;
+      }
+    };
+
+    function addToCart(l,qty){
+      const existing=cart.find(c=>c.listing.id===l.id);
+      if(existing){existing.qty=Math.min(l.quantity,existing.qty+qty);}
+      else{cart.push({listing:l,qty});}
+      saveCart();updateCartUI();
+      showToast('✅ Added "'+l.title+'" to cart');
+    }
+
+    window.showToast=(msg,type)=>{
+      const stack=document.getElementById('toast-stack');
+      if(!stack)return;
+      const el=document.createElement('div');
+      el.className='toast'+(type?' toast-'+type:'');
+      el.textContent=msg;
+      stack.appendChild(el);
+      requestAnimationFrame(()=>el.classList.add('toast-show'));
+      setTimeout(()=>{
+        el.classList.remove('toast-show');
+        setTimeout(()=>el.remove(),250);
+      },2400);
+    };
+
+    function saveCart(){localStorage.setItem('cv_cart',JSON.stringify(cart.map(c=>({id:c.listing.id,qty:c.qty}))));}
+    async function loadCart(){
+      const saved=localStorage.getItem('cv_cart');
+      if(!saved)return;
+      const items=JSON.parse(saved);
+      for(const item of items){
+        const l=all.find(x=>x.id===item.id);
+        if(l)cart.push({listing:l,qty:item.qty});
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI(){
+      const total=cart.reduce((s,c)=>s+c.qty,0);
+      const badge=document.getElementById('cart-badge');
+      badge.style.display=total>0?'flex':'none';
+      badge.textContent=total;
+      const body=document.getElementById('cart-body');
+      const footer=document.getElementById('cart-footer');
+      if(!cart.length){body.innerHTML='<div class="cart-empty">Your cart is empty 🛍️</div>';footer.style.display='none';return;}
+      footer.style.display='block';
+      let totalPrice=0;
+      body.innerHTML=cart.map((c,i)=>{
+        const fp=c.listing.discount_percent>0?Math.round(c.listing.price*(1-c.listing.discount_percent/100)):c.listing.price;
+        totalPrice+=fp*c.qty;
+        const img=c.listing.image_url?'<img loading="lazy" src="'+c.listing.image_url+'" alt="'+(c.listing.title||'Listing').replace(/"/g,'')+'"/>':(CAT_EMOJI[c.listing.category]||'📦');
+        return '<div class="cart-item">'+
+          '<div class="cart-item-img">'+img+'</div>'+
+          '<div class="cart-item-info">'+
+          '<div class="cart-item-title">'+c.listing.title+'</div>'+
+          '<div class="cart-item-seller">by '+(c.listing.profiles?.full_name||'Seller')+'</div>'+
+          '<div class="cart-item-price">R'+fp+' × '+c.qty+' = R'+(fp*c.qty)+'</div>'+
+          '<div class="qty-ctrl-cart" style="margin-top:6px">'+
+          '<button class="qty-btn-sm" onclick="window._cartQty('+i+',-1)">−</button>'+
+          '<span style="font-size:13px;font-weight:800;margin:0 6px">'+c.qty+'</span>'+
+          '<button class="qty-btn-sm" onclick="window._cartQty('+i+',1)">+</button>'+
+          '</div></div>'+
+          '<button class="cart-item-remove" onclick="window._cartRemove('+i+')">🗑</button>'+
+          '</div>';
+      }).join('');
+      document.getElementById('cart-total').textContent='R'+totalPrice;
+    }
+
+    window._cartQty=(i,dir)=>{
+      const max=cart[i].listing.quantity||1;
+      cart[i].qty=Math.max(1,Math.min(max,cart[i].qty+dir));
+      saveCart();updateCartUI();
+    };
+    window._cartRemove=(i)=>{cart.splice(i,1);saveCart();updateCartUI();};
+    window.openCart=()=>{document.getElementById('cart-drawer').classList.add('open');document.getElementById('cart-overlay').classList.add('open');document.body.style.overflow='hidden';};
+    window.closeCart=()=>{document.getElementById('cart-drawer').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');document.body.style.overflow='';};
+
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function showSellerContacts(sellerMap){
+      const sellerList=Object.values(sellerMap);
+      document.getElementById('contact-box').innerHTML=sellerList.map(s=>
+        '<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0">'+
+        '<div style="font-weight:800;font-size:14px;margin-bottom:6px">👤 '+escapeHtml(s.name)+'</div>'+
+        (s.res?'<div class="contact-item"><span class="contact-label">📍 Find at</span><span class="contact-value">'+escapeHtml(s.res)+'</span></div>':'')+
+        '<div class="contact-item"><span class="contact-label">📱 WhatsApp</span><span class="contact-value">'+escapeHtml(s.wa)+'</span></div>'+
+        '<div style="font-size:12px;color:#aaa;font-weight:600;margin-top:6px">'+escapeHtml(s.items.join(', '))+'</div>'+
+        '</div>'
+      ).join('');
+      document.getElementById('contact-overlay').style.display='flex';
+    }
+
+    async function getBuyerContactInfo(){
+      const {data:p} = await supabase.from('profiles').select('full_name,whatsapp').eq('id',currentUser.id).single();
+      if(!p?.full_name || !p?.whatsapp){
+        alert('Please add your name and WhatsApp number to your profile before ordering — sellers need this to arrange the sale with you.');
+        window.location.href='profile.html';
+        return null;
+      }
+      return {name:p.full_name, wa:p.whatsapp};
+    }
+
+    function orderErrorMessage(error){
+      const raw=error?.message||'Unknown error';
+      // A missing RPC (schema/migration not applied yet) surfaces as a "not found" style error from PostgREST
+      if(/function .*place_order.*does not exist|could not find the function|schema cache/i.test(raw)){
+        return 'Ordering isn\'t set up yet on this store (missing database function). Please contact the site owner.';
+      }
+      return raw;
+    }
+
+    window.checkout=async()=>{
+      if(!currentUser){window.location.href='login.html';return;}
+      if(!cart.length)return;
+      const info=await getBuyerContactInfo();
+      if(!info)return;
+      const btn=document.querySelector('.btn-checkout');
+      const origTxt=btn?btn.textContent:'';
+      if(btn){btn.disabled=true;btn.textContent='Placing order...';}
+      let sellers={};
+      try{
+        for(const c of cart){
+          const l=c.listing;
+          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:c.qty});
+          if(error){showToast('❌ Order failed: '+orderErrorMessage(error),'error');return;}
+          const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+          const sid=data.seller_id;
+          if(!sellers[sid])sellers[sid]={name:data.seller_name||'Seller',wa:data.seller_whatsapp||'N/A',res:data.seller_residence||'',items:[]};
+          sellers[sid].items.push((data.listing_title||l.title)+' ×'+c.qty+' (R'+(fp*c.qty)+')');
+          l.quantity=Math.max(0,(l.quantity||0)-c.qty);
+        }
+        cart=[];saveCart();updateCartUI();closeCart();
+        showToast('✅ Order placed! Contact details below.','success');
+        showSellerContacts(sellers);
+        doFilter();
+      } catch(e){
+        showToast('❌ Order failed: '+(e?.message||'Unknown error'),'error');
+      } finally {
+        if(btn){btn.disabled=false;btn.textContent=origTxt;}
+      }
+    };
+
+    async function placeOrder(items){
+      if(!currentUser){window.location.href='login.html';return;}
+      const info=await getBuyerContactInfo();
+      if(!info)return;
+      let sellers={};
+      try{
+        for(const {listing:l,qty} of items){
+          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:qty});
+          if(error){showToast('❌ Order failed: '+orderErrorMessage(error),'error');return;}
+          const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+          const sid=data.seller_id;
+          if(!sellers[sid])sellers[sid]={name:data.seller_name||'Seller',wa:data.seller_whatsapp||'N/A',res:data.seller_residence||'',items:[]};
+          sellers[sid].items.push((data.listing_title||l.title)+' ×'+qty+' (R'+(fp*qty)+')');
+          l.quantity=Math.max(0,(l.quantity||0)-qty);
+        }
+        closeModal();
+        showToast('✅ Order placed! Contact details below.','success');
+        showSellerContacts(sellers);
+        doFilter();
+      } catch(e){
+        showToast('❌ Order failed: '+(e?.message||'Unknown error'),'error');
+      }
+    }
+
+    window.closeModal=()=>{document.getElementById('modal-overlay').style.display='none';document.body.style.overflow='';};
+    window.selectCat=(c,el)=>{
+      cat=c;tbYear=null;tbSubject=null;tbSubjectsExpanded=false;flatSubcat=null;stationaryGroup=null;flatChipsExpanded=false;
+      document.getElementById('tb-panel').style.display='none';
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+      doFilter();
+    };
+    function doFilter(resetPage=true){
+      if (resetPage) renderLimit=24;
+      const q=(document.getElementById('search-input').value||'').toLowerCase();
+      let f=all;
+      if(cat==='Textbooks'){
+        f=f.filter(l=>l.category==='Textbooks');
+        if(tbYear)f=f.filter(l=>l.textbook_year===tbYear);
+        if(tbSubject)f=f.filter(l=>l.textbook_subject===tbSubject);
+      } else if(cat==='Beauty' && (flatSubcat==="Men's Perfume" || flatSubcat==="Women's Perfume")){
+        f=f.filter(l=>
+          (l.category==='Perfumes' && l.perfumes_subcategory===flatSubcat) ||
+          (l.category==='Beauty' && (l.beauty_subcategory===flatSubcat || l.beauty_subcategory==='Perfume'))
+        );
+      } else if(cat==='Beauty' && flatSubcat==='Perfume'){
+        f=f.filter(l=>
+          l.category==='Perfumes' ||
+          (l.category==='Beauty' && (l.beauty_subcategory==='Perfume' || l.beauty_subcategory==="Men's Perfume" || l.beauty_subcategory==="Women's Perfume"))
+        );
+      } else if(cat==='Beauty'){
+        f=f.filter(l=>l.category==='Beauty' || l.category==='Perfumes');
+        if(flatSubcat)f=f.filter(l=>l.beauty_subcategory===flatSubcat);
+      } else if(cat==='Stationary'){
+        f=f.filter(l=>l.category==='Stationary');
+        if(flatSubcat){
+          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].includes(flatSubcat));
+          f=f.filter(l=>l.stationary_subcategory===flatSubcat || legacyKeys.includes(l.stationary_subcategory));
+        } else if(stationaryGroup){
+          const items=STATIONARY_GROUPS[stationaryGroup]||[];
+          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].some(i=>items.includes(i)));
+          f=f.filter(l=>items.includes(l.stationary_subcategory) || legacyKeys.includes(l.stationary_subcategory));
+        }
+      } else if(FLAT_SUBCATS[cat]){
+        f=f.filter(l=>l.category===cat);
+        if(flatSubcat)f=f.filter(l=>l[FLAT_SUBCATS[cat].field]===flatSubcat);
+      } else if(cat!=='All'){
+        f=f.filter(l=>l.category===cat);
+      }
+      if(q)f=f.filter(l=>fuzzyMatch(l.title,q)||fuzzyMatch(l.description||'',q));
+
+      const minP=parseFloat(document.getElementById('price-min').value);
+      const maxP=parseFloat(document.getElementById('price-max').value);
+      if(!isNaN(minP)) f=f.filter(l=>(l.discount_percent>0?l.price*(1-l.discount_percent/100):l.price)>=minP);
+      if(!isNaN(maxP)) f=f.filter(l=>(l.discount_percent>0?l.price*(1-l.discount_percent/100):l.price)<=maxP);
+
+      if(document.getElementById('my-area-only').checked){
+        const saved=JSON.parse(localStorage.getItem('sm_area')||'null');
+        if(saved){
+          f=f.filter(l=>sellerDeliversTo(l.profiles,saved));
+        }
+      }
+
+      const sortMode=document.getElementById('sort-select').value;
+      f=[...f];
+      if(sortMode==='price_asc') f.sort((a,b)=>(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price)-(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price));
+      else if(sortMode==='price_desc') f.sort((a,b)=>(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price)-(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price));
+      else if(sortMode==='random'){
+        f.forEach(l=>{ if(!randomOrderSeed.has(l.id)) randomOrderSeed.set(l.id, Math.random()); });
+        f.sort((a,b)=>randomOrderSeed.get(a.id)-randomOrderSeed.get(b.id));
+      }
+      else f.sort((a,b)=>new Date(b.renewed_at||b.created_at)-new Date(a.renewed_at||a.created_at));
+
+      render(f);
+      renderRecentlyViewed();
+    }
+    window.doFilter=doFilter;
+    window.filterListings=doFilter;
+
+    // ===== SEARCH AUTOCOMPLETE =====
+    window.showSuggestions=(q)=>{
+      const box=document.getElementById('search-suggestions');
+      q=(q||'').trim().toLowerCase();
+      if(q.length<2){box.style.display='none';return;}
+      const matches=[...new Set(all.filter(l=>l.title.toLowerCase().includes(q)).map(l=>l.title))].slice(0,6);
+      if(!matches.length){box.style.display='none';return;}
+      box.innerHTML=matches.map(t=>'<div class="search-suggestion-item" onmousedown="pickSuggestion(\''+t.replace(/'/g,"\\'")+'\')">🔍 '+t+'</div>').join('');
+      box.style.display='block';
+    };
+    window.hideSuggestions=()=>{document.getElementById('search-suggestions').style.display='none';};
+    window.pickSuggestion=(t)=>{
+      document.getElementById('search-input').value=t;
+      hideSuggestions();
+      doFilter();
+    };
+
+    // ===== GENERIC FLAT SUBCATEGORY DRILL-DOWN (Clothing, Electronics, Food, Beauty, Wigs, Tutoring, …) =====
+    window.openFlatSubcats=(catName,el)=>{
+      cat=catName;flatSubcat=null;tbYear=null;tbSubject=null;tbSubjectsExpanded=false;stationaryGroup=null;flatChipsExpanded=false;
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+      renderFlatSubcats();
+      document.getElementById('tb-panel').style.display='block';
+      doFilter();
+    };
+    function renderFlatSubcats(){
+      const conf=FLAT_SUBCATS[cat];if(!conf)return;
+      const p=document.getElementById('tb-panel');
+      if(cat==='Stationary' && conf.groups){
+        renderStationaryPanel();
+        return;
+      }
+      let html='<div class="tb-heading">'+conf.emoji+' Browse '+cat.toLowerCase()+' by type</div>';
+      html+='<button class="tb-view-all-year" onclick="viewAllFlat()">'+(flatChipsExpanded?'Hide subcategories':'Show all '+cat.toLowerCase())+'</button>';
+      if(flatChipsExpanded){
+        html+='<div class="tb-subject-grid">'+
+          conf.items.map(sub=>{
+            if(cat==='Beauty' && sub==='Perfume'){
+              return '<button class="tb-subject-btn'+(flatSubcat==='Perfume'||flatSubcat==="Men's Perfume"||flatSubcat==="Women's Perfume"?' active':'')+'" onclick="openPerfumeGender()">Perfume</button>';
+            }
+            return '<button class="tb-subject-btn'+(flatSubcat===sub?' active':'')+'" onclick="selectFlatSubcat(\''+sub.replace(/'/g,"\\'")+'\')">'+sub+'</button>';
+          }).join('')+
+          '</div>';
+      }
+      p.innerHTML=html;
+    }
+    function renderStationaryPanel(){
+      const p=document.getElementById('tb-panel');
+      if(!stationaryGroup){
+        let html=
+          '<div class="tb-heading">✏️ Browse stationary by type</div>'+
+          '<button class="tb-view-all-year" onclick="viewAllFlat()">'+(flatChipsExpanded?'Hide subcategories':'Show all stationary')+'</button>';
+        if(flatChipsExpanded){
+          html+='<div class="tb-subject-grid">'+
+            Object.keys(STATIONARY_GROUPS).map(g=>
+              '<button class="tb-subject-btn" onclick="openStationaryGroup(\''+g.replace(/'/g,"\\'")+'\')">'+g+'</button>'
+            ).join('')+
+            '</div>';
+        }
+        p.innerHTML=html;
+        return;
+      }
+      const items=STATIONARY_GROUPS[stationaryGroup]||[];
+      p.innerHTML=
+        '<div class="tb-crumbs">'+
+        '<span class="tb-crumb" onclick="stationaryGroup=null;flatSubcat=null;renderStationaryPanel();doFilter()">Stationary</span>'+
+        '<span class="tb-crumb-sep">›</span>'+
+        '<span class="tb-crumb-current">'+stationaryGroup+'</span>'+
+        '</div>'+
+        '<div class="tb-heading">Choose a '+stationaryGroup.toLowerCase()+' option</div>'+
+        '<button class="tb-view-all-year" onclick="flatSubcat=null;doFilter();renderStationaryPanel()">Show all '+stationaryGroup.toLowerCase()+'</button>'+
+        '<div class="tb-subject-grid">'+
+        items.map(sub=>'<button class="tb-subject-btn'+(flatSubcat===sub?' active':'')+'" onclick="selectFlatSubcat(\''+sub.replace(/'/g,"\\'")+'\')">'+sub+'</button>').join('')+
+        '</div>';
+    }
+    window.openStationaryGroup=(g)=>{stationaryGroup=g;flatSubcat=null;renderStationaryPanel();doFilter();};
+    window.viewAllFlat=()=>{
+      flatChipsExpanded=!flatChipsExpanded;
+      if(flatChipsExpanded){flatSubcat=null;stationaryGroup=null;}
+      renderFlatSubcats();
+      doFilter();
+    };
+    window.selectFlatSubcat=(sub)=>{
+      flatSubcat=sub;
+      if(cat==='Stationary') renderStationaryPanel();
+      else renderFlatSubcats();
+      doFilter();
+    };
+
+    // Perfume sits under Beauty — when pressed, ask men's or women's
+    window.openPerfumeGender=()=>{
+      flatSubcat='Perfume';
+      renderPerfumeGender();
+      doFilter();
+    };
+    function renderPerfumeGender(){
+      const p=document.getElementById('tb-panel');
+      p.innerHTML=
+        '<div class="tb-crumbs">'+
+        '<span class="tb-crumb" onclick="flatSubcat=null;renderFlatSubcats();doFilter()">Beauty</span>'+
+        '<span class="tb-crumb-sep">›</span>'+
+        '<span class="tb-crumb-current">Perfume</span>'+
+        '</div>'+
+        '<div class="tb-heading">🌸 Men\'s perfume or women\'s perfume?</div>'+
+        '<button class="tb-view-all-year" onclick="openPerfumeGender()">Show all perfume</button>'+
+        '<div class="tb-year-grid">'+
+        PERFUMES_SUBCATS.map(g=>
+          '<button class="tb-year-btn'+(flatSubcat===g?' active':'')+'" data-g="'+g.replace(/"/g,'&quot;')+'" onclick="selectPerfumeGender(this.dataset.g)">'+g+'</button>'
+        ).join('')+
+        '</div>';
+    }
+    window.selectPerfumeGender=(g)=>{flatSubcat=g;renderPerfumeGender();doFilter();};
+
+    // ===== TEXTBOOK YEAR / FACULTY / SUBJECT DRILL-DOWN =====
+    window.openTextbookYears=(el)=>{
+      cat='Textbooks';tbYear=null;tbSubject=null;tbSubjectsExpanded=false;flatSubcat=null;
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+      renderTbYearPicker();
+      document.getElementById('tb-panel').style.display='block';
+      doFilter();
+    };
+    function renderTbYearPicker(){
+      const p=document.getElementById('tb-panel');
+      p.innerHTML=
+        '<div class="tb-heading">📚 Which year are your textbooks for?</div>'+
+        '<div class="tb-year-grid">'+
+        TB_YEARS.map(y=>'<button class="tb-year-btn" onclick="openTbFaculties(\''+y+'\')">'+y+'</button>').join('')+
+        '<button class="tb-year-btn tb-year-all" onclick="viewAllTextbooks()">Show all textbooks</button>'+
+        '</div>';
+    }
+    window.viewAllTextbooks=()=>{
+      tbYear=null;tbSubject=null;tbSubjectsExpanded=false;
+      document.getElementById('tb-panel').style.display='none';
+      doFilter();
+    };
+    window.openTbFaculties=(year)=>{
+      tbYear=year;tbSubject=null;tbSubjectsExpanded=false;
+      renderTbFaculties();
+      doFilter();
+    };
+    function renderTbFaculties(){
+      const p=document.getElementById('tb-panel');
+      let html='<div class="tb-crumbs">'+
+        '<span class="tb-crumb" onclick="backToTbYears()">Textbooks</span>'+
+        '<span class="tb-crumb-sep">›</span>'+
+        '<span class="tb-crumb-current">'+tbYear+'</span>'+
+        '</div>';
+      html+='<button class="tb-view-all-year" onclick="viewAllInYear()">'+(tbSubjectsExpanded?'Hide subjects':'View all '+tbYear+' textbooks')+'</button>';
+      if(tbSubjectsExpanded){
+        html+=Object.keys(TB_TAXONOMY).map(fac=>
+          '<div class="tb-faculty-block">'+
+          '<div class="tb-faculty-title">'+fac+'</div>'+
+          '<div class="tb-subject-grid">'+
+          TB_TAXONOMY[fac].map(sub=>'<button class="tb-subject-btn'+(tbSubject===sub?' active':'')+'" onclick="selectTbSubject(\''+sub.replace(/'/g,"\\'")+'\')">'+sub+'</button>').join('')+
+          '</div></div>'
+        ).join('');
+      }
+      p.innerHTML=html;
+    }
+    window.backToTbYears=()=>{
+      tbYear=null;tbSubject=null;tbSubjectsExpanded=false;
+      renderTbYearPicker();
+      doFilter();
+    };
+    window.viewAllInYear=()=>{
+      tbSubjectsExpanded=!tbSubjectsExpanded;
+      if(tbSubjectsExpanded){tbSubject=null;}
+      renderTbFaculties();
+      doFilter();
+    };
+    window.selectTbSubject=(sub)=>{tbSubject=sub;renderTbFaculties();doFilter();};
+
+    // LIGHTBOX
+    let lbImgs=[], lbIdx=0;
+    window.openLightbox=(idx)=>{
+      if(!currentListing)return;
+      lbImgs=[currentListing.image_url,currentListing.image_url_2,currentListing.image_url_3,currentListing.image_url_4,currentListing.image_url_5,currentListing.image_url_6].filter(Boolean);
+      if(!lbImgs.length)return;
+      lbIdx=idx||0;
+      renderLightbox();
+      const lb=document.getElementById('lightbox');
+      lb.style.display='flex';
+      document.body.style.overflow='hidden';
+    };
+    function renderLightbox(){
+      const img=document.getElementById('lightbox-img');
+      img.src=lbImgs[lbIdx];
+      img.alt=(currentListing?.title||'Listing').replace(/"/g,'')+' — photo '+(lbIdx+1);
+      document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbImgs.length;
+      document.getElementById('lb-prev').style.display=lbImgs.length>1?'block':'none';
+      document.getElementById('lb-next').style.display=lbImgs.length>1?'block':'none';
+      document.getElementById('lb-dots').innerHTML=lbImgs.map((_,i)=>'<div onclick="event.stopPropagation();lbGo('+i+')" style="width:8px;height:8px;border-radius:50%;background:'+(i===lbIdx?'#fff':'rgba(255,255,255,0.35)')+';cursor:pointer"></div>').join('');
+    }
+    window.lightboxSlide=(dir)=>{lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;renderLightbox();};
+    window.lbGo=(i)=>{lbIdx=i;renderLightbox();};
+    window.closeLightbox=()=>{document.getElementById('lightbox').style.display='none';document.body.style.overflow='hidden';};
+
+    // Keyboard navigation for lightbox
+    document.addEventListener('keydown',(e)=>{
+      const lb=document.getElementById('lightbox');
+      if(lb.style.display==='flex'){
+        if(e.key==='ArrowRight')lightboxSlide(1);
+        if(e.key==='ArrowLeft')lightboxSlide(-1);
+        if(e.key==='Escape')closeLightbox();
+      }
+    });
+
+    // ===== CATEGORY BAR SCROLL ARROWS =====
+    window.scrollCats=(dir)=>{
+      document.getElementById('cats-bar').scrollBy({left:dir*220,behavior:'smooth'});
+    };
+
+    // ===== AREA SELECTOR (Province > City > District > Town/Suburb) =====
+    let provincePicked=null, cityPicked=null, districtPicked=null;
+
+    function updateAreaBtnLabel(){
+      const btn=document.getElementById('area-select-btn');
+      if(localStorage.getItem('sm_area_all')==='1'){ btn.textContent='📍 All areas'; return; }
+      const saved=JSON.parse(localStorage.getItem('sm_area')||'null');
+      if(saved){ btn.textContent='📍 '+saved.suburb+', '+saved.district; }
+      else { btn.textContent='📍 Select your area'; }
+    }
+    updateAreaBtnLabel();
+
+    window.pickAllAreas=()=>{
+      localStorage.removeItem('sm_area');
+      localStorage.setItem('sm_area_all','1');
+      const chk=document.getElementById('my-area-only');
+      if(chk) chk.checked=false;
+      updateAreaBtnLabel();
+      closeAreaModal();
+      if(typeof doFilter==='function') doFilter();
+    };
+
+    window.openAreaModal=()=>{
+      provincePicked=null; cityPicked=null; districtPicked=null;
+      renderProvinceList();
+      document.getElementById('area-modal-overlay').style.display='flex';
+      document.body.style.overflow='hidden';
+    };
+    window.closeAreaModal=()=>{
+      document.getElementById('area-modal-overlay').style.display='none';
+      document.body.style.overflow='';
+    };
+    function renderProvinceList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaProvinces();
+      body.innerHTML='<div class="inst-modal-title">Select your area</div>'+
+        '<div class="inst-modal-sub">What province are you in?</div>'+
+        '<button type="button" class="tb-year-btn tb-year-all" style="width:100%;margin-bottom:14px" onclick="pickAllAreas()">🌍 All areas — see every listing everywhere</button>'+
+        '<div class="inst-count">'+list.length+' provinces</div>'+
+        '<div class="tb-subject-grid">'+
+        list.map(p=>'<button class="tb-subject-btn" onclick="pickProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
+        '</div>';
+    }
+    window.renderProvinceList=renderProvinceList;
+    window.pickProvince=(p)=>{
+      provincePicked=p;
+      renderCityList();
+    };
+    function renderCityList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaCities(provincePicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderProvinceList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your city</div>'+
+        '<div class="inst-modal-sub">'+provincePicked+'</div>'+
+        '<input type="text" id="inst-search" class="inst-search" placeholder="Search cities..." oninput="filterCityList(this.value)"/>'+
+        '<div class="inst-count" id="inst-count">'+list.length+' cities'+'</div>'+
+        '<div class="tb-subject-grid" id="inst-list">'+
+        list.map(c=>'<button class="tb-subject-btn" onclick="pickCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+        '</div>';
+    }
+    window.renderCityList=renderCityList;
+    window.filterCityList=(q)=>{
+      const list=areaCities(provincePicked);
+      q=q.trim().toLowerCase();
+      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
+      document.getElementById('inst-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
+      document.getElementById('inst-list').innerHTML=filtered.map(c=>'<button class="tb-subject-btn" onclick="pickCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+    };
+    window.pickCity=(c)=>{
+      cityPicked=c;
+      renderDistrictList();
+    };
+    function renderDistrictList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaDistricts(provincePicked,cityPicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderCityList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your district</div>'+
+        '<div class="inst-modal-sub">'+cityPicked+'</div>'+
+        '<div class="inst-count">'+list.length+' districts</div>'+
+        '<div class="tb-subject-grid">'+
+        list.map(d=>'<button class="tb-subject-btn" onclick="pickDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
+        '</div>';
+    }
+    window.renderDistrictList=renderDistrictList;
+    window.pickDistrict=(d)=>{
+      districtPicked=d;
+      renderSuburbList();
+    };
+    function renderSuburbList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaSuburbs(provincePicked,cityPicked,districtPicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderDistrictList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your town or suburb</div>'+
+        '<div class="inst-modal-sub">'+districtPicked+'</div>'+
+        '<input type="text" id="inst-search" class="inst-search" placeholder="Search suburbs..." oninput="filterSuburbList(this.value)"/>'+
+        '<div class="inst-count" id="inst-count">'+list.length+' suburb'+(list.length===1?'':'s')+'</div>'+
+        '<div class="tb-subject-grid" id="inst-list">'+
+        list.map(s=>'<button class="tb-subject-btn" onclick="pickSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
+        '</div>';
+    }
+    window.renderSuburbList=renderSuburbList;
+    window.filterSuburbList=(q)=>{
+      const list=areaSuburbs(provincePicked,cityPicked,districtPicked);
+      q=q.trim().toLowerCase();
+      const filtered=q?list.filter(s=>s.toLowerCase().includes(q)):list;
+      document.getElementById('inst-count').textContent=filtered.length+' suburb'+(filtered.length===1?'':'s');
+      document.getElementById('inst-list').innerHTML=filtered.map(s=>'<button class="tb-subject-btn" onclick="pickSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+    };
+    window.pickSuburb=(suburb)=>{
+      localStorage.removeItem('sm_area_all');
+      localStorage.setItem('sm_area',JSON.stringify({province:provincePicked,city:cityPicked,district:districtPicked,suburb}));
+      updateAreaBtnLabel();
+      closeAreaModal();
+    };
+
+    // Auto-open a listing if we arrived here via a store.html link (?open=<id>)
+    if(pendingOpenId && all.some(l=>l.id===pendingOpenId)) window._open(pendingOpenId);
+
+    // Auto-select a category if we arrived here via categories.html (?cat=<name>)
+    if(pendingCat){
+      const elId='cat-'+pendingCat.toLowerCase();
+      const el=document.getElementById(elId);
+      if(pendingCat==='Textbooks'){
+        openTextbookYears(document.getElementById('cat-textbooks'));
+      } else if(el && FLAT_SUBCATS[pendingCat]){
+        openFlatSubcats(pendingCat,el);
+      } else if(el){
+        selectCat(pendingCat,el);
+      }
+      const catsEl=document.getElementById('categories');
+      if(catsEl && catsEl.offsetParent!==null) catsEl.scrollIntoView({block:'start'});
+      else document.getElementById('listings-grid').scrollIntoView({block:'start'});
+    }
+  </script>
+  <nav class="bottom-nav">
+    <a class="bottom-nav-item active" href="index.html"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>
+    <a class="bottom-nav-item" href="categories.html"><span class="bottom-nav-icon">🗂️</span><span class="bottom-nav-label">Categories</span></a>
+    <a class="bottom-nav-item" href="messages.html" id="bnav-messages"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-badge" id="bnav-msg-badge" style="display:none">0</span><span class="bottom-nav-label">Messages</span></a>
+    <a class="bottom-nav-item" href="favorites.html"><span class="bottom-nav-icon">❤️</span><span class="bottom-nav-label">Favourites</span></a>
+    <a class="bottom-nav-item" href="profile.html"><span class="bottom-nav-icon">👤</span><span class="bottom-nav-label">Profile</span></a>
+  </nav>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

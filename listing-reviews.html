@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item Reviews — Marketrade</title>
+  <meta name="description" content="See what buyers said about this item on Marketrade."/>
+  <meta name="robots" content="noindex, follow"/>
+  <meta property="og:title" content="Item Reviews — Marketrade"/>
+  <meta property="og:description" content="See what buyers said about this item on Marketrade."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Item Reviews — Marketrade"/>
+  <meta name="twitter:description" content="See what buyers said about this item on Marketrade."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=2"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .lr-wrap { max-width: 640px; margin: 0 auto; padding: 24px 20px 40px; }
+    .lr-back { display: inline-flex; align-items: center; gap: 4px; color: #2563eb; font-size: 13.5px; font-weight: 800; text-decoration: none; margin-bottom: 18px; }
+    .lr-item-card { display: flex; gap: 14px; align-items: center; background: #fff; border: 2.5px solid #f0f0f0; border-radius: 18px; padding: 16px; margin-bottom: 20px; text-decoration: none; color: inherit; }
+    .lr-item-img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background: #f5f5f5; }
+    .lr-item-title { font-weight: 900; font-size: 15px; color: #111; }
+    .lr-item-price { font-weight: 800; font-size: 13px; color: #2563eb; margin-top: 2px; }
+    .lr-summary { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .lr-avg { font-size: 34px; font-weight: 900; color: #111; }
+    .lr-stars { color: #f5a623; font-size: 17px; letter-spacing: 1px; }
+    .lr-count { font-size: 12.5px; color: #888; font-weight: 700; }
+    .lr-review-card { background: #fff; border: 2px solid #f0f0f0; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+    .lr-review-stars { color: #e65c00; font-weight: 800; }
+    .lr-review-comment { font-size: 13px; color: #555; font-weight: 600; margin-top: 4px; }
+    .lr-review-comment.empty { color: #bbb; font-style: italic; }
+    .lr-review-date { font-size: 11px; color: #aaa; font-weight: 700; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <div class="nav-links nav-links-simple">
+      <a href="index.html">Browse</a>
+    </div>
+  </nav>
+
+  <div class="lr-wrap">
+    <h1 class="sr-only">Item Reviews — Marketrade</h1>
+    <a href="#" class="lr-back" onclick="event.preventDefault();history.length>1?history.back():location.href='index.html'">← Back</a>
+
+    <a href="#" id="lr-item-card" class="lr-item-card" style="display:none">
+      <img id="lr-item-img" class="lr-item-img" alt="Listing photo"/>
+      <div>
+        <div class="lr-item-title" id="lr-item-title"></div>
+        <div class="lr-item-price" id="lr-item-price"></div>
+      </div>
+    </a>
+
+    <div id="lr-summary" class="lr-summary" style="display:none">
+      <div class="lr-avg" id="lr-avg"></div>
+      <div>
+        <div class="lr-stars" id="lr-stars"></div>
+        <div class="lr-count" id="lr-count"></div>
+      </div>
+    </div>
+
+    <div id="lr-list"><p class="loading-msg">Loading reviews... ⏳</p></div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+
+    const listingId = new URLSearchParams(location.search).get('listing');
+    const listEl = document.getElementById('lr-list');
+
+    if (!listingId) {
+      listEl.innerHTML = '<p class="loading-msg">No item specified.</p>';
+    } else {
+      init();
+    }
+
+    async function init(){
+      const {data: listing} = await supabase.from('listings').select('title,price,image_url').eq('id', listingId).single();
+      if (listing) {
+        document.getElementById('lr-item-card').href = 'index.html?open=' + listingId;
+        document.getElementById('lr-item-card').style.display = 'flex';
+        document.getElementById('lr-item-img').src = listing.image_url || '';
+        document.getElementById('lr-item-img').alt = listing.title || 'Listing';
+        document.getElementById('lr-item-title').textContent = listing.title || 'Item';
+        document.getElementById('lr-item-price').textContent = 'R' + listing.price;
+      }
+
+      const {data: reviews, error} = await supabase
+        .from('reviews')
+        .select('rating,comment,created_at,buyer:profiles!reviews_buyer_id_fkey(full_name)')
+        .eq('listing_id', listingId)
+        .order('created_at', {ascending:false});
+
+      if (error) { listEl.innerHTML = '<p class="loading-msg">Could not load reviews.</p>'; return; }
+
+      if (!reviews || !reviews.length) {
+        listEl.innerHTML = '<p class="loading-msg">No reviews yet for this item.</p>';
+        return;
+      }
+
+      const avg = reviews.reduce((s,r)=>s+r.rating,0) / reviews.length;
+      document.getElementById('lr-summary').style.display = 'flex';
+      document.getElementById('lr-avg').textContent = avg.toFixed(1);
+      document.getElementById('lr-stars').textContent = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
+      document.getElementById('lr-count').textContent = reviews.length + (reviews.length===1?' review':' reviews');
+
+      listEl.innerHTML = reviews.map(r => {
+        const name = r.buyer?.full_name || 'A buyer';
+        return '<div class="lr-review-card">' +
+          '<div class="lr-review-stars">' + '⭐'.repeat(r.rating) + '</div>' +
+          '<div style="font-size:12px;font-weight:800;color:#888;margin-top:2px">' + name + '</div>' +
+          (r.comment && r.comment.trim()
+            ? '<div class="lr-review-comment">' + r.comment + '</div>'
+            : '<div class="lr-review-comment empty">No written comment left</div>') +
+          '<div class="lr-review-date">' + new Date(r.created_at).toLocaleDateString('en-ZA') + '</div>' +
+          '</div>';
+      }).join('');
+    }
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>
