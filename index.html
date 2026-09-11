@@ -940,7 +940,7 @@
       let recent=JSON.parse(localStorage.getItem('sm_recently_viewed')||'[]');
       let items=recent.map(id=>all.find(l=>l.id===id)).filter(Boolean);
       if(cat!=='All') items=items.filter(l=>l.category===cat);
-      items=items.slice(0,8);
+      items=items.slice(0,3);
       const section=document.getElementById('recently-viewed-section');
       if(!items.length){section.style.display='none';return;}
       section.style.display='block';

@@ -405,6 +405,9 @@
             <div style="font-size:12px;color:#aaa;font-weight:600;margin-top:4px">JPG, PNG or WEBP · Max 2MB each</div>
             <div id="upload-err" style="display:none;font-size:13px;font-weight:700;color:#1d4ed8;margin-top:6px"></div>
           </div>
+          <div style="background:#fff7e6;border:1px solid #ffd580;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:#8a5a00;margin-bottom:12px">
+            ⚠️ One product, one listing — listing multiple products under a single listing is not allowed.
+          </div>
           <div class="form-error" id="form-error"></div>
           <button class="btn-primary" id="btn-post">Post Listing 🚀</button>
           <button class="btn-primary" id="btn-draft" style="background:#888;margin-top:8px">Save as Draft 📝</button>
@@ -1798,7 +1801,6 @@
             '<button class="btn-sm btn-toggle" onclick="window._toggle(\''+l.id+'\','+l.is_available+')">'+(l.is_available?'Hide':'Show')+'</button>')+
           (!l.is_draft?'<button class="btn-sm btn-toggle" onclick="window._toggleSold(\''+l.id+'\','+!!l.is_sold+')">'+(l.is_sold?'Unmark Sold':'Mark Sold')+'</button>':'')+
           (isOld?'<button class="btn-sm btn-toggle" onclick="window._renewListing(\''+l.id+'\')">🔄 Renew</button>':'')+
-          '<button class="btn-sm btn-toggle" onclick="window._duplicate(\''+l.id+'\')">Duplicate</button>'+
           '<button class="btn-sm btn-delete" onclick="window._delete(\''+l.id+'\')">Delete</button>'+
           '</div></div>';
       }).join('');
@@ -1818,17 +1820,6 @@
     window._publishDraft = async (id) => {
       const {error} = await supabase.from('listings').update({is_draft:false, is_available:true}).eq('id',id);
       if(error)alert('Error: '+error.message); else loadMyListings();
-    };
-    window._duplicate = async (id) => {
-      const {data:orig} = await supabase.from('listings').select('*').eq('id',id).single();
-      if(!orig) return;
-      const copy = {...orig};
-      delete copy.id; delete copy.created_at;
-      copy.title = copy.title + ' (copy)';
-      copy.is_sold = false; copy.is_available = true; copy.is_draft = false;
-      copy.renewed_at = new Date().toISOString();
-      const {error} = await supabase.from('listings').insert(copy);
-      if(error) alert('Error: '+error.message); else loadMyListings();
     };
     window._delete = async id => {
       if (!confirm('Delete this listing permanently?')) return;
