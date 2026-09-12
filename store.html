@@ -155,6 +155,15 @@
         const deliveryParts=[];
         if(profile.deliver_all_areas) deliveryParts.push('all areas');
         (Array.isArray(profile.seller_areas)?profile.seller_areas:[]).forEach(a=>deliveryParts.push(a.district+' ('+(a.suburbs||[]).join(', ')+')'));
+        const deliveryFull = deliveryParts.join(' · ');
+        const deliveryIsLong = deliveryFull.length > 90;
+        const deliveryPreview = deliveryIsLong ? deliveryFull.slice(0,70).trim()+'…' : deliveryFull;
+        const deliveryHtml = !deliveryParts.length ? '' :
+          !deliveryIsLong ? '<div class="store-meta">🚚 Delivers to: '+deliveryFull+'</div>' :
+          '<div class="store-meta">🚚 Delivers to: '+
+            '<span id="delivery-text">'+deliveryPreview+'</span> '+
+            '<button type="button" id="delivery-toggle-btn" onclick="window.toggleDeliveryAreas()" style="background:none;border:none;color:#2563eb;font-weight:800;font-size:12px;cursor:pointer;padding:0;text-decoration:underline;font-family:inherit">Show more</button>'+
+          '</div>';
         headerEl.innerHTML =
           '<div class="store-logo">'+(profile.store_logo_url?'<img loading="lazy" src="'+profile.store_logo_url+'" alt="Store logo"/>':'🏪')+'</div>'+
           '<div>'+
@@ -162,11 +171,20 @@
           (profile.store_bio?'<div class="store-bio">'+profile.store_bio+'</div>':'')+
           (profile.store_link?'<div class="store-meta"><a href="'+profile.store_link.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:700;text-decoration:none">🔗 '+profile.store_link.replace(/^https?:\/\//i,'')+'</a></div>':'')+
           (profile.residence?'<div class="store-meta">📍 '+profile.residence+'</div>':'')+
-          (deliveryParts.length?'<div class="store-meta">🚚 Delivers to: '+deliveryParts.join(' · ')+'</div>':'')+
+          deliveryHtml+
           '<div class="store-stats-row">'+
           '<div class="store-stat-pill">📦 '+(listings?.length||0)+' listings</div>'+
           '<div class="store-stat-pill">'+ratingTxt+'</div>'+
           '</div></div>';
+        window._deliveryFull = deliveryFull;
+        window._deliveryPreview = deliveryPreview;
+        window.toggleDeliveryAreas = () => {
+          const span = document.getElementById('delivery-text');
+          const btn = document.getElementById('delivery-toggle-btn');
+          const expanded = btn.textContent === 'Show less';
+          span.textContent = expanded ? window._deliveryPreview : window._deliveryFull;
+          btn.textContent = expanded ? 'Show more' : 'Show less';
+        };
 
         document.getElementById('store-listings-title').textContent = displayName+"'s listings 🛍️";
 
