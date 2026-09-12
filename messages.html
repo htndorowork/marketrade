@@ -70,7 +70,12 @@
 
   <div class="msg-wrap" id="msg-wrap">
     <h1 class="sr-only">Messages — Marketrade</h1>
-    <div class="thread-list" id="thread-list"><p class="loading-msg">Loading conversations... ⏳</p></div>
+    <div class="thread-list" id="thread-list">
+      <div style="padding:10px 12px;border-bottom:1px solid #f5f5f5;position:sticky;top:0;background:#fff;z-index:1">
+        <input type="text" id="thread-search" placeholder="🔍 Search conversations..." oninput="window.filterThreads(this.value)" style="width:100%;border:2px solid #f0f0f0;border-radius:50px;padding:8px 14px;font-family:inherit;font-size:13.5px;-webkit-appearance:none;box-sizing:border-box"/>
+      </div>
+      <div id="thread-list-items"><p class="loading-msg">Loading conversations... ⏳</p></div>
+    </div>
     <div class="chat-panel" id="chat-panel">
       <div class="chat-header"><button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button><span id="chat-header-text" style="flex:1">Select a conversation</span><div id="chat-header-actions" style="display:none;gap:6px"><button class="btn-sm btn-toggle" id="mute-btn" onclick="toggleMute()">🔇 Mute</button><button class="btn-sm btn-delete" id="block-btn" onclick="toggleBlock()">🚫 Block</button></div></div>
       <div class="chat-messages" id="chat-messages"><p class="loading-msg" style="margin:auto">Pick a conversation on the left, or message a seller from a listing 💬</p></div>
@@ -125,6 +130,7 @@
       updateHeaderActions(counterpartId);
     };
 
+    let searchQuery = '';
     async function loadThreads(){
       const {data} = await supabase.from('messages').select('*,listings(title)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false});
       const msgs = data||[];
@@ -137,7 +143,8 @@
       });
       const threads = Object.values(threadMap);
 
-      // Fetch counterpart names
+      // Fetch counterpart names — only for people already in a thread with this user,
+      // never a lookup across the whole site's user base.
       const counterpartIds = [...new Set(threads.map(t=>t.buyer_id===user.id?t.seller_id:t.buyer_id))];
       let names={};
       if(counterpartIds.length){
@@ -145,19 +152,37 @@
         (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User';});
       }
 
-      const list = document.getElementById('thread-list');
+      window._threads = threads;
+      window._names = names;
+      renderThreadList();
+    }
+
+    // Renders the thread list, filtered to whatever's currently in the search box.
+    // The filter only ever runs over window._threads (people this user has already
+    // messaged) — it never queries or searches the site's full user base.
+    function renderThreadList(){
+      const q = searchQuery.trim().toLowerCase();
+      const list = document.getElementById('thread-list-items');
+      const threads = window._threads||[];
+      const names = window._names||{};
       if(!threads.length){ list.innerHTML='<p class="loading-msg">No conversations yet</p>'; return; }
-      threads.sort((a,b)=>new Date(b.messages[0].created_at)-new Date(a.messages[0].created_at));
-      list.innerHTML = threads.map((t,i)=>{
+
+      const withIdx = threads.map((t,i)=>({t,i})).filter(({t})=>{
+        if(!q) return true;
+        const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
+        return (names[counterpartId]||'User').toLowerCase().includes(q);
+      });
+      if(!withIdx.length){ list.innerHTML='<p class="loading-msg">No conversations match "'+searchQuery.trim()+'"</p>'; return; }
+      withIdx.sort((a,b)=>new Date(b.t.messages[0].created_at)-new Date(a.t.messages[0].created_at));
+      list.innerHTML = withIdx.map(({t,i})=>{
         const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
         const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
         return '<div class="thread-item" data-idx="'+i+'" onclick="openThread('+i+')">'+
           '<div class="thread-name">'+(names[counterpartId]||'User')+(unread?'<span class="thread-unread">'+unread+'</span>':'')+'</div>'+
           '</div>';
       }).join('');
-      window._threads = threads;
-      window._names = names;
     }
+    window.filterThreads = (val) => { searchQuery = val; renderThreadList(); };
 
     window.openThread = async (idx) => {
       const t = window._threads[idx];

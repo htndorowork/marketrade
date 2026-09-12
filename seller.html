@@ -285,7 +285,7 @@
           <h3 style="font-size:18px;font-weight:800;margin-bottom:16px" id="add-form-heading">Add New Listing</h3>
           <div class="form-row">
             <div class="form-group">
-              <label>Product Title *</label>
+              <label>Product/Service Title *</label>
               <input type="text" id="f-title" placeholder="e.g. Calculus Textbook"/>
             </div>
             <div class="form-group">
@@ -406,7 +406,7 @@
             <div id="upload-err" style="display:none;font-size:13px;font-weight:700;color:#1d4ed8;margin-top:6px"></div>
           </div>
           <div style="background:#fff7e6;border:1px solid #ffd580;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:#8a5a00;margin-bottom:12px">
-            ⚠️ One product, one listing — listing multiple products under a single listing is not allowed.
+            ⚠️ One product/service, one listing — listing multiple products/services under a single listing is not allowed.
           </div>
           <div class="form-error" id="form-error"></div>
           <button class="btn-primary" id="btn-post">Post Listing 🚀</button>
@@ -1291,7 +1291,7 @@
         return;
       }
 
-      if (!title) { err.textContent='❌ Enter a product title'; return; }
+      if (!title) { err.textContent='❌ Enter a product/service title'; return; }
       if (!cat)   { err.textContent='❌ Select a category'; return; }
       if (!price || price<=0) { err.textContent='❌ Enter a valid price'; return; }
       if (!qty || qty<1) { err.textContent='❌ Enter quantity (at least 1)'; return; }
@@ -1333,7 +1333,7 @@
       const wasEditing = !!editingListingId;
       resetAddForm();
       err.style.color='#2e7d32'; err.textContent=wasEditing?'✅ Listing updated!':(isDraft?'✅ Saved as draft!':'✅ Listing posted!');
-      setTimeout(()=>{err.textContent=''; showTab('listings'); loadMyListings();},1500);
+      setTimeout(()=>{err.textContent=''; showTab('listings'); loadMyListings(true);},1500);
       refreshPlanUsage();
     }
 
@@ -1655,15 +1655,22 @@
         '</div>';
     }
 
-    async function loadOrders() {
+    // Persisted "seen" tracking for dashboard notification badges — survives page refresh,
+    // and only re-shows a badge when there's something genuinely new (not seen before).
+    function _seenIds(key){ try{ return new Set(JSON.parse(localStorage.getItem(key)||'[]')); }catch(e){ return new Set(); } }
+    function _markSeenIds(key,ids){ const s=_seenIds(key); ids.forEach(id=>s.add(id)); localStorage.setItem(key, JSON.stringify([...s])); }
+
+    async function loadOrders(markSeen) {
       const c = document.getElementById('orders-container');
       const {data,error} = await supabase.from('orders').select('*,listings(title)').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
-      const newCount = (data||[]).filter(o=>o.status==='confirmed').length;
+      const newOrders = (data||[]).filter(o=>o.status==='confirmed');
+      if (markSeen) _markSeenIds('sm_seen_order_ids', newOrders.map(o=>o.id));
+      const seen = _seenIds('sm_seen_order_ids');
+      const unseenCount = newOrders.filter(o=>!seen.has(o.id)).length;
       const ob = document.getElementById('orders-badge');
-      if (newCount>0){ob.textContent=newCount;ob.style.display='inline-block';} else ob.style.display='none';
+      if (unseenCount>0){ob.textContent=unseenCount;ob.style.display='inline-block';} else ob.style.display='none';
       if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No orders yet 📬</p>'; return; }
 
-      const newOrders = data.filter(o=>o.status==='confirmed');
       if (!newOrders.length) { c.innerHTML='<p class="loading-msg">No new orders right now 📬 — check Completed Orders for your history.</p>'; return; }
       c.innerHTML = newOrders.map(o => renderOrderCard(o, {})).join('');
     }
@@ -1775,12 +1782,15 @@
       loadMyPurchases();
     };
 
-    async function loadMyListings() {
+    async function loadMyListings(markSeen) {
       const c = document.getElementById('my-listings');
       const {data,error} = await supabase.from('listings').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
-      const activeCount = (data||[]).filter(l=>l.is_available && !l.is_draft && !l.is_sold).length;
+      const activeListings = (data||[]).filter(l=>l.is_available && !l.is_draft && !l.is_sold);
+      if (markSeen) _markSeenIds('sm_seen_listing_ids', activeListings.map(l=>l.id));
+      const seen = _seenIds('sm_seen_listing_ids');
+      const newCount = activeListings.filter(l=>!seen.has(l.id)).length;
       const lb = document.getElementById('listings-badge');
-      if (activeCount>0){lb.textContent=activeCount;lb.style.display='inline-block';} else lb.style.display='none';
+      if (newCount>0){lb.textContent=newCount;lb.style.display='inline-block';} else lb.style.display='none';
       if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No listings yet.</p>'; return; }
       c.innerHTML = data.map(l => {
         const fp = l.discount_percent>0 ? Math.round(l.price*(1-l.discount_percent/100)) : l.price;
@@ -1809,38 +1819,38 @@
 
     window._renewListing = async (id) => {
       const {error} = await supabase.from('listings').update({renewed_at:new Date().toISOString()}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings();
+      if(error)alert('Error: '+error.message); else loadMyListings(true);
     };
 
-    window._done   = async id => { await supabase.from('orders').update({status:'completed'}).eq('id',id); loadOrders(); };
-    window._toggle = async (id,cur) => { const {error} = await supabase.from('listings').update({is_available:!cur}).eq('id',id); if(error)alert('Error: '+error.message); else loadMyListings(); };
+    window._done   = async id => { await supabase.from('orders').update({status:'completed'}).eq('id',id); loadOrders(true); };
+    window._toggle = async (id,cur) => { const {error} = await supabase.from('listings').update({is_available:!cur}).eq('id',id); if(error)alert('Error: '+error.message); else loadMyListings(true); };
     window._toggleSold = async (id,cur) => {
       const {error} = await supabase.from('listings').update({is_sold:!cur, is_available: cur}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings();
+      if(error)alert('Error: '+error.message); else loadMyListings(true);
     };
     window._publishDraft = async (id) => {
       const {error} = await supabase.from('listings').update({is_draft:false, is_available:true}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings();
+      if(error)alert('Error: '+error.message); else loadMyListings(true);
     };
     window._delete = async id => {
       if (!confirm('Delete this listing permanently?')) return;
       const {error} = await supabase.from('listings').delete().eq('id',id);
       if (error) alert('Delete failed: '+error.message);
-      else loadMyListings();
+      else loadMyListings(true);
     };
     window._adjQty = async (id,cur,dir) => {
       const nq = Math.max(0,cur+dir);
       const {error} = await supabase.from('listings').update({quantity:nq}).eq('id',id);
       if (error) alert('Update failed: '+error.message);
-      else loadMyListings();
+      else loadMyListings(true);
     };
 
     window.showTab = (tab) => {
       document.getElementById('dashboard-menu').style.display='none';
       document.getElementById('dashboard-detail').style.display='block';
       ['orders','orders-completed','purchases','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
-      if (tab==='listings'){ loadMyListings().then(()=>{document.getElementById('listings-badge').style.display='none';}); }
-      if (tab==='orders'){ loadOrders().then(()=>{document.getElementById('orders-badge').style.display='none';}); }
+      if (tab==='listings'){ loadMyListings(true); }
+      if (tab==='orders'){ loadOrders(true); }
       if (tab==='orders-completed') loadCompletedOrders();
       if (tab==='purchases'){ loadMyPurchases(); markNotifsRead(['order_completed']).then(loadPurchasesBadge); }
       if (tab==='store') loadStoreTab();

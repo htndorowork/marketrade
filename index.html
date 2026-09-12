@@ -268,11 +268,13 @@
   </div>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center" onclick="closeLightbox()">
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y" onclick="closeLightbox()">
     <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;font-weight:800;z-index:10">✕</button>
     <button onclick="event.stopPropagation();lightboxSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-prev">‹</button>
     <button onclick="event.stopPropagation();lightboxSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-next">›</button>
-    <img id="lightbox-img" src="" alt="Listing photo" onclick="event.stopPropagation()" style="max-width:92vw;max-height:78vh;object-fit:contain;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.5)"/>
+    <div id="lightbox-viewport" style="width:min(88vw,60vh);aspect-ratio:3/4;overflow:hidden;display:flex;align-items:center;border-radius:12px;background:#111;box-shadow:0 8px 40px rgba(0,0,0,0.5);touch-action:pan-y" onclick="event.stopPropagation()">
+      <div id="lightbox-track" style="display:flex;width:100%;height:100%;transition:transform 0.3s ease;will-change:transform"></div>
+    </div>
     <div style="display:flex;gap:8px;margin-top:16px" id="lb-dots"></div>
     <div style="color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;margin-top:8px" id="lb-counter"></div>
   </div>
@@ -940,7 +942,7 @@
       let recent=JSON.parse(localStorage.getItem('sm_recently_viewed')||'[]');
       let items=recent.map(id=>all.find(l=>l.id===id)).filter(Boolean);
       if(cat!=='All') items=items.filter(l=>l.category===cat);
-      items=items.slice(0,3);
+      items=items.slice(0,4);
       const section=document.getElementById('recently-viewed-section');
       if(!items.length){section.style.display='none';return;}
       section.style.display='block';
@@ -1083,7 +1085,7 @@
           const se=CAT_EMOJI[s.category]||'🛍️';
           const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+(s.title||'Listing').replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
           return '<div class="card" onclick="window._open(\''+s.id+'\')" style="cursor:pointer">'+
-            '<div class="card-img" style="background:'+sc.bg+';height:90px">'+simg+'</div>'+
+            '<div class="card-img" style="background:'+sc.bg+'">'+simg+'</div>'+
             '<div class="card-body" style="padding:8px"><div class="card-title" style="font-size:12px">'+s.title+'</div>'+
             '<div class="card-footer"><span class="price" style="font-size:13px">R'+(s.discount_percent>0?Math.round(s.price*(1-s.discount_percent/100)):s.price)+'</span></div></div></div>';
         }).join('');
@@ -1583,51 +1585,93 @@
       lbImgs=[currentListing.image_url,currentListing.image_url_2,currentListing.image_url_3,currentListing.image_url_4,currentListing.image_url_5,currentListing.image_url_6].filter(Boolean);
       if(!lbImgs.length)return;
       lbIdx=idx||0;
-      renderLightbox();
+      buildLightboxTrack();
+      setLightboxTransform(false);
+      updateLightboxUI();
       const lb=document.getElementById('lightbox');
       lb.style.display='flex';
       document.body.style.overflow='hidden';
     };
-    function renderLightbox(){
-      const img=document.getElementById('lightbox-img');
-      img.src=lbImgs[lbIdx];
-      img.alt=(currentListing?.title||'Listing').replace(/"/g,'')+' — photo '+(lbIdx+1);
+    function buildLightboxTrack(){
+      document.getElementById('lightbox-track').innerHTML = lbImgs.map((u,i)=>
+        '<div style="min-width:100%;height:100%;flex-shrink:0;display:flex;align-items:center;justify-content:center">'+
+        '<img loading="lazy" src="'+u+'" alt="'+(currentListing?.title||'Listing').replace(/"/g,'')+' — photo '+(i+1)+'" style="max-width:100%;max-height:100%;object-fit:contain"/></div>'
+      ).join('');
+    }
+    function setLightboxTransform(animate){
+      const track=document.getElementById('lightbox-track');
+      track.style.transition = animate===false ? 'none' : 'transform 0.3s ease';
+      track.style.transform='translateX(-'+(lbIdx*100)+'%)';
+    }
+    function updateLightboxUI(){
       document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbImgs.length;
       document.getElementById('lb-prev').style.display=lbImgs.length>1?'block':'none';
       document.getElementById('lb-next').style.display=lbImgs.length>1?'block':'none';
       document.getElementById('lb-dots').innerHTML=lbImgs.map((_,i)=>'<div onclick="event.stopPropagation();lbGo('+i+')" style="width:8px;height:8px;border-radius:50%;background:'+(i===lbIdx?'#fff':'rgba(255,255,255,0.35)')+';cursor:pointer"></div>').join('');
     }
-    window.lightboxSlide=(dir)=>{lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;renderLightbox();};
-    window.lbGo=(i)=>{lbIdx=i;renderLightbox();};
+    window.lightboxSlide=(dir)=>{lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;setLightboxTransform(true);updateLightboxUI();};
+    window.lbGo=(i)=>{lbIdx=i;setLightboxTransform(true);updateLightboxUI();};
     window.closeLightbox=()=>{document.getElementById('lightbox').style.display='none';document.body.style.overflow='hidden';};
 
-    // Swipe navigation for lightbox
+    // Smooth drag-following swipe for the lightbox — the image tracks the finger in real time,
+    // then eases into place (or snaps back) on release.
+    // Shared drag-following swipe behavior: the track follows the finger in real time
+    // (preventDefault once horizontal intent is clear, so the browser's own scroll/back
+    // gestures never hijack the swipe), then eases to the target slide — or snaps back —
+    // on release. Handles touchcancel too, so an interrupted gesture never leaves the
+    // track stuck without its transition.
+    function enableSwipeTrack(container, track, opts){
+      let sx=0, sy=0, dragging=false, locked=null;
+      const reset=(animate)=>{
+        dragging=false; locked=null;
+        track.style.transition = animate===false ? 'none' : 'transform 0.3s ease';
+        track.style.transform='translateX(-'+(opts.getIndex()*100)+'%)';
+      };
+      container.addEventListener('touchstart',(e)=>{
+        if(opts.getCount()<2)return;
+        sx=e.touches[0].clientX; sy=e.touches[0].clientY; dragging=true; locked=null;
+        track.style.transition='none';
+      },{passive:true});
+      container.addEventListener('touchmove',(e)=>{
+        if(!dragging)return;
+        const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+        if(locked===null) locked = Math.abs(dx)>Math.abs(dy) ? 'x' : 'y';
+        if(locked==='y')return;
+        e.preventDefault();
+        track.style.transform='translateX(calc(-'+(opts.getIndex()*100)+'% + '+dx+'px))';
+      },{passive:false});
+      container.addEventListener('touchend',(e)=>{
+        if(!dragging)return;
+        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+        if(locked==='x' && Math.abs(dx)>40){
+          const count=opts.getCount();
+          const next = opts.loop
+            ? (opts.getIndex()+(dx<0?1:-1)+count)%count
+            : Math.max(0, Math.min(count-1, opts.getIndex()+(dx<0?1:-1)));
+          opts.setIndex(next);
+        }
+        reset(true);
+        if(opts.onSettled) opts.onSettled();
+      },{passive:true});
+      container.addEventListener('touchcancel',()=>{ if(dragging) reset(true); },{passive:true});
+    }
+
     (function(){
       const lb=document.getElementById('lightbox');
-      let sx=0, sy=0, tracking=false;
-      lb.addEventListener('touchstart',(e)=>{
-        if(lbImgs.length<2)return;
-        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
-      },{passive:true});
-      lb.addEventListener('touchend',(e)=>{
-        if(!tracking)return; tracking=false;
-        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-        if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) lightboxSlide(dx<0?1:-1);
-      },{passive:true});
+      const track=document.getElementById('lightbox-track');
+      enableSwipeTrack(lb, track, {
+        getIndex:()=>lbIdx, setIndex:(i)=>{lbIdx=i;}, getCount:()=>lbImgs.length, loop:true,
+        onSettled:()=>updateLightboxUI()
+      });
     })();
 
-    // Swipe navigation for the in-page gallery
     (function(){
       const gal=document.getElementById('modal-gallery');
-      let sx=0, sy=0, tracking=false;
-      gal.addEventListener('touchstart',(e)=>{
-        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
-      },{passive:true});
-      gal.addEventListener('touchend',(e)=>{
-        if(!tracking)return; tracking=false;
-        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-        if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) slideGallery(dx<0?1:-1);
-      },{passive:true});
+      const track=document.getElementById('gallery-slides');
+      enableSwipeTrack(gal, track, {
+        getIndex:()=>galleryIdx, setIndex:(i)=>{galleryIdx=i;}, getCount:()=>track.children.length, loop:false,
+        onSettled:()=>document.querySelectorAll('.gallery-dot').forEach((d,j)=>d.classList.toggle('active',j===galleryIdx))
+      });
     })();
 
     // Keyboard navigation for lightbox
