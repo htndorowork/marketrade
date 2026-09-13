@@ -58,6 +58,10 @@
   </nav>
   <main class="auth-main">
     <h1 class="sr-only">Sign In or Sign Up — Marketrade</h1>
+    <div class="auth-brand">
+      <div class="auth-brand-badge">🛍️</div>
+      <div class="auth-brand-tagline">Your campus marketplace</div>
+    </div>
     <div class="auth-card">
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Sign In</button>
@@ -73,12 +77,13 @@
           <label>Password</label>
           <div class="pw-wrap">
             <input type="password" id="login-password" placeholder="••••••••"/>
-            <button class="pw-toggle" onclick="togglePw('login-password',this)" type="button">👁</button>
+            <button class="pw-toggle" onclick="togglePw('login-password',this)" type="button">Show</button>
           </div>
         </div>
         <div class="auth-error" id="login-error"></div>
         <button class="btn-primary" id="btn-login">Sign In 🚀</button>
         <p style="text-align:center;margin-top:12px"><a href="#" onclick="event.preventDefault();openForgotPw()" style="font-size:12.5px;color:#2563eb;font-weight:700;text-decoration:none">Forgot password?</a></p>
+        <p class="auth-foot-link">Don't have an account? <a href="#" onclick="event.preventDefault();showTab('signup')">Sign Up</a></p>
       </div>
 
       <!-- FORGOT PASSWORD -->
@@ -93,8 +98,8 @@
 
       <!-- SIGNUP -->
       <div id="signup-form" style="display:none">
-        <h2 class="auth-title">Join Marketrade! 🎉</h2>
-        <p class="auth-sub">Create your free account</p>
+        <h2 class="auth-title">Create Account 🎉</h2>
+        <p class="auth-sub">Get started in seconds</p>
         <div id="referral-banner" style="display:none;background:#eff6ff;color:#2563eb;font-weight:700;font-size:12.5px;padding:10px 14px;border-radius:12px;margin-bottom:14px">🎁 You were invited by a friend — sign up to connect your accounts!</div>
         <div class="form-group"><label>I want to</label>
           <div class="role-selector">
@@ -127,13 +132,21 @@
         <div class="form-group">
           <label>Password *</label>
           <div class="pw-wrap">
-            <input type="password" id="signup-password" placeholder="••••••••"/>
-            <button class="pw-toggle" onclick="togglePw('signup-password',this)" type="button">👁</button>
+            <input type="password" id="signup-password" placeholder="••••••••" oninput="updatePwStrength(this.value)"/>
+            <button class="pw-toggle" onclick="togglePw('signup-password',this)" type="button">Show</button>
           </div>
+        </div>
+        <div class="pw-strength" id="pw-strength" style="display:none">
+          <div class="pw-strength-track"><div class="pw-strength-fill" id="pw-strength-fill"></div></div>
+          <div class="pw-strength-label" id="pw-strength-label"></div>
+        </div>
+        <div class="terms-row">
+          <input type="checkbox" id="signup-terms"/>
+          <label for="signup-terms">By clicking "Create Account", you agree to our <a href="terms.html">Terms and Conditions</a> and <a href="privacy.html">Privacy Policy</a>, and confirm that you are over 18 years of age.</label>
         </div>
         <div class="auth-error" id="signup-error"></div>
         <button class="btn-primary" id="btn-signup">Create Account 🎓</button>
-        <p style="text-align:center;margin-top:10px;font-size:11px;color:#aaa;font-weight:600">By signing up you agree to our <a href="terms.html" style="color:#2563eb">Terms</a> and <a href="privacy.html" style="color:#2563eb">Privacy Policy</a></p>
+        <p class="auth-foot-link">Already have an account? <a href="#" onclick="event.preventDefault();showTab('login')">Sign In</a></p>
       </div>
     </div>
   </main>
@@ -171,8 +184,29 @@
     }
     function togglePw(id,btn){
       const inp=document.getElementById(id);
-      if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
-      else{inp.type='password';btn.textContent='👁';}
+      if(inp.type==='password'){inp.type='text';btn.textContent='Hide';}
+      else{inp.type='password';btn.textContent='Show';}
+    }
+    function updatePwStrength(val){
+      const wrap=document.getElementById('pw-strength');
+      const fill=document.getElementById('pw-strength-fill');
+      const label=document.getElementById('pw-strength-label');
+      if(!val){ wrap.style.display='none'; return; }
+      wrap.style.display='block';
+      let score=0;
+      if(val.length>=8) score++;
+      if(val.length>=12) score++;
+      if(/[A-Z]/.test(val)&&/[a-z]/.test(val)) score++;
+      if(/[0-9]/.test(val)) score++;
+      if(/[^A-Za-z0-9]/.test(val)) score++;
+      let pct, color, text;
+      if(score<=1){pct=25;color='#e5484d';text='Weak';}
+      else if(score<=3){pct=60;color='#f59e0b';text='Medium';}
+      else{pct=100;color='#16a34a';text='Strong';}
+      fill.style.width=pct+'%';
+      fill.style.background=color;
+      label.style.color=color;
+      label.textContent=text;
     }
     function openForgotPw(){
       document.getElementById('login-form').style.display='none';
@@ -429,6 +463,7 @@
       const role=window.selectedRole||'buyer';
       err.style.color='#1d4ed8';err.textContent='';
       if(!name||!wa||!email||!password){err.textContent='❌ Please fill in all fields';return;}
+      if(!document.getElementById('signup-terms').checked){err.textContent='❌ Please agree to the Terms and confirm you are over 18';return;}
       if(!isValidSAPhone(wa)){err.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678';return;}
       if(role==='buyer' && (!buyerProvince||!buyerCity||!buyerDistrict||!buyerSuburb)){err.textContent='❌ Select your area';return;}
       let allAreas=false;
