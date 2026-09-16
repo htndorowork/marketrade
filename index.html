@@ -65,7 +65,7 @@
 <body>
   <div id="toast-stack" aria-live="polite"></div>
   <nav class="nav">
-    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🛍️',className:'nav-logo-icon',style:'font-size:22px;display:inline-flex;align-items:center;justify-content:center'}))"/>Market<span>rade</span></a>
     <div class="nav-links nav-links-simple">
       <a href="index.html">Browse</a>
       <a href="favorites.html" id="nav-favorites" style="display:none">❤️ Favorites</a>
@@ -724,6 +724,13 @@
     let flatChipsExpanded=false; // whether the full subcategory chip grid is currently revealed (only after "Show all" is pressed)
 
     let all=[], cat='All', currentListing=null, galleryIdx=0, modalQty=1, currentUser=null, cart=[], renderLimit=24, lastFilteredList=[];
+    // Declared up here (not just above render()) because render() is a hoisted
+    // function declaration that can be — and is — invoked via doFilter() before
+    // the interpreter reaches wherever this line sits textually. A `let` stays
+    // in the temporal dead zone until its own line actually executes, so this
+    // has to run before any code path that can call render(), not merely
+    // before render()'s own definition.
+    let infiniteScrollObserver=null, loadingMore=false;
     let randomOrderSeed=new Map(); // listing id -> stable random value, so favoriting/re-filtering doesn't reshuffle the page
 
     // Lightweight typo tolerance: exact substring match first, then falls back to
@@ -867,7 +874,6 @@
     const pendingOpenId=new URLSearchParams(location.search).get('open');
     const pendingCat=new URLSearchParams(location.search).get('cat');
 
-    let infiniteScrollObserver=null, loadingMore=false;
     function render(list){
       const g=document.getElementById('listings-grid');
       lastFilteredList=list;
