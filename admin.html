@@ -18,8 +18,8 @@
   <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=2"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -27,7 +27,7 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
     <div class="nav-links">
       <a href="index.html">Browse</a>
       <a href="profile.html">Profile</a>
@@ -150,10 +150,13 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase=createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
     let allListings=[];
     let allSellers=[];
     let currentAdminId=null;
+    // Escapes user-typed text before it goes into innerHTML — admin.html renders
+    // the same user-submitted titles/names/comments as the public pages.
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     // Shared helper: fetch a table in safe chunks instead of one unbounded
     // request. Used by views that genuinely need the full/filtered result
@@ -186,8 +189,8 @@
     }
 
     async function loadPaywall(){
-      const {data}=await supabase.from('settings').select('value').eq('key','paywall_active').single();
-      const active=data?.value==='true';
+      const {data}=await supabase.from('settings').select('value').eq('key','paywall_active').limit(1);
+      const active=data?.[0]?.value==='true';
       document.getElementById('paywall-toggle').checked=active;
       document.getElementById('paywall-status').textContent=active?'🔴 Emergency pause ON — sellers cannot open the dashboard':'🟢 Emergency pause OFF — sellers must still have an active paid plan to post';
       document.getElementById('paywall-status').style.color=active?'#1d4ed8':'#2e7d32';
@@ -200,8 +203,8 @@
     };
 
     async function loadFreeMode(){
-      const {data}=await supabase.from('settings').select('value').eq('key','free_mode_active').single();
-      const active=data?.value==='true';
+      const {data}=await supabase.from('settings').select('value').eq('key','free_mode_active').limit(1);
+      const active=data?.[0]?.value==='true';
       document.getElementById('free-mode-toggle').checked=active;
       document.getElementById('free-mode-status').textContent=active?'🎁 Free Mode ON — all sellers can post without paying':'Free Mode OFF — sellers need an active paid plan to post';
       document.getElementById('free-mode-status').style.color=active?'#c2410c':'#888';
@@ -252,12 +255,12 @@
         list.map(l=>{
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         const status=l.is_available?'<span style="color:#2e7d32;font-weight:700">Active</span>':'<span style="color:#aaa;font-weight:700">Hidden</span>';
-        const thumb=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'&quot;')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">'+(CAT_EMOJI[l.category]||'📦')+'</div>';
+        const thumb=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title||'Listing')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">'+(CAT_EMOJI[l.category]||'📦')+'</div>';
         return '<div class="listing-row">'+
           '<input type="checkbox" class="listing-select" value="'+l.id+'" style="width:16px;height:16px;flex-shrink:0"/>'+
           thumb+
-          '<div class="listing-info" style="flex:1;cursor:pointer" onclick="window._viewStore(\''+l.seller_id+'\')" title="View seller\'s store"><div class="listing-title">'+l.title+'</div>'+
-          '<div class="listing-meta">'+l.category+' · R'+fp+' · Stock: '+l.quantity+' · by '+(l.profiles?.full_name||'Unknown')+' · '+status+'</div></div>'+
+          '<div class="listing-info" style="flex:1;cursor:pointer" onclick="window._viewStore(\''+l.seller_id+'\')" title="View seller\'s store"><div class="listing-title">'+escapeHtml(l.title)+'</div>'+
+          '<div class="listing-meta">'+escapeHtml(l.category)+' · R'+fp+' · Stock: '+l.quantity+' · by '+escapeHtml(l.profiles?.full_name||'Unknown')+' · '+status+'</div></div>'+
           '<div class="listing-actions">'+
           '<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._aEditListing(\''+l.id+'\')">Edit</button>'+
           '<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._atoggle(\''+l.id+'\','+l.is_available+')">'+(l.is_available?'Hide':'Show')+'</button>'+
@@ -342,8 +345,8 @@
         return '<div class="seller-row">'+
         '<div class="seller-avatar">👤</div>'+
         '<div class="listing-info" style="flex:1'+(isSeller?';cursor:pointer':'')+'"'+(isSeller?' onclick="window._viewStore(\''+s.id+'\')" title="View seller\'s store"':'')+'>'+
-        '<div class="listing-title">'+(s.full_name||'No name')+(s.is_admin?' <span class="badge-admin">Admin</span>':'')+' <span style="background:#f0f0f0;color:#555;font-size:11px;font-weight:700;padding:2px 8px;border-radius:50px">'+(s.role||'buyer')+'</span></div>'+
-        '<div class="listing-meta"><span>📱 '+(s.whatsapp||'N/A')+'</span><span>📍 '+(s.residence||'No res')+'</span><span>'+new Date(s.created_at).toLocaleDateString('en-ZA')+'</span></div>'+
+        '<div class="listing-title">'+escapeHtml(s.full_name||'No name')+(s.is_admin?' <span class="badge-admin">Admin</span>':'')+' <span style="background:#f0f0f0;color:#555;font-size:11px;font-weight:700;padding:2px 8px;border-radius:50px">'+(s.role||'buyer')+'</span></div>'+
+        '<div class="listing-meta"><span>📱 '+escapeHtml(s.whatsapp||'N/A')+'</span><span>📍 '+escapeHtml(s.residence||'No res')+'</span><span>'+new Date(s.created_at).toLocaleDateString('en-ZA')+'</span></div>'+
         '</div>'+
         '<button class="btn-sm btn-delete" onclick="event.stopPropagation();window._deluser(\''+s.id+'\')">Remove</button>'+
         '</div>';
@@ -388,8 +391,8 @@
       c.innerHTML=data.map(o=>'<div class="listing-row">'+
         '<div style="font-size:24px;flex-shrink:0">🛒</div>'+
         '<div class="listing-info" style="flex:1;cursor:pointer" onclick="window._viewStore(\''+o.seller_id+'\')" title="View seller\'s store">'+
-        '<div class="listing-title">'+(o.listings?.title||'Unknown')+'</div>'+
-        '<div class="listing-meta">👤 '+o.buyer_name+' · 📱 '+o.buyer_whatsapp+' · Qty: '+o.quantity+' · Seller: '+(o.profiles?.full_name||'?')+' · <span style="color:'+(o.status==='confirmed'?'#e65c00':'#2e7d32')+';font-weight:700">'+o.status.toUpperCase()+'</span></div>'+
+        '<div class="listing-title">'+escapeHtml(o.listings?.title||'Unknown')+'</div>'+
+        '<div class="listing-meta">👤 '+escapeHtml(o.buyer_name)+' · 📱 '+escapeHtml(o.buyer_whatsapp)+' · Qty: '+o.quantity+' · Seller: '+escapeHtml(o.profiles?.full_name||'?')+' · <span style="color:'+(o.status==='confirmed'?'#e65c00':'#2e7d32')+';font-weight:700">'+o.status.toUpperCase()+'</span></div>'+
         '<div class="listing-meta">🕐 '+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
         '</div>'+
         (o.status==='confirmed'?'<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._adone(\''+o.id+'\')">Mark Done</button>':'')+
@@ -417,10 +420,10 @@
       const paid=(data||[]).filter(s=>!s.is_blocked && (s.is_admin || (s.subscription_paid_until && s.subscription_paid_until>=today)));
       if(!paid.length){c.innerHTML='<div class="empty-msg">No sellers with an active paid subscription 📭</div>';return;}
       c.innerHTML=paid.map(s=>'<div class="seller-row">'+
-        '<div class="seller-avatar">'+(s.store_logo_url?'<img loading="lazy" src="'+s.store_logo_url+'" alt="'+(s.store_name||s.full_name||'Seller').replace(/"/g,'&quot;')+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>':'👤')+'</div>'+
+        '<div class="seller-avatar">'+(s.store_logo_url?'<img loading="lazy" src="'+s.store_logo_url+'" alt="'+escapeHtml(s.store_name||s.full_name||'Seller')+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>':'👤')+'</div>'+
         '<div class="listing-info" style="flex:1;cursor:pointer" onclick="window._viewStore(\''+s.id+'\')" title="View seller\'s store">'+
-        '<div class="listing-title">'+(s.store_name||s.full_name||'No name')+'</div>'+
-        '<div class="listing-meta">📱 '+(s.whatsapp||'N/A')+'&nbsp;· 📍 '+sellerScopeSummary(s)+'</div>'+
+        '<div class="listing-title">'+escapeHtml(s.store_name||s.full_name||'No name')+'</div>'+
+        '<div class="listing-meta">📱 '+escapeHtml(s.whatsapp||'N/A')+'&nbsp;· 📍 '+sellerScopeSummary(s)+'</div>'+
         '<div class="listing-meta" style="color:#2e7d32;font-weight:700">'+(s.is_admin?'✅ Admin — no expiry':'✅ '+planLabel(s.seller_plan)+' · Paid until '+new Date(s.subscription_paid_until).toLocaleDateString('en-ZA'))+'</div>'+
         '</div>'+
         '<button class="btn-sm btn-delete" onclick="event.stopPropagation();window._blockSeller(\''+s.id+'\')">🚫 Block</button>'+
@@ -441,10 +444,10 @@
         else if(!s.subscription_paid_until) reason='<span style="color:#1d4ed8;font-weight:700">⚠️ No subscription on file</span>';
         else reason='<span style="color:#1d4ed8;font-weight:700">⏰ Expired '+new Date(s.subscription_paid_until).toLocaleDateString('en-ZA')+'</span>';
         return '<div class="seller-row">'+
-          '<div class="seller-avatar">'+(s.store_logo_url?'<img loading="lazy" src="'+s.store_logo_url+'" alt="'+(s.store_name||s.full_name||'Seller').replace(/"/g,'&quot;')+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>':'👤')+'</div>'+
+          '<div class="seller-avatar">'+(s.store_logo_url?'<img loading="lazy" src="'+s.store_logo_url+'" alt="'+escapeHtml(s.store_name||s.full_name||'Seller')+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>':'👤')+'</div>'+
           '<div class="listing-info" style="flex:1;cursor:pointer" onclick="window._viewStore(\''+s.id+'\')" title="View seller\'s store">'+
-          '<div class="listing-title">'+(s.store_name||s.full_name||'No name')+'</div>'+
-          '<div class="listing-meta">📱 '+(s.whatsapp||'N/A')+'&nbsp;· 📍 '+sellerScopeSummary(s)+'</div>'+
+          '<div class="listing-title">'+escapeHtml(s.store_name||s.full_name||'No name')+'</div>'+
+          '<div class="listing-meta">📱 '+escapeHtml(s.whatsapp||'N/A')+'&nbsp;· 📍 '+sellerScopeSummary(s)+'</div>'+
           '<div class="listing-meta">'+reason+'</div>'+
           '</div>'+
           '<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._markPaid(\''+s.id+'\',\'flash\')">✅ Flash 48h (R19, 1 listing)</button>'+
@@ -491,9 +494,9 @@
         const canOpen=!!r.listing_id;
         return '<div class="seller-row">'+
         '<div class="listing-info" style="flex:1'+(canOpen?';cursor:pointer':'')+'"'+(canOpen?' onclick="window.open(\'index.html?open='+r.listing_id+'\',\'_blank\')" title="Open this listing"':'')+'>'+
-        '<div class="listing-title">'+r.reason+(r.status==='open'?' <span style="color:#1d4ed8;font-weight:800">(open)</span>':' <span style="color:#2e7d32;font-weight:800">(resolved)</span>')+'</div>'+
-        '<div class="listing-meta">📦 Listing: '+(r.listings?.title||'—')+(canOpen?' 👁️':'')+' · 👤 Reported: '+(r.reported?.full_name||'Unknown')+'</div>'+
-        (r.details?'<div class="listing-meta">💬 '+r.details+'</div>':'')+
+        '<div class="listing-title">'+escapeHtml(r.reason)+(r.status==='open'?' <span style="color:#1d4ed8;font-weight:800">(open)</span>':' <span style="color:#2e7d32;font-weight:800">(resolved)</span>')+'</div>'+
+        '<div class="listing-meta">📦 Listing: '+escapeHtml(r.listings?.title||'—')+(canOpen?' 👁️':'')+' · 👤 Reported: '+escapeHtml(r.reported?.full_name||'Unknown')+'</div>'+
+        (r.details?'<div class="listing-meta">💬 '+escapeHtml(r.details)+'</div>':'')+
         '<div class="listing-meta" style="color:#aaa">'+new Date(r.created_at).toLocaleDateString('en-ZA')+'</div>'+
         '</div>'+
         (canOpen?'<button class="btn-sm btn-toggle" onclick="event.stopPropagation();window._atoggle(\''+r.listing_id+'\','+!!r.listings?.is_available+')">'+(r.listings?.is_available?'Hide':'Show')+'</button>':'')+

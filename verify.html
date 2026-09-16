@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify your account — Marketrade</title>
+  <meta name="description" content="Enter the 6-digit code we emailed you to verify your Marketrade account."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
+    <div class="nav-links"><a href="index.html">← Browse</a></div>
+  </nav>
+
+  <main class="auth-main">
+    <h1 class="sr-only">Verify your account — Marketrade</h1>
+    <div class="auth-brand">
+      <div class="auth-brand-badge"><img src="icons/logo.png" alt="Marketrade logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/></div>
+      <div class="auth-brand-tagline">The marketplace</div>
+    </div>
+    <div class="auth-card">
+      <h2 class="auth-title">Verify your account</h2>
+      <p class="auth-sub" id="verify-sub">We've sent a 6-digit code to your email.</p>
+
+      <div class="otp-row" id="otp-row">
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" data-i="0"/>
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="1"/>
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="2"/>
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="3"/>
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="4"/>
+        <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-i="5"/>
+      </div>
+
+      <div class="auth-error" id="verify-error" style="text-align:center"></div>
+      <button class="btn-primary" id="btn-verify">Verify Code</button>
+      <p class="auth-foot-link">Didn't receive code? <a href="#" id="btn-resend" onclick="event.preventDefault();resendCode()">Resend Code</a></p>
+      <p style="text-align:center;margin-top:4px"><a href="login.html" style="font-size:12.5px;color:#888;font-weight:700;text-decoration:none">← Back to sign in</a></p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
+    const err = document.getElementById('verify-error');
+
+    if (!email) {
+      // No email to verify against — nothing useful to do on this page.
+      location.href = 'login.html';
+    } else {
+      document.getElementById('verify-sub').textContent = "We've sent a 6-digit code to " + email + '.';
+    }
+
+    // OTP box behavior: digits only, auto-advance, backspace-to-previous, paste support.
+    const boxes = Array.from(document.querySelectorAll('.otp-box'));
+    boxes.forEach((box, i) => {
+      box.addEventListener('input', () => {
+        box.value = box.value.replace(/[^0-9]/g, '').slice(0, 1);
+        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+      });
+      box.addEventListener('paste', (e) => {
+        const text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+        if (!text) return;
+        e.preventDefault();
+        text.slice(0, boxes.length).split('').forEach((ch, j) => { if (boxes[i + j]) boxes[i + j].value = ch; });
+        const next = boxes[Math.min(i + text.length, boxes.length - 1)];
+        next.focus();
+      });
+    });
+    boxes[0]?.focus();
+
+    function getCode() { return boxes.map(b => b.value).join(''); }
+
+    // Saves the profile row (and any referral link) collected during sign-up — this
+    // can only succeed now, once verifyOtp has given us a real, authenticated session.
+    async function finishPendingProfile() {
+      const raw = localStorage.getItem('mt_pending_profile');
+      if (!raw) return;
+      try {
+        const { payload, refCode } = JSON.parse(raw);
+        await supabase.from('profiles').upsert(payload);
+        if (refCode) {
+          const { data: referrer } = await supabase.from('profiles').select('id').eq('referral_code', refCode.toUpperCase()).maybeSingle();
+          if (referrer && referrer.id !== payload.id) {
+            await supabase.from('referrals').insert({ referrer_id: referrer.id, referred_id: payload.id });
+          }
+        }
+      } finally {
+        localStorage.removeItem('mt_pending_profile');
+      }
+    }
+
+    async function verifyCode() {
+      err.style.color = '#1d4ed8'; err.textContent = '';
+      const token = getCode();
+      if (token.length !== 6) { err.textContent = '❌ Enter all 6 digits'; return; }
+      const btn = document.getElementById('btn-verify');
+      btn.textContent = 'Verifying...'; btn.disabled = true;
+      const { error } = await supabase.auth.verifyOtp({ email, token, type: 'signup' });
+      btn.textContent = 'Verify Code'; btn.disabled = false;
+      if (error) { err.textContent = '❌ ' + error.message; return; }
+      await finishPendingProfile();
+      err.style.color = '#2e7d32';
+      err.textContent = '✅ Verified! Taking you in...';
+      setTimeout(() => location.href = 'index.html', 1000);
+    }
+    document.getElementById('btn-verify').onclick = verifyCode;
+    boxes[boxes.length - 1].addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyCode(); });
+
+    window.resendCode = async () => {
+      err.style.color = '#1d4ed8'; err.textContent = '';
+      const link = document.getElementById('btn-resend');
+      const { error } = await supabase.auth.resend({ type: 'signup', email });
+      if (error) { err.textContent = '❌ ' + error.message; return; }
+      err.style.color = '#2e7d32'; err.textContent = '✅ Code resent — check your email.';
+      let secs = 30;
+      link.style.pointerEvents = 'none'; link.style.opacity = '0.5';
+      const label = link.textContent;
+      const tick = setInterval(() => {
+        link.textContent = 'Resend Code (' + secs + 's)';
+        secs--;
+        if (secs < 0) { clearInterval(tick); link.textContent = label; link.style.pointerEvents = 'auto'; link.style.opacity = '1'; }
+      }, 1000);
+    };
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

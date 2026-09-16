@@ -122,6 +122,11 @@ CREATE TABLE IF NOT EXISTS listings (
   perfumes_subcategory text,
   tutoring_subcategory text,
   accommodation_subcategory text,
+  properties_subcategory text,
+  jobs_subcategory text,
+  watermobile_subcategory text,
+  camping_subcategory text,
+  boardgames_subcategory text,
   transport_subcategory text,
   services_subcategory text,
   stationary_subcategory text,
@@ -147,6 +152,15 @@ CREATE TABLE IF NOT EXISTS listings (
   health_subcategory text,
   career_subcategory text,
   vehicles_subcategory text,
+  vehicle_make text,
+  vehicle_model text,
+  vehicle_year text,
+  vehicle_transmission text,
+  vehicle_fuel_type text,
+  vehicle_for_sale_by text,
+  vehicle_colour text,
+  vehicle_kilometers integer,
+  vehicle_location text,
   hardware_subcategory text,
   gaming_subcategory text,
   created_at timestamp DEFAULT now()
@@ -163,6 +177,23 @@ ALTER TABLE listings ADD COLUMN IF NOT EXISTS wigs_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS perfumes_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS tutoring_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS accommodation_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS properties_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS jobs_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS watermobile_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS camping_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS boardgames_subcategory text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_make text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_model text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_year text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_transmission text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_fuel_type text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_for_sale_by text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_colour text;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_kilometers integer;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS vehicle_location text;
+-- Migrate any existing 'Accommodation' listings over to the new 'Properties' category/column
+UPDATE listings SET properties_subcategory = accommodation_subcategory WHERE category = 'Accommodation' AND properties_subcategory IS NULL;
+UPDATE listings SET category = 'Properties' WHERE category = 'Accommodation';
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS transport_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS services_subcategory text;
 ALTER TABLE listings ADD COLUMN IF NOT EXISTS stationary_subcategory text;
@@ -313,6 +344,38 @@ INSERT INTO settings (key, value) VALUES ('paywall_active', 'false')
 ON CONFLICT (key) DO NOTHING;
 INSERT INTO settings (key, value) VALUES ('free_mode_active', 'false')
 ON CONFLICT (key) DO NOTHING;
+
+-- Safety net for re-runs against a `settings` table that already existed
+-- before this script (CREATE TABLE IF NOT EXISTS is a no-op in that case,
+-- so it can't retroactively add the PRIMARY KEY below on its own). If that
+-- older table ever ended up with more than one row for the same key, some
+-- pages read it with .single()/.maybeSingle() and quietly fall back to
+-- "Free Mode is OFF" whenever that happens — silently hiding every
+-- unpaid seller's listings from Browse. This keeps one row per key
+-- (preferring a 'true' row over 'false' so nobody's existing toggle
+-- choice gets lost), then makes sure the primary key is actually in
+-- place so it can't happen again.
+WITH ranked AS (
+  SELECT ctid, key, value,
+         row_number() OVER (
+           PARTITION BY key
+           ORDER BY (value = 'true') DESC, ctid
+         ) AS rn
+  FROM settings
+)
+DELETE FROM settings s
+USING ranked r
+WHERE s.ctid = r.ctid AND r.rn > 1;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE table_name = 'settings' AND constraint_type = 'PRIMARY KEY'
+  ) THEN
+    ALTER TABLE settings ADD PRIMARY KEY (key);
+  END IF;
+END $$;
 
 -- ===================== FOREIGN KEYS WITH SAFE DELETE =====================
 

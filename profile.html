@@ -18,8 +18,8 @@
   <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=2"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -27,7 +27,7 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
     <div class="nav-links">
       <a href="index.html">Browse</a>
       <a href="messages.html" id="nav-messages">💬 Messages<span class="inline-badge" id="msg-badge" style="display:none">0</span></a>
@@ -265,6 +265,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase=createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
     let currentUser=null;
+    // Escapes user-typed text before it goes into innerHTML.
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     async function init(){
      try {
@@ -382,9 +384,9 @@
       }
 
       container.innerHTML=data.map(o=>{
-        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
         const e=CAT_EMOJI[o.listings?.category]||'📦';
-        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
+        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+escapeHtml(o.listings.title||'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
         const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
         let ratingHtml='';
         if(o.status==='completed'){
@@ -401,19 +403,19 @@
         }
         const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelOrder(\''+o.id+'\')">Cancel Order</button>' : '';
         const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>' : '';
-        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" onclick="window._requestDispute(\''+o.id+'\',\''+(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
+        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" onclick="window._requestDispute(\''+o.id+'\',\''+escapeHtml(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
         const actionRow = (receiptBtn||disputeBtn) ? '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px">'+receiptBtn+disputeBtn+'</div>' : '';
         const viewItem = o.listing_id ? "window._viewOrderedItem('"+o.listing_id+"')" : '';
         return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
           '<div style="display:flex;gap:12px;align-items:flex-start">'+
           (viewItem?'<div onclick="'+viewItem+'" style="cursor:pointer">'+img+'</div>':img)+
           '<div style="flex:1">'+status+
-          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
+          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+escapeHtml(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
           '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
           '<a href="messages.html?seller='+o.seller_id+'&listing='+(o.listing_id||'')+'" style="display:inline-block;font-size:13px;font-weight:800;color:#2563eb;margin-bottom:8px;text-decoration:none">💬 Contact seller to arrange</a>'+
-          '<div class="order-detail">👤 <strong>'+(o.profiles?.full_name||'Seller')+'</strong></div>'+
-          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+o.profiles.residence+'</strong></div>':'')+
-          '<div class="order-detail">📱 <strong>'+(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
+          '<div class="order-detail">👤 <strong>'+escapeHtml(o.profiles?.full_name||'Seller')+'</strong></div>'+
+          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+escapeHtml(o.profiles.residence)+'</strong></div>':'')+
+          '<div class="order-detail">📱 <strong>'+escapeHtml(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
           '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
           ratingHtml+cancelBtn+actionRow+
           '</div></div></div>';
@@ -463,14 +465,14 @@
       const {data:favs}=await supabase.from('favorites').select('listing_id,listings(*)').eq('user_id',currentUser.id).order('created_at',{ascending:false});
       const items=(favs||[]).map(f=>f.listings).filter(Boolean);
       if(!items.length){c.innerHTML='<p class="loading-msg">No favorites yet — heart a listing while browsing! ❤️</p>';return;}
-      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
       c.innerHTML=items.map(l=>{
         const e=CAT_EMOJI[l.category]||'🛍️';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         return '<div class="card" onclick="location.href=\'index.html?open='+l.id+'\'">'+
           '<div class="card-img" style="background:#f5f5f5">'+img+'</div>'+
-          '<div class="card-body"><div class="card-title">'+l.title+'</div>'+
+          '<div class="card-body"><div class="card-title">'+escapeHtml(l.title)+'</div>'+
           '<div class="card-footer"><span class="price">R'+fp+'</span></div></div></div>';
       }).join('');
     };
@@ -495,8 +497,8 @@
       if(restocks?.length){
         html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Restock alerts</p>';
         html+=restocks.map(r=>{
-          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+(r.listings?.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
-          const title=r.listings?.title||'Listing no longer available';
+          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+escapeHtml(r.listings?.title||'Listing')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
+          const title=escapeHtml(r.listings?.title||'Listing no longer available');
           const price=r.listings?.price!=null?'R'+r.listings.price:'';
           return '<div class="seller-row">'+img+'<div class="listing-info" style="flex:1;margin-left:10px">'+
             (r.listings?.id?'<div class="listing-title" style="cursor:pointer" onclick="window.location.href=\'index.html?open='+r.listings.id+'\'">'+title+'</div>':'<div class="listing-title">'+title+'</div>')+
@@ -508,7 +510,7 @@
         if(restocks?.length) html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px">Search alerts</p>';
         html+=searches.map(a=>{
           const parts=[];
-          if(a.keyword)parts.push('"'+a.keyword+'"');
+          if(a.keyword)parts.push('"'+escapeHtml(a.keyword)+'"');
           if(a.category)parts.push(a.category);
           if(a.max_price)parts.push('under R'+a.max_price);
           if(a.area_only)parts.push('my area only');

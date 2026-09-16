@@ -18,8 +18,8 @@
   <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=2"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -27,7 +27,7 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
     <div class="nav-links nav-links-simple">
       <a href="index.html">Browse</a>
       <a href="favorites.html" id="nav-favorites" style="color:#2563eb">❤️ Favorites</a>
@@ -87,11 +87,13 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Accommodation:{bg:'#fff3e0'},Transport:{bg:'#e0f2f1'},Vehicles:{bg:'#e3f2fd'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Hardware:{bg:'#efebe9'},Gaming:{bg:'#ede7f6'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Transport:{bg:'#e0f2f1'},Vehicles:{bg:'#e3f2fd'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Hardware:{bg:'#efebe9'},Gaming:{bg:'#ede7f6'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'},Properties:{bg:'#fff3e0'},Jobs:{bg:'#e0f2f1'},Watermobile:{bg:'#e0f7fa'},Camping:{bg:'#e8f5e9'},BoardGames:{bg:'#f3e5f5'}};
 
     let myFavorites=new Set();
     let favListings=[];
+    // Escapes user-typed text before it goes into innerHTML.
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     const {data:{user}}=await supabase.auth.getUser();
     if(!user){ window.location.href='login.html'; }
@@ -150,12 +152,14 @@
       }
       const {data:listings,error:listErr}=await supabase.from('listings').select('*,profiles(full_name,residence,is_blocked,subscription_paid_until,is_admin)').in('id',ids);
       if(listErr){ document.getElementById('fav-grid').innerHTML='<p class="loading-msg">Could not load favorites: '+listErr.message+'</p>'; return; }
+      const {data:freeModeRow} = await supabase.from('settings').select('value').eq('key','free_mode_active').limit(1);
+      const freeModeOn = freeModeRow?.[0]?.value==='true';
       const today=new Date().toISOString().slice(0,10);
       favListings=(listings||[]).filter(l=>{
         const p=l.profiles;
         if(!p) return false;
         if(p.is_blocked) return false;
-        if(!p.is_admin && (!p.subscription_paid_until || p.subscription_paid_until<today)) return false;
+        if(!p.is_admin && !freeModeOn && (!p.subscription_paid_until || p.subscription_paid_until<today)) return false;
         return true;
       });
       renderFavorites();
@@ -172,17 +176,17 @@
         const e=CAT_EMOJI[l.category]||'🛍️';
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         const db=l.discount_percent>0?'<div class="discount-tag">-'+l.discount_percent+'% OFF</div>':'';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
         const stock=l.quantity>5?'<div class="card-stock">'+l.quantity+' in stock</div>':l.quantity>0?'<div class="card-stock low">Only '+l.quantity+' left!</div>':'<div class="card-stock out">Out of stock</div>';
         const heart='<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Remove favorite">❤️</button>';
-        const condTag=l.condition?'<span class="condition-tag">'+l.condition+'</span>':'';
+        const condTag=l.condition?'<span class="condition-tag">'+escapeHtml(l.condition)+'</span>':'';
         const negTag=l.is_negotiable?'<span class="negotiable-tag">💬 Negotiable</span>':'';
         return '<div class="card" onclick="window.location.href=\'index.html?open='+l.id+'\'">'+
           '<div class="card-img" style="background:'+c.bg+'">'+db+heart+img+'</div>'+
           '<div class="card-body">'+
-          '<div class="card-title">'+l.title+'</div>'+
-          '<div class="card-seller">👤 '+(l.profiles?.full_name||'Seller')+'</div>'+
-          (l.profiles?.residence?'<div class="card-residence">📍 '+l.profiles.residence+'</div>':'')+
+          '<div class="card-title">'+escapeHtml(l.title)+'</div>'+
+          '<div class="card-seller">👤 '+escapeHtml(l.profiles?.full_name||'Seller')+'</div>'+
+          (l.profiles?.residence?'<div class="card-residence">📍 '+escapeHtml(l.profiles.residence)+'</div>':'')+
           stock+
           '<div>'+condTag+negTag+'</div>'+
           '<div class="card-footer"><span class="price">R'+fp+'</span></div>'+

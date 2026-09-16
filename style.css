@@ -9,8 +9,9 @@ body { font-family: 'Nunito', sans-serif; background: #fafafa; color: #111; -web
 button { -webkit-appearance: none; appearance: none; font-family: inherit; }
 
 .nav { background: #fff; padding: calc(10px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) 10px calc(24px + env(safe-area-inset-left)); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; min-height: 64px; border-bottom: 2px solid #f0f0f0; position: sticky; top: 0; z-index: 100; }
-.nav-logo { font-size: 22px; font-weight: 800; color: #111; letter-spacing: -0.5px; text-decoration: none; white-space: nowrap; }
+.nav-logo { font-size: 22px; font-weight: 800; color: #111; letter-spacing: -0.5px; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
 .nav-logo span { color: #2563eb; }
+.nav-logo-icon { width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0; }
 .nav-links { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: flex-end; margin-left: auto; min-width: 0; }
 .nav-links a { color: #666; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; }
 .nav-links a:hover { color: #2563eb; }
@@ -286,7 +287,7 @@ button { -webkit-appearance: none; appearance: none; font-family: inherit; }
 /* AUTH */
 .auth-main { min-height: calc(100vh - 64px); min-height: calc(100dvh - 64px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; background: linear-gradient(180deg, #f7f9ff 0%, #eef1fb 100%); }
 .auth-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 22px; }
-.auth-brand-badge { width: 68px; height: 68px; border-radius: 20px; background: linear-gradient(135deg, #2563eb, #7c3aed); display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 10px 24px rgba(37,99,235,0.28); margin-bottom: 12px; }
+.auth-brand-badge { width: 68px; height: 68px; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(37,99,235,0.28); margin-bottom: 12px; }
 .auth-brand-tagline { font-size: 14.5px; color: #6b7280; font-weight: 700; }
 .auth-card { background: #fff; border: none; border-radius: 24px; padding: 32px; width: 100%; max-width: 420px; box-shadow: 0 16px 48px rgba(17,24,39,0.09); }
 .auth-tabs { display: flex; margin-bottom: 26px; background: #f2f3f8; border-radius: 14px; padding: 4px; }
@@ -305,6 +306,9 @@ button { -webkit-appearance: none; appearance: none; font-family: inherit; }
 .pw-strength-track { height: 5px; border-radius: 3px; background: #f0f0f0; overflow: hidden; }
 .pw-strength-fill { height: 100%; width: 0%; border-radius: 3px; background: #e5484d; transition: width 0.2s ease, background 0.2s ease; }
 .pw-strength-label { font-size: 12px; font-weight: 800; margin-top: 5px; color: #e5484d; }
+.otp-row { display: flex; gap: 8px; justify-content: center; margin: 22px 0 6px; }
+.otp-box { width: 15%; max-width: 48px; aspect-ratio: 3/4; text-align: center; font-size: 22px; font-weight: 800; border: 2px solid #eceef2; border-radius: 12px; background: #fbfbfd; outline: none; font-family: inherit; color: #111; -webkit-appearance: none; appearance: none; }
+.otp-box:focus { border-color: #2563eb; background: #fff; box-shadow: 0 0 0 4px rgba(37,99,235,0.10); }
 .terms-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
 .terms-row label { font-size: 12.5px; color: #6b7280; font-weight: 600; line-height: 1.5; cursor: pointer; }
 .terms-row a { color: #2563eb; font-weight: 800; text-decoration: none; }
@@ -466,6 +470,7 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
   .nav { padding: 12px 16px 10px; row-gap: 10px; }
   .nav:has(.nav-cart) { padding-right: 56px; }
   .nav-logo { font-size: 18px; }
+  .nav-logo-icon { width: 24px; height: 24px; border-radius: 7px; }
   .nav-cart { position: absolute; top: 12px; right: 16px; font-size: 22px; }
   .nav-links {
     width: 100%;

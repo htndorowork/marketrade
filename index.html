@@ -19,8 +19,8 @@
   <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=2"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -65,7 +65,7 @@
 <body>
   <div id="toast-stack" aria-live="polite"></div>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
     <div class="nav-links nav-links-simple">
       <a href="index.html">Browse</a>
       <a href="favorites.html" id="nav-favorites" style="display:none">❤️ Favorites</a>
@@ -131,8 +131,12 @@
     <div class="cat" id="cat-career" onclick="openFlatSubcats('Career',this)">💼 Career</div>
     <div class="cat" id="cat-transport" onclick="openFlatSubcats('Transport',this)">🚲 Transport</div>
     <div class="cat" id="cat-vehicles" onclick="openFlatSubcats('Vehicles',this)">🚗 Vehicles</div>
-    <div class="cat" id="cat-accommodation" onclick="openFlatSubcats('Accommodation',this)">🏠 Accommodation</div>
+    <div class="cat" id="cat-watermobile" onclick="openFlatSubcats('Watermobile',this)">⛵ Boats &amp; Watermobile</div>
+    <div class="cat" id="cat-properties" onclick="openFlatSubcats('Properties',this)">🏠 Properties</div>
     <div class="cat" id="cat-tutoring" onclick="openFlatSubcats('Tutoring',this)">🎓 Tutoring</div>
+    <div class="cat" id="cat-jobs" onclick="openFlatSubcats('Jobs',this)">🧑‍💼 Jobs &amp; Work</div>
+    <div class="cat" id="cat-camping" onclick="openFlatSubcats('Camping',this)">🏕️ Camping</div>
+    <div class="cat" id="cat-boardgames" onclick="openFlatSubcats('BoardGames',this)">🎲 Board Games</div>
     <div class="cat" id="cat-services" onclick="openFlatSubcats('Services',this)">🛠️ Services</div>
     <div class="cat" id="cat-others" onclick="selectCat('Others',this)">🔀 Others</div>
     </div>
@@ -343,8 +347,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Gaming:{bg:'#ede7f6',text:'#4527a0'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Watermobile:'⛵',Properties:'🏠',Jobs:'🧑\u200d💼',Camping:'🏕️',BoardGames:'🎲',Services:'🛠️',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Gaming:{bg:'#ede7f6',text:'#4527a0'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'},Watermobile:{bg:'#e0f7fa',text:'#00636e'},Properties:{bg:'#fff3e0',text:'#bf360c'},Jobs:{bg:'#e0f2f1',text:'#00695c'},Camping:{bg:'#e8f5e9',text:'#2e5c1e'},BoardGames:{bg:'#f3e5f5',text:'#6a1b9a'}};
 
     const TB_YEARS=['1st Year','2nd Year','3rd Year','Postgraduate'];
     const TB_TAXONOMY={
@@ -430,11 +434,11 @@
       'Academic mentoring','First-year support tutoring','Final-year project support'
     ];
 
-    const ACCOMMODATION_SUBCATS=[
-      'Single room','Shared room','Bachelor (studio) apartment','One-bedroom apartment','Two-bedroom apartment',
-      'Three-bedroom apartment','Shared flat/apartment','Shared house','Commune house',
-      'Private student residence room','Ensuite room','Non-ensuite room','Self-catering apartment',
-      'Furnished apartment','Unfurnished apartment','Loft apartment','Duplex apartment'
+    const PROPERTIES_SUBCATS=[
+      'Car Parks & Storage','Commercial Properties for Rent','Commercial Properties for Sale',
+      'Flats for Rent','Holiday Homes','Houses & Flats for Sale','Houses for Rent',
+      'Land & Plots for Sale','Other Property','Roommate & Accommodation Wanted',
+      'Rooms for Rent','Short Term'
     ];
 
     const TRANSPORT_SUBCATS=[
@@ -452,11 +456,19 @@
       'Laundry and ironing','Carpet cleaning','Move-in/move-out cleaning','Graphic design','Logo design',
       'Photography','Videography','Social media management','Website creation',
       'Printing business cards and flyers','Water delivery','Gas refill delivery','Convenience Services',
-      'Transport services','Dj services',
+      'Transport services',
       'Rental: Bicycle','Rental: Electric scooter','Rental: Skateboard','Rental: Motorcycle/Moped',
       'Rental: Car','Rental: Laptop','Rental: Projector','Rental: Speaker/PA system',
       'Rental: Camera/Photography gear','Rental: Furniture','Rental: Costume','Rental: Event equipment',
-      'Rental: Tools'
+      'Rental: Tools',
+      'Appliance Repairs','Automotive Services','Building & Trades','Chauffeur & Airport Transfer',
+      'Child Care','Cleaning Services','Courses & Training','DJ & Entertainment Services',
+      'DSTV Services','Electronics & IT Services','Event Services','Healer Services',
+      'Health & Beauty Services','Landscaping & Gardening Services','Legal Services','Manufacturing Services',
+      'Other Services','Party & Catering','Pet Services','Photography & Video Services',
+      'Real Estate Services','Recruitment Services','Removals & Storage','Sports & Fitness Training',
+      'Tax & Financial Services','Travel Agents & Tours','Tutors & Education Services',
+      'Wedding Venues & Wedding Services'
     ];
 
     const STATIONARY_GROUPS={
@@ -538,7 +550,7 @@
       'Suitcases','Travel bags','School bags','Tote/Grocery bags','Pouches'
     ];
     const TOYS_SUBCATS=[
-      'Board games','Card games','Puzzles','Building blocks/Lego','Action figures','Dolls',
+      'Building blocks/Lego','Action figures','Dolls',
       'Plush toys/Stuffed animals','Remote control toys','Educational toys','Outdoor toys',
       'Water toys','Toy cars','Play sets','Art & craft kits','Musical toys','Party games',
       'Fidget toys','Baby toys','Video game consoles','Video games'
@@ -580,9 +592,24 @@
       'Dumbbells','Resistance bands','Yoga mats','Gym gloves','Skipping ropes','Weight plates',
       'Treadmills','Exercise bikes','Soccer balls','Rugby balls','Netballs','Basketballs','Cricket bats',
       'Team jerseys','Cycling helmets','Running shoes','Sports water bottles','Shaker bottles',
-      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
-      'Hiking backpacks','Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
+      'Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
       'Boxing gloves','Sports/gym bags'
+    ];
+
+    const CAMPING_SUBCATS=[
+      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
+      'Hiking backpacks','Camping stoves','Gas canisters','Lanterns & torches','Camping tables',
+      'Portable camping fridges','Camping cutlery & cookware','Ground mats/sleeping pads','Gazebos',
+      'Firewood & fire starters','Portable camping generators','Water containers','Camping hammocks',
+      'Multi-tools & camping knives','Insect repellent gear','First aid kits (outdoor)'
+    ];
+
+    const BOARDGAMES_SUBCATS=[
+      'Family board games','Strategy board games','Party board games','Card games',
+      'Chess sets','Checkers/Draughts sets','Backgammon sets','Dominoes',
+      'Poker sets & chips','Dice games','Trivia games','Puzzle board games',
+      'Role-playing/tabletop games','Jigsaw puzzles','Kids board games','Classic board games',
+      'Board game accessories'
     ];
     const BOOKS_SUBCATS=[
       'Fiction novels','Non-fiction books','Comics & manga','Magazines','Poetry collections',
@@ -636,10 +663,22 @@
 
     const VEHICLES_SUBCATS=[
       'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
-      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan','Boat','Jet ski',
-      'Car parts & spares','Tyres & rims','Car batteries','Car audio & electronics','Dash cams',
-      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car care & cleaning products',
+      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan',
+      'Car parts & spares','Tyres & Accessories','Car batteries','Car Audio & Electronics','Dash cams',
+      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car Care & Cleaning',
+      'Automotive Accessories','Maintenance & Service','Workshop Cleaning & Maintenance',
       'Car jacks & tools','Helmets & riding gear','Number plates'
+    ];
+
+    const WATERMOBILE_SUBCATS=['All Watermobile','Parts','Accessories'];
+
+    const JOBS_SUBCATS=[
+      'Accounting & Finance','Advertising & Marketing','Agriculture & Farm Jobs','Arts & Entertainment',
+      'Au Pair & Babysitting','Beauty','Clerical & Administrative','Construction & Trade','Customer Service',
+      'Engineering & Architecture','FMCG','General Worker & Labour','Healthcare & Medical','Hospitality & Tourism',
+      'Human Resources','Information Technology','Legal','Logistics, Transport & Drivers','Management',
+      'Manufacturing','Retail','Sales & Marketing','Security','Skilled Trades','Teaching & Education',
+      'Internships & Graduate Programs','Part-Time & Freelance','Remote & Work From Home','Other Jobs'
     ];
 
     // Generic config for every category that gets a flat (single-level) subcategory drill-down
@@ -669,9 +708,13 @@
       Food:{field:'food_subcategory',emoji:'🍱',items:FOOD_SUBCATS},
       Beauty:{field:'beauty_subcategory',emoji:'💄',items:BEAUTY_SUBCATS},
       Tutoring:{field:'tutoring_subcategory',emoji:'🎓',items:TUTORING_SUBCATS},
-      Accommodation:{field:'accommodation_subcategory',emoji:'🏠',items:ACCOMMODATION_SUBCATS},
+      Properties:{field:'properties_subcategory',emoji:'🏠',items:PROPERTIES_SUBCATS},
       Transport:{field:'transport_subcategory',emoji:'🚲',items:TRANSPORT_SUBCATS},
       Vehicles:{field:'vehicles_subcategory',emoji:'🚗',items:VEHICLES_SUBCATS},
+      Watermobile:{field:'watermobile_subcategory',emoji:'⛵',items:WATERMOBILE_SUBCATS},
+      Jobs:{field:'jobs_subcategory',emoji:'🧑\u200d💼',items:JOBS_SUBCATS},
+      Camping:{field:'camping_subcategory',emoji:'🏕️',items:CAMPING_SUBCATS},
+      BoardGames:{field:'boardgames_subcategory',emoji:'🎲',items:BOARDGAMES_SUBCATS},
       Services:{field:'services_subcategory',emoji:'🛠️',items:SERVICES_SUBCATS},
       Stationary:{field:'stationary_subcategory',emoji:'✏️',items:STATIONARY_SUBCATS,groups:STATIONARY_GROUPS},
       Appliances:{field:'appliances_subcategory',emoji:'🔌',items:APPLIANCES_SUBCATS},
@@ -737,6 +780,7 @@
     const SERVER_PAGE_SIZE = 300;
     let serverOffset = 0, serverHasMore = true;
 
+    let freeModeOn = false;
     async function fetchListingsPage(offset){
       const {data} = await supabase.from('listings')
         .select('*,profiles(full_name,residence,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin)')
@@ -749,6 +793,7 @@
         if(!p) return false;
         if(p.is_blocked===true) return false;
         if(p.is_admin===true) return true;
+        if(freeModeOn) return true;
         return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
       });
       serverHasMore = (data||[]).length === SERVER_PAGE_SIZE;
@@ -758,7 +803,16 @@
 
     // Kick off the listings fetch immediately — it's the actual content of this
     // page, so it should never sit behind unrelated auth/profile round-trips.
-    const listingsPromise = fetchListingsPage(0);
+    // Free Mode (an admin-wide toggle) lets sellers without a paid plan post and
+    // show up in Browse just like paid sellers, so check it before we filter.
+    // NOTE: deliberately not using .single()/.maybeSingle() here — those throw/
+    // return null if the settings table ever ends up with more than one row for
+    // this key (e.g. a migration re-run), which would silently hide every
+    // unpaid seller's listings from Browse. Reading the array and taking the
+    // first match degrades gracefully instead.
+    const freeModePromise = supabase.from('settings').select('value').eq('key','free_mode_active').limit(1)
+      .then(({data})=>{ freeModeOn = data?.[0]?.value==='true'; });
+    const listingsPromise = freeModePromise.then(()=>fetchListingsPage(0));
 
     if(user){
       document.getElementById('nav-auth').textContent='Sign out';
@@ -829,20 +883,20 @@
         const e=CAT_EMOJI[l.category]||'🛍️';
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         const db=l.discount_percent>0?'<div class="discount-tag">-'+l.discount_percent+'% OFF</div>':'';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
         const photoCount=[l.image_url,l.image_url_2,l.image_url_3,l.image_url_4,l.image_url_5,l.image_url_6].filter(Boolean).length;
         const photoDots=photoCount>1?'<div class="photo-dots">'+Array(photoCount).fill('•').join('')+'</div>':'';
         const stock=l.quantity>5?'<div class="card-stock">'+l.quantity+' in stock</div>':l.quantity>0?'<div class="card-stock low">Only '+l.quantity+' left!</div>':'<div class="card-stock out">Out of stock</div>';
         const outOfStock=l.quantity<=0;
         const isFav=myFavorites.has(l.id);
         const heart=currentUser?'<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Favorite">'+(isFav?'❤️':'🤍')+'</button>':'';
-        const condTag=l.condition?'<span class="condition-tag">'+l.condition+'</span>':'';
+        const condTag=l.condition?'<span class="condition-tag">'+escapeHtml(l.condition)+'</span>':'';
         const negTag=l.is_negotiable?'<span class="negotiable-tag">💬 Negotiable</span>':'';
         const verifiedTag=verifiedSellers.has(l.seller_id)?'<span class="verified-badge">✅ Verified</span>':'';
         return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
           '<div class="card-img" style="background:'+c.bg+'">'+db+heart+img+photoDots+'</div>'+
           '<div class="card-body">'+
-          '<div class="card-title">'+l.title+'</div>'+
+          '<div class="card-title">'+escapeHtml(l.title)+'</div>'+
           (verifiedTag?'<div class="card-seller">'+verifiedTag+'</div>':'')+
           (negTag?'<div>'+negTag+'</div>':'')+
           stock+
@@ -851,12 +905,31 @@
           '</div></div></div>';
       }).join('');
       if(list.length>renderLimit){
-        g.insertAdjacentHTML('afterend','<div id="load-more-wrap" style="text-align:center;margin-top:16px"><button class="btn-primary" style="padding:11px 30px;border-radius:50px" onclick="loadMoreListings()">Load more ('+(list.length-renderLimit)+' more)</button></div>');
+        ensureInfiniteScrollSentinel();
+      } else {
+        document.getElementById('infinite-scroll-sentinel')?.remove();
+        infiniteScrollObserver?.disconnect();
+        infiniteScrollObserver=null;
       }
     }
+    let infiniteScrollObserver=null, loadingMore=false;
+    function ensureInfiniteScrollSentinel(){
+      const g=document.getElementById('listings-grid');
+      if(document.getElementById('infinite-scroll-sentinel')) return;
+      const sentinel=document.createElement('div');
+      sentinel.id='infinite-scroll-sentinel';
+      sentinel.style.height='1px';
+      g.insertAdjacentElement('afterend', sentinel);
+      infiniteScrollObserver=new IntersectionObserver((entries)=>{
+        if(entries[0].isIntersecting) window.loadMoreListings();
+      },{rootMargin:'800px'});
+      infiniteScrollObserver.observe(sentinel);
+    }
     window.loadMoreListings=async ()=>{
+      if(loadingMore) return;
+      if(renderLimit>=lastFilteredList.length && !serverHasMore) return;
+      loadingMore=true;
       renderLimit+=24;
-      document.getElementById('load-more-wrap')?.remove();
       // Running low on the locally-filtered buffer and the server has more
       // rows beyond what we've fetched so far — pull the next page before
       // the person actually hits the end, so filters/search still work
@@ -869,9 +942,11 @@
         all = all.concat(nextBatch);
         await markVerifiedSellers(nextBatch);
         doFilter(false);
+        loadingMore=false;
         return;
       }
       render(lastFilteredList);
+      loadingMore=false;
     };
     window.resetFilters=()=>{
       document.getElementById('search-input').value='';
@@ -950,10 +1025,10 @@
       document.getElementById('recently-viewed-grid').innerHTML=items.map(l=>{
         const c=CAT_COLOR[l.category]||{bg:'#f5f5f5'};
         const e=CAT_EMOJI[l.category]||'🛍️';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title||'Listing')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
         return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
           '<div class="card-img" style="background:'+c.bg+'">'+img+'</div>'+
-          '<div class="card-body"><div class="card-title">'+l.title+'</div>'+
+          '<div class="card-body"><div class="card-title">'+escapeHtml(l.title)+'</div>'+
           '<div class="card-footer"><span class="price">R'+(l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price)+'</span></div></div></div>';
       }).join('');
     }
@@ -1022,7 +1097,7 @@
       const slides=document.getElementById('gallery-slides');
       const dots=document.getElementById('gallery-dots');
       if(imgs.length){
-        slides.innerHTML=imgs.map((u,i)=>'<div class="gallery-slide"><img loading="lazy" src="'+u+'" alt="'+(l.title||'Listing').replace(/"/g,'')+' — photo '+(i+1)+'" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox('+i+')" /></div>').join('');
+        slides.innerHTML=imgs.map((u,i)=>'<div class="gallery-slide"><img loading="lazy" src="'+u+'" alt="'+escapeHtml(l.title||'Listing')+' — photo '+(i+1)+'" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox('+i+')" /></div>').join('');
         dots.innerHTML=imgs.map((_,i)=>'<div class="gallery-dot'+(i===0?' active':'')+'" onclick="goSlide('+i+')"></div>').join('');
         document.getElementById('gallery-prev').style.display=imgs.length>1?'flex':'none';
         document.getElementById('gallery-next').style.display=imgs.length>1?'flex':'none';
@@ -1039,8 +1114,19 @@
       document.getElementById('modal-desc').textContent=l.description||'No description.';
       const flatConf2=FLAT_SUBCATS[l.category];
       const flatVal2=flatConf2?l[flatConf2.field]:null;
-      const extraTags = (l.condition?'<div><strong>🏷️ Condition:</strong> '+l.condition+'</div>':'')+(l.is_negotiable?'<div><strong>💬 Price is negotiable</strong></div>':'')+(l.delivery_fee>0?'<div><strong>🚚 Delivery fee:</strong> R'+l.delivery_fee+'</div>':'');
-      document.getElementById('modal-seller-info').innerHTML='<div><strong>👤 Seller:</strong> '+(l.profiles?.full_name||'Unknown')+'</div>'+(l.profiles?.residence?'<div><strong>📍 Residence:</strong> '+l.profiles.residence+'</div>':'')+((l.category==='Textbooks'&&l.textbook_year)?'<div><strong>🎓 Year:</strong> '+l.textbook_year+'</div>'+(l.textbook_subject?'<div><strong>📖 Subject:</strong> '+l.textbook_subject+'</div>':''):'')+(flatVal2?'<div><strong>'+flatConf2.emoji+' Type:</strong> '+flatVal2+'</div>':'')+extraTags+'<div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="store.html?seller='+l.seller_id+'" style="font-weight:800;color:#2563eb;text-decoration:none">🏪 Visit store</a><a href="listing-reviews.html?listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">⭐ Reviews</a><a href="messages.html?seller='+l.seller_id+'&listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">💬 Message seller</a><a href="#" onclick="event.preventDefault();shareListing()" style="font-weight:800;color:#2563eb;text-decoration:none">🔗 Share</a></div>';
+      const extraTags = (l.condition?'<div><strong>🏷️ Condition:</strong> '+escapeHtml(l.condition)+'</div>':'')+(l.is_negotiable?'<div><strong>💬 Price is negotiable</strong></div>':'')+(l.delivery_fee>0?'<div><strong>🚚 Delivery fee:</strong> R'+l.delivery_fee+'</div>':'');
+      const vehTags = (l.category==='Vehicles') ? (
+        (l.vehicle_location?'<div><strong>📍 Location:</strong> '+escapeHtml(l.vehicle_location)+'</div>':'')+
+        (l.vehicle_year?'<div><strong>📅 Year:</strong> '+escapeHtml(String(l.vehicle_year))+'</div>':'')+
+        (l.vehicle_transmission?'<div><strong>⚙️ Transmission:</strong> '+escapeHtml(l.vehicle_transmission)+'</div>':'')+
+        (l.vehicle_for_sale_by?'<div><strong>🏷️ For Sale By:</strong> '+escapeHtml(l.vehicle_for_sale_by)+'</div>':'')+
+        (l.vehicle_fuel_type?'<div><strong>⛽ Fuel Type:</strong> '+escapeHtml(l.vehicle_fuel_type)+'</div>':'')+
+        (l.vehicle_make?'<div><strong>🚗 Make:</strong> '+escapeHtml(l.vehicle_make)+'</div>':'')+
+        (l.vehicle_model?'<div><strong>🚘 Model:</strong> '+escapeHtml(l.vehicle_model)+'</div>':'')+
+        (l.vehicle_colour?'<div><strong>🎨 Colour:</strong> '+escapeHtml(l.vehicle_colour)+'</div>':'')+
+        (l.vehicle_kilometers?'<div><strong>🛣️ Kilometers:</strong> '+Number(l.vehicle_kilometers).toLocaleString()+'km</div>':'')
+      ) : '';
+      document.getElementById('modal-seller-info').innerHTML='<div><strong>👤 Seller:</strong> '+escapeHtml(l.profiles?.full_name||'Unknown')+'</div>'+(l.profiles?.residence?'<div><strong>📍 Residence:</strong> '+escapeHtml(l.profiles.residence)+'</div>':'')+((l.category==='Textbooks'&&l.textbook_year)?'<div><strong>🎓 Year:</strong> '+escapeHtml(l.textbook_year)+'</div>'+(l.textbook_subject?'<div><strong>📖 Subject:</strong> '+escapeHtml(l.textbook_subject)+'</div>':''):'')+(flatVal2?'<div><strong>'+flatConf2.emoji+' Type:</strong> '+escapeHtml(flatVal2)+'</div>':'')+vehTags+extraTags+'<div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="store.html?seller='+l.seller_id+'" style="font-weight:800;color:#2563eb;text-decoration:none">🏪 Visit store</a><a href="listing-reviews.html?listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">⭐ Reviews</a><a href="messages.html?seller='+l.seller_id+'&listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">💬 Message seller</a><a href="#" onclick="event.preventDefault();shareListing()" style="font-weight:800;color:#2563eb;text-decoration:none">🔗 Share</a></div>';
       document.getElementById('modal-qty').textContent=1;
       document.getElementById('modal-stock-note').textContent=l.quantity>0?l.quantity+' available':'Out of stock';
       document.getElementById('btn-add-to-cart').disabled=l.quantity<=0;
@@ -1082,10 +1168,10 @@
         document.getElementById('modal-similar-grid').innerHTML=similar.map(s=>{
           const sc=CAT_COLOR[s.category]||{bg:'#f5f5f5'};
           const se=CAT_EMOJI[s.category]||'🛍️';
-          const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+(s.title||'Listing').replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
+          const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+escapeHtml(s.title||'Listing')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
           return '<div class="card" onclick="window._open(\''+s.id+'\')" style="cursor:pointer">'+
             '<div class="card-img" style="background:'+sc.bg+'">'+simg+'</div>'+
-            '<div class="card-body" style="padding:8px"><div class="card-title" style="font-size:12px">'+s.title+'</div>'+
+            '<div class="card-body" style="padding:8px"><div class="card-title" style="font-size:12px">'+escapeHtml(s.title)+'</div>'+
             '<div class="card-footer"><span class="price" style="font-size:13px">R'+(s.discount_percent>0?Math.round(s.price*(1-s.discount_percent/100)):s.price)+'</span></div></div></div>';
         }).join('');
       } else {
@@ -1211,12 +1297,12 @@
       body.innerHTML=cart.map((c,i)=>{
         const fp=c.listing.discount_percent>0?Math.round(c.listing.price*(1-c.listing.discount_percent/100)):c.listing.price;
         totalPrice+=fp*c.qty;
-        const img=c.listing.image_url?'<img loading="lazy" src="'+c.listing.image_url+'" alt="'+(c.listing.title||'Listing').replace(/"/g,'')+'"/>':(CAT_EMOJI[c.listing.category]||'📦');
+        const img=c.listing.image_url?'<img loading="lazy" src="'+c.listing.image_url+'" alt="'+escapeHtml(c.listing.title||'Listing')+'"/>':(CAT_EMOJI[c.listing.category]||'📦');
         return '<div class="cart-item">'+
           '<div class="cart-item-img">'+img+'</div>'+
           '<div class="cart-item-info">'+
-          '<div class="cart-item-title">'+c.listing.title+'</div>'+
-          '<div class="cart-item-seller">by '+(c.listing.profiles?.full_name||'Seller')+'</div>'+
+          '<div class="cart-item-title">'+escapeHtml(c.listing.title)+'</div>'+
+          '<div class="cart-item-seller">by '+escapeHtml(c.listing.profiles?.full_name||'Seller')+'</div>'+
           '<div class="cart-item-price">R'+fp+' × '+c.qty+' = R'+(fp*c.qty)+'</div>'+
           '<div class="qty-ctrl-cart" style="margin-top:6px">'+
           '<button class="qty-btn-sm" onclick="window._cartQty('+i+',-1)">−</button>'+
@@ -1594,7 +1680,7 @@
     function buildLightboxTrack(){
       document.getElementById('lightbox-track').innerHTML = lbImgs.map((u,i)=>
         '<div style="min-width:100%;height:100%;flex-shrink:0;display:flex;align-items:center;justify-content:center">'+
-        '<img loading="lazy" src="'+u+'" alt="'+(currentListing?.title||'Listing').replace(/"/g,'')+' — photo '+(i+1)+'" style="max-width:100%;max-height:100%;object-fit:contain"/></div>'
+        '<img loading="lazy" src="'+u+'" alt="'+escapeHtml(currentListing?.title||'Listing')+' — photo '+(i+1)+'" style="max-width:100%;max-height:100%;object-fit:contain"/></div>'
       ).join('');
     }
     function setLightboxTransform(animate){
