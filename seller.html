@@ -49,33 +49,6 @@
   </style>
 </head>
 <body>
-  <!-- TEMPORARY DEBUG HELPER — shows any JS error directly on the page so it
-       can be diagnosed without needing desktop DevTools. Safe to remove once
-       the underlying issue is found and fixed. -->
-  <script>
-    (function(){
-      function showDebugBanner(msg){
-        var b = document.getElementById('__debug_banner');
-        if(!b){
-          b = document.createElement('div');
-          b.id='__debug_banner';
-          b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999999;background:#b91c1c;color:#fff;padding:10px;font-size:12px;font-family:monospace;white-space:pre-wrap;max-height:50vh;overflow:auto;box-shadow:0 2px 10px rgba(0,0,0,0.4)';
-          document.body.appendChild(b);
-        }
-        var line=document.createElement('div');
-        line.style.cssText='border-top:1px solid rgba(255,255,255,0.3);padding-top:6px;margin-top:6px';
-        line.textContent=msg;
-        b.appendChild(line);
-      }
-      window.addEventListener('error', function(e){
-        showDebugBanner('JS ERROR: '+e.message+'\n  at '+(e.filename||'?')+':'+(e.lineno||'?')+':'+(e.colno||'?'));
-      });
-      window.addEventListener('unhandledrejection', function(e){
-        var r=e.reason;
-        showDebugBanner('UNHANDLED PROMISE REJECTION: '+(r && (r.message||r.toString()) || String(r)));
-      });
-    })();
-  </script>
   <nav class="nav">
     <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon"/>Market<span>rade</span></a>
     <div class="nav-links">
