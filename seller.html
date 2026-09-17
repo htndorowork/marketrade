@@ -1,56 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Registered as early as possible so we don't miss the browser's install-availability event
+    window._deferredInstallPrompt=null;
+    window.addEventListener('beforeinstallprompt',(e)=>{
+      e.preventDefault();
+      window._deferredInstallPrompt=e;
+      window._onInstallPromptReady && window._onInstallPromptReady();
+    });
+  </script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seller Dashboard — Marketrade</title>
-  <meta name="description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Seller Dashboard — Marketrade"/>
-  <meta property="og:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
+  <title>Seller Dashboard — Student Marketplace</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/seller.html"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <meta name="description" content="Manage your listings, orders, and seller plan on Student Marketplace."/>
+    <meta property="og:title" content="Seller Dashboard — Student Marketplace"/>
+  <meta property="og:description" content="🎓 Your campus. Your marketplace. Buy & sell textbooks, electronics, clothing & more with fellow students — fast, easy & safe 🤝"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Seller Dashboard — Marketrade"/>
-  <meta name="twitter:description" content="Manage your Marketrade seller store, listings, orders and subscription plan."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=3"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="js/areas-data.js" defer></script>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" type="image/x-icon" href="icons/favicon.ico?v=2"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=2"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=2"/>
+  <link rel="stylesheet" href="style.css?v=1789517217"/>
   <style>
     .dash-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
     .dash-tab{border:2px solid #f0f0f0;background:#fff;padding:10px 20px;border-radius:50px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;color:#888}
-    .dash-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+    .dash-tab.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
     .upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
     .upload-slot{border:2.5px dashed #f0f0f0;border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;transition:border-color 0.15s;position:relative;overflow:hidden}
-    .upload-slot:hover{border-color:#2563eb;background:#eff6ff}
+    .upload-slot:hover{border-color:#7c3aed;background:#f5f0fe}
     .upload-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
     .slot-remove{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700;z-index:10}
     .order-card{background:#fff;border:2px solid #f0f0f0;border-radius:16px;padding:16px;margin-bottom:12px}
-    .order-card.order-new{border-color:#2563eb;background:#fff9f9}
+    .order-card.order-new{border-color:#7c3aed;background:#fff9f9}
     .order-card-title{font-size:15px;font-weight:800;margin-bottom:8px;color:#111}
     .order-detail{font-size:13px;font-weight:600;color:#555;margin-bottom:4px}
     .order-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;margin-bottom:10px}
-    .badge-new{background:#eff6ff;color:#2563eb}
+    .badge-new{background:#f5f0fe;color:#7c3aed}
     .badge-done{background:#e8f5e9;color:#2e7d32}
     .paywall-screen{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:24px}
-    .paywall-card{background:#fff;border:2.5px solid #bfdbfe;border-radius:20px;padding:40px 32px;max-width:400px;width:100%;text-align:center}
+    .paywall-card{background:#fff;border:2.5px solid #d8c4f7;border-radius:20px;padding:40px 32px;max-width:400px;width:100%;text-align:center}
     .qty-row-sm{display:flex;align-items:center;gap:8px}
     .qty-btn-sm{background:#f0f0f0;border:none;border-radius:50%;width:28px;height:28px;font-size:15px;cursor:pointer;font-weight:800;display:flex;align-items:center;justify-content:center}
     .qty-num-sm{font-size:15px;font-weight:800;min-width:28px;text-align:center}
+    .plan-card{transition:border-color .15s,box-shadow .15s}
+    .plan-card-pressed{border-color:#7c3aed !important;box-shadow:0 0 0 3px rgba(124,58,237,0.18)}
   </style>
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🛍️',className:'nav-logo-icon',style:'font-size:22px;display:inline-flex;align-items:center;justify-content:center'}))"/>Market<span>rade</span></a>
+    <a href="index.html" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links">
       <a href="index.html">Browse</a>
     </div>
@@ -64,82 +70,82 @@
           <div style="font-size:52px;margin-bottom:16px">🔒</div>
           <h2 style="font-size:22px;font-weight:900;margin-bottom:10px;text-align:center">Listings Paused</h2>
           <p style="font-size:14px;color:#888;font-weight:600;line-height:1.7;margin-bottom:20px;text-align:center">New listings are temporarily paused. Contact admin if you need help.</p>
-          <div style="text-align:center"><a href="mailto:marketrade.co@gmail.com" style="display:inline-block;background:#2563eb;color:#fff;padding:12px 28px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none">📧 Contact Admin</a></div>
+          <div style="text-align:center"><a href="mailto:studentmarketplacehelp@gmail.com" style="display:inline-block;background:#7c3aed;color:#fff;padding:12px 28px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none">📧 Contact Admin</a></div>
         </div>
         <div id="paywall-plans">
           <div style="text-align:center;font-size:42px;margin-bottom:8px">💼</div>
           <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;text-align:center">Start selling</h2>
-          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:center">No free trial — pay securely via Paystack to unlock your seller dashboard and post listings.</p>
+          <p style="font-size:14px;color:#888;font-weight:600;line-height:1.6;margin-bottom:20px;text-align:center">Selling is currently free — create your seller profile to unlock your dashboard and post listings.</p>
           <div class="plan-grid" style="display:grid;gap:10px;margin-bottom:16px">
-            <button type="button" class="plan-card" id="plan-flash" onclick="startCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-flash" onclick="startSellerCheckout('flash')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Flash Sale · 48 hours</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">1 active listing — clear a single item fast</div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R19</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R19</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-quicklister" onclick="startCheckout('quicklister')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-quicklister" onclick="startSellerCheckout('quicklister')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Quick Lister · 7 days</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">3 active listings — low-commitment entry point</div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R39</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R39</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-casual" onclick="startCheckout('casual')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-casual" onclick="startSellerCheckout('casual')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Casual Seller · 1 month</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">5 active listings — budget-conscious</div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R89</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R89</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-standard" onclick="startCheckout('standard')" style="text-align:left;background:#f0f7ff;border:2.5px solid #2563eb;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit;position:relative">
-              <div style="position:absolute;top:-10px;left:14px;background:#2563eb;color:#fff;font-size:10px;font-weight:800;padding:2px 10px;border-radius:50px;letter-spacing:0.3px">MOST POPULAR</div>
+            <button type="button" class="plan-card" id="plan-standard" onclick="startSellerCheckout('standard')" style="text-align:left;background:#faf7ff;border:2.5px solid #7c3aed;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit;position:relative">
+              <div style="position:absolute;top:-10px;left:14px;background:#7c3aed;color:#fff;font-size:10px;font-weight:800;padding:2px 10px;border-radius:50px;letter-spacing:0.3px">MOST POPULAR</div>
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Standard Monthly · 1 month</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">15 active listings — R10.60/listing, best value on the ladder</div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R159</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R159</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-power" onclick="startCheckout('power')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-power" onclick="startSellerCheckout('power')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Power Seller · 1 month</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">Unlimited active listings — for full stores</div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R249</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R249</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-quarter" onclick="startCheckout('quarter')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-quarter" onclick="startSellerCheckout('quarter')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Quarter Pass · 3 months</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">15 active listings, term-aligned <span style="color:#2e7d32">· SAVE ~R78</span></div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R399</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R399</div>
               </div>
             </button>
-            <button type="button" class="plan-card" id="plan-semester" onclick="startCheckout('semester')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
+            <button type="button" class="plan-card" id="plan-semester" onclick="startSellerCheckout('semester')" style="text-align:left;background:#fff;border:2.5px solid #eee;border-radius:16px;padding:16px;cursor:pointer;font-family:inherit">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
                 <div>
                   <div style="font-weight:900;font-size:15px;color:#111">Semester Pass · 6 months</div>
                   <div style="font-size:12px;color:#888;font-weight:700;margin-top:4px">Unlimited active listings, best for established brands <span style="color:#2e7d32">· SAVE ~R255</span></div>
                 </div>
-                <div style="font-weight:900;font-size:20px;color:#2563eb;white-space:nowrap">R699</div>
+                <div style="font-weight:900;font-size:20px;color:#7c3aed;white-space:nowrap">R699</div>
               </div>
             </button>
           </div>
-          <p id="checkout-error" style="display:none;color:#1d4ed8;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px"></p>
-          <p style="font-size:12px;color:#aaa;font-weight:600;text-align:center;line-height:1.5">Payments are processed by Paystack. After a successful payment your selling access activates automatically.</p>
+          <p id="checkout-error" style="display:none;color:#9333ea;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px"></p>
+          <p style="font-size:12px;color:#aaa;font-weight:600;text-align:center;line-height:1.5">Selling is currently free — no payment needed to unlock your dashboard.</p>
           <div style="margin-top:16px;text-align:center">
-            <a href="#" id="paywall-back-dashboard" style="display:none;color:#2563eb;font-size:13px;font-weight:800;text-decoration:none" onclick="event.preventDefault();closeUpgrade()">← Back to dashboard</a>
+            <a href="#" id="paywall-back-dashboard" style="display:none;color:#7c3aed;font-size:13px;font-weight:800;text-decoration:none" onclick="event.preventDefault();closeUpgrade()">← Back to dashboard</a>
             <a href="index.html" id="paywall-back-browse" style="color:#aaa;font-size:13px;font-weight:700;text-decoration:none">← Back to browsing</a>
             <span style="color:#ddd;margin:0 8px">·</span>
             <a href="#" id="paywall-signout" style="color:#aaa;font-size:13px;font-weight:700;text-decoration:none" onclick="event.preventDefault();paywallSignOut()">🚪 Sign out</a>
@@ -151,18 +157,8 @@
 
   <!-- MAIN DASHBOARD -->
   <main class="main" style="max-width:700px;display:none" id="main-dashboard">
-    <h1 class="sr-only">Seller Dashboard — Marketrade</h1>
     <div id="auth-guard" style="display:none">
-      <div class="deposit-note">You need to <a href="login.html" style="color:#2563eb;font-weight:700">sign in</a> to access your dashboard.</div>
-    </div>
-
-    <div id="load-error-guard" style="display:none">
-      <div class="form-card" style="text-align:center">
-        <div style="font-size:40px;margin-bottom:12px">⚠️</div>
-        <p style="font-weight:800;margin-bottom:6px">Something went wrong loading your dashboard.</p>
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This is usually a temporary connection hiccup. Try again below.</p>
-        <button class="btn-primary" style="padding:12px 28px;border-radius:50px" onclick="location.reload()">🔄 Try again</button>
-      </div>
+      <div class="deposit-note">You need to <a href="login.html" style="color:#7c3aed;font-weight:700">sign in</a> to access your dashboard.</div>
     </div>
 
     <div id="seller-content" style="display:none">
@@ -186,6 +182,9 @@
             <span class="pmr-icon">📦</span><span class="pmr-label">My Listings</span>
             <span class="pmr-badge" id="listings-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
           </button>
+          <button class="profile-menu-row" onclick="showTab('wallet')">
+            <span class="pmr-icon">💰</span><span class="pmr-label">Wallet</span><span class="pmr-chevron">›</span>
+          </button>
           <button class="profile-menu-row" onclick="showTab('add')">
             <span class="pmr-icon">➕</span><span class="pmr-label">Add Listing</span><span class="pmr-chevron">›</span>
           </button>
@@ -197,17 +196,12 @@
           </button>
         </div>
 
-        <div class="profile-section-label">Buying</div>
-        <div class="profile-menu-card">
-          <button class="profile-menu-row" onclick="showTab('purchases')">
-            <span class="pmr-icon">🛍️</span><span class="pmr-label">My Purchases</span>
-            <span class="pmr-badge" id="purchases-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
-          </button>
-        </div>
-
         <div class="profile-section-label">Account</div>
         <div class="profile-menu-card">
-          <a class="profile-menu-row" href="messages.html">
+          <button class="profile-menu-row" onclick="showTab('my-purchases')">
+            <span class="pmr-icon">🛍️</span><span class="pmr-label">My Purchases</span><span class="pmr-chevron">›</span>
+          </button>
+          <a class="profile-menu-row" href="messages.html" onclick="window._dismissBadge('messages', parseInt(document.getElementById('msg-badge').textContent)||0)">
             <span class="pmr-icon">💬</span><span class="pmr-label">Messages</span>
             <span class="pmr-badge" id="msg-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
           </a>
@@ -221,15 +215,14 @@
           <button class="profile-menu-row" onclick="showTab('profile')">
             <span class="pmr-icon">👤</span><span class="pmr-label">Profile</span><span class="pmr-chevron">›</span>
           </button>
+          <button class="profile-menu-row" onclick="showTab('security')">
+            <span class="pmr-icon">🔐</span><span class="pmr-label">Security</span><span class="pmr-chevron">›</span>
+          </button>
           <button class="profile-menu-row" onclick="showTab('alerts')">
-            <span class="pmr-icon">🔔</span><span class="pmr-label">My Alerts</span>
-            <span class="pmr-badge" id="alerts-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
+            <span class="pmr-icon">🔔</span><span class="pmr-label">My Alerts</span><span class="pmr-chevron">›</span>
           </button>
           <button class="profile-menu-row" onclick="showTab('invite')">
             <span class="pmr-icon">🎁</span><span class="pmr-label">Invite Friends</span><span class="pmr-chevron">›</span>
-          </button>
-          <button class="profile-menu-row" onclick="showTab('security')">
-            <span class="pmr-icon">🔐</span><span class="pmr-label">Security</span><span class="pmr-chevron">›</span>
           </button>
           <a class="profile-menu-row" href="admin.html" id="admin-link" style="display:none">
             <span class="pmr-icon">🛠️</span><span class="pmr-label">Admin</span><span class="pmr-chevron">›</span>
@@ -240,11 +233,14 @@
         <div class="profile-menu-card">
           <a class="profile-menu-row" href="faq.html"><span class="pmr-icon">❓</span><span class="pmr-label">Help &amp; How It Works</span><span class="pmr-chevron">›</span></a>
           <a class="profile-menu-row" href="https://wa.me/27694520629" target="_blank" rel="noopener"><span class="pmr-icon">📱</span><span class="pmr-label">WhatsApp Support</span><span class="pmr-chevron">›</span></a>
-          <a class="profile-menu-row" href="mailto:marketrade.co@gmail.com"><span class="pmr-icon">📧</span><span class="pmr-label">Report an Issue</span><span class="pmr-chevron">›</span></a>
+          <a class="profile-menu-row" href="mailto:studentmarketplacehelp@gmail.com"><span class="pmr-icon">📧</span><span class="pmr-label">Report an Issue</span><span class="pmr-chevron">›</span></a>
+          <div class="profile-menu-row" id="install-app-row" style="display:none">
+            <span class="pmr-icon">📲</span><span class="pmr-label" id="install-app-label">Install App</span><span class="pmr-chevron">›</span>
+          </div>
         </div>
 
         <button class="profile-logout-btn" id="dashboard-logout-btn">🚪 Sign out</button>
-        <div class="profile-version">Marketrade 🛍️</div>
+        <div class="profile-version">Student Marketplace 🎓</div>
       </div>
 
       <!-- DETAIL PANELS -->
@@ -254,7 +250,8 @@
 
       <!-- ORDERS -->
       <div id="tab-orders" style="display:none">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px">
+          <button class="btn-sm btn-toggle" onclick="exportMyOrdersCSV()">⬇️ Export CSV</button>
           <button class="btn-sm btn-toggle" onclick="showTab('orders-completed')">✅ Completed Orders</button>
         </div>
         <div id="orders-container"><p class="loading-msg">Loading orders... ⏳</p></div>
@@ -265,27 +262,45 @@
         <div id="orders-completed-container"><p class="loading-msg">Loading completed orders... ⏳</p></div>
       </div>
 
-      <!-- MY PURCHASES (things this seller bought from other sellers) -->
-      <div id="tab-purchases" style="display:none">
-        <div id="purchases-container"><p class="loading-msg">Loading purchases... ⏳</p></div>
-      </div>
-
       <!-- MY LISTINGS -->
       <div id="tab-listings" style="display:none">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <button class="btn-sm btn-toggle" onclick="exportMyListingsCSV()">⬇️ Export CSV</button>
+        </div>
         <div id="my-listings"><p class="loading-msg">Loading listings...</p></div>
+      </div>
+
+      <!-- WALLET -->
+      <div id="tab-wallet" style="display:none">
+        <div style="display:flex;gap:10px;margin-bottom:16px">
+          <div style="flex:1;background:#f5f0ff;border-radius:14px;padding:14px">
+            <div style="font-size:11.5px;color:#7c3aed;font-weight:800">AVAILABLE</div>
+            <div id="wallet-balance" style="font-size:24px;font-weight:900;color:#7c3aed">R0</div>
+          </div>
+          <div style="flex:1;background:#f7f7f7;border-radius:14px;padding:14px">
+            <div style="font-size:11.5px;color:#888;font-weight:800">IN ESCROW</div>
+            <div id="wallet-pending" style="font-size:24px;font-weight:900;color:#888">R0</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#888;font-weight:600;margin-bottom:14px">"In escrow" is money buyers have paid that's still held by TradeSafe — it moves to "Available" once you confirm the Collection PIN (or 24h after Pargo delivery with no dispute).</p>
+        <div id="wallet-payout-banner"></div>
+        <button class="btn-primary" style="width:100%" onclick="window._requestWithdrawal()">Withdraw available balance</button>
+        <p id="wallet-error" style="display:none;color:#c0392b;font-size:12.5px;font-weight:700;margin-top:8px"></p>
+        <div class="profile-section-label" style="margin-top:20px">Transaction history</div>
+        <div id="wallet-transactions"><p class="loading-msg">Loading...</p></div>
       </div>
 
       <!-- ADD LISTING -->
       <div id="tab-add" style="display:none">
         <div class="form-card" id="plan-usage-card" style="display:none;margin-bottom:14px;padding:14px 16px">
           <div id="plan-usage-text" style="font-size:13px;font-weight:800;color:#555"></div>
-          <div style="background:#f0f0f0;border-radius:50px;height:6px;margin-top:8px;overflow:hidden"><div id="plan-usage-bar" style="height:100%;background:#2563eb;border-radius:50px;width:0%"></div></div>
+          <div style="background:#f0f0f0;border-radius:50px;height:6px;margin-top:8px;overflow:hidden"><div id="plan-usage-bar" style="height:100%;background:#7c3aed;border-radius:50px;width:0%"></div></div>
         </div>
         <div class="form-card">
           <h3 style="font-size:18px;font-weight:800;margin-bottom:16px" id="add-form-heading">Add New Listing</h3>
           <div class="form-row">
             <div class="form-group">
-              <label>Product/Service Title *</label>
+              <label>Product Title *</label>
               <input type="text" id="f-title" placeholder="e.g. Calculus Textbook"/>
             </div>
             <div class="form-group">
@@ -297,10 +312,10 @@
                 <option>Food</option><option>Snacks</option><option>Utensils</option>
                 <option>Furniture</option><option>Decor</option><option>Appliances</option><option>Tools</option>
                 <option>Sports</option><option>Toys</option><option>Books</option><option>Music</option>
-                <option>Cameras</option><option>Pets</option><option>Baby</option><option>Plants</option>
+                <option>Cameras</option><option>Gaming</option><option>Tickets</option><option>Pets</option><option>Baby</option><option>Plants</option>
                 <option>Events</option><option>Health</option><option>Data</option><option>Career</option>
-                <option>Transport</option><option>Vehicles</option><option>Watermobile</option><option>Properties</option><option>Tutoring</option>
-                <option>Jobs</option><option>Services</option><option>Camping</option><option>BoardGames</option><option>Hardware</option><option>Gaming</option><option>Others</option>
+                <option>Transport</option><option>Accommodation</option><option>Tutoring</option>
+                <option>Services</option><option>Others</option>
               </select>
             </div>
           </div>
@@ -328,59 +343,6 @@
           <div class="form-group" id="f-flat-other-row" style="display:none">
             <label>Please describe the item *</label>
             <input type="text" id="f-flat-other" placeholder="e.g. Cheese grater with wooden handle"/>
-          </div>
-          <div class="form-row" id="f-veh-row1" style="display:none">
-            <div class="form-group">
-              <label>Make</label>
-              <input type="text" id="f-veh-make" placeholder="e.g. Toyota"/>
-            </div>
-            <div class="form-group">
-              <label>Model</label>
-              <input type="text" id="f-veh-model" placeholder="e.g. RAV4"/>
-            </div>
-          </div>
-          <div class="form-row" id="f-veh-row2" style="display:none">
-            <div class="form-group">
-              <label>Year</label>
-              <select id="f-veh-year"><option value="">Select year</option></select>
-            </div>
-            <div class="form-group">
-              <label>Transmission</label>
-              <select id="f-veh-transmission">
-                <option value="">Select transmission</option>
-                <option>Automatic</option><option>Manual</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row" id="f-veh-row3" style="display:none">
-            <div class="form-group">
-              <label>Fuel Type</label>
-              <select id="f-veh-fuel">
-                <option value="">Select fuel type</option>
-                <option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option><option>LPG</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>For Sale By</label>
-              <select id="f-veh-for-sale-by">
-                <option value="">Select</option>
-                <option>Private</option><option>Dealer</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row" id="f-veh-row4" style="display:none">
-            <div class="form-group">
-              <label>Colour</label>
-              <input type="text" id="f-veh-colour" placeholder="e.g. Black"/>
-            </div>
-            <div class="form-group">
-              <label>Kilometers</label>
-              <input type="number" id="f-veh-km" placeholder="e.g. 220000" min="0"/>
-            </div>
-          </div>
-          <div class="form-group" id="f-veh-row5" style="display:none">
-            <label>Location</label>
-            <input type="text" id="f-veh-location" placeholder="e.g. Goodwood, Northern Suburbs"/>
           </div>
           <div class="form-group">
             <label>Description</label>
@@ -418,7 +380,7 @@
           </div>
           <div class="form-group">
             <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" id="f-negotiable"/> Price is negotiable
+              <input type="checkbox" id="f-negotiable" style="width:16px;height:16px"/> Price is negotiable
             </label>
           </div>
           <div class="form-group">
@@ -456,11 +418,9 @@
             <input type="file" id="fi-5" accept="image/jpeg,image/png,image/webp" style="display:none"/>
             <input type="file" id="fi-6" accept="image/jpeg,image/png,image/webp" style="display:none"/>
             <div style="font-size:12px;color:#aaa;font-weight:600;margin-top:4px">JPG, PNG or WEBP · Max 2MB each</div>
-            <div id="upload-err" style="display:none;font-size:13px;font-weight:700;color:#1d4ed8;margin-top:6px"></div>
+            <div id="upload-err" style="display:none;font-size:13px;font-weight:700;color:#9333ea;margin-top:6px"></div>
           </div>
-          <div style="background:#fff7e6;border:1px solid #ffd580;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:#8a5a00;margin-bottom:12px">
-            ⚠️ One product/service, one listing — listing multiple products/services under a single listing is not allowed.
-          </div>
+          <div class="form-warning">⚠️ One product/service, one listing — listing multiple products/services under a single listing is not allowed.</div>
           <div class="form-error" id="form-error"></div>
           <button class="btn-primary" id="btn-post">Post Listing 🚀</button>
           <button class="btn-primary" id="btn-draft" style="background:#888;margin-top:8px">Save as Draft 📝</button>
@@ -492,10 +452,10 @@
           </div>
           <div class="form-group"><label>Store Name</label><input type="text" id="s-store-name" placeholder="e.g. Thabo's Textbook Corner"/></div>
           <div class="form-group"><label>Store Bio</label><textarea id="s-store-bio" placeholder="Tell buyers a bit about what you sell..." rows="3"></textarea></div>
-          <div class="form-group"><label>Store Link (optional)</label><input type="url" id="s-store-link" placeholder="https://instagram.com/yourstore or your WhatsApp/website link"/></div>
+          <div class="form-group"><label>Store Link (optional)</label><input type="url" id="s-store-link" placeholder="e.g. https://instagram.com/yourstore or a WhatsApp catalog link"/></div>
           <div class="form-error" id="store-error"></div>
           <button class="btn-primary" id="btn-save-store">Save Store ✅</button>
-          <a id="store-public-link" href="#" target="_blank" style="display:block;text-align:center;margin-top:14px;font-weight:800;font-size:13px;color:#2563eb;text-decoration:none">🔗 View my public store page</a>
+          <a id="store-public-link" href="#" target="_blank" style="display:block;text-align:center;margin-top:14px;font-weight:800;font-size:13px;color:#7c3aed;text-decoration:none">🔗 View my public store page</a>
         </div>
       </div>
 
@@ -504,40 +464,27 @@
           <h3 style="font-size:18px;font-weight:800;margin-bottom:4px">Your Profile 👤</h3>
           <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This shows on your listings so buyers can find you.</p>
           <div class="form-group"><label>Full Name *</label><input type="text" id="p-name" placeholder="Thabo Mokoena"/></div>
-          <div class="form-group"><label>WhatsApp *</label><input type="text" inputmode="tel" id="p-whatsapp" placeholder="0812345678 or +27812345678"/></div>
-          <div class="form-group"><label>Residence</label><input type="text" id="p-residence" placeholder="e.g. 12 Church Street, Potchefstroom"/></div>
+          <div class="form-group"><label>WhatsApp *</label><input type="text" id="p-whatsapp" placeholder="0812345678"/></div>
+          <div class="form-group"><label>Residence</label><input type="text" id="p-residence" placeholder="e.g. Heroes Residence, NWU Potchefstroom"/></div>
           <div class="form-group">
-            <label>Where do you deliver? *</label>
-            <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers can filter listings by their area, so tell us every area you deliver to.</p>
+            <label>Where do you sell? *</label>
+            <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers can filter listings by their campus, so tell us every institution & campus you deliver to.</p>
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
               <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
-                <input type="checkbox" id="p-sell-all-areas"/> 📍 Deliver anywhere in South Africa
+                <input type="checkbox" id="p-sell-all-uni" style="width:16px;height:16px"/> 🎓 All universities (every campus)
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
+                <input type="checkbox" id="p-sell-all-tvet" style="width:16px;height:16px"/> 🛠️ All public TVET colleges (every campus)
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
+                <input type="checkbox" id="p-sell-all-private" style="width:16px;height:16px"/> 🏫 All private higher-education institutions (every campus)
               </label>
             </div>
-            <div id="p-area-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
-            <button type="button" class="btn-sm btn-toggle" onclick="openAreaAddModal()">+ Add a specific area</button>
+            <div id="p-inst-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+            <button type="button" class="btn-sm btn-toggle" onclick="openInstAddModal()">+ Add a specific institution</button>
           </div>
           <div class="form-error" id="profile-error"></div>
           <button class="btn-primary" id="btn-save">Save Profile ✅</button>
-        </div>
-      </div>
-
-      <div id="tab-alerts" style="display:none">
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">We'll notify you when a new listing matches one of these, or when an out-of-stock item you're watching is back. Save searches from the 🔔 Alert me button on the search/filter bar, or tap "We'll notify you" on any out-of-stock listing.</p>
-        <div id="alerts-container"><p class="loading-msg">Loading alerts... ⏳</p></div>
-      </div>
-
-      <div id="tab-invite" style="display:none">
-        <div class="form-card" style="text-align:center">
-          <div style="font-size:36px;margin-bottom:8px">🎁</div>
-          <h3 style="font-size:17px;font-weight:800;margin-bottom:6px">Invite friends, earn free selling days</h3>
-          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">Share your link — when a friend signs up with it, you get <b>3 free selling days</b> added to your account.</p>
-          <div style="display:flex;gap:8px;align-items:center;background:#eff6ff;border-radius:12px;padding:10px 14px;margin-bottom:14px">
-            <input type="text" id="invite-link" readonly style="flex:1;border:none;background:transparent;font-weight:700;font-size:13px;color:#2563eb"/>
-            <button class="btn-sm btn-toggle" onclick="copyInviteLink()">📋 Copy</button>
-          </div>
-          <a class="btn-sm btn-toggle" id="invite-whatsapp-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📱 Share on WhatsApp</a>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:13px;font-weight:700;color:#2563eb">🎉 <span id="invite-count">0</span> friend(s) joined using your link</div>
         </div>
       </div>
 
@@ -562,10 +509,8 @@
           <div id="mfa-enroll-box" style="display:none">
             <div id="mfa-qr" style="margin-bottom:10px"></div>
             <div class="form-group"><label>Enter the 6-digit code from your authenticator app</label><input type="text" id="mfa-code" placeholder="123456" maxlength="6"/></div>
-            <div style="display:flex;flex-wrap:wrap;gap:10px">
-              <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify &amp; Enable</button>
-              <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
-            </div>
+            <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify & Enable</button>
+            <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
           </div>
           <button class="btn-sm btn-toggle" id="btn-mfa-toggle" style="display:none"></button>
 
@@ -574,32 +519,58 @@
           </div>
         </div>
       </div>
+
+      <div id="tab-alerts" style="display:none">
+        <div class="form-card">
+          <h3 style="font-size:15px;font-weight:800;margin-bottom:4px">🔔 My Alerts</h3>
+          <p style="font-size:12.5px;color:#888;font-weight:600;margin-bottom:14px">Alerts you've saved while browsing as a buyer show up here too.</p>
+          <div id="alerts-list"><p class="loading-msg">Loading alerts... ⏳</p></div>
+        </div>
+      </div>
+
+      <div id="tab-invite" style="display:none">
+        <div class="form-card" style="text-align:center">
+          <div style="font-size:38px;margin-bottom:8px">🎁</div>
+          <h3 style="font-size:17px;font-weight:900;margin-bottom:6px">Invite friends, get free selling days</h3>
+          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px;line-height:1.5">Share your link — when a friend signs up and becomes a seller for the first time, you get <strong>7 bonus days</strong> added to your own plan automatically.</p>
+          <div style="display:flex;gap:8px;background:#f7f5fb;border-radius:12px;padding:10px 12px;margin-bottom:12px">
+            <input type="text" id="invite-link" readonly style="flex:1;border:none;background:none;font-size:12.5px;font-weight:700;color:#555;outline:none"/>
+            <button class="btn-sm btn-toggle" onclick="copyInviteLink()">Copy</button>
+          </div>
+          <button class="btn-primary" style="padding:12px 32px;border-radius:50px" onclick="shareInviteLink()">Share Invite Link 🔗</button>
+          <p id="referral-count-text" style="font-size:12px;color:#aaa;font-weight:700;margin-top:14px"></p>
+        </div>
+      </div>
+      <div id="tab-my-purchases" style="display:none">
+        <div id="my-purchases-container"><p class="loading-msg">Loading your orders... ⏳</p></div>
+      </div>
       </div>
     </div>
   </main>
 
-  <div class="modal-overlay" id="area-modal-overlay" onclick="closeAreaAddModal()">
+  <div class="modal-overlay" id="inst-modal-overlay" onclick="closeInstAddModal()">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
-      <button class="modal-close" onclick="closeAreaAddModal()">✕</button>
-      <div class="modal-body" id="area-modal-body"></div>
+      <button class="modal-close" onclick="closeInstAddModal()">✕</button>
+      <div class="modal-body" id="inst-modal-body"></div>
     </div>
   </div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient(
-      'https://spupfdclswjlpwiebwlq.supabase.co',
-      'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
+      'https://kqsqtasykdtpdrkqyaxp.supabase.co',
+      'sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ'
     );
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-    // Paystack secret key lives ONLY in Supabase Edge Function secrets (paystack-checkout / paystack-webhook).
-    const PAYSTACK_FN = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/paystack-checkout';
-
-    window.startCheckout = (planKey) => startPaystackCheckout(planKey);
+    function isValidSAPhone(raw){
+      const v=(raw||'').replace(/[\s-]/g,'');
+      return /^0[6-8][0-9]{8}$/.test(v) || /^\+?27[6-8][0-9]{8}$/.test(v);
+    }
 
     let currentUser = null;
-    // Escapes user-typed text before it goes into innerHTML.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     const imgs = {1:null,2:null,3:null,4:null,5:null,6:null};
 
     const TB_TAXONOMY={
@@ -673,24 +644,9 @@
       'Dumbbells','Resistance bands','Yoga mats','Gym gloves','Skipping ropes','Weight plates',
       'Treadmills','Exercise bikes','Soccer balls','Rugby balls','Netballs','Basketballs','Cricket bats',
       'Team jerseys','Cycling helmets','Running shoes','Sports water bottles','Shaker bottles',
-      'Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
-      'Boxing gloves','Sports/gym bags'
-    ];
-
-    const CAMPING_SUBCATS=[
       'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
-      'Hiking backpacks','Camping stoves','Gas canisters','Lanterns & torches','Camping tables',
-      'Portable camping fridges','Camping cutlery & cookware','Ground mats/sleeping pads','Gazebos',
-      'Firewood & fire starters','Portable camping generators','Water containers','Camping hammocks',
-      'Multi-tools & camping knives','Insect repellent gear','First aid kits (outdoor)'
-    ];
-
-    const BOARDGAMES_SUBCATS=[
-      'Family board games','Strategy board games','Party board games','Card games',
-      'Chess sets','Checkers/Draughts sets','Backgammon sets','Dominoes',
-      'Poker sets & chips','Dice games','Trivia games','Puzzle board games',
-      'Role-playing/tabletop games','Jigsaw puzzles','Kids board games','Classic board games',
-      'Board game accessories'
+      'Hiking backpacks','Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
+      'Boxing gloves','Sports/gym bags'
     ];
     const BOOKS_SUBCATS=[
       'Fiction novels','Non-fiction books','Comics & manga','Magazines','Poetry collections',
@@ -707,7 +663,18 @@
       'Camera lenses','Tripods','Ring lights','Photo backdrops','Camera bags','Memory cards',
       'Drones','GoPros/action cameras','Camera batteries & chargers','Gimbals/stabilizers'
     ];
+    const GAMING_SUBCATS=[
+      'PS5 consoles & games','PS4 consoles & games','Xbox consoles & games','Nintendo Switch consoles & games',
+      'PC games','Gaming laptops & PCs','Controllers','Gaming headsets','Gaming keyboards & mice',
+      'Gaming chairs','Gaming monitors','VR headsets','Game cards/vouchers','Retro consoles & games',
+      'Gaming accessories'
+    ];
+    const TICKETS_SUBCATS=[
+      'Concert tickets','Sports event tickets','Theatre/show tickets','Festival tickets','Movie tickets',
+      'Comedy show tickets','Club/event tickets','Graduation tickets','Other tickets'
+    ];
     const EVENTS_SUBCATS=[
+      'Events, Gigs & Nightlife','Flea Market & Jumble Sale',
       'Balloons','Party decorations','Banners & bunting','Costumes','Party lighting',
       'Speakers for events','Disposable cups & plates','Photo booth props','Candles',
       'Gift wrapping supplies','Fairy lights','Table linens','Party favors','Cake toppers'
@@ -755,38 +722,18 @@
       'Academic mentoring','First-year support tutoring','Final-year project support'
     ];
 
-    const PROPERTIES_SUBCATS=[
-      'Car Parks & Storage','Commercial Properties for Rent','Commercial Properties for Sale',
-      'Flats for Rent','Holiday Homes','Houses & Flats for Sale','Houses for Rent',
-      'Land & Plots for Sale','Other Property','Roommate & Accommodation Wanted',
-      'Rooms for Rent','Short Term'
+    const ACCOMMODATION_SUBCATS=[
+      'Single room','Shared room','Bachelor (studio) apartment','One-bedroom apartment','Two-bedroom apartment',
+      'Three-bedroom apartment','Shared flat/apartment','Shared house','Commune house',
+      'Private student residence room','Ensuite room','Non-ensuite room','Self-catering apartment',
+      'Furnished apartment','Unfurnished apartment','Loft apartment','Duplex apartment'
     ];
-
-    const JOBS_SUBCATS=[
-      'Accounting & Finance','Advertising & Marketing','Agriculture & Farm Jobs','Arts & Entertainment',
-      'Au Pair & Babysitting','Beauty','Clerical & Administrative','Construction & Trade','Customer Service',
-      'Engineering & Architecture','FMCG','General Worker & Labour','Healthcare & Medical','Hospitality & Tourism',
-      'Human Resources','Information Technology','Legal','Logistics, Transport & Drivers','Management',
-      'Manufacturing','Retail','Sales & Marketing','Security','Skilled Trades','Teaching & Education',
-      'Internships & Graduate Programs','Part-Time & Freelance','Remote & Work From Home','Other Jobs'
-    ];
-
-    const WATERMOBILE_SUBCATS=['All Watermobile','Parts','Accessories'];
 
     const TRANSPORT_SUBCATS=[
       'Skateboard','Longboard','Penny board','Kick scooter','Electric scooter','Bicycle','Folding bicycle',
       'Electric bicycle','Roller skates','Inline skates (Rollerblades)','Hoverboard','Electric skateboard',
       'Unicycle','Electric unicycle','Drift trike','Mini bike','Balance bike','Ripstik','Car','Quadbike',
       'Motorbike'
-    ];
-
-    const VEHICLES_SUBCATS=[
-      'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
-      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan',
-      'Car parts & spares','Tyres & Accessories','Car batteries','Car Audio & Electronics','Dash cams',
-      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car Care & Cleaning',
-      'Automotive Accessories','Maintenance & Service','Workshop Cleaning & Maintenance',
-      'Car jacks & tools','Helmets & riding gear','Number plates'
     ];
 
     const SERVICES_SUBCATS=[
@@ -797,19 +744,11 @@
       'Laundry and ironing','Carpet cleaning','Move-in/move-out cleaning','Graphic design','Logo design',
       'Photography','Videography','Social media management','Website creation',
       'Printing business cards and flyers','Water delivery','Gas refill delivery','Convenience Services',
-      'Transport services',
+      'Transport services','Dj services',
       'Rental: Bicycle','Rental: Electric scooter','Rental: Skateboard','Rental: Motorcycle/Moped',
       'Rental: Car','Rental: Laptop','Rental: Projector','Rental: Speaker/PA system',
       'Rental: Camera/Photography gear','Rental: Furniture','Rental: Costume','Rental: Event equipment',
-      'Rental: Tools',
-      'Appliance Repairs','Automotive Services','Building & Trades','Chauffeur & Airport Transfer',
-      'Child Care','Cleaning Services','Courses & Training','DJ & Entertainment Services',
-      'DSTV Services','Electronics & IT Services','Event Services','Healer Services',
-      'Health & Beauty Services','Landscaping & Gardening Services','Legal Services','Manufacturing Services',
-      'Other Services','Party & Catering','Pet Services','Photography & Video Services',
-      'Real Estate Services','Recruitment Services','Removals & Storage','Sports & Fitness Training',
-      'Tax & Financial Services','Travel Agents & Tours','Tutors & Education Services',
-      'Wedding Venues & Wedding Services'
+      'Rental: Tools'
     ];
 
     const STATIONARY_GROUPS={
@@ -884,7 +823,7 @@
       'Suitcases','Travel bags','School bags','Tote/Grocery bags','Pouches'
     ];
     const TOYS_SUBCATS=[
-      'Building blocks/Lego','Action figures','Dolls',
+      'Board games','Card games','Puzzles','Building blocks/Lego','Action figures','Dolls',
       'Plush toys/Stuffed animals','Remote control toys','Educational toys','Outdoor toys',
       'Water toys','Toy cars','Play sets','Art & craft kits','Musical toys','Party games',
       'Fidget toys','Baby toys','Video game consoles','Video games'
@@ -904,19 +843,6 @@
       'Step stools','Wheelbarrows','Garden tools','Shovels','Rakes','Paint brushes','Paint rollers',
       'Sandpaper','Nails','Screws','Bolts & nuts','Cable ties','Duct tape','Super glue','Lubricants/WD-40'
     ];
-    const HARDWARE_SUBCATS=[
-      'Door handles & knobs','Door hinges','Locks & padlocks','Window fittings','Cabinet handles','Cabinet hinges',
-      'Chains & ropes','Wire mesh','Pipes & fittings','Plumbing fittings','Taps & fixtures','Electrical wiring',
-      'Switches & sockets','Light fittings','Bricks & blocks','Cement & building materials','Timber/Wood',
-      'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
-      'Insulation materials','Adhesives & sealants','Silicone & fillers'
-    ];
-    const GAMING_SUBCATS=[
-      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
-      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
-      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
-      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
-    ];
     const SNACKS_SUBCATS=[
       'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
       'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
@@ -932,13 +858,13 @@
       Toys:{field:'toys_subcategory',label:'Toy/Hobby Type *',items:TOYS_SUBCATS},
       Pets:{field:'pets_subcategory',label:'Pet Item Type *',items:PETS_SUBCATS},
       Tools:{field:'tools_subcategory',label:'Tool Type *',items:TOOLS_SUBCATS},
-      Hardware:{field:'hardware_subcategory',label:'Hardware Type *',items:HARDWARE_SUBCATS},
-      Gaming:{field:'gaming_subcategory',label:'Gaming Item *',items:GAMING_SUBCATS},
       Snacks:{field:'snacks_subcategory',label:'Snack Type *',items:SNACKS_SUBCATS},
       Sports:{field:'sports_subcategory',label:'Sports/Outdoor Item *',items:SPORTS_SUBCATS},
       Books:{field:'books_subcategory',label:'Book/Media Type *',items:BOOKS_SUBCATS},
       Music:{field:'music_subcategory',label:'Music Item Type *',items:MUSIC_SUBCATS},
       Cameras:{field:'cameras_subcategory',label:'Camera Item Type *',items:CAMERAS_SUBCATS},
+      Gaming:{field:'gaming_subcategory',label:'Gaming Item Type *',items:GAMING_SUBCATS},
+      Tickets:{field:'tickets_subcategory',label:'Ticket Type *',items:TICKETS_SUBCATS},
       Events:{field:'events_subcategory',label:'Event/Party Item *',items:EVENTS_SUBCATS},
       Plants:{field:'plants_subcategory',label:'Plant/Garden Item *',items:PLANTS_SUBCATS},
       Decor:{field:'decor_subcategory',label:'Home Decor Item *',items:DECOR_SUBCATS},
@@ -950,35 +876,17 @@
       Food:{field:'food_subcategory',label:'Food Item *',items:FOOD_SUBCATS},
       Beauty:{field:'beauty_subcategory',label:'Beauty Item *',items:BEAUTY_SUBCATS},
       Tutoring:{field:'tutoring_subcategory',label:'Tutoring Subject *',items:TUTORING_SUBCATS},
-      Properties:{field:'properties_subcategory',label:'Property Type *',items:PROPERTIES_SUBCATS},
+      Accommodation:{field:'accommodation_subcategory',label:'Accommodation Type *',items:ACCOMMODATION_SUBCATS},
       Transport:{field:'transport_subcategory',label:'Transport Type *',items:TRANSPORT_SUBCATS},
-      Vehicles:{field:'vehicles_subcategory',label:'Vehicle Type *',items:VEHICLES_SUBCATS},
-      Watermobile:{field:'watermobile_subcategory',label:'Watermobile Type *',items:WATERMOBILE_SUBCATS},
-      Jobs:{field:'jobs_subcategory',label:'Job Category *',items:JOBS_SUBCATS},
-      Camping:{field:'camping_subcategory',label:'Camping Item Type *',items:CAMPING_SUBCATS},
-      BoardGames:{field:'boardgames_subcategory',label:'Board Game Type *',items:BOARDGAMES_SUBCATS},
       Services:{field:'services_subcategory',label:'Service Type *',items:SERVICES_SUBCATS},
       Stationary:{field:'stationary_subcategory',label:'Stationary Item *',items:STATIONARY_SUBCATS},
       Appliances:{field:'appliances_subcategory',label:'Appliance Type *',items:APPLIANCES_SUBCATS},
       Furniture:{field:'furniture_subcategory',label:'Furniture Item *',items:FURNITURE_SUBCATS}
     };
 
-    function populateVehYears(){
-      const sel=document.getElementById('f-veh-year');
-      const nowYear=new Date().getFullYear();
-      let opts='<option value="">Select year</option>';
-      for(let y=nowYear+1;y>=1980;y--) opts+='<option>'+y+'</option>';
-      sel.innerHTML=opts;
-    }
-    populateVehYears();
-
     document.getElementById('f-cat').addEventListener('change',e=>{
       const v=e.target.value;
       document.getElementById('f-tb-row').style.display = v==='Textbooks' ? 'grid' : 'none';
-      const isVeh = v==='Vehicles';
-      ['f-veh-row1','f-veh-row2','f-veh-row3','f-veh-row4','f-veh-row5'].forEach(id=>{
-        document.getElementById(id).style.display = isVeh ? (id==='f-veh-row5'?'block':'grid') : 'none';
-      });
       const conf=FLAT_SUBCATS[v];
       const flatRow=document.getElementById('f-flat-row');
       document.getElementById('f-flat-other-row').style.display='none';
@@ -1005,112 +913,332 @@
       if(e.target.value!=='Other') document.getElementById('f-flat-other').value='';
     });
 
-    // ===== AREA DELIVERY COVERAGE (Province > City > District > Suburb) =====
-    let sellerAreas=[]; // [{province,city,district,suburbs:[...]}]
-    let areaAddProvince=null, areaAddCity=null, areaAddDistrict=null, areaAddSuburbs=[];
+    // ===== INSTITUTION / CAMPUS DELIVERY COVERAGE =====
+    const INSTITUTIONS={
+      university:[
+      {name:'University of Cape Town (UCT)',campuses:['Rondebosch (Cape Town)']},
+      {name:'Stellenbosch University (SU)',campuses:['Stellenbosch','Tygerberg','Bellville Park','Saldanha']},
+      {name:'University of the Western Cape (UWC)',campuses:['Bellville']},
+      {name:'Cape Peninsula University of Technology (CPUT)',campuses:['Bellville','District Six','Granger Bay','Wellington','Mowbray']},
+      {name:'University of Fort Hare (UFH)',campuses:['Alice','East London','Bhisho']},
+      {name:'Rhodes University',campuses:['Makhanda (Grahamstown)']},
+      {name:'Nelson Mandela University (NMU)',campuses:['Gqeberha (Port Elizabeth)','George']},
+      {name:'Walter Sisulu University (WSU)',campuses:['Mthatha','Butterworth','Buffalo City (East London)','Komani (Queenstown)']},
+      {name:'University of the Free State (UFS)',campuses:['Bloemfontein','Qwaqwa','South Campus']},
+      {name:'Central University of Technology (CUT)',campuses:['Bloemfontein','Welkom']},
+      {name:'University of KwaZulu-Natal (UKZN)',campuses:['Howard College','Westville','Edgewood','Pietermaritzburg','Nelson R. Mandela School of Medicine']},
+      {name:'Durban University of Technology (DUT)',campuses:['Steve Biko','Ritson','ML Sultan','Brickfield','Indumiso','Riverside']},
+      {name:'Mangosuthu University of Technology (MUT)',campuses:['Umlazi']},
+      {name:'University of Zululand (UNIZULU)',campuses:['KwaDlangezwa','Richards Bay']},
+      {name:'University of Johannesburg (UJ)',campuses:['Auckland Park Kingsway','Auckland Park Bunting Road','Doornfontein','Soweto']},
+      {name:'University of Pretoria (UP)',campuses:['Hatfield','Groenkloof','Prinshof','Hillcrest','Onderstepoort','Mamelodi']},
+      {name:'University of South Africa (UNISA)',campuses:['Main campus (Pretoria)','Regional campus']},
+      {name:'Tshwane University of Technology (TUT)',campuses:['Pretoria','Soshanguve','Ga-Rankuwa','eMalahleni','Mbombela','Polokwane']},
+      {name:'University of the Witwatersrand (Wits)',campuses:['Braamfontein','Parktown']},
+      {name:'North-West University (NWU)',campuses:['Potchefstroom','Mahikeng','Vanderbijlpark']},
+      {name:'Vaal University of Technology (VUT)',campuses:['Vanderbijlpark','Ekurhuleni','Secunda','Upington']},
+      {name:'University of Limpopo (UL)',campuses:['Turfloop']},
+      {name:'University of Venda (UNIVEN)',campuses:['Thohoyandou']},
+      {name:'University of Mpumalanga (UMP)',campuses:['Mbombela','Siyabuswa']},
+      {name:'Sol Plaatje University (SPU)',campuses:['Kimberley']},
+      {name:'Sefako Makgatho Health Sciences University (SMU)',campuses:['Ga-Rankuwa (Pretoria)']}
+      ],
+      private:[
+      {name:'AAA School of Advertising',campuses:['Cape Town','Johannesburg']},
+      {name:'Academy for Facility Management (A4FM)',campuses:['Johannesburg','Cape Town']},
+      {name:'Academy of Sound Engineering',campuses:['Johannesburg','Cape Town']},
+      {name:'ACT Cape Town',campuses:['Cape Town']},
+      {name:'Afrikaanse Protestantse Akademie',campuses:['Pretoria','Online/Distance']},
+      {name:'Akademia',campuses:['Centurion','Online/Distance','Various study centres']},
+      {name:'Akademiese Reformatoriese Opleiding en Studies (AROS)',campuses:['Pretoria','Online/Distance']},
+      {name:'The Animation School',campuses:['Cape Town','Johannesburg']},
+      {name:'Baptist Theological College of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Belgium Campus iTversity',campuses:['Pretoria','Johannesburg','Port Elizabeth/Gqeberha','Stellenbosch']},
+      {name:'Berea College of Technology',campuses:['Durban']},
+      {name:'BHC School of Design',campuses:['Cape Town']},
+      {name:'Boston City Campus',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','East London','Polokwane','Mbombela','Kimberley','Rustenburg','Potchefstroom','Vanderbijlpark']},
+      {name:'Boston Media House',campuses:['Johannesburg','Cape Town','Durban']},
+      {name:'Business Management Training College',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
+      {name:'Cape Audio College',campuses:['Cape Town']},
+      {name:'Cape Town Baptist Seminary',campuses:['Cape Town','Online/Distance']},
+      {name:'Cape Town College of Fashion Design',campuses:['Cape Town']},
+      {name:'Cape Town Creative Academy',campuses:['Cape Town']},
+      {name:'Centre for Creative Education / Iziko La Bantu Be Afrika',campuses:['Cape Town','Online/Distance']},
+      {name:'Christ Baptist Church Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Christian Reformed Theological Seminary',campuses:['Pretoria','Online/Distance']},
+      {name:'College of Transfiguration',campuses:['Grahamstown/Makhanda','Online/Distance']},
+      {name:'Cornerstone Institute',campuses:['Cape Town','Online/Distance']},
+      {name:'Cranefield College',campuses:['Pretoria','Johannesburg','Online/Distance']},
+      {name:'Da Vinci Institute for Technology Management',campuses:['Lethabong','Online/Distance']},
+      {name:'Design Academy of Fashion',campuses:['Cape Town']},
+      {name:'Edutel Higher Education',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
+      {name:'Eduvos',campuses:['Bedfordview','Bloemfontein','Durban (Umhlanga)','East London','Mbombela','Midrand','Mowbray','Nelson Mandela Bay','Potchefstroom','Pretoria','Tygervalley','Vaal']},
+      {name:'Elizabeth Galloway Academy of Fashion Design',campuses:['Stellenbosch']},
+      {name:'Empilweni Education',campuses:['Johannesburg']},
+      {name:'ESRI South Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Exercise Teachers Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'FEDISA',campuses:['Cape Town','Johannesburg']},
+      {name:'Friends of Design – Academy of Digital Arts',campuses:['Cape Town']},
+      {name:'Foundation for Professional Development',campuses:['Pretoria','Johannesburg','Cape Town','Durban','Bloemfontein','Online/Distance']},
+      {name:'George Whitefield College',campuses:['Cape Town']},
+      {name:'Health and Fitness Professionals Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Helderberg College of Higher Education',campuses:['Somerset West']},
+      {name:'Henley Business School Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'IHT Hotel School',campuses:['Johannesburg','Cape Town','Durban']},
+      {name:'IMM Graduate School',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
+      {name:'The Independent Institute of Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','Mbombela','Potchefstroom','Midrand']},
+      {name:'Inscape Education Group',campuses:['Cape Town','Pretoria','Johannesburg','Durban','Online/Distance']},
+      {name:'International Hotel School',campuses:['Cape Town','Johannesburg','Durban','Pretoria','Gqeberha','Online/Distance']},
+      {name:'International Trade Institute of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'IQ Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Isa Carstens Academy',campuses:['Stellenbosch','Pretoria','Online/Distance']},
+      {name:'Life Healthcare',campuses:['Johannesburg','Pretoria','Cape Town','Durban']},
+      {name:'Lyceum College',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
+      {name:'MANCOSA',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Gqeberha','Polokwane','Mbombela','Online/Distance']},
+      {name:'Mediclinic',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Bloemfontein']},
+      {name:'Milpark Education',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Mukhanyo Theological College',campuses:['Durban','Cape Town','Johannesburg','Online/Distance']},
+      {name:'Netcare Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Port Elizabeth/Gqeberha']},
+      {name:'Newbridge Graduate Institute',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Oakfields College',campuses:['Pretoria','Johannesburg']},
+      {name:'Open Learning Group',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
+      {name:'The Open Window',campuses:['Centurion/Pretoria']},
+      {name:'Potchefstroom Academy',campuses:['Potchefstroom']},
+      {name:'Production Management Institute of Southern Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Red & Yellow Creative School of Business',campuses:['Cape Town','Johannesburg','Online/Distance']},
+      {name:'Regenesys',campuses:['Johannesburg','Online/Distance']},
+      {name:'Regent Business School',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
+      {name:'Richfield',campuses:['Bryanston','Newtown Junction','Centurion','Pretoria','Umhlanga','Musgrave','Cape Town','Polokwane']},
+      {name:'Ruth Prowse School of Art',campuses:['Cape Town']},
+      {name:'SAE Institute South Africa',campuses:['Johannesburg','Cape Town']},
+      {name:'SANTS Private Higher Education Institution',campuses:['Pretoria','Online/Distance']},
+      {name:'Seth Mokitimi Methodist Seminary',campuses:['Pietermaritzburg','Online/Distance']},
+      {name:'South African College of Applied Psychology (SACAP)',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Online/Distance']},
+      {name:'AFDA',campuses:['Johannesburg','Cape Town','Gqeberha','Durban']},
+      {name:'South African Theological Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Southern Africa Bible College',campuses:['South Africa/Online learning']},
+      {name:'Southern African Wildlife College',campuses:['Hoedspruit']},
+      {name:'STADIO',campuses:['Centurion','Durbanville','Musgrave','Waterfall/Midrand','Online/Distance']},
+      {name:'St Augustine College of South Africa',campuses:['Johannesburg']},
+      {name:'Stellenbosch Academy of Design and Photography',campuses:['Stellenbosch']},
+      {name:'Stenden South Africa',campuses:['Port Alfred']},
+      {name:'St John Vianney Seminary',campuses:['Pretoria']},
+      {name:'St Joseph\'s Theological Institute',campuses:['Cedara/Pietermaritzburg']},
+      {name:'Theological Education by Extension College',campuses:['Johannesburg','Online/Distance']},
+      {name:'The Swiss Hotel School South Africa',campuses:['Johannesburg']},
+      {name:'TSIBA Education',campuses:['Cape Town']},
+      {name:'Union Bible Institute',campuses:['Pietermaritzburg']},
+      {name:'Villioti Fashion Institute',campuses:['Johannesburg','Cape Town']},
+      {name:'Academic Institute of Excellence',campuses:['Johannesburg','Online/Distance']},
+      {name:'Academy for Environmental Leadership South Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Academy for Organisational Change',campuses:['Johannesburg','Online/Distance']},
+      {name:'AFM Theological College',campuses:['Johannesburg','Online/Distance']},
+      {name:'African Academy of Cinematic Arts',campuses:['Johannesburg','Cape Town']},
+      {name:'Alpvest Institute for Futuretech',campuses:['Johannesburg','Online/Distance']},
+      {name:'Arwyp Training Institute',campuses:['Kempton Park']},
+      {name:'Auckland Park Theological Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Balderstone Sports Institute',campuses:['Pretoria','Johannesburg']},
+      {name:'Bible Institute of South Africa',campuses:['Kalk Bay, Cape Town','Online/Distance']},
+      {name:'Bronberg Nurse Education and Training Academy',campuses:['Pretoria']},
+      {name:'Camelot International',campuses:['Johannesburg','Cape Town','Durban','Pretoria']},
+      {name:'Campus of Performing Arts',campuses:['Johannesburg']},
+      {name:'Career Excel Academy',campuses:['Johannesburg','Online/Distance']},
+      {name:'Cedar International Academy',campuses:['Johannesburg','Online/Distance']},
+      {name:'Chatsmed Candle Light Nursing School',campuses:['Durban','Pietermaritzburg']},
+      {name:'Cheeba Cannabis Academy',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Chartall Business College',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Cornerstone Performance Solutions',campuses:['Johannesburg','Online/Distance']},
+      {name:'CTU Training Solutions',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha']},
+      {name:'Duke Corporate Education RSA',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Design Time',campuses:['Cape Town']},
+      {name:'EcoTraining',campuses:['Hoedspruit','Greater Kruger area']},
+      {name:'Engineering College of Science and Technology',campuses:['Johannesburg']},
+      {name:'Emmanuel Verpleegskool',campuses:['Online/Distance']},
+      {name:'Equine-Librium College',campuses:['White River/Mbombela area']},
+      {name:'Esda Nursing Education Institute',campuses:['Johannesburg']},
+      {name:'Evangelical Seminary of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Felix Higher Education and Training',campuses:['Johannesburg']},
+      {name:'Future Nurses Nursing School',campuses:['Johannesburg']},
+      {name:'Hugenote Kollege',campuses:['Wellington']},
+      {name:'Instill Education',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Institute for Architecture and Design',campuses:['Johannesburg','Online/Distance']},
+      {name:'Institute of Accounting Science',campuses:['Johannesburg','Online/Distance']},
+      {name:'International Peace College South Africa',campuses:['Cape Town','Online/Distance']},
+      {name:'Keobakile Nursing Academy',campuses:['Johannesburg']},
+      {name:'Khanyisa Nursing School',campuses:['Johannesburg']},
+      {name:'Lenmed Nursing College',campuses:['Johannesburg']},
+      {name:'Lillian Spengani Memorial Nursing School',campuses:['Johannesburg']},
+      {name:'Lutheran Theological Seminary in Tshwane',campuses:['Pretoria']},
+      {name:'Madina Institute',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
+      {name:'Marematlou Training Institute',campuses:['Johannesburg']},
+      {name:'Moonstone Business School of Excellence',campuses:['Cape Town','Johannesburg','Online/Distance']},
+      {name:'Novia One Group',campuses:['Johannesburg','Online/Distance']},
+      {name:'2 Oceans Graduate Institute',campuses:['Cape Town','Online/Distance']},
+      {name:'Peritum Agri Institute',campuses:['Pretoria','Online/Distance']},
+      {name:'SACOB',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
+      {name:'School of Explorative Architecture',campuses:['Johannesburg','Online/Distance']},
+      {name:'Sizanesu Nursing Training Institute',campuses:['Johannesburg']},
+      {name:'SkillsPro',campuses:['Johannesburg','Online/Distance']},
+      {name:'Striving Mind Nursing Academy',campuses:['Johannesburg']},
+      {name:'The Graduate Institute of Financial Sciences Private Higher Education',campuses:['Johannesburg','Online/Distance']},
+      {name:'Thulaganyo Nursing School',campuses:['Johannesburg']},
+      {name:'Thutobopelo Nursing Academy',campuses:['Johannesburg']},
+      {name:'Trifocus Fitness Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Ukwazi School of Nursing',campuses:['Johannesburg','Pretoria','Cape Town']}
+      ],
+      tvet:[
+      {name:'Buffalo City TVET College',campuses:['East London','John Knox Bokwe','St Marks']},
+      {name:'Eastcape Midlands TVET College',campuses:['Charles Goodyear','Graaff-Reinet','Grahamstown','Brickfields Road','High Street','Park Avenue','Thanduxolo','Heath Park']},
+      {name:'Ikhala TVET College',campuses:['Aliwal North','Ezibeleni Engineering','Queen Nonesi','Sterkspruit']},
+      {name:'Ingwe TVET College',campuses:['Maluti','Mount Fletcher','Mount Frere','Ngqungqushe','Siteto']},
+      {name:'King Hintsa TVET College',campuses:['Centane','H.B. Tsengwa','Teko']},
+      {name:'King Sabata Dalindyebo TVET College',campuses:['Engcobo','Mapuzi','Mthatha']},
+      {name:'Lovedale TVET College',campuses:['Alice','King','Zwelitsha']},
+      {name:'Port Elizabeth TVET College',campuses:['Dower','Struandale','Russell Road']},
+      {name:'Flavius Mareka TVET College',campuses:['Kroonstad','Mphohadi','Sasolburg']},
+      {name:'Goldfields TVET College',campuses:['Tosa','Welkom']},
+      {name:'Maluti TVET College',campuses:['Bethlehem','Bonamelo','Itemoheleng','Kwethisong','Sefikeng','Lere La Tshepe','Harrismith']},
+      {name:'Motheo TVET College',campuses:['Hillside View','Bloemfontein','Thaba Nchu']},
+      {name:'Central Johannesburg TVET College',campuses:['Alexandra','Ellispark','Highveld','Parktown','Troyeville']},
+      {name:'Ekurhuleni East TVET College',campuses:['Benoni','Brakpan','Daveyton','Kwa-Thema','Springs']},
+      {name:'Ekurhuleni West TVET College',campuses:['Alberton','Boksburg','Germiston','Kathorus','Kempton','Tembisa']},
+      {name:'Sedibeng TVET College',campuses:['Sebokeng','Vanderbijlpark','Vereeniging']},
+      {name:'South West Gauteng TVET College',campuses:['Dobsonville','George Tabor','Molapo','Roodepoort','Roodepoort West','Technisa']},
+      {name:'Tshwane North TVET College',campuses:['Mamelodi','Pretoria','Rosslyn','Soshanguve South','Temba','Soshanguve North']},
+      {name:'Tshwane South TVET College',campuses:['Atteridgeville','Centurion','Odi','Pretoria West']},
+      {name:'Western TVET College',campuses:['Carletonville','Krugersdorp','Krugersdorp West','Randfontein']},
+      {name:'Coastal KZN TVET College',campuses:['Durban','Swinton Road','Umlazi','Umlazi BB','AS-Salaam','Ubughle Bogu','Umbumbulu']},
+      {name:'Elangeni TVET College',campuses:['KwaMashu','Mpumalanga','Ndwedwe','Inanda','Kwadabeka','Ntuzuma','Pinetown','Qadi']},
+      {name:'Esayidi TVET College',campuses:['Enyenyezi','Gamalakhe','Gcinangempi','Kokstad','Nqumuza','Port Shepstone','Sizanani']},
+      {name:'Majuba TVET College',campuses:['Centre for People Development','IT & Business','Majuba Technology Centre','Newcastle Technology','Ekuseni Youth Centre','Ncome Prison','Newcastle Training Centre','Open Learning Unit','Waterval Prison','Westville Prison','Dundee']},
+      {name:'Mnambithi TVET College',campuses:['Ezakheni E-Section','Ladysmith','Estcourt','Ezakheni A-Section']},
+      {name:'Mthashana TVET College',campuses:['Babanango','Emandleni','Kwa-Qgikazi','Maputa','Vryheid','Nqutu']},
+      {name:'Thekwini TVET College',campuses:['Asherville','Cato Manor','Centec','Melbourne','Springfield','Umbilo']},
+      {name:'Umfolozi TVET College',campuses:['Esikhawini','Eshowe','Jininindomnyama','Mandeni','Nseleni','Richtek','Sikhanyisele','Sundumbili','Thubelihle','ZCBF']},
+      {name:'Umgungundlovu TVET College',campuses:['Edendale','Midlands','Msunduzi','Northdale','Plessislaer']},
+      {name:'Capricorn TVET College',campuses:['Polokwane','Senwabarwana','Seshego']},
+      {name:'Lephalale TVET College',campuses:['Lephalale','Modimolle']},
+      {name:'Letaba TVET College',campuses:['Giyani','Maake','Tzaneen']},
+      {name:'Mopani South East TVET College',campuses:['Phalaborwa','Sir Val Duncan']},
+      {name:'Sekhukhune TVET College',campuses:['CN Phatudi','CS Barlow']},
+      {name:'Vhembe TVET College',campuses:['Makwarela','Mashamba','Mavhoi']},
+      {name:'Waterberg TVET College',campuses:['Lebowakgomo','Mahwelereng','Mokopane']},
+      {name:'Ehlanzeni TVET College',campuses:['Barberton','KaNyamazane','Mapulaneng','Mlumati','Mthimba','Nelspruit','Waterval Boven']},
+      {name:'Gert Sibande TVET College',campuses:['Ermelo','Evander','Standerton','Sibanesetfu']},
+      {name:'Nkangala TVET College',campuses:['CN Mahlangu','Middelburg','Mpondozankomo','Witbank']},
+      {name:'Northern Cape Rural TVET College',campuses:['De Aar','Kathu','Kuruman','Namaqualand','Upington']},
+      {name:'Northern Cape Urban TVET College',campuses:['City','Moromogolo']},
+      {name:'Orbit TVET College',campuses:['Rustenburg','Mankwe','Brits']},
+      {name:'Taletso TVET College',campuses:['Mafikeng','Lichtenburg','Lehurutshe']},
+      {name:'Vuselela TVET College',campuses:['Jouberton','Klerksdorp','Matlosana','Potchefstroom','Taung']},
+      {name:'Boland TVET College',campuses:['Caledon','Paarl','Stellenbosch','Strand','Worcester']},
+      {name:'College of Cape Town for TVET',campuses:['Athlone','City','Crawford','Gardens','Guguletu','Pinelands','Thornton','Wynberg']},
+      {name:'False Bay TVET College',campuses:['Fish Hoek','Khayelitsha','Mitchell\'s Plain','Muizenberg','Westlake']},
+      {name:'Northlink TVET College',campuses:['Belhar','Bellville','Goodwood','Parow','Protea','Tygerberg','Wingfield']},
+      {name:'South Cape TVET College',campuses:['Beaufort West','Bitou','George','Hessequa','Mossel Bay','Oudtshoorn']},
+      {name:'West Coast TVET College',campuses:['Atlantis','Citrusdal','Malmesbury','Vredenburg','Vredendal']}
+      ]
+    };
+    const INSTITUTION_TYPES=[{key:'university',label:'University'},{key:'private',label:'Private Higher Education Institution'},{key:'tvet',label:'Public TVET College'}];
+    const INST_TYPE_ICON={university:'🎓',private:'🏫',tvet:'🛠️'};
+    let sellerInstitutions=[]; // [{type,name,campuses:[...]}]
+    let instAddType=null, instAddInst=null, instAddCampuses=[];
 
-    function renderAreaList(){
-      const box=document.getElementById('p-area-list');
-      if(!sellerAreas.length){ box.innerHTML=''; return; }
-      box.innerHTML=sellerAreas.map((a,i)=>
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#f0f7ff;border:1.5px solid #eadcfb;border-radius:12px;padding:10px 12px">'+
-          '<div><div style="font-weight:800;font-size:13px;color:#111">📍 '+a.district+', '+a.city+'</div>'+
-          '<div style="font-size:12px;color:#888;font-weight:600;margin-top:2px">'+(a.suburbs||[]).join(', ')+'</div></div>'+
-          '<button type="button" onclick="removeArea('+i+')" style="border:none;background:none;color:#c62828;font-weight:900;font-size:16px;cursor:pointer;line-height:1">✕</button>'+
+    function findInstitution(uniName){
+      for(const key of ['university','private','tvet']){
+        const found=(INSTITUTIONS[key]||[]).find(u=>u.name===uniName);
+        if(found) return found;
+      }
+      return null;
+    }
+
+    function renderInstList(){
+      const box=document.getElementById('p-inst-list');
+      if(!sellerInstitutions.length){ box.innerHTML=''; return; }
+      box.innerHTML=sellerInstitutions.map((inst,i)=>
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#faf7ff;border:1.5px solid #eadcfb;border-radius:12px;padding:10px 12px">'+
+          '<div><div style="font-weight:800;font-size:13px;color:#111">'+(INST_TYPE_ICON[inst.type]||'')+' '+inst.name+'</div>'+
+          '<div style="font-size:12px;color:#888;font-weight:600;margin-top:2px">'+(inst.campuses||[]).join(', ')+'</div></div>'+
+          '<button type="button" onclick="removeInstitution('+i+')" style="border:none;background:none;color:#c62828;font-weight:900;font-size:16px;cursor:pointer;line-height:1">✕</button>'+
         '</div>'
       ).join('');
     }
-    window.removeArea=(i)=>{ sellerAreas.splice(i,1); renderAreaList(); };
+    window.removeInstitution=(i)=>{ sellerInstitutions.splice(i,1); renderInstList(); };
 
-    window.openAreaAddModal=()=>{
-      areaAddProvince=null; areaAddCity=null; areaAddDistrict=null; areaAddSuburbs=[];
-      renderAreaProvinceStep();
-      document.getElementById('area-modal-overlay').style.display='flex';
+    window.openInstAddModal=()=>{
+      instAddType=null; instAddInst=null; instAddCampuses=[];
+      renderInstTypeStep();
+      document.getElementById('inst-modal-overlay').style.display='flex';
       document.body.style.overflow='hidden';
     };
-    window.closeAreaAddModal=()=>{
-      document.getElementById('area-modal-overlay').style.display='none';
+    window.closeInstAddModal=()=>{
+      document.getElementById('inst-modal-overlay').style.display='none';
       document.body.style.overflow='';
     };
-    function renderAreaProvinceStep(){
-      const list=areaProvinces();
-      document.getElementById('area-modal-body').innerHTML=
-        '<div class="inst-modal-title">Add an area</div>'+
-        '<div class="inst-modal-sub">What province?</div>'+
+    function renderInstTypeStep(){
+      document.getElementById('inst-modal-body').innerHTML=
+        '<div class="inst-modal-title">Add an institution</div>'+
+        '<div class="inst-modal-sub">What type of institution is it?</div>'+
         '<div class="tb-subject-grid">'+
-        list.map(p=>'<button type="button" class="tb-subject-btn" onclick="pickAreaProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
+        INSTITUTION_TYPES.map(t=>'<button type="button" class="tb-subject-btn" onclick="pickInstType(\''+t.key+'\')">'+(INST_TYPE_ICON[t.key]||'')+' '+t.label+'</button>').join('')+
         '</div>';
     }
-    window.pickAreaProvince=(p)=>{ areaAddProvince=p; renderAreaCityStep(); };
-    function renderAreaCityStep(){
-      const list=areaCities(areaAddProvince);
-      document.getElementById('area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderAreaProvinceStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select the city</div>'+
-        '<div class="inst-modal-sub">'+areaAddProvince+'</div>'+
-        '<input type="text" class="inst-search" placeholder="Search cities..." oninput="filterAreaCityList(this.value)"/>'+
-        '<div class="inst-count" id="area-pick-count">'+list.length+' cities</div>'+
-        '<div class="tb-subject-grid" id="area-pick-list">'+
-        list.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickAreaCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+    window.pickInstType=(key)=>{ instAddType=key; renderInstPickStep(); };
+    function renderInstPickStep(){
+      const typeObj=INSTITUTION_TYPES.find(t=>t.key===instAddType);
+      const list=INSTITUTIONS[instAddType]||[];
+      document.getElementById('inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderInstTypeStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select the institution</div>'+
+        '<div class="inst-modal-sub">'+typeObj.label+'</div>'+
+        '<input type="text" class="inst-search" placeholder="Search '+typeObj.label.toLowerCase()+'..." oninput="filterInstPickList(this.value)"/>'+
+        '<div class="inst-count" id="inst-pick-count">'+list.length+' institution'+(list.length===1?'':'s')+'</div>'+
+        '<div class="tb-subject-grid" id="inst-pick-list">'+
+        list.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickInstInstitution(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')+
         '</div>';
     }
-    window.renderAreaProvinceStep=renderAreaProvinceStep;
-    window.filterAreaCityList=(q)=>{
-      const list=areaCities(areaAddProvince);
+    window.renderInstPickStep=renderInstPickStep;
+    window.filterInstPickList=(q)=>{
+      const list=INSTITUTIONS[instAddType]||[];
       q=(q||'').trim().toLowerCase();
-      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
-      document.getElementById('area-pick-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
-      document.getElementById('area-pick-list').innerHTML=filtered.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickAreaCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+      const filtered=q?list.filter(u=>u.name.toLowerCase().includes(q)):list;
+      document.getElementById('inst-pick-count').textContent=filtered.length+' institution'+(filtered.length===1?'':'s');
+      document.getElementById('inst-pick-list').innerHTML=filtered.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickInstInstitution(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')||'<p class="loading-msg">No matches</p>';
     };
-    window.pickAreaCity=(c)=>{ areaAddCity=c; renderAreaDistrictStep(); };
-    function renderAreaDistrictStep(){
-      const list=areaDistricts(areaAddProvince,areaAddCity);
-      document.getElementById('area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderAreaCityStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select the district</div>'+
-        '<div class="inst-modal-sub">'+areaAddCity+'</div>'+
-        '<div class="tb-subject-grid">'+
-        list.map(d=>'<button type="button" class="tb-subject-btn" onclick="pickAreaDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
-        '</div>';
-    }
-    window.renderAreaCityStep=renderAreaCityStep;
-    window.pickAreaDistrict=(d)=>{
-      areaAddDistrict=d;
-      const existing=sellerAreas.find(a=>a.province===areaAddProvince && a.city===areaAddCity && a.district===areaAddDistrict);
-      areaAddSuburbs = existing ? [...existing.suburbs] : [];
-      renderAreaSuburbStep();
+    window.pickInstInstitution=(name)=>{
+      instAddInst=findInstitution(name);
+      const existing=sellerInstitutions.find(x=>x.name===instAddInst.name);
+      instAddCampuses = existing ? [...existing.campuses] : [];
+      renderInstCampusStep();
     };
-    function renderAreaSuburbStep(){
-      const list=areaSuburbs(areaAddProvince,areaAddCity,areaAddDistrict);
-      const allSelected = list.every(s=>areaAddSuburbs.includes(s));
-      document.getElementById('area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderAreaDistrictStep()">← Back</button>'+
-        '<div class="inst-modal-title">Which suburbs?</div>'+
-        '<div class="inst-modal-sub">'+areaAddDistrict+'</div>'+
+    function renderInstCampusStep(){
+      const allSelected = instAddInst.campuses.every(c=>instAddCampuses.includes(c));
+      document.getElementById('inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderInstPickStep()">← Back</button>'+
+        '<div class="inst-modal-title">Which campuses?</div>'+
+        '<div class="inst-modal-sub">'+instAddInst.name+'</div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:10px 0;cursor:pointer">'+
-          '<input type="checkbox" id="area-suburb-all" '+(allSelected?'checked':'')+' onchange="toggleAreaAllSuburbs(this.checked)"/> All suburbs in this district'+
+          '<input type="checkbox" id="inst-campus-all" '+(allSelected?'checked':'')+' onchange="toggleInstAllCampuses(this.checked)" style="width:16px;height:16px"/> All campuses'+
         '</label>'+
-        '<div class="tb-subject-grid" id="area-suburb-grid">'+
-        list.map(s=>'<button type="button" class="tb-subject-btn'+(areaAddSuburbs.includes(s)?' active':'')+'" onclick="toggleAreaSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
+        '<div class="tb-subject-grid" id="inst-campus-grid">'+
+        instAddInst.campuses.map(c=>'<button type="button" class="tb-subject-btn'+(instAddCampuses.includes(c)?' active':'')+'" onclick="toggleInstCampus(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
         '</div>'+
-        '<button type="button" class="btn-primary" style="margin-top:14px" onclick="confirmAreaAdd()">Add ✅</button>';
+        '<button type="button" class="btn-primary" style="margin-top:14px" onclick="confirmInstAdd()">Add ✅</button>';
     }
-    window.renderAreaDistrictStep=renderAreaDistrictStep;
-    window.toggleAreaAllSuburbs=(checked)=>{
-      const list=areaSuburbs(areaAddProvince,areaAddCity,areaAddDistrict);
-      areaAddSuburbs = checked ? [...list] : [];
-      renderAreaSuburbStep();
+    window.toggleInstAllCampuses=(checked)=>{
+      instAddCampuses = checked ? [...instAddInst.campuses] : [];
+      renderInstCampusStep();
     };
-    window.toggleAreaSuburb=(s)=>{
-      areaAddSuburbs = areaAddSuburbs.includes(s) ? areaAddSuburbs.filter(x=>x!==s) : [...areaAddSuburbs,s];
-      renderAreaSuburbStep();
+    window.toggleInstCampus=(c)=>{
+      instAddCampuses = instAddCampuses.includes(c) ? instAddCampuses.filter(x=>x!==c) : [...instAddCampuses,c];
+      renderInstCampusStep();
     };
-    window.confirmAreaAdd=()=>{
-      if(!areaAddSuburbs.length){ alert('Select at least one suburb (or tick "All suburbs in this district").'); return; }
-      sellerAreas = sellerAreas.filter(a=>!(a.province===areaAddProvince && a.city===areaAddCity && a.district===areaAddDistrict));
-      sellerAreas.push({province:areaAddProvince,city:areaAddCity,district:areaAddDistrict,suburbs:areaAddSuburbs});
-      renderAreaList();
-      closeAreaAddModal();
+    window.confirmInstAdd=()=>{
+      if(!instAddCampuses.length){ alert('Select at least one campus (or tick "All campuses").'); return; }
+      sellerInstitutions = sellerInstitutions.filter(x=>x.name!==instAddInst.name);
+      sellerInstitutions.push({type:instAddType,name:instAddInst.name,campuses:instAddCampuses});
+      renderInstList();
+      closeInstAddModal();
     };
 
 
@@ -1118,56 +1246,32 @@
       return window.location.href.replace(/[^/]*$/, '');
     }
     const VALID_PLAN_KEYS=['flash','quicklister','casual','standard','power','quarter','semester'];
-
-    window.startPaystackCheckout = async (planKey)=>{
-      document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('plan-card-selected'));
-      const pressedCard = document.getElementById('plan-'+planKey);
-      if (pressedCard) pressedCard.classList.add('plan-card-selected');
-
+    // Payments are not currently wired up — selling is free while we set
+    // things up (see Admin → Free Mode). This handler is a safe no-op that
+    // won't call any removed payment integration; it exists so the plan
+    // cards don't silently do nothing if this screen is ever reached.
+    window.startSellerCheckout = async (planKey)=>{
       const errEl = document.getElementById('checkout-error');
-      errEl.style.display='none';
       if (!VALID_PLAN_KEYS.includes(planKey)) return;
-      if (!currentUser) {
-        errEl.style.display='block';
-        errEl.textContent='Please sign in first.';
-        return;
-      }
-      const {data:{session}}=await supabase.auth.getSession();
-      if (!session?.access_token) {
-        errEl.style.display='block';
-        errEl.textContent='Please sign in again.';
-        return;
-      }
+      document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('plan-card-pressed'));
+      document.getElementById('plan-'+planKey)?.classList.add('plan-card-pressed');
       errEl.style.display='block';
       errEl.style.color='#555';
-      errEl.textContent='Redirecting to Paystack…';
-      try {
-        const res = await fetch(PAYSTACK_FN, {
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'Authorization':'Bearer '+session.access_token,
-            'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
-          },
-          body: JSON.stringify({ plan: planKey, return_base: siteBase() })
-        });
-        const payload = await res.json().catch(()=>({}));
-        if (!res.ok) {
-          errEl.style.color='#1d4ed8';
-          errEl.textContent = payload.error || ('Checkout failed ('+res.status+')');
-          return;
-        }
-        // Paystack hosts the whole checkout page — just redirect there.
-        window.location.href = payload.authorization_url;
-      } catch(e) {
-        errEl.style.color='#1d4ed8';
-        errEl.textContent = 'Could not start payment. Check that paystack-checkout is deployed.';
-      }
+      errEl.textContent='Selling is currently free — no payment needed. If you\'re seeing this screen, please contact support.';
     };
 
     async function init() {
-     try {
-      const {data:{user}} = await supabase.auth.getUser();
+      // These three don't depend on each other's results to be kicked off —
+      // auth doesn't need the settings, and the two settings don't need auth.
+      // Fetching all three in parallel instead of one-after-another cuts two
+      // full network round-trips off the dashboard's load time.
+      const [{data:{user}}, {data:pw}, {data:fm}] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase.from('settings').select('value').eq('key','paywall_active').single(),
+        supabase.from('settings').select('value').eq('key','free_mode').single()
+      ]);
+      const paywallOn = pw?.value === 'true';
+      const freeModeOn = fm?.value === 'true';
 
       if (!user) {
         document.getElementById('main-dashboard').style.display = 'block';
@@ -1177,15 +1281,6 @@
       currentUser = user;
       document.getElementById('dashboard-logout-btn').onclick = async () => { await supabase.auth.signOut(); window.location.href='login.html'; };
 
-      // These three are independent of each other — fetch together instead of
-      // three sequential round-trips before anything can render.
-      const [{data:settingsRows},{data:p}] = await Promise.all([
-        supabase.from('settings').select('key,value').in('key',['paywall_active','free_mode_active']),
-        supabase.from('profiles').select('*').eq('id',user.id).single()
-      ]);
-      const paywallOn = settingsRows?.find(r=>r.key==='paywall_active')?.value === 'true';
-      const freeModeOn = settingsRows?.find(r=>r.key==='free_mode_active')?.value === 'true';
-
       if (paywallOn) {
         document.getElementById('paywall-screen').style.display = 'block';
         document.getElementById('paywall-emergency').style.display = 'block';
@@ -1193,6 +1288,7 @@
         return;
       }
 
+      const {data:p} = await supabase.from('profiles').select('*').eq('id',user.id).single();
       const today = new Date().toISOString().slice(0,10);
       const paidActive = (p?.subscription_paid_until && p.subscription_paid_until >= today) || freeModeOn;
       const blocked = p?.is_blocked === true;
@@ -1223,23 +1319,23 @@
         document.getElementById('p-name').value = p.full_name||'';
         document.getElementById('p-whatsapp').value = p.whatsapp||'';
         document.getElementById('p-residence').value = p.residence||'';
-        document.getElementById('p-sell-all-areas').checked = !!p.deliver_all_areas;
-        sellerAreas = Array.isArray(p.seller_areas) ? p.seller_areas : [];
-        renderAreaList();
+        document.getElementById('p-sell-all-uni').checked = !!p.deliver_all_universities;
+        document.getElementById('p-sell-all-tvet').checked = !!p.deliver_all_tvet;
+        document.getElementById('p-sell-all-private').checked = !!p.deliver_all_private;
+        sellerInstitutions = Array.isArray(p.seller_institutions) ? p.seller_institutions : [];
+        renderInstList();
         if (p.is_admin) document.getElementById('admin-link').style.display = 'flex';
         supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+currentUser.id+',seller_id.eq.'+currentUser.id).neq('sender_id',currentUser.id).eq('is_read',false).then(({count})=>{
-          if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';}
+          renderBadge('messages', document.getElementById('msg-badge'), count||0);
         });
         loadNotifications();
         loadOrders();
         loadMyListings();
-        loadPurchasesBadge();
-        loadAlertsBadge();
 
-        if (p.is_admin || p.subscription_paid_until || freeModeOn) {
+        if (p.is_admin || p.subscription_paid_until) {
           const banner = document.createElement('div');
-          banner.style.cssText = 'background:#eff6ff;color:#5b21b6;padding:10px 20px;font-weight:800;font-size:12.5px;text-align:center;border-bottom:2px solid #e9d5ff';
-          banner.textContent = p.is_admin ? '✅ Admin account — seller plan never expires' : (p.subscription_paid_until && p.subscription_paid_until >= today) ? '✅ Seller plan active until '+new Date(p.subscription_paid_until).toLocaleDateString('en-ZA') : '🎁 Free Mode is ON — you can post without paying';
+          banner.style.cssText = 'background:#f5f0fe;color:#5b21b6;padding:10px 20px;font-weight:800;font-size:12.5px;text-align:center;border-bottom:2px solid #e9d5ff';
+          banner.textContent = p.is_admin ? '✅ Admin account — seller plan never expires' : '✅ Seller plan active until '+new Date(p.subscription_paid_until).toLocaleDateString('en-ZA');
           document.body.insertBefore(banner, document.body.firstChild);
         }
       }
@@ -1251,17 +1347,17 @@
           if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { err.textContent='❌ Only JPG/PNG/WEBP'; err.style.display='block'; return; }
           if (file.size > 8*1024*1024) { err.textContent='❌ Max 8MB per photo (before compression)'; err.style.display='block'; return; }
           const slot = document.getElementById('slot-'+n);
-          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Compressing...</div>';
+          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#7c3aed;text-align:center">Compressing...</div>';
           let uploadFile;
           try { uploadFile = await compressImage(file); }
           catch(compressErr) { uploadFile = file; }
-          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Uploading...</div>';
+          slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#7c3aed;text-align:center">Uploading...</div>';
           const fname = currentUser.id+'/'+n+'-'+Date.now()+'.jpg';
-          const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile);
+          const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile,{cacheControl:'31536000',upsert:false}); // 1yr cache: filenames are timestamp-unique, so content never changes under a given name
           if (error) { err.textContent='❌ '+error.message; err.style.display='block'; slot.innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>'; return; }
           const {data:u} = supabase.storage.from('listing-images').getPublicUrl(fname);
           imgs[n] = u.publicUrl;
-          slot.innerHTML = '<img loading="lazy" src="'+u.publicUrl+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>';
+          slot.innerHTML = '<img loading="lazy" src="'+u.publicUrl+'" alt="Uploaded listing photo '+(n+1)+'"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>';
         });
       });
 
@@ -1272,13 +1368,6 @@
       document.getElementById('btn-save-store').onclick = saveStore;
       loadOrders();
       refreshMfaStatus();
-     } catch (err) {
-      console.error('Seller dashboard failed to load:', err);
-      document.getElementById('main-dashboard').style.display = 'block';
-      document.getElementById('auth-guard').style.display = 'none';
-      document.getElementById('seller-content').style.display = 'none';
-      document.getElementById('load-error-guard').style.display = 'block';
-     }
     }
 
     // Resizes to max 1280px on the longest side and re-encodes as JPEG ~0.8 quality,
@@ -1325,35 +1414,24 @@
       if(unread>0){badge.textContent=unread;badge.style.display='inline-flex';}
       else badge.style.display='none';
     }
-
-    // Badges only reflect actual unread events — never a static count of things already saved.
-    async function countUnreadNotifs(types){
-      const {count}=await supabase.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
-      return count||0;
-    }
-    async function markNotifsRead(types){
-      await supabase.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
-    }
-    function setBadge(id,count){
-      const b=document.getElementById(id);
-      if(count>0){b.textContent=count;b.style.display='inline-block';}
-      else b.style.display='none';
-    }
-    async function loadAlertsBadge(){
-      setBadge('alerts-badge', await countUnreadNotifs(['search_alert','restock']));
-    }
-    async function loadPurchasesBadge(){
-      setBadge('purchases-badge', await countUnreadNotifs(['order_completed']));
-    }
     window.toggleNotifDropdown=async()=>{
       const dd=document.getElementById('notif-dropdown');
       if(dd.style.display==='block'){dd.style.display='none';return;}
       await loadNotifications();
       const notifs=window._notifs||[];
       dd.innerHTML=notifs.length
-        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+n.message+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
+        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+escapeHtml(n.message)+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
         : '<div class="notif-empty">No notifications yet 🔔</div>';
       dd.style.display='block';
+      // Opening the bell counts as "seen" — clear the badge right away and persist
+      // that server-side, so it stays cleared after a refresh (only new notifications
+      // that arrive after this point will bring the badge back).
+      const unreadIds=notifs.filter(n=>!n.is_read).map(n=>n.id);
+      if(unreadIds.length){
+        await supabase.from('notifications').update({is_read:true}).in('id',unreadIds);
+        unreadIds.forEach(id=>{const n=window._notifs.find(x=>x.id===id); if(n) n.is_read=true;});
+      }
+      document.getElementById('notif-badge').style.display='none';
     };
     window._openNotif=async(id,listingId)=>{
       await supabase.from('notifications').update({is_read:true}).eq('id',id);
@@ -1381,34 +1459,24 @@
       const flatConf = FLAT_SUBCATS[cat];
       let flatVal = document.getElementById('f-flat-subcat').value;
       const flatOtherDesc = document.getElementById('f-flat-other').value.trim();
-      const isVeh = cat==='Vehicles';
-      const vehMake = document.getElementById('f-veh-make').value.trim();
-      const vehModel = document.getElementById('f-veh-model').value.trim();
-      const vehYear = document.getElementById('f-veh-year').value;
-      const vehTransmission = document.getElementById('f-veh-transmission').value;
-      const vehFuel = document.getElementById('f-veh-fuel').value;
-      const vehForSaleBy = document.getElementById('f-veh-for-sale-by').value;
-      const vehColour = document.getElementById('f-veh-colour').value.trim();
-      const vehKm = document.getElementById('f-veh-km').value;
-      const vehLocation = document.getElementById('f-veh-location').value.trim();
       const err   = document.getElementById('form-error');
-      err.style.color='#1d4ed8'; err.textContent='';
+      err.style.color='#9333ea'; err.textContent='';
 
       // Fix 4 — check profile is complete first
-      const {data:p} = await supabase.from('profiles').select('full_name,whatsapp,residence,deliver_all_areas,seller_areas').eq('id',currentUser.id).single();
+      const {data:p} = await supabase.from('profiles').select('full_name,whatsapp,residence,deliver_all_universities,deliver_all_tvet,deliver_all_private,seller_institutions').eq('id',currentUser.id).single();
       if (!p?.full_name || !p?.whatsapp) {
         err.textContent='❌ Please complete your profile (name & WhatsApp) before listing. Go to the Profile tab.';
         showTab('profile');
         return;
       }
-      const hasDeliveryScope = p?.deliver_all_areas || (Array.isArray(p?.seller_areas) && p.seller_areas.length>0);
+      const hasDeliveryScope = p?.deliver_all_universities || p?.deliver_all_tvet || p?.deliver_all_private || (Array.isArray(p?.seller_institutions) && p.seller_institutions.length>0);
       if (!hasDeliveryScope) {
-        err.textContent='❌ Set which areas you deliver to before listing. Go to the Profile tab.';
+        err.textContent='❌ Set which institutions & campuses you sell to before listing. Go to the Profile tab.';
         showTab('profile');
         return;
       }
 
-      if (!title) { err.textContent='❌ Enter a product/service title'; return; }
+      if (!title) { err.textContent='❌ Enter a product title'; return; }
       if (!cat)   { err.textContent='❌ Select a category'; return; }
       if (!price || price<=0) { err.textContent='❌ Enter a valid price'; return; }
       if (!qty || qty<1) { err.textContent='❌ Enter quantity (at least 1)'; return; }
@@ -1427,16 +1495,7 @@
         image_url: imgs[1]||null, image_url_2: imgs[2]||null, image_url_3: imgs[3]||null,
         image_url_4: imgs[4]||null, image_url_5: imgs[5]||null, image_url_6: imgs[6]||null,
         textbook_year: cat==='Textbooks' ? tbYear : null,
-        textbook_subject: cat==='Textbooks' ? tbSubject : null,
-        vehicle_make: isVeh ? (vehMake||null) : null,
-        vehicle_model: isVeh ? (vehModel||null) : null,
-        vehicle_year: isVeh ? (vehYear||null) : null,
-        vehicle_transmission: isVeh ? (vehTransmission||null) : null,
-        vehicle_fuel_type: isVeh ? (vehFuel||null) : null,
-        vehicle_for_sale_by: isVeh ? (vehForSaleBy||null) : null,
-        vehicle_colour: isVeh ? (vehColour||null) : null,
-        vehicle_kilometers: isVeh && vehKm ? parseInt(vehKm) : null,
-        vehicle_location: isVeh ? (vehLocation||null) : null
+        textbook_subject: cat==='Textbooks' ? tbSubject : null
       };
       if (!editingListingId) { payload.is_available = !isDraft; payload.is_draft = !!isDraft; }
       // set every flat-category DB field to null, then fill in the one that applies
@@ -1450,7 +1509,7 @@
       btn.textContent=origTxt; btn.disabled=false;
       if (error) {
         if (error.message && error.message.includes('LISTING_CAP_REACHED')) {
-          err.innerHTML = '❌ You\'ve hit your plan\'s active listing limit. <a href="#" onclick="event.preventDefault();showUpgradeOptions()" style="color:#2563eb;font-weight:800;text-decoration:underline">Upgrade your plan →</a>';
+          err.innerHTML = '❌ You\'ve hit your plan\'s active listing limit. <a href="#" onclick="event.preventDefault();showUpgradeOptions()" style="color:#7c3aed;font-weight:800;text-decoration:underline">Upgrade your plan →</a>';
         } else {
           err.textContent='❌ '+error.message;
         }
@@ -1459,7 +1518,7 @@
       const wasEditing = !!editingListingId;
       resetAddForm();
       err.style.color='#2e7d32'; err.textContent=wasEditing?'✅ Listing updated!':(isDraft?'✅ Saved as draft!':'✅ Listing posted!');
-      setTimeout(()=>{err.textContent=''; showTab('listings'); loadMyListings(true);},1500);
+      setTimeout(()=>{err.textContent=''; showTab('listings'); loadMyListings();},1500);
       refreshPlanUsage();
     }
 
@@ -1477,7 +1536,7 @@
       card.style.display='block';
       document.getElementById('plan-usage-text').textContent = (PLAN_NAMES[p.seller_plan]||'Your plan')+': '+used+' of '+cap+' active listings used';
       document.getElementById('plan-usage-bar').style.width = Math.min(100,(used/cap)*100)+'%';
-      document.getElementById('plan-usage-bar').style.background = used>=cap ? '#dc2626' : '#2563eb';
+      document.getElementById('plan-usage-bar').style.background = used>=cap ? '#dc2626' : '#7c3aed';
     }
     window.showUpgradeOptions=()=>{
       document.getElementById('seller-content').style.display='none';
@@ -1502,8 +1561,8 @@
     function resetAddForm(){
       editingListingId = null;
       document.getElementById('add-form-heading').textContent='Add New Listing';
-      document.getElementById('btn-post').style.display='inline-block';
       document.getElementById('btn-post').textContent='Post Listing 🚀';
+      document.getElementById('btn-post').style.display='inline-block';
       document.getElementById('btn-draft').style.display='inline-block';
       document.getElementById('btn-cancel-edit').style.display='none';
       ['f-title','f-desc','f-price','f-qty','f-discount','f-delivery-fee'].forEach(id=>document.getElementById(id).value='');
@@ -1517,9 +1576,6 @@
       document.getElementById('f-flat-row').style.display='none';
       document.getElementById('f-flat-other').value='';
       document.getElementById('f-flat-other-row').style.display='none';
-      ['f-veh-make','f-veh-model','f-veh-colour','f-veh-km','f-veh-location'].forEach(id=>document.getElementById(id).value='');
-      ['f-veh-year','f-veh-transmission','f-veh-fuel','f-veh-for-sale-by'].forEach(id=>document.getElementById(id).value='');
-      ['f-veh-row1','f-veh-row2','f-veh-row3','f-veh-row4','f-veh-row5'].forEach(id=>document.getElementById(id).style.display='none');
       [1,2,3,4,5,6].forEach(n=>{imgs[n]=null;document.getElementById('fi-'+n).value='';document.getElementById('slot-'+n).innerHTML='<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';});
     }
 
@@ -1528,8 +1584,8 @@
       if(!l) return;
       editingListingId = id;
       document.getElementById('add-form-heading').textContent='Edit Listing ✏️';
+      document.getElementById('btn-post').textContent='Save Changes ✅';
       document.getElementById('btn-post').style.display='inline-block';
-      document.getElementById('btn-post').textContent='Save Changes 💾';
       document.getElementById('btn-draft').style.display='none';
       document.getElementById('btn-cancel-edit').style.display='inline-block';
       document.getElementById('f-title').value = l.title||'';
@@ -1545,17 +1601,6 @@
       if (l.category==='Textbooks') {
         document.getElementById('f-tb-year').value = l.textbook_year||'';
         document.getElementById('f-tb-subject').value = l.textbook_subject||'';
-      }
-      if (l.category==='Vehicles') {
-        document.getElementById('f-veh-make').value = l.vehicle_make||'';
-        document.getElementById('f-veh-model').value = l.vehicle_model||'';
-        document.getElementById('f-veh-year').value = l.vehicle_year||'';
-        document.getElementById('f-veh-transmission').value = l.vehicle_transmission||'';
-        document.getElementById('f-veh-fuel').value = l.vehicle_fuel_type||'';
-        document.getElementById('f-veh-for-sale-by').value = l.vehicle_for_sale_by||'';
-        document.getElementById('f-veh-colour').value = l.vehicle_colour||'';
-        document.getElementById('f-veh-km').value = l.vehicle_kilometers||'';
-        document.getElementById('f-veh-location').value = l.vehicle_location||'';
       }
       const flatConf = FLAT_SUBCATS[l.category];
       if (flatConf) {
@@ -1578,7 +1623,7 @@
         imgs[n] = url||null;
         const slot = document.getElementById('slot-'+n);
         slot.innerHTML = url
-          ? '<img loading="lazy" src="'+url+'" alt="Listing photo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>'
+          ? '<img loading="lazy" src="'+url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+' — photo '+n+'"/><button class="slot-remove" style="display:flex" onclick="window.removeImg(event,'+n+')">✕</button>'
           : '<div style="font-size:24px">📸</div><div style="font-size:11px;font-weight:700;color:#aaa">Photo '+n+'</div><button class="slot-remove" id="sr-'+n+'" onclick="window.removeImg(event,'+n+')">✕</button>';
       });
       showTab('add');
@@ -1592,7 +1637,7 @@
       window.location.href='login.html';
     };
 
-        const VAPID_PUBLIC_KEY = 'BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM';
+        const VAPID_PUBLIC_KEY = 'BDyOj8uuDSlLJDGHXjMZYWWvELnV2jtbQ5YY93jxZ_TNYAcDLgUUaaOntRyt-iOWUvEV-aIZbBIfCrLEQ_fxnD4';
     function urlBase64ToUint8Array(base64String){
       const padding='='.repeat((4-base64String.length%4)%4);
       const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
@@ -1616,10 +1661,7 @@
         return;
       }
       try{
-        const reg=await Promise.race([
-          navigator.serviceWorker.ready,
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))
-        ]);
+        const reg=await navigator.serviceWorker.ready;
         const sub=await reg.pushManager.getSubscription();
         if(sub){
           statusEl.textContent='✅ Push notifications are enabled on this device.';
@@ -1631,12 +1673,7 @@
           btn.style.display='inline-block';
         }
       }catch(e){
-        if(e && e.message==='timeout'){
-          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
-        } else {
-          statusEl.textContent='Could not check push status: '+e.message;
-        }
-        btn.style.display='none';
+        statusEl.textContent='Could not check push status: '+e.message;
       }
     }
     window.togglePush=async()=>{
@@ -1644,10 +1681,7 @@
       const statusEl=document.getElementById('push-status');
       btn.disabled=true;
       try{
-        const reg=await Promise.race([
-          navigator.serviceWorker.ready,
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-        ]);
+        const reg=await navigator.serviceWorker.ready;
         const existing=await reg.pushManager.getSubscription();
         if(existing){
           await existing.unsubscribe();
@@ -1666,21 +1700,67 @@
           if(error){ statusEl.textContent='Could not save subscription: '+error.message; btn.disabled=false; return; }
         }
       }catch(e){
-        if(e && e.message==='timeout'){
-          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
-        } else {
-          statusEl.textContent='Error: '+e.message;
-        }
+        statusEl.textContent='Error: '+e.message;
       }
       btn.disabled=false;
       refreshPushStatus();
     };
 
+        window._deferredInstallPrompt = window._deferredInstallPrompt || null;
+    window._onInstallPromptReady = refreshInstallUI;
+    window.addEventListener('appinstalled',()=>{ window._deferredInstallPrompt=null; refreshInstallUI(); });
+
+    function isStandalone(){
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+    }
+    function isIOS(){
+      return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    }
+    function refreshInstallUI(){
+      const row=document.getElementById('install-app-row');
+      const label=document.getElementById('install-app-label');
+      if(!row) return;
+      row.style.display='flex';
+      row.style.cursor='pointer';
+      if(isStandalone()){
+        label.textContent='✅ App installed';
+        row.onclick=null;
+        row.style.cursor='default';
+      } else if(window._deferredInstallPrompt){
+        label.textContent='📲 Install App';
+        row.onclick=installApp;
+      } else if(isIOS()){
+        label.textContent='📲 Install App';
+        row.onclick=showIOSInstallHelp;
+      } else {
+        // The browser's native install prompt wasn't captured on this specific
+        // page load — still show the row with manual instructions instead of
+        // hiding it, since the app may still be installable.
+        label.textContent='📲 Install App';
+        row.onclick=showManualInstallHelp;
+      }
+    }
+    window.installApp=async()=>{
+      if(!window._deferredInstallPrompt) return showManualInstallHelp();
+      window._deferredInstallPrompt.prompt();
+      await window._deferredInstallPrompt.userChoice;
+      window._deferredInstallPrompt=null;
+      refreshInstallUI();
+    };
+    window.showIOSInstallHelp=()=>{
+      alert('To install: tap the Share icon in Safari (square with an arrow), then "Add to Home Screen".');
+    };
+    window.showManualInstallHelp=()=>{
+      alert('To install: open your browser menu (⋮ or ...) and choose "Install app" or "Add to Home Screen". If you don\'t see that option, try reloading this page first.');
+    };
+    refreshInstallUI();
+
+
     window.changePassword=async()=>{
       const pw=document.getElementById('pw-new').value;
       const pw2=document.getElementById('pw-confirm').value;
       const err=document.getElementById('pw-error');
-      err.style.color='#1d4ed8';err.textContent='';
+      err.style.color='#9333ea';err.textContent='';
       if(!pw||pw.length<6){err.textContent='❌ Password must be at least 6 characters';return;}
       if(pw!==pw2){err.textContent='❌ Passwords don\'t match';return;}
       const {error}=await supabase.auth.updateUser({password:pw});
@@ -1688,6 +1768,81 @@
       err.style.color='#2e7d32';err.textContent='✅ Password updated!';
       document.getElementById('pw-new').value='';document.getElementById('pw-confirm').value='';
       setTimeout(()=>err.textContent='',3000);
+    };
+
+    async function loadSearchAlerts(){
+      const box=document.getElementById('alerts-list');
+      const [{data,error}, {data:restocks}] = await Promise.all([
+        supabase.from('search_alerts').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}),
+        supabase.from('restock_alerts').select('id,listing_id,listings(title,image_url)').eq('user_id',currentUser.id).order('created_at',{ascending:false})
+      ]);
+      const searchRows = (error||!data?.length) ? [] : data.map(a=>{
+        const parts=[];
+        if(a.query) parts.push('"'+a.query+'"');
+        if(a.category) parts.push(a.category);
+        if(a.max_price) parts.push('under R'+a.max_price);
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f5">'+
+          '<span style="font-size:13px;font-weight:700">🔔 '+(parts.join(' · ')||'Any new listing')+'</span>'+
+          '<button class="btn-sm btn-delete" onclick="deleteSearchAlert(\''+a.id+'\')">Remove</button>'+
+          '</div>';
+      });
+      const restockRows = (restocks||[]).map(r=>{
+        const title = r.listings?.title || 'Listing no longer available';
+        return '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5">'+
+          (r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+title.replace(/"/g,'')+'" style="width:36px;height:36px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<span style="font-size:18px;flex-shrink:0">📦</span>')+
+          '<span style="font-size:13px;font-weight:700;flex:1">📬 Notify me: '+title+'</span>'+
+          '<button class="btn-sm btn-delete" onclick="deleteRestockAlert(\''+r.id+'\')">Remove</button>'+
+          '</div>';
+      });
+      const allRows = restockRows.concat(searchRows);
+      box.innerHTML = allRows.length ? allRows.join('') : '<p class="loading-msg">No saved alerts yet — set these up from the browse page.</p>';
+    }
+    window.deleteSearchAlert=async(id)=>{
+      await supabase.from('search_alerts').delete().eq('id',id);
+      loadSearchAlerts();
+    };
+    window.deleteRestockAlert=async(id)=>{
+      await supabase.from('restock_alerts').delete().eq('id',id);
+      loadSearchAlerts();
+    };
+
+    async function loadInviteTab(){
+      const link=location.origin+location.pathname.replace('seller.html','login.html')+'?ref='+currentUser.id;
+      document.getElementById('invite-link').value=link;
+      const {count}=await supabase.from('profiles').select('id',{count:'exact',head:true}).eq('referred_by',currentUser.id);
+      document.getElementById('referral-count-text').textContent=(count||0)+' friend'+(count===1?'':'s')+' joined using your link so far';
+    }
+    window.copyInviteLink=()=>{
+      const el=document.getElementById('invite-link');
+      el.select(); document.execCommand('copy');
+      alert('Link copied!');
+    };
+    window.shareInviteLink=async()=>{
+      const link=document.getElementById('invite-link').value;
+      const text='Join me on Student Marketplace — buy & sell with fellow students 🎓';
+      if(navigator.share){ try{ await navigator.share({title:'Student Marketplace',text,url:link}); }catch(e){} }
+      else { window.copyInviteLink(); }
+    };
+
+    function toCSV(rows,headers){
+      const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+      return headers.map(esc).join(',')+'\n'+rows.map(r=>headers.map(h=>esc(r[h])).join(',')).join('\n');
+    }
+    function downloadCSV(content,filename){
+      const blob=new Blob([content],{type:'text/csv'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    window.exportMyListingsCSV=async()=>{
+      const {data}=await supabase.from('listings').select('id,title,category,price,quantity,condition,is_available,is_sold,created_at').eq('seller_id',currentUser.id);
+      if(!data?.length){ alert('No listings to export yet.'); return; }
+      downloadCSV(toCSV(data,['id','title','category','price','quantity','condition','is_available','is_sold','created_at']),'my-listings.csv');
+    };
+    window.exportMyOrdersCSV=async()=>{
+      const {data}=await supabase.from('orders').select('id,listing_id,buyer_name,buyer_whatsapp,quantity,status,created_at').eq('seller_id',currentUser.id);
+      if(!data?.length){ alert('No orders to export yet.'); return; }
+      downloadCSV(toCSV(data,['id','listing_id','buyer_name','buyer_whatsapp','quantity','status','created_at']),'my-orders.csv');
     };
 
     let pendingMfaFactorId=null;
@@ -1739,28 +1894,23 @@
       refreshMfaStatus();
     };
 
-    // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)
-    function isValidSAPhone(v){
-      const cleaned=(v||'').replace(/[\s-]/g,'');
-      return /^(0\d{9}|\+27\d{9})$/.test(cleaned);
-    }
-
     async function saveProfile() {
       const name = document.getElementById('p-name').value.trim();
       const wa   = document.getElementById('p-whatsapp').value.trim();
       const res  = document.getElementById('p-residence').value.trim();
-      const allAreas = document.getElementById('p-sell-all-areas').checked;
+      const allUni = document.getElementById('p-sell-all-uni').checked;
+      const allTvet = document.getElementById('p-sell-all-tvet').checked;
+      const allPrivate = document.getElementById('p-sell-all-private').checked;
       const err  = document.getElementById('profile-error');
-      err.style.color='#1d4ed8'; err.textContent='';
+      err.style.color='#9333ea'; err.textContent='';
       if (!name||!wa) { err.textContent='❌ Name and WhatsApp are required'; return; }
-      if (!isValidSAPhone(wa)) { err.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678'; return; }
-      if (!allAreas && !sellerAreas.length) { err.textContent='❌ Choose at least one area you deliver to (tick "Deliver anywhere" or add a specific area)'; return; }
+      if (!isValidSAPhone(wa)) { err.textContent='❌ Enter a valid South African cell number, e.g. 0812345678'; return; }
+      if (!allUni && !allTvet && !allPrivate && !sellerInstitutions.length) { err.textContent='❌ Choose at least one institution you sell to (tick an "All X" option or add a specific institution)'; return; }
 
-      // No free trial — sellers must pay via Paystack before posting
       const updatePayload = {
         full_name:name, whatsapp:wa, residence:res,
-        deliver_all_areas:allAreas,
-        seller_areas:sellerAreas
+        deliver_all_universities:allUni, deliver_all_tvet:allTvet, deliver_all_private:allPrivate,
+        seller_institutions:sellerInstitutions
       };
 
       const {error} = await supabase.from('profiles').update(updatePayload).eq('id',currentUser.id);
@@ -1782,35 +1932,175 @@
           '</div>';
       }
       const badge = isNew?'<span class="order-badge badge-new">🆕 New Order</span>':isCancelled?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+
+      // Escrow-aware fulfilment block — replaces the old bare "Mark as
+      // Done" button, which used to flip status with no link to whether
+      // (or how) the buyer had actually paid.
+      let escrowHtml='';
+      if(isNew){
+        if(o.payment_status!=='paid' || o.escrow_status!=='held'){
+          escrowHtml='<div class="order-detail" style="margin-top:8px;color:#888;font-weight:700">⏳ Waiting on payment — nothing to do yet.</div>';
+        } else if(o.escrow_status==='disputed'){
+          escrowHtml='<div class="order-detail" style="margin-top:8px;color:#c0392b;font-weight:800">⚠️ Buyer opened a dispute'+(o.dispute_reason?': '+escapeHtml(o.dispute_reason):'')+'. Payout is on hold — message the buyer or contact support.</div>';
+        } else if(o.delivery_method==='pargo'){
+          escrowHtml='<div style="background:#f5f0ff;border:2px solid #e0d0ff;border-radius:12px;padding:10px 12px;margin-top:8px">'+
+            '<div style="font-size:12.5px;font-weight:800;color:#7c3aed">🚚 Pargo — '+escapeHtml(o.pargo_point_name||'pickup point')+'</div>'+
+            '<div style="font-size:12px;color:#666;font-weight:600;margin-top:4px">'+(o.delivered_at?'Delivered — your payout releases automatically 24h after drop-off unless the buyer disputes.':'Payment is held in escrow until Pargo confirms delivery.')+'</div>'+
+            '</div>';
+        } else {
+          escrowHtml='<div style="background:#f5f0ff;border:2px solid #e0d0ff;border-radius:12px;padding:10px 12px;margin-top:8px">'+
+            '<div style="font-size:12.5px;font-weight:800;color:#7c3aed">🔑 Ask the buyer for their 6-digit Collection PIN at handover</div>'+
+            '<div style="display:flex;gap:8px;margin-top:8px">'+
+            '<input type="text" inputmode="numeric" maxlength="6" placeholder="6-digit PIN" id="pin-input-'+o.id+'" style="flex:1;padding:9px 12px;border:2px solid #ddd;border-radius:10px;font-family:inherit;font-size:14px;letter-spacing:2px"/>'+
+            '<button class="btn-sm btn-toggle" onclick="window._confirmHandover(\''+o.id+'\')">Confirm ✓</button>'+
+            '</div><p id="pin-error-'+o.id+'" style="display:none;color:#c0392b;font-size:11.5px;font-weight:700;margin-top:6px"></p>'+
+            '</div>';
+        }
+      }
+
       return '<div class="order-card '+(isNew?'order-new':'')+'">'+
         badge+
         '<div class="order-card-title">'+escapeHtml(o.listings?.title||'Unknown listing')+'</div>'+
         '<div class="order-detail">👤 Buyer: <strong>'+escapeHtml(o.buyer_name)+'</strong></div>'+
-        '<div class="order-detail">📱 WhatsApp: <strong>'+o.buyer_whatsapp+'</strong></div>'+
+        '<div class="order-detail">📱 WhatsApp: <strong>'+escapeHtml(o.buyer_whatsapp)+'</strong></div>'+
         '<div class="order-detail">📦 Quantity: <strong>'+o.quantity+'</strong></div>'+
         '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:4px">🕐 '+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
-        (isNew?'<button class="btn-sm btn-toggle" style="margin-top:10px" onclick="window._done(\''+o.id+'\')">Mark as Done ✓</button>':'')+
-        (o.status==='completed'?'<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>':'')+
+        escrowHtml+
+        '<a style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;background:#7c3aed;padding:8px 16px;border-radius:50px;text-decoration:none;margin-top:10px" href="messages.html?buyer='+o.buyer_id+(o.listing_id?'&listing='+o.listing_id:'')+'">💬 Message Buyer</a>'+
+        (o.status==='completed'?'<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#7c3aed;text-decoration:none">🧾 View Receipt</a>':'')+
         ratingHtml+
         '</div>';
     }
 
-    // Persisted "seen" tracking for dashboard notification badges — survives page refresh,
-    // and only re-shows a badge when there's something genuinely new (not seen before).
-    function _seenIds(key){ try{ return new Set(JSON.parse(localStorage.getItem(key)||'[]')); }catch(e){ return new Set(); } }
-    function _markSeenIds(key,ids){ const s=_seenIds(key); ids.forEach(id=>s.add(id)); localStorage.setItem(key, JSON.stringify([...s])); }
+    let myPurchasesData=[], myPurchasesReviews={}, mpShowCompletedOnly=false;
 
-    async function loadOrders(markSeen) {
+    async function loadMyPurchases(){
+      const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
+      myPurchasesData=data||[];
+      const container=document.getElementById('my-purchases-container');
+      if(!myPurchasesData.length){container.innerHTML='<p class="loading-msg">No orders yet — go browse! 🛍️</p>';return;}
+
+      const completedIds=myPurchasesData.filter(o=>o.status==='completed').map(o=>o.id);
+      myPurchasesReviews={};
+      if(completedIds.length){
+        const {data:revs}=await supabase.from('reviews').select('order_id,rating').eq('buyer_id',currentUser.id).in('order_id',completedIds);
+        (revs||[]).forEach(r=>{myPurchasesReviews[r.order_id]=r.rating;});
+      }
+      renderMyPurchases();
+    }
+
+    window._mpToggleCompletedFilter=(showCompleted)=>{
+      mpShowCompletedOnly=showCompleted;
+      renderMyPurchases();
+    };
+
+    function renderMyPurchases(){
+      const container=document.getElementById('my-purchases-container');
+      const filterBar='<div style="margin-bottom:14px;display:flex;gap:8px">'+
+        '<button class="btn-sm" style="'+(mpShowCompletedOnly?'background:#f0f0f0;color:#444':'background:#7c3aed;color:#fff')+'" onclick="window._mpToggleCompletedFilter(false)">All Orders</button>'+
+        '<button class="btn-sm" style="'+(mpShowCompletedOnly?'background:#7c3aed;color:#fff':'background:#f0f0f0;color:#444')+'" onclick="window._mpToggleCompletedFilter(true)">✅ Completed</button>'+
+        '</div>';
+
+      const list=mpShowCompletedOnly?myPurchasesData.filter(o=>o.status==='completed'):myPurchasesData;
+      if(!list.length){container.innerHTML=filterBar+'<p class="loading-msg">No completed orders yet ✅</p>';return;}
+
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      container.innerHTML=filterBar+list.map(o=>{
+        const e=CAT_EMOJI[o.listings?.category]||'📦';
+        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
+        const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+        let ratingHtml='';
+        if(o.status==='completed'){
+          if(myPurchasesReviews[o.id]){
+            ratingHtml='<div class="order-detail" style="margin-top:6px">⭐ You rated this seller: <strong>'+myPurchasesReviews[o.id]+'/5</strong></div>';
+          } else {
+            ratingHtml='<div class="order-detail" style="margin-top:6px">Rate this seller: '+
+              [1,2,3,4,5].map(n=>'<span style="cursor:pointer;font-size:18px" onclick="window._mpStarClick(this,'+n+')">☆</span>').join('')+
+              '<input type="hidden" class="rate-val" value="0"/>'+
+              '<textarea class="rate-comment" placeholder="Optional comment..." rows="2" style="width:100%;margin-top:6px;font-family:inherit;font-size:12px;padding:6px;border:2px solid #f0f0f0;border-radius:8px"></textarea>'+
+              '<button class="btn-sm btn-toggle" style="margin-top:4px" onclick="window._mpSubmitRating(this,\''+o.id+'\',\''+o.seller_id+'\')">Submit rating</button>'+
+              '</div>';
+          }
+        }
+        const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._mpCancelOrder(\''+o.id+'\')">Cancel Order</button>' : '';
+        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#7c3aed;text-decoration:none">🧾 View Receipt</a>' : '';
+        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" style="margin-top:8px;margin-left:6px" onclick="window._mpRequestDispute(\''+o.id+'\',\''+escapeHtml(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
+        // Only offer to view the listing when it's still there — o.listing_id
+        // can point at a listing that's since been deleted (the column has no
+        // FK cleanup), and o.listings (the join) is null in that case.
+        const viewItem = o.listings ? "window._mpViewOrderedItem('"+o.listing_id+"')" : '';
+        return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
+          '<div style="display:flex;gap:12px;align-items:flex-start">'+
+          (viewItem?'<div onclick="'+viewItem+'" style="cursor:pointer">'+img+'</div>':img)+
+          '<div style="flex:1">'+status+
+          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+escapeHtml(o.listings?.title||'Listing no longer available')+(viewItem?' 👁️':'')+'</div>'+
+          '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
+          '<a style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;background:#7c3aed;padding:8px 16px;border-radius:50px;text-decoration:none;margin-bottom:8px" href="messages.html?seller='+o.seller_id+(o.listing_id?'&listing='+o.listing_id:'')+'">💬 Message Seller</a>'+
+          '<div class="order-detail">👤 <strong>'+escapeHtml(o.profiles?.full_name||'Seller')+'</strong></div>'+
+          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+escapeHtml(o.profiles.residence)+'</strong></div>':'')+
+          '<div class="order-detail">📱 <strong>'+escapeHtml(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
+          '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
+          ratingHtml+cancelBtn+receiptBtn+disputeBtn+
+          '</div></div></div>';
+      }).join('');
+    }
+
+    window._mpViewOrderedItem=(listingId)=>{
+      window.location.href='index.html?open='+listingId;
+    };
+    window._mpCancelOrder=async(id)=>{
+      if(!confirm('Cancel this order? The seller will see it as cancelled.'))return;
+      const {error}=await supabase.rpc('buyer_cancel_order',{p_order_id:id});
+      if(error){alert('Error: '+error.message);return;}
+      loadMyPurchases();
+    };
+    window._mpRequestDispute=async(orderId,listingTitle)=>{
+      const details=prompt('Briefly describe the problem with this order ("'+listingTitle+'"):');
+      if(details===null) return;
+      const {data:o}=await supabase.from('orders').select('seller_id,listing_id').eq('id',orderId).single();
+      const {error}=await supabase.from('reports').insert({
+        reporter_id:currentUser.id, order_id:orderId, listing_id:o?.listing_id||null, reported_user_id:o?.seller_id||null,
+        reason:'Dispute or refund request', details:details||null
+      });
+      if(error){alert('Could not submit: '+error.message);return;}
+      alert('Thanks — our team will review this and reach out if needed.');
+    };
+    window._mpStarClick=(el,n)=>{
+      const wrap=el.parentElement;
+      wrap.querySelectorAll('.rate-val')[0].value=n;
+      wrap.querySelectorAll('span').forEach((s,i)=>s.textContent=(i<n)?'⭐':'☆');
+    };
+    window._mpSubmitRating=async(btn,orderId,sellerId)=>{
+      const wrap=btn.parentElement;
+      const rating=parseInt(wrap.querySelector('.rate-val').value)||0;
+      const comment=wrap.querySelector('.rate-comment').value.trim();
+      if(!rating){alert('Tap a star to choose a rating first');return;}
+      const {error}=await supabase.from('reviews').insert({order_id:orderId,seller_id:sellerId,buyer_id:currentUser.id,rating,comment:comment||null});
+      if(error){alert('Could not submit rating: '+error.message);return;}
+      loadMyPurchases();
+    };
+
+    // Menu badges stay dismissed (per user, persisted in localStorage) once their
+    // tab has been opened, and only reappear once the underlying count changes again.
+    function badgeSeenKey(name){ return 'sm_badge_seen_'+name+'_'+(currentUser?currentUser.id:'anon'); }
+    function renderBadge(name, el, count){
+      const seen = localStorage.getItem(badgeSeenKey(name));
+      if (count>0 && seen!==String(count)){ el.textContent=count; el.style.display='inline-block'; }
+      else { el.style.display='none'; }
+    }
+    function dismissBadge(name, count){ localStorage.setItem(badgeSeenKey(name), String(count)); }
+    window._dismissBadge = dismissBadge;
+
+    async function loadOrders(dismiss) {
       const c = document.getElementById('orders-container');
       const {data,error} = await supabase.from('orders').select('*,listings(title)').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
-      const newOrders = (data||[]).filter(o=>o.status==='confirmed');
-      if (markSeen) _markSeenIds('sm_seen_order_ids', newOrders.map(o=>o.id));
-      const seen = _seenIds('sm_seen_order_ids');
-      const unseenCount = newOrders.filter(o=>!seen.has(o.id)).length;
+      const newCount = (data||[]).filter(o=>o.status==='confirmed').length;
       const ob = document.getElementById('orders-badge');
-      if (unseenCount>0){ob.textContent=unseenCount;ob.style.display='inline-block';} else ob.style.display='none';
+      if (dismiss) { dismissBadge('orders', newCount); ob.style.display='none'; }
+      else renderBadge('orders', ob, newCount);
       if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No orders yet 📬</p>'; return; }
 
+      const newOrders = data.filter(o=>o.status==='confirmed');
       if (!newOrders.length) { c.innerHTML='<p class="loading-msg">No new orders right now 📬 — check Completed Orders for your history.</p>'; return; }
       c.innerHTML = newOrders.map(o => renderOrderCard(o, {})).join('');
     }
@@ -1835,113 +2125,24 @@
       loadCompletedOrders();
     };
 
-    // "My Purchases" — orders THIS seller placed as a buyer with other sellers.
-    async function loadMyPurchases(){
-      const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
-      const container=document.getElementById('purchases-container');
-      if(!data?.length){container.innerHTML='<p class="loading-msg">No purchases yet — go browse! 🛍️</p>';return;}
-
-      const completedIds=data.filter(o=>o.status==='completed').map(o=>o.id);
-      let myReviews={};
-      if(completedIds.length){
-        const {data:revs}=await supabase.from('reviews').select('order_id,rating').eq('buyer_id',currentUser.id).in('order_id',completedIds);
-        (revs||[]).forEach(r=>{myReviews[r.order_id]=r.rating;});
-      }
-
-      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑\u200d💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
-      container.innerHTML=data.map(o=>{
-        const e=CAT_EMOJI[o.listings?.category]||'📦';
-        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+escapeHtml(o.listings.title||'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
-        const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
-        let ratingHtml='';
-        if(o.status==='completed'){
-          if(myReviews[o.id]){
-            ratingHtml='<div class="order-detail" style="margin-top:6px">⭐ You rated this seller: <strong>'+myReviews[o.id]+'/5</strong></div>';
-          } else {
-            ratingHtml='<div class="order-detail" style="margin-top:6px">Rate this seller: '+
-              [1,2,3,4,5].map(n=>'<span style="cursor:pointer;font-size:18px" onclick="window._starClickBuy(this,'+n+')">☆</span>').join('')+
-              '<input type="hidden" class="rate-val" value="0"/>'+
-              '<textarea class="rate-comment" placeholder="Optional comment..." rows="2" style="width:100%;margin-top:6px;font-family:inherit;font-size:12px;padding:6px;border:2px solid #f0f0f0;border-radius:8px"></textarea>'+
-              '<button class="btn-sm btn-toggle" style="margin-top:4px" onclick="window._submitBuyerRating(this,\''+o.id+'\',\''+o.seller_id+'\')">Submit rating</button>'+
-              '</div>';
-          }
-        }
-        const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelPurchase(\''+o.id+'\')">Cancel Order</button>' : '';
-        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>' : '';
-        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" onclick="window._requestPurchaseDispute(\''+o.id+'\',\''+escapeHtml(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
-        const actionRow = (receiptBtn||disputeBtn) ? '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px">'+receiptBtn+disputeBtn+'</div>' : '';
-        const viewItem = o.listing_id ? "window._viewPurchasedItem('"+o.listing_id+"')" : '';
-        return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
-          '<div style="display:flex;gap:12px;align-items:flex-start">'+
-          (viewItem?'<div onclick="'+viewItem+'" style="cursor:pointer">'+img+'</div>':img)+
-          '<div style="flex:1">'+status+
-          '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+escapeHtml(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
-          '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
-          '<a href="messages.html?seller='+o.seller_id+'&listing='+(o.listing_id||'')+'" style="display:inline-block;font-size:13px;font-weight:800;color:#2563eb;margin-bottom:8px;text-decoration:none">💬 Contact seller to arrange</a>'+
-          '<div class="order-detail">👤 <strong>'+escapeHtml(o.profiles?.full_name||'Seller')+'</strong></div>'+
-          (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+escapeHtml(o.profiles.residence)+'</strong></div>':'')+
-          '<div class="order-detail">📱 <strong>'+escapeHtml(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
-          '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
-          ratingHtml+cancelBtn+actionRow+
-          '</div></div></div>';
-      }).join('');
-    }
-
-    window._viewPurchasedItem=(listingId)=>{
-      window.location.href='index.html?open='+listingId;
-    };
-    window._cancelPurchase=async(id)=>{
-      if(!confirm('Cancel this order? The seller will see it as cancelled.'))return;
-      const {error}=await supabase.rpc('buyer_cancel_order',{p_order_id:id});
-      if(error){alert('Error: '+error.message);return;}
-      loadMyPurchases();
-    };
-    window._requestPurchaseDispute=async(orderId,listingTitle)=>{
-      const details=prompt('Briefly describe the problem with this order ("'+listingTitle+'"):');
-      if(details===null) return;
-      const {data:o}=await supabase.from('orders').select('seller_id,listing_id').eq('id',orderId).single();
-      const {error}=await supabase.from('reports').insert({
-        reporter_id:currentUser.id, order_id:orderId, listing_id:o?.listing_id||null, reported_user_id:o?.seller_id||null,
-        reason:'Dispute or refund request', details:details||null
-      });
-      if(error){alert('Could not submit: '+error.message);return;}
-      alert('Thanks — our team will review this and reach out if needed.');
-    };
-    window._starClickBuy=(el,n)=>{
-      const wrap=el.parentElement;
-      wrap.querySelectorAll('.rate-val')[0].value=n;
-      wrap.querySelectorAll('span').forEach((s,i)=>s.textContent=(i<n)?'⭐':'☆');
-    };
-    window._submitBuyerRating=async(btn,orderId,sellerId)=>{
-      const wrap=btn.parentElement;
-      const rating=parseInt(wrap.querySelector('.rate-val').value)||0;
-      const comment=wrap.querySelector('.rate-comment').value.trim();
-      if(!rating){alert('Tap a star to choose a rating first');return;}
-      const {error}=await supabase.from('reviews').insert({order_id:orderId,seller_id:sellerId,buyer_id:currentUser.id,rating,comment:comment||null});
-      if(error){alert('Could not submit rating: '+error.message);return;}
-      loadMyPurchases();
-    };
-
-    async function loadMyListings(markSeen) {
+    async function loadMyListings(dismiss) {
       const c = document.getElementById('my-listings');
       const {data,error} = await supabase.from('listings').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
-      const activeListings = (data||[]).filter(l=>l.is_available && !l.is_draft && !l.is_sold);
-      if (markSeen) _markSeenIds('sm_seen_listing_ids', activeListings.map(l=>l.id));
-      const seen = _seenIds('sm_seen_listing_ids');
-      const newCount = activeListings.filter(l=>!seen.has(l.id)).length;
+      const activeCount = (data||[]).filter(l=>l.is_available && !l.is_draft && !l.is_sold).length;
       const lb = document.getElementById('listings-badge');
-      if (newCount>0){lb.textContent=newCount;lb.style.display='inline-block';} else lb.style.display='none';
+      if (dismiss) { dismissBadge('listings', activeCount); lb.style.display='none'; }
+      else renderBadge('listings', lb, activeCount);
       if (error||!data?.length) { c.innerHTML='<p class="loading-msg">No listings yet.</p>'; return; }
       c.innerHTML = data.map(l => {
         const fp = l.discount_percent>0 ? Math.round(l.price*(1-l.discount_percent/100)) : l.price;
-        const status = l.is_draft ? '<span style="color:#888;font-weight:700">📝 Draft</span>' : l.is_sold ? '<span style="color:#1d4ed8;font-weight:700">✅ Sold</span>' : l.is_available ? '<span style="color:#2e7d32;font-weight:700">Active</span>' : '<span style="color:#aaa;font-weight:700">Hidden</span>';
-        const thumb = l.image_url ? '<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title||'Listing')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>' : '<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>';
+        const status = l.is_draft ? '<span style="color:#888;font-weight:700">📝 Draft</span>' : l.is_sold ? '<span style="color:#9333ea;font-weight:700">✅ Sold</span>' : l.is_available ? '<span style="color:#2e7d32;font-weight:700">Active</span>' : '<span style="color:#aaa;font-weight:700">Hidden</span>';
+        const thumb = l.image_url ? '<img loading="lazy" src="'+l.image_url+'" alt="'+(l.title||'Listing').replace(/"/g,'')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>' : '<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>';
         const ageDays = Math.floor((Date.now()-new Date(l.renewed_at||l.created_at))/86400000);
         const isOld = ageDays >= 30 && !l.is_draft && !l.is_sold;
         const oldTag = isOld ? ' · <span style="color:#e65c00;font-weight:800">⏰ '+ageDays+'d old</span>' : '';
         return '<div class="listing-row">'+thumb+
           '<div class="listing-info"><div class="listing-title">'+escapeHtml(l.title)+'</div>'+
-          '<div class="listing-meta">'+escapeHtml(l.category)+(l.textbook_year?' ('+escapeHtml(l.textbook_year)+(l.textbook_subject?' · '+escapeHtml(l.textbook_subject):'')+')':'')+((FLAT_SUBCATS[l.category]&&l[FLAT_SUBCATS[l.category].field])?' ('+escapeHtml(l[FLAT_SUBCATS[l.category].field])+')':'')+' · R'+fp+' · '+status+oldTag+' · 👁️ '+(l.view_count||0)+' views</div>'+
+          '<div class="listing-meta">'+l.category+(l.textbook_year?' ('+l.textbook_year+(l.textbook_subject?' · '+l.textbook_subject:'')+')':'')+((FLAT_SUBCATS[l.category]&&l[FLAT_SUBCATS[l.category].field])?' ('+l[FLAT_SUBCATS[l.category].field]+')':'')+' · R'+fp+' · '+status+oldTag+' · 👁️ '+(l.view_count||0)+' views</div>'+
           '<div class="listing-meta" style="margin-top:4px">Stock: <strong>'+l.quantity+'</strong> &nbsp;'+
           '<button class="btn-sm btn-toggle" style="padding:3px 10px" onclick="window._adjQty(\''+l.id+'\','+l.quantity+',1)">+ Add</button> '+
           '<button class="btn-sm btn-delete" style="padding:3px 10px" onclick="window._adjQty(\''+l.id+'\','+l.quantity+',-1)">− Remove</button>'+
@@ -1959,109 +2160,102 @@
 
     window._renewListing = async (id) => {
       const {error} = await supabase.from('listings').update({renewed_at:new Date().toISOString()}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings(true);
+      if(error)alert('Error: '+error.message); else loadMyListings();
     };
 
-    window._done   = async id => { await supabase.from('orders').update({status:'completed'}).eq('id',id); loadOrders(true); };
-    window._toggle = async (id,cur) => { const {error} = await supabase.from('listings').update({is_available:!cur}).eq('id',id); if(error)alert('Error: '+error.message); else loadMyListings(true); };
+    async function loadWallet(){
+      const {data:profile} = await supabase.from('profiles').select('wallet_balance,wallet_pending,tradesafe_token_id').eq('id',currentUser.id).single();
+      document.getElementById('wallet-balance').textContent = 'R'+Math.round(profile?.wallet_balance||0);
+      document.getElementById('wallet-pending').textContent = 'R'+Math.round(profile?.wallet_pending||0);
+      const banner=document.getElementById('wallet-payout-banner');
+      banner.innerHTML = profile?.tradesafe_token_id
+        ? '<div style="background:#e8f5e9;color:#2e7d32;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:700;margin-bottom:12px">✅ Payouts connected</div>'
+        : '<div style="background:#fff3e0;color:#e65c00;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:700;margin-bottom:12px">⚠️ Payouts aren\'t connected yet — buyers can\'t pay you until this is set up. <a href="https://wa.me/27694520629" target="_blank" rel="noopener" style="color:#e65c00;text-decoration:underline">Contact support</a> to finish TradeSafe seller onboarding.</div>';
+
+      const {data:txs} = await supabase.from('wallet_transactions').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false}).limit(50);
+      const c=document.getElementById('wallet-transactions');
+      if(!txs?.length){c.innerHTML='<p class="loading-msg">No transactions yet.</p>';return;}
+      const TYPE_LABEL={escrow_release:'💰 Order payout',withdrawal_requested:'🏦 Withdrawal requested',withdrawal_paid:'✅ Withdrawal paid',adjustment:'⚙️ Adjustment'};
+      c.innerHTML=txs.map(t=>{
+        const isCredit=t.amount>0;
+        return '<div class="order-card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">'+
+          '<div><div style="font-size:12.5px;font-weight:800">'+(TYPE_LABEL[t.type]||t.type)+'</div>'+
+          '<div style="font-size:11px;color:#888;font-weight:600">'+new Date(t.created_at).toLocaleDateString('en-ZA')+(t.status==='pending'?' · pending':'')+'</div></div>'+
+          '<div style="font-weight:900;color:'+(isCredit?'#2e7d32':'#c0392b')+'">'+(isCredit?'+':'')+'R'+Math.round(t.amount)+'</div>'+
+          '</div>';
+      }).join('');
+    }
+    window._requestWithdrawal = async () => {
+      const errEl=document.getElementById('wallet-error');
+      errEl.style.display='none';
+      const {data:profile} = await supabase.from('profiles').select('wallet_balance').eq('id',currentUser.id).single();
+      const balance = profile?.wallet_balance||0;
+      if(balance<=0){errEl.textContent='Your available balance is R0.';errEl.style.display='block';return;}
+      if(!confirm('Withdraw R'+Math.round(balance)+' to your bank account? This can take a few business days.'))return;
+      const {error} = await supabase.rpc('request_withdrawal',{p_amount:balance});
+      if(error){errEl.textContent=error.message;errEl.style.display='block';return;}
+      alert('Withdrawal requested — you\'ll be paid out shortly.');
+      loadWallet();
+    };
+
+    window._confirmHandover = async (id) => {
+      const input = document.getElementById('pin-input-'+id);
+      const errEl = document.getElementById('pin-error-'+id);
+      errEl.style.display='none';
+      const pin = (input?.value||'').trim();
+      if(!/^\d{6}$/.test(pin)){
+        errEl.textContent='Enter the 6-digit PIN the buyer gives you.';
+        errEl.style.display='block';
+        return;
+      }
+      const {error} = await supabase.rpc('confirm_handover_pin',{p_order_id:id,p_pin:pin});
+      if(error){
+        errEl.textContent = /incorrect pin/i.test(error.message) ? 'That PIN doesn\'t match — double-check with the buyer.' : error.message;
+        errEl.style.display='block';
+        return;
+      }
+      // confirm_handover_pin releases escrow into the wallet; mark the
+      // order itself completed too so it moves out of "new orders" and
+      // becomes rateable/receiptable like before.
+      await supabase.from('orders').update({status:'completed'}).eq('id',id);
+      loadOrders();
+    };
+    window._toggle = async (id,cur) => { const {error} = await supabase.from('listings').update({is_available:!cur}).eq('id',id); if(error)alert('Error: '+error.message); else loadMyListings(); };
     window._toggleSold = async (id,cur) => {
       const {error} = await supabase.from('listings').update({is_sold:!cur, is_available: cur}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings(true);
+      if(error)alert('Error: '+error.message); else loadMyListings();
     };
     window._publishDraft = async (id) => {
       const {error} = await supabase.from('listings').update({is_draft:false, is_available:true}).eq('id',id);
-      if(error)alert('Error: '+error.message); else loadMyListings(true);
+      if(error)alert('Error: '+error.message); else loadMyListings();
     };
     window._delete = async id => {
       if (!confirm('Delete this listing permanently?')) return;
       const {error} = await supabase.from('listings').delete().eq('id',id);
       if (error) alert('Delete failed: '+error.message);
-      else loadMyListings(true);
+      else loadMyListings();
     };
     window._adjQty = async (id,cur,dir) => {
       const nq = Math.max(0,cur+dir);
       const {error} = await supabase.from('listings').update({quantity:nq}).eq('id',id);
       if (error) alert('Update failed: '+error.message);
-      else loadMyListings(true);
+      else loadMyListings();
     };
 
     window.showTab = (tab) => {
       document.getElementById('dashboard-menu').style.display='none';
       document.getElementById('dashboard-detail').style.display='block';
-      ['orders','orders-completed','purchases','listings','add','store','profile','alerts','invite','security'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
-      if (tab==='listings'){ loadMyListings(true); }
-      if (tab==='orders'){ loadOrders(true); }
+      ['orders','orders-completed','listings','wallet','add','store','profile','security','alerts','invite','my-purchases'].forEach(t=>document.getElementById('tab-'+t).style.display=t===tab?'block':'none');
+      if (tab==='listings') loadMyListings(true);
+      if (tab==='wallet') loadWallet();
+      if (tab==='orders') loadOrders(true);
       if (tab==='orders-completed') loadCompletedOrders();
-      if (tab==='purchases'){ loadMyPurchases(); markNotifsRead(['order_completed']).then(loadPurchasesBadge); }
       if (tab==='store') loadStoreTab();
       if (tab==='add') refreshPlanUsage();
-      if (tab==='alerts'){ loadAlerts(); markNotifsRead(['search_alert','restock']).then(loadAlertsBadge); }
-      if (tab==='invite') loadInvite();
       if (tab==='security') refreshPushStatus();
-    };
-
-    async function loadAlerts(){
-      const c=document.getElementById('alerts-container');
-      c.innerHTML='<p class="loading-msg">Loading alerts... ⏳</p>';
-      const [{data:searches},{data:restocks}]=await Promise.all([
-        supabase.from('saved_searches').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}),
-        supabase.from('restock_alerts').select('id,created_at,listings(id,title,price,image_url)').eq('user_id',currentUser.id).order('created_at',{ascending:false})
-      ]);
-      const totalCount=(searches?.length||0)+(restocks?.length||0);
-      if(!totalCount){c.innerHTML='<p class="loading-msg">No alerts saved yet — use the 🔔 Alert me button while browsing 🔍</p>';return;}
-
-      let html='';
-      if(restocks?.length){
-        html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Restock alerts</p>';
-        html+=restocks.map(r=>{
-          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+escapeHtml(r.listings?.title||'Listing')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
-          const title=escapeHtml(r.listings?.title||'Listing no longer available');
-          const price=r.listings?.price!=null?'R'+r.listings.price:'';
-          return '<div class="seller-row">'+img+'<div class="listing-info" style="flex:1;margin-left:10px">'+
-            (r.listings?.id?'<div class="listing-title" style="cursor:pointer" onclick="window.location.href=\'index.html?open='+r.listings.id+'\'">'+title+'</div>':'<div class="listing-title">'+title+'</div>')+
-            '<div class="listing-meta">'+(price?price+' · ':'')+'We\'ll notify you when it\'s back</div></div>'+
-            '<button class="btn-sm btn-delete" onclick="deleteRestockAlert(\''+r.id+'\')">Delete</button></div>';
-        }).join('');
-      }
-      if(searches?.length){
-        if(restocks?.length) html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px">Search alerts</p>';
-        html+=searches.map(a=>{
-          const parts=[];
-          if(a.keyword)parts.push('"'+escapeHtml(a.keyword)+'"');
-          if(a.category)parts.push(a.category);
-          if(a.max_price)parts.push('under R'+a.max_price);
-          if(a.area_only)parts.push('my area only');
-          return '<div class="seller-row"><div class="listing-info" style="flex:1"><div class="listing-title">'+(parts.join(' · ')||'Any new listing')+'</div>'+
-            '<div class="listing-meta">Saved '+new Date(a.created_at).toLocaleDateString('en-ZA')+'</div></div>'+
-            '<button class="btn-sm btn-delete" onclick="deleteAlert(\''+a.id+'\')">Delete</button></div>';
-        }).join('');
-      }
-      c.innerHTML=html;
-    }
-    window.deleteAlert=async(id)=>{
-      if(!confirm('Delete this alert?'))return;
-      await supabase.from('saved_searches').delete().eq('id',id);
-      loadAlerts();
-    };
-    window.deleteRestockAlert=async(id)=>{
-      if(!confirm('Delete this restock alert?'))return;
-      await supabase.from('restock_alerts').delete().eq('id',id);
-      loadAlerts();
-    };
-
-    async function loadInvite(){
-      const {data:p}=await supabase.from('profiles').select('referral_code').eq('id',currentUser.id).single();
-      const code=p?.referral_code||'';
-      const link=location.origin+location.pathname.replace('seller.html','index.html')+'?ref='+code;
-      document.getElementById('invite-link').value=link;
-      document.getElementById('invite-whatsapp-btn').href='https://wa.me/?text='+encodeURIComponent('Come check out Marketrade — buy & sell jobs, furniture, electronics and more with your community! '+link);
-      const {count}=await supabase.from('referrals').select('id',{count:'exact',head:true}).eq('referrer_id',currentUser.id);
-      document.getElementById('invite-count').textContent=count||0;
-    }
-    window.copyInviteLink=()=>{
-      const el=document.getElementById('invite-link');
-      el.select();
-      navigator.clipboard?.writeText(el.value).then(()=>alert('Link copied!')).catch(()=>document.execCommand('copy'));
+      if (tab==='alerts') loadSearchAlerts();
+      if (tab==='invite') loadInviteTab();
+      if (tab==='my-purchases') loadMyPurchases();
     };
     window.closeTab = () => {
       document.getElementById('dashboard-detail').style.display='none';
@@ -2076,13 +2270,13 @@
       if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { err.textContent='❌ Only JPG/PNG/WEBP'; return; }
       if (file.size > 8*1024*1024) { err.textContent='❌ Max 8MB (before compression)'; return; }
       const slot = document.getElementById('store-logo-slot');
-      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Compressing...</div>';
+      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#7c3aed;text-align:center">Compressing...</div>';
       let uploadFile;
       try { uploadFile = await compressImage(file); }
       catch(compressErr) { uploadFile = file; }
-      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#2563eb;text-align:center">Uploading...</div>';
+      slot.innerHTML = '<div style="font-size:12px;font-weight:700;color:#7c3aed;text-align:center">Uploading...</div>';
       const fname = currentUser.id+'/store-'+Date.now()+'.jpg';
-      const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile);
+      const {error} = await supabase.storage.from('listing-images').upload(fname,uploadFile,{cacheControl:'31536000',upsert:false}); // 1yr cache: filenames are timestamp-unique, so content never changes under a given name
       if (error) { err.textContent='❌ '+error.message; renderStoreLogoSlot(); return; }
       const {data:u} = supabase.storage.from('listing-images').getPublicUrl(fname);
       storeLogoUrl = u.publicUrl;
@@ -2091,7 +2285,7 @@
     function renderStoreLogoSlot(){
       const slot = document.getElementById('store-logo-slot');
       slot.innerHTML = storeLogoUrl
-        ? '<img loading="lazy" src="'+storeLogoUrl+'" alt="Store logo preview"/><button class="slot-remove" style="display:flex" onclick="window.removeStoreLogo(event)">✕</button>'
+        ? '<img loading="lazy" src="'+storeLogoUrl+'" alt="Your store logo"/><button class="slot-remove" style="display:flex" onclick="window.removeStoreLogo(event)">✕</button>'
         : '<div style="font-size:24px">🏪</div><div style="font-size:11px;font-weight:700;color:#aaa">Logo</div><button class="slot-remove" id="store-logo-remove" onclick="window.removeStoreLogo(event)">✕</button>';
     }
     window.removeStoreLogo = (e) => { e.stopPropagation(); storeLogoUrl=null; document.getElementById('store-logo-input').value=''; renderStoreLogoSlot(); };
@@ -2122,36 +2316,26 @@
     }
 
     async function saveStore(){
-      const err = document.getElementById('store-error'); err.style.color='#1d4ed8'; err.textContent='';
-      let link = document.getElementById('s-store-link').value.trim();
-      if (link && !/^https?:\/\//i.test(link)) link = 'https://'+link;
-      if (link && !/^https?:\/\/[^\s]+\.[^\s]+/i.test(link)) { err.textContent='❌ Enter a valid link, e.g. https://instagram.com/yourstore'; return; }
+      const err = document.getElementById('store-error'); err.style.color='#9333ea'; err.textContent='';
+      let storeLink = document.getElementById('s-store-link').value.trim();
+      if (storeLink && !/^https?:\/\//i.test(storeLink)) storeLink = 'https://'+storeLink;
+      if (storeLink) {
+        try { new URL(storeLink); } catch(_) { err.textContent='❌ Store link doesn\'t look like a valid URL'; return; }
+      }
       const btn = document.getElementById('btn-save-store');
       btn.textContent='Saving...'; btn.disabled=true;
       const {error} = await supabase.from('profiles').update({
         store_name: document.getElementById('s-store-name').value.trim() || null,
         store_bio: document.getElementById('s-store-bio').value.trim() || null,
         store_logo_url: storeLogoUrl,
-        store_link: link || null
+        store_link: storeLink || null
       }).eq('id',currentUser.id);
       btn.textContent='Save Store ✅'; btn.disabled=false;
       if (error) { err.textContent='❌ '+error.message; return; }
-      document.getElementById('s-store-link').value = link;
       err.style.color='#2e7d32'; err.textContent='✅ Store updated!';
     }
 
     init();
-    setTimeout(()=>{
-      const dash = document.getElementById('main-dashboard');
-      const stillHidden = dash && dash.style.display === 'none' &&
-        document.getElementById('paywall-screen').style.display === 'none';
-      if (stillHidden) {
-        dash.style.display = 'block';
-        document.getElementById('auth-guard').style.display = 'none';
-        document.getElementById('seller-content').style.display = 'none';
-        document.getElementById('load-error-guard').style.display = 'block';
-      }
-    }, 15000);
   </script>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
 </body>

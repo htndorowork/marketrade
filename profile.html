@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Registered as early as possible so we don't miss the browser's install-availability event
+    window._deferredInstallPrompt=null;
+    window.addEventListener('beforeinstallprompt',(e)=>{
+      e.preventDefault();
+      window._deferredInstallPrompt=e;
+      window._onInstallPromptReady && window._onInstallPromptReady();
+    });
+  </script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Profile — Marketrade</title>
-  <meta name="description" content="Manage your Marketrade profile, orders, favorites and account settings."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="My Profile — Marketrade"/>
-  <meta property="og:description" content="Manage your Marketrade profile, orders, favorites and account settings."/>
+  <title>My Profile — Student Marketplace</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/profile.html"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <meta name="description" content="Manage your Student Marketplace profile, orders, and saved listings."/>
+    <meta property="og:title" content="My Profile — Student Marketplace"/>
+  <meta property="og:description" content="🎓 Your campus. Your marketplace. Buy & sell textbooks, electronics, clothing & more with fellow students — fast, easy & safe 🤝"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="My Profile — Marketrade"/>
-  <meta name="twitter:description" content="Manage your Marketrade profile, orders, favorites and account settings."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta name="twitter:card" content="summary"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=3"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" type="image/x-icon" href="icons/favicon.ico?v=2"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=2"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=2"/>
+  <link rel="stylesheet" href="style.css?v=1789517217"/>
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🛍️',className:'nav-logo-icon',style:'font-size:22px;display:inline-flex;align-items:center;justify-content:center'}))"/>Market<span>rade</span></a>
+    <a href="index.html" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links">
       <a href="index.html">Browse</a>
       <a href="messages.html" id="nav-messages">💬 Messages<span class="inline-badge" id="msg-badge" style="display:none">0</span></a>
@@ -42,7 +47,6 @@
   </nav>
 
   <main class="main" style="max-width:700px">
-    <h1 class="sr-only">My Profile — Marketrade</h1>
     <div id="auth-guard" style="display:none">
       <div class="form-card" style="text-align:center">
         <div style="font-size:40px;margin-bottom:12px">🔒</div>
@@ -55,15 +59,6 @@
       <div class="form-card" style="text-align:center">
         <div style="font-size:40px;margin-bottom:12px">🏪</div>
         <p style="font-weight:700">Taking you to your seller dashboard...</p>
-      </div>
-    </div>
-
-    <div id="load-error-guard" style="display:none">
-      <div class="form-card" style="text-align:center">
-        <div style="font-size:40px;margin-bottom:12px">⚠️</div>
-        <p style="font-weight:800;margin-bottom:6px">Something went wrong loading your profile.</p>
-        <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">This is usually a temporary connection hiccup. Try again below.</p>
-        <button class="btn-primary" style="padding:12px 28px;border-radius:50px" onclick="location.reload()">🔄 Try again</button>
       </div>
     </div>
 
@@ -88,18 +83,17 @@
             <span class="pmr-icon">❤️</span><span class="pmr-label">Favorites</span>
             <span class="pmr-badge" id="favorites-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
           </button>
-          <button class="profile-menu-row" onclick="showTab('alerts')">
-            <span class="pmr-icon">🔔</span><span class="pmr-label">My Alerts</span>
-            <span class="pmr-badge" id="alerts-badge" style="display:none">0</span><span class="pmr-chevron">›</span>
-          </button>
-          <button class="profile-menu-row" onclick="showTab('invite')">
-            <span class="pmr-icon">🎁</span><span class="pmr-label">Invite Friends</span><span class="pmr-chevron">›</span>
-          </button>
           <button class="profile-menu-row" onclick="showTab('edit')">
             <span class="pmr-icon">✏️</span><span class="pmr-label">Edit Profile</span><span class="pmr-chevron">›</span>
           </button>
           <button class="profile-menu-row" onclick="showTab('security')">
             <span class="pmr-icon">🔐</span><span class="pmr-label">Security</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('alerts')">
+            <span class="pmr-icon">🔔</span><span class="pmr-label">My Alerts</span><span class="pmr-chevron">›</span>
+          </button>
+          <button class="profile-menu-row" onclick="showTab('invite')">
+            <span class="pmr-icon">🎁</span><span class="pmr-label">Invite Friends</span><span class="pmr-chevron">›</span>
           </button>
         </div>
 
@@ -107,7 +101,10 @@
         <div class="profile-menu-card">
           <a class="profile-menu-row" href="faq.html"><span class="pmr-icon">❓</span><span class="pmr-label">Help &amp; How It Works</span><span class="pmr-chevron">›</span></a>
           <a class="profile-menu-row" href="https://wa.me/27694520629" target="_blank" rel="noopener"><span class="pmr-icon">📱</span><span class="pmr-label">WhatsApp Support</span><span class="pmr-chevron">›</span></a>
-          <a class="profile-menu-row" href="mailto:marketrade.co@gmail.com"><span class="pmr-icon">📧</span><span class="pmr-label">Report an Issue</span><span class="pmr-chevron">›</span></a>
+          <a class="profile-menu-row" href="mailto:studentmarketplacehelp@gmail.com"><span class="pmr-icon">📧</span><span class="pmr-label">Report an Issue</span><span class="pmr-chevron">›</span></a>
+          <div class="profile-menu-row" id="install-app-row" style="display:none">
+            <span class="pmr-icon">📲</span><span class="pmr-label" id="install-app-label">Install App</span><span class="pmr-chevron">›</span>
+          </div>
         </div>
 
         <div class="profile-section-label">Legal</div>
@@ -118,7 +115,7 @@
         </div>
 
         <button class="profile-logout-btn" id="profile-logout-btn">🚪 Sign out</button>
-        <div class="profile-version">Marketrade 🛍️</div>
+        <div class="profile-version">Student Marketplace 🎓</div>
       </div>
 
       <!-- DETAIL PANELS -->
@@ -133,31 +130,12 @@
           <div class="grid" id="favorites-container"><p class="loading-msg">Loading favorites... ⏳</p></div>
         </div>
 
-        <div id="tab-alerts" style="display:none">
-          <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">We'll notify you when a new listing matches one of these, or when an out-of-stock item you're watching is back. Save searches from the 🔔 Alert me button on the search/filter bar, or tap "We'll notify you" on any out-of-stock listing.</p>
-          <div id="alerts-container"><p class="loading-msg">Loading alerts... ⏳</p></div>
-        </div>
-
-        <div id="tab-invite" style="display:none">
-          <div class="form-card" style="text-align:center">
-            <div style="font-size:36px;margin-bottom:8px">🎁</div>
-            <h3 style="font-size:17px;font-weight:800;margin-bottom:6px">Invite friends, earn free selling days</h3>
-            <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px">Share your link — when a friend signs up with it, you get <b>3 free selling days</b> added to your account.</p>
-            <div style="display:flex;gap:8px;align-items:center;background:#eff6ff;border-radius:12px;padding:10px 14px;margin-bottom:14px">
-              <input type="text" id="invite-link" readonly style="flex:1;border:none;background:transparent;font-weight:700;font-size:13px;color:#2563eb"/>
-              <button class="btn-sm btn-toggle" onclick="copyInviteLink()">📋 Copy</button>
-            </div>
-            <a class="btn-sm btn-toggle" id="invite-whatsapp-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📱 Share on WhatsApp</a>
-            <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:13px;font-weight:700;color:#2563eb">🎉 <span id="invite-count">0</span> friend(s) joined using your link</div>
-          </div>
-        </div>
-
         <div id="tab-edit" style="display:none">
           <div class="form-card">
             <h3 style="font-size:18px;font-weight:800;margin-bottom:16px">Edit Profile</h3>
             <div class="form-group"><label>Full Name *</label><input type="text" id="p-name" placeholder="Your name"/></div>
-            <div class="form-group"><label>WhatsApp *</label><input type="text" inputmode="tel" id="p-wa" placeholder="0812345678 or +27812345678"/></div>
-            <div class="form-group"><label>Residence</label><input type="text" id="p-res" placeholder="e.g. 12 Church Street, Potchefstroom"/></div>
+            <div class="form-group"><label>WhatsApp *</label><input type="text" id="p-wa" placeholder="0812345678"/></div>
+            <div class="form-group"><label>Residence</label><input type="text" id="p-res" placeholder="e.g. Heroes Residence"/></div>
             <div class="form-group"><label>I am a</label>
               <div class="role-selector">
                 <button class="role-btn" id="r-buyer" onclick="setRole('buyer')">🛍️ Buyer</button>
@@ -190,20 +168,38 @@
             <div id="mfa-enroll-box" style="display:none">
               <div id="mfa-qr" style="margin-bottom:10px"></div>
               <div class="form-group"><label>Enter the 6-digit code from your authenticator app</label><input type="text" id="mfa-code" placeholder="123456" maxlength="6"/></div>
-              <div style="display:flex;flex-wrap:wrap;gap:10px">
-                <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify &amp; Enable</button>
-                <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
-              </div>
+              <button class="btn-sm btn-toggle" onclick="verifyMfa()">Verify & Enable</button>
+              <button class="btn-sm btn-delete" onclick="cancelMfaEnroll()">Cancel</button>
             </div>
             <button class="btn-sm btn-toggle" id="btn-mfa-toggle" style="display:none"></button>
 
             <div style="margin-top:24px;padding-top:16px;border-top:1px solid #f0f0f0">
-              <div style="display:flex;flex-wrap:wrap;gap:10px">
-                <button class="btn-sm btn-delete" onclick="requestAccountDeletion()">🗑️ Delete my account</button>
-                <button class="btn-sm btn-toggle" onclick="signOutEverywhere()">🔒 Sign out of all devices</button>
-              </div>
-              <p style="font-size:11px;color:#aaa;font-weight:600;margin-top:10px">This removes your profile data. Contact support to fully close your account and remove your listings/orders.</p>
+              <button class="btn-sm btn-delete" onclick="requestAccountDeletion()">🗑️ Delete my account</button>
+              <button class="btn-sm btn-toggle" onclick="signOutEverywhere()" style="margin-left:8px">🔒 Sign out of all devices</button>
+              <p style="font-size:11px;color:#aaa;font-weight:600;margin-top:6px">This removes your profile data. Contact support to fully close your account and remove your listings/orders.</p>
             </div>
+          </div>
+        </div>
+
+        <div id="tab-alerts" style="display:none">
+          <div class="form-card">
+            <h3 style="font-size:15px;font-weight:800;margin-bottom:4px">🔔 My Alerts</h3>
+            <p style="font-size:12.5px;color:#888;font-weight:600;margin-bottom:14px">Set these up from the "No listings match" screen while browsing — we'll notify you the moment something matching goes live.</p>
+            <div id="alerts-list"><p class="loading-msg">Loading alerts... ⏳</p></div>
+          </div>
+        </div>
+
+        <div id="tab-invite" style="display:none">
+          <div class="form-card" style="text-align:center">
+            <div style="font-size:38px;margin-bottom:8px">🎁</div>
+            <h3 style="font-size:17px;font-weight:900;margin-bottom:6px">Invite friends, get free selling days</h3>
+            <p style="font-size:13px;color:#888;font-weight:600;margin-bottom:16px;line-height:1.5">Share your link — when a friend signs up and becomes a seller for the first time, you get <strong>7 bonus days</strong> added to your own seller plan automatically.</p>
+            <div style="display:flex;gap:8px;background:#f7f5fb;border-radius:12px;padding:10px 12px;margin-bottom:12px">
+              <input type="text" id="invite-link" readonly style="flex:1;border:none;background:none;font-size:12.5px;font-weight:700;color:#555;outline:none"/>
+              <button class="btn-sm btn-toggle" onclick="copyInviteLink()">Copy</button>
+            </div>
+            <button class="btn-primary" style="padding:12px 32px;border-radius:50px" onclick="shareInviteLink()">Share Invite Link 🔗</button>
+            <p id="referral-count-text" style="font-size:12px;color:#aaa;font-weight:700;margin-top:14px"></p>
           </div>
         </div>
       </div>
@@ -211,49 +207,45 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-grid">
-      <div class="footer-col footer-social-col">
-        <div class="footer-col-label">Follow Us</div>
-        <div class="footer-social">
-          <a href="https://instagram.com/marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg><span>marketrade.co</span></a>
-          <a href="https://www.facebook.com/share/1EvtMfWTCg/" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><span>Marketrade</span></a>
-          <a href="https://tiktok.com/@marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.66-.58-1.08-1.4-1.16-2.32h-2.75v11.55c0 1.24-1 2.25-2.24 2.25a2.25 2.25 0 0 1-.85-4.34 2.24 2.24 0 0 1 .85-.16c.24 0 .48.03.7.1v-2.8a5.06 5.06 0 0 0-5.79 4.99 5.07 5.07 0 0 0 8.63 3.6 5.06 5.06 0 0 0 1.51-3.6V9.7a7.7 7.7 0 0 0 4.5 1.45V8.4a4.85 4.85 0 0 1-3.4-2.58z"/></svg><span>marketrade.co</span></a>
-        </div>
+    <div class="footer-inner">
+      <div class="footer-social">
+        <div class="footer-social-title">Follow Us</div>
+        <div class="footer-social-line"><a href="https://instagram.com/mystudentmarketplacee" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> mystudentmarketplacee</a></div>
+        <div class="footer-social-line"><a href="https://www.facebook.com/share/1ExUfH1RSm/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.5c0-.9.25-1.5 1.5-1.5H16.5V4.3c-.27-.04-1.2-.13-2.28-.13-2.25 0-3.8 1.37-3.8 3.9V10.5H8v3h2.42V21h3.08z"/></svg> Student Marketplace</a></div>
+        <div class="footer-social-line"><a href="https://tiktok.com/@student_marketplace" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3v13.5a2.5 2.5 0 1 1-2.5-2.5c.2 0 .4.02.6.06V9.9a5.5 5.5 0 1 0 4.9 5.47V8.7a6.9 6.9 0 0 0 4 1.28V6.9a4.2 4.2 0 0 1-4-4.9z"/></svg> student_marketplace</a></div>
       </div>
-      <div class="footer-col footer-center">
-        <div class="footer-title">Marketrade 🛍️</div>
-        <div class="footer-sub">The marketplace for everyone</div>
+      <div class="footer-main">
+        <div class="footer-title">Student Marketplace 🎓</div>
+        <div class="footer-sub">The student marketplace for all</div>
         <div class="footer-links">
-          <a class="footer-link" href="mailto:marketrade.co@gmail.com">📧 Report an issue</a>
-          <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
-          <a class="footer-link" href="index.html">Browse listings</a>
-          <a class="footer-link" href="faq.html">How It Works</a>
-          <a class="footer-link" href="terms.html">Terms</a>
-          <a class="footer-link" href="how-payments-work.html">How Payments Work</a>
-          <a class="footer-link" href="privacy.html">Privacy</a>
-          <a class="footer-link" href="guidelines.html">Guidelines</a>
-        </div>
-        <div class="footer-copy">© 2025 Marketrade</div>
+      <a class="footer-link" href="mailto:studentmarketplacehelp@gmail.com">📧 Report an issue</a>
+      <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
+      <a class="footer-link" href="index.html">Browse listings</a>
+      <a class="footer-link" href="faq.html">How It Works</a>
+      <a class="footer-link" href="terms.html">Terms</a>
+      <a class="footer-link" href="privacy.html">Privacy</a>
+      <a class="footer-link" href="guidelines.html">Guidelines</a>
+    </div>
+        <div class="footer-copy">© 2025 Student Marketplace</div>
       </div>
-      <div class="footer-col footer-business">
-        <div class="footer-col-label">Business Info</div>
-        <a href="tel:+27623584921">📞 062 358 4921</a>
-        <a href="terms.html#refunds">📄 Refund &amp; Return Policy</a>
+      <div class="footer-business">
+        <div class="footer-business-title">Business Info</div>
+        <div class="footer-business-line">📞 <a href="tel:+27623584921">062 358 4921</a></div>
+        <div class="footer-business-line">📄 <a href="terms.html#refund-policy">Refund &amp; Return Policy</a></div>
       </div>
     </div>
-  </footer>
+    </footer>
 
   <script>
     function setRole(r){document.getElementById('r-buyer').classList.toggle('active',r==='buyer');document.getElementById('r-seller').classList.toggle('active',r==='seller');window._selectedRole=r;}
     function showTab(t){
       document.getElementById('profile-menu').style.display='none';
       document.getElementById('profile-detail').style.display='block';
-      ['orders','favorites','alerts','invite','edit','security'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');
-      if(t==='orders'){markNotifsRead(['order_completed']).then(loadOrdersBadge);}
-      if(t==='favorites'){window._loadFavorites(); markNotifsRead(['back_in_stock','price_drop']).then(loadFavoritesBadge);}
-      if(t==='alerts'){window._loadAlerts(); markNotifsRead(['search_alert','restock']).then(loadAlertsBadge);}
-      if(t==='invite')window._loadInvite();
+      ['orders','favorites','edit','security','alerts','invite'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');
+      if(t==='favorites')window._loadFavorites();
       if(t==='security')refreshPushStatus();
+      if(t==='alerts')loadSearchAlerts();
+      if(t==='invite')loadInviteTab();
     }
     function closeTab(){
       document.getElementById('profile-detail').style.display='none';
@@ -263,13 +255,17 @@
   </script>
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase=createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+    const supabase=createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
     let currentUser=null;
-    // Escapes user-typed text before it goes into innerHTML.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function isValidSAPhone(raw){
+      const v=(raw||'').replace(/[\s-]/g,'');
+      return /^0[6-8][0-9]{8}$/.test(v) || /^\+?27[6-8][0-9]{8}$/.test(v);
+    }
 
     async function init(){
-     try {
       const {data:{user}}=await supabase.auth.getUser();
       if(!user){document.getElementById('auth-guard').style.display='block';return;}
       currentUser=user;
@@ -303,50 +299,16 @@
       }
       document.getElementById('btn-save-profile').onclick=saveProfile;
       loadBuyerOrders();
-      loadOrdersBadge();
       loadFavoritesBadge();
-      loadAlertsBadge();
       refreshMfaStatus();
-     } catch (err) {
-      console.error('Profile failed to load:', err);
-      document.getElementById('auth-guard').style.display='none';
-      document.getElementById('redirecting-guard').style.display='none';
-      document.getElementById('profile-content').style.display='none';
-      document.getElementById('load-error-guard').style.display='block';
-     }
-    }
-
-    // Badges only reflect actual unread events (a match, a restock, a completed order) —
-    // never a static count of things you already know you have saved.
-    async function countUnreadNotifs(types){
-      const {count}=await supabase.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
-      return count||0;
-    }
-    async function markNotifsRead(types){
-      await supabase.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false).in('type',types);
-    }
-    function setBadge(id,count){
-      const b=document.getElementById(id);
-      if(count>0){b.textContent=count;b.style.display='inline-block';}
-      else b.style.display='none';
-    }
-
-    async function loadOrdersBadge(){
-      setBadge('orders-badge', await countUnreadNotifs(['order_completed']));
-    }
-
-    async function loadAlertsBadge(){
-      setBadge('alerts-badge', await countUnreadNotifs(['search_alert','restock']));
+      const wantTab=new URLSearchParams(location.search).get('tab');
+      if(wantTab==='orders') showTab('orders');
     }
 
     async function loadFavoritesBadge(){
-      setBadge('favorites-badge', await countUnreadNotifs(['back_in_stock','price_drop']));
-    }
-
-    // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)
-    function isValidSAPhone(v){
-      const cleaned=(v||'').replace(/[\s-]/g,'');
-      return /^(0\d{9}|\+27\d{9})$/.test(cleaned);
+      const {count}=await supabase.from('favorites').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id);
+      const b=document.getElementById('favorites-badge');
+      if(count>0){b.textContent=count;b.style.display='inline-block';}
     }
 
     async function saveProfile(){
@@ -355,9 +317,9 @@
       const res=document.getElementById('p-res').value.trim();
       const role=window._selectedRole||'buyer';
       const errEl=document.getElementById('profile-err');
-      errEl.style.color='#1d4ed8';errEl.textContent='';
+      errEl.style.color='#9333ea';errEl.textContent='';
       if(!name||!wa){errEl.textContent='❌ Name and WhatsApp are required';return;}
-      if(!isValidSAPhone(wa)){errEl.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678';return;}
+      if(!isValidSAPhone(wa)){errEl.textContent='❌ Enter a valid South African cell number, e.g. 0812345678';return;}
       const {error}=await supabase.from('profiles').update({full_name:name,whatsapp:wa,residence:res,role}).eq('id',currentUser.id);
       if(error){errEl.textContent='❌ '+error.message;return;}
       document.getElementById('profile-name').textContent=name;
@@ -374,6 +336,9 @@
     async function loadBuyerOrders(){
       const {data}=await supabase.from('orders').select('*,listings(title,price,image_url,category),profiles!orders_seller_id_fkey(full_name,whatsapp,residence)').eq('buyer_id',currentUser.id).order('created_at',{ascending:false});
       const container=document.getElementById('orders-container');
+      const activeCount=(data||[]).filter(o=>o.status==='confirmed').length;
+      const ob=document.getElementById('orders-badge');
+      if(activeCount>0){ob.textContent=activeCount;ob.style.display='inline-block';}
       if(!data?.length){container.innerHTML='<p class="loading-msg">No orders yet — go browse! 🛍️</p>';return;}
 
       const completedIds=data.filter(o=>o.status==='completed').map(o=>o.id);
@@ -384,10 +349,37 @@
       }
 
       container.innerHTML=data.map(o=>{
-        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+        const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
         const e=CAT_EMOJI[o.listings?.category]||'📦';
-        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+escapeHtml(o.listings.title||'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
+        const img=o.listings?.image_url?'<img loading="lazy" src="'+o.listings.image_url+'" alt="'+(o.listings.title||'').replace(/"/g,'')+'" style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0"/>':`<div style="width:52px;height:52px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${e}</div>`;
         const status=o.status==='confirmed'?'<span class="order-badge badge-new">🆕 Confirmed</span>':o.status==='cancelled'?'<span class="order-badge" style="background:#f0f0f0;color:#888">🚫 Cancelled</span>':'<span class="order-badge badge-done">✅ Completed</span>';
+
+        // Escrow/payment status — this is the part the buyer actually needs
+        // to act on, so it gets its own block above the usual seller details.
+        let escrowHtml='';
+        if(o.status==='confirmed'){
+          if(o.payment_status==='unpaid'){
+            escrowHtml='<div class="order-detail" style="margin-top:6px;color:#c0392b;font-weight:800">⏳ Payment not completed — this order won\'t be fulfilled until it\'s paid.</div>';
+          } else if(o.payment_status==='paid' && o.escrow_status==='held'){
+            if(o.delivery_method==='pargo'){
+              escrowHtml='<div style="background:#f5f0ff;border:2px solid #e0d0ff;border-radius:12px;padding:10px 12px;margin-top:8px">'+
+                '<div style="font-size:12.5px;font-weight:800;color:#7c3aed">🚚 Pargo delivery'+(o.pargo_point_name?' — '+escapeHtml(o.pargo_point_name):'')+'</div>'+
+                '<div style="font-size:12px;color:#666;font-weight:600;margin-top:4px">'+(o.delivered_at?'📦 Delivered to the pickup point. Your payment releases to the seller automatically 24h after delivery unless you report a problem.':'On its way — your payment is held safely in escrow until it arrives.')+'</div>'+
+                '</div>';
+            } else {
+              escrowHtml='<div style="background:#f5f0ff;border:2px solid #e0d0ff;border-radius:12px;padding:10px 12px;margin-top:8px">'+
+                '<div style="font-size:12.5px;font-weight:800;color:#7c3aed">🔑 Collection PIN: <span style="font-size:15px;letter-spacing:1px">'+escapeHtml(o.collection_pin||'—')+'</span></div>'+
+                '<div style="font-size:12px;color:#666;font-weight:600;margin-top:4px">Give this to the seller in person once you\'ve got your item — it releases your payment from escrow. Don\'t share it before then.</div>'+
+                '</div>';
+            }
+            escrowHtml+='<button class="btn-sm btn-toggle" style="margin-top:8px" onclick="window._openEscrowDispute(\''+o.id+'\')">🚩 Report a problem with this order</button>';
+          } else if(o.escrow_status==='disputed'){
+            escrowHtml='<div class="order-detail" style="margin-top:6px;color:#c0392b;font-weight:800">⚠️ Dispute under review — our team will follow up.</div>';
+          } else if(o.escrow_status==='released'){
+            escrowHtml='<div class="order-detail" style="margin-top:6px;color:#2e7d32;font-weight:700">✅ Payment released to the seller.</div>';
+          }
+        }
+
         let ratingHtml='';
         if(o.status==='completed'){
           if(myReviews[o.id]){
@@ -401,10 +393,13 @@
               '</div>';
           }
         }
-        const cancelBtn = o.status==='confirmed' ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelOrder(\''+o.id+'\')">Cancel Order</button>' : '';
-        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="font-size:12px;font-weight:800;color:#2563eb;text-decoration:none">🧾 View Receipt</a>' : '';
-        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" onclick="window._requestDispute(\''+o.id+'\',\''+escapeHtml(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
-        const actionRow = (receiptBtn||disputeBtn) ? '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px">'+receiptBtn+disputeBtn+'</div>' : '';
+        // Cancelling is only safe while nothing has been paid yet — once
+        // money's moved into escrow, cancelling here would strand it there
+        // with no order to tie it back to, so that path goes through the
+        // dispute button above instead.
+        const cancelBtn = (o.status==='confirmed' && o.payment_status==='unpaid') ? '<button class="btn-sm btn-delete" style="margin-top:8px" onclick="window._cancelOrder(\''+o.id+'\')">Cancel Order</button>' : '';
+        const receiptBtn = o.status==='completed' ? '<a href="receipt.html?order='+o.id+'" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#7c3aed;text-decoration:none">🧾 View Receipt</a>' : '';
+        const disputeBtn = o.status==='completed' ? '<button class="btn-sm btn-toggle" style="margin-top:8px;margin-left:6px" onclick="window._requestDispute(\''+o.id+'\',\''+escapeHtml(o.listings?.title||'').replace(/'/g,"\\'")+'\')">🚩 Report a problem</button>' : '';
         const viewItem = o.listing_id ? "window._viewOrderedItem('"+o.listing_id+"')" : '';
         return '<div class="order-card '+(o.status==='confirmed'?'order-new':'')+'">'+
           '<div style="display:flex;gap:12px;align-items:flex-start">'+
@@ -412,12 +407,13 @@
           '<div style="flex:1">'+status+
           '<div class="order-card-title"'+(viewItem?' onclick="'+viewItem+'" style="cursor:pointer"':'')+'>'+escapeHtml(o.listings?.title||'Unknown')+(viewItem?' 👁️':'')+'</div>'+
           '<div class="order-detail">Qty: <strong>'+o.quantity+'</strong></div>'+
-          '<a href="messages.html?seller='+o.seller_id+'&listing='+(o.listing_id||'')+'" style="display:inline-block;font-size:13px;font-weight:800;color:#2563eb;margin-bottom:8px;text-decoration:none">💬 Contact seller to arrange</a>'+
+          escrowHtml+
+          '<a style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;background:#7c3aed;padding:8px 16px;border-radius:50px;text-decoration:none;margin-bottom:8px;margin-top:8px" href="messages.html?seller='+o.seller_id+(o.listing_id?'&listing='+o.listing_id:'')+'">💬 Message Seller</a>'+
           '<div class="order-detail">👤 <strong>'+escapeHtml(o.profiles?.full_name||'Seller')+'</strong></div>'+
           (o.profiles?.residence?'<div class="order-detail">📍 <strong>'+escapeHtml(o.profiles.residence)+'</strong></div>':'')+
           '<div class="order-detail">📱 <strong>'+escapeHtml(o.profiles?.whatsapp||'N/A')+'</strong></div>'+
           '<div class="order-detail" style="color:#aaa;font-size:12px;margin-top:6px">'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</div>'+
-          ratingHtml+cancelBtn+actionRow+
+          ratingHtml+cancelBtn+receiptBtn+disputeBtn+
           '</div></div></div>';
       }).join('');
     }
@@ -430,6 +426,14 @@
       if(!confirm('Cancel this order? The seller will see it as cancelled.'))return;
       const {error}=await supabase.rpc('buyer_cancel_order',{p_order_id:id});
       if(error){alert('Error: '+error.message);return;}
+      loadBuyerOrders();
+    };
+    window._openEscrowDispute=async(orderId)=>{
+      const reason=prompt('Briefly describe the problem — this pauses the automatic payment release until our team reviews it:');
+      if(reason===null || !reason.trim())return;
+      const {error}=await supabase.rpc('open_dispute',{p_order_id:orderId,p_reason:reason.trim()});
+      if(error){alert('Could not submit: '+error.message);return;}
+      alert('Dispute opened — the payment release is on hold. Our team will follow up.');
       loadBuyerOrders();
     };
     window._requestDispute=async(orderId,listingTitle)=>{
@@ -465,10 +469,10 @@
       const {data:favs}=await supabase.from('favorites').select('listing_id,listings(*)').eq('user_id',currentUser.id).order('created_at',{ascending:false});
       const items=(favs||[]).map(f=>f.listings).filter(Boolean);
       if(!items.length){c.innerHTML='<p class="loading-msg">No favorites yet — heart a listing while browsing! ❤️</p>';return;}
-      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+      const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
       c.innerHTML=items.map(l=>{
         const e=CAT_EMOJI[l.category]||'🛍️';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         return '<div class="card" onclick="location.href=\'index.html?open='+l.id+'\'">'+
           '<div class="card-img" style="background:#f5f5f5">'+img+'</div>'+
@@ -483,71 +487,7 @@
       window.location.href='login.html';
     };
 
-    window._loadAlerts=async()=>{
-      const c=document.getElementById('alerts-container');
-      c.innerHTML='<p class="loading-msg">Loading alerts... ⏳</p>';
-      const [{data:searches},{data:restocks}]=await Promise.all([
-        supabase.from('saved_searches').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}),
-        supabase.from('restock_alerts').select('id,created_at,listings(id,title,price,image_url)').eq('user_id',currentUser.id).order('created_at',{ascending:false})
-      ]);
-      const totalCount=(searches?.length||0)+(restocks?.length||0);
-      if(!totalCount){c.innerHTML='<p class="loading-msg">No alerts saved yet — use the 🔔 Alert me button while browsing 🔍</p>';return;}
-
-      let html='';
-      if(restocks?.length){
-        html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Restock alerts</p>';
-        html+=restocks.map(r=>{
-          const img=r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+escapeHtml(r.listings?.title||'Listing')+'" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<div style="width:44px;height:44px;background:#f5f5f5;border-radius:8px;flex-shrink:0"></div>';
-          const title=escapeHtml(r.listings?.title||'Listing no longer available');
-          const price=r.listings?.price!=null?'R'+r.listings.price:'';
-          return '<div class="seller-row">'+img+'<div class="listing-info" style="flex:1;margin-left:10px">'+
-            (r.listings?.id?'<div class="listing-title" style="cursor:pointer" onclick="window.location.href=\'index.html?open='+r.listings.id+'\'">'+title+'</div>':'<div class="listing-title">'+title+'</div>')+
-            '<div class="listing-meta">'+(price?price+' · ':'')+'We\'ll notify you when it\'s back</div></div>'+
-            '<button class="btn-sm btn-delete" onclick="window._deleteRestockAlert(\''+r.id+'\')">Delete</button></div>';
-        }).join('');
-      }
-      if(searches?.length){
-        if(restocks?.length) html+='<p style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px">Search alerts</p>';
-        html+=searches.map(a=>{
-          const parts=[];
-          if(a.keyword)parts.push('"'+escapeHtml(a.keyword)+'"');
-          if(a.category)parts.push(a.category);
-          if(a.max_price)parts.push('under R'+a.max_price);
-          if(a.area_only)parts.push('my area only');
-          return '<div class="seller-row"><div class="listing-info" style="flex:1"><div class="listing-title">'+(parts.join(' · ')||'Any new listing')+'</div>'+
-            '<div class="listing-meta">Saved '+new Date(a.created_at).toLocaleDateString('en-ZA')+'</div></div>'+
-            '<button class="btn-sm btn-delete" onclick="window._deleteAlert(\''+a.id+'\')">Delete</button></div>';
-        }).join('');
-      }
-      c.innerHTML=html;
-    };
-    window._deleteAlert=async(id)=>{
-      if(!confirm('Delete this alert?'))return;
-      await supabase.from('saved_searches').delete().eq('id',id);
-      window._loadAlerts();
-    };
-    window._deleteRestockAlert=async(id)=>{
-      if(!confirm('Delete this restock alert?'))return;
-      await supabase.from('restock_alerts').delete().eq('id',id);
-      window._loadAlerts();
-    };
-
-    window._loadInvite=async()=>{
-      const {data:p}=await supabase.from('profiles').select('referral_code').eq('id',currentUser.id).single();
-      const code=p?.referral_code||'';
-      const link=location.origin+location.pathname.replace('profile.html','index.html')+'?ref='+code;
-      document.getElementById('invite-link').value=link;
-      document.getElementById('invite-whatsapp-btn').href='https://wa.me/?text='+encodeURIComponent('Come check out Marketrade — buy & sell jobs, furniture, electronics and more with your community! '+link);
-      const {count}=await supabase.from('referrals').select('id',{count:'exact',head:true}).eq('referrer_id',currentUser.id);
-      document.getElementById('invite-count').textContent=count||0;
-    };
-    window.copyInviteLink=()=>{
-      const el=document.getElementById('invite-link');
-      el.select();
-      navigator.clipboard?.writeText(el.value).then(()=>window.showToast?window.showToast('🔗 Link copied!'):alert('Link copied!')).catch(()=>document.execCommand('copy'));
-    };
-
-        const VAPID_PUBLIC_KEY = 'BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM';
+        const VAPID_PUBLIC_KEY = 'BDyOj8uuDSlLJDGHXjMZYWWvELnV2jtbQ5YY93jxZ_TNYAcDLgUUaaOntRyt-iOWUvEV-aIZbBIfCrLEQ_fxnD4';
     function urlBase64ToUint8Array(base64String){
       const padding='='.repeat((4-base64String.length%4)%4);
       const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
@@ -571,10 +511,7 @@
         return;
       }
       try{
-        const reg=await Promise.race([
-          navigator.serviceWorker.ready,
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))
-        ]);
+        const reg=await navigator.serviceWorker.ready;
         const sub=await reg.pushManager.getSubscription();
         if(sub){
           statusEl.textContent='✅ Push notifications are enabled on this device.';
@@ -586,12 +523,7 @@
           btn.style.display='inline-block';
         }
       }catch(e){
-        if(e && e.message==='timeout'){
-          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
-        } else {
-          statusEl.textContent='Could not check push status: '+e.message;
-        }
-        btn.style.display='none';
+        statusEl.textContent='Could not check push status: '+e.message;
       }
     }
     window.togglePush=async()=>{
@@ -599,10 +531,7 @@
       const statusEl=document.getElementById('push-status');
       btn.disabled=true;
       try{
-        const reg=await Promise.race([
-          navigator.serviceWorker.ready,
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-        ]);
+        const reg=await navigator.serviceWorker.ready;
         const existing=await reg.pushManager.getSubscription();
         if(existing){
           await existing.unsubscribe();
@@ -621,21 +550,67 @@
           if(error){ statusEl.textContent='Could not save subscription: '+error.message; btn.disabled=false; return; }
         }
       }catch(e){
-        if(e && e.message==='timeout'){
-          statusEl.textContent='Push notifications aren\'t available in this browser. Try opening Marketrade in Chrome or Safari instead of an in-app browser (like WhatsApp\'s).';
-        } else {
-          statusEl.textContent='Error: '+e.message;
-        }
+        statusEl.textContent='Error: '+e.message;
       }
       btn.disabled=false;
       refreshPushStatus();
     };
 
+        window._deferredInstallPrompt = window._deferredInstallPrompt || null;
+    window._onInstallPromptReady = refreshInstallUI;
+    window.addEventListener('appinstalled',()=>{ window._deferredInstallPrompt=null; refreshInstallUI(); });
+
+    function isStandalone(){
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+    }
+    function isIOS(){
+      return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    }
+    function refreshInstallUI(){
+      const row=document.getElementById('install-app-row');
+      const label=document.getElementById('install-app-label');
+      if(!row) return;
+      row.style.display='flex';
+      row.style.cursor='pointer';
+      if(isStandalone()){
+        label.textContent='✅ App installed';
+        row.onclick=null;
+        row.style.cursor='default';
+      } else if(window._deferredInstallPrompt){
+        label.textContent='📲 Install App';
+        row.onclick=installApp;
+      } else if(isIOS()){
+        label.textContent='📲 Install App';
+        row.onclick=showIOSInstallHelp;
+      } else {
+        // The browser's native install prompt wasn't captured on this specific
+        // page load — still show the row with manual instructions instead of
+        // hiding it, since the app may still be installable.
+        label.textContent='📲 Install App';
+        row.onclick=showManualInstallHelp;
+      }
+    }
+    window.installApp=async()=>{
+      if(!window._deferredInstallPrompt) return showManualInstallHelp();
+      window._deferredInstallPrompt.prompt();
+      await window._deferredInstallPrompt.userChoice;
+      window._deferredInstallPrompt=null;
+      refreshInstallUI();
+    };
+    window.showIOSInstallHelp=()=>{
+      alert('To install: tap the Share icon in Safari (square with an arrow), then "Add to Home Screen".');
+    };
+    window.showManualInstallHelp=()=>{
+      alert('To install: open your browser menu (⋮ or ...) and choose "Install app" or "Add to Home Screen". If you don\'t see that option, try reloading this page first.');
+    };
+    refreshInstallUI();
+
+
     window.changePassword=async()=>{
       const pw=document.getElementById('pw-new').value;
       const pw2=document.getElementById('pw-confirm').value;
       const err=document.getElementById('pw-error');
-      err.style.color='#1d4ed8';err.textContent='';
+      err.style.color='#9333ea';err.textContent='';
       if(!pw||pw.length<6){err.textContent='❌ Password must be at least 6 characters';return;}
       if(pw!==pw2){err.textContent='❌ Passwords don\'t match';return;}
       const {error}=await supabase.auth.updateUser({password:pw});
@@ -643,6 +618,60 @@
       err.style.color='#2e7d32';err.textContent='✅ Password updated!';
       document.getElementById('pw-new').value='';document.getElementById('pw-confirm').value='';
       setTimeout(()=>err.textContent='',3000);
+    };
+
+    async function loadSearchAlerts(){
+      const box=document.getElementById('alerts-list');
+      const [{data,error}, {data:restocks}] = await Promise.all([
+        supabase.from('search_alerts').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}),
+        supabase.from('restock_alerts').select('id,listing_id,listings(title,image_url)').eq('user_id',currentUser.id).order('created_at',{ascending:false})
+      ]);
+      const searchRows = (error||!data?.length) ? [] : data.map(a=>{
+        const parts=[];
+        if(a.query) parts.push('"'+a.query+'"');
+        if(a.category) parts.push(a.category);
+        if(a.max_price) parts.push('under R'+a.max_price);
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f5">'+
+          '<span style="font-size:13px;font-weight:700">🔔 '+(parts.join(' · ')||'Any new listing')+'</span>'+
+          '<button class="btn-sm btn-delete" onclick="deleteSearchAlert(\''+a.id+'\')">Remove</button>'+
+          '</div>';
+      });
+      const restockRows = (restocks||[]).map(r=>{
+        const title = r.listings?.title || 'Listing no longer available';
+        return '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5">'+
+          (r.listings?.image_url?'<img loading="lazy" src="'+r.listings.image_url+'" alt="'+title.replace(/"/g,'')+'" style="width:36px;height:36px;object-fit:cover;border-radius:8px;flex-shrink:0"/>':'<span style="font-size:18px;flex-shrink:0">📦</span>')+
+          '<span style="font-size:13px;font-weight:700;flex:1">📬 Notify me: '+title+'</span>'+
+          '<button class="btn-sm btn-delete" onclick="deleteRestockAlert(\''+r.id+'\')">Remove</button>'+
+          '</div>';
+      });
+      const allRows = restockRows.concat(searchRows);
+      box.innerHTML = allRows.length ? allRows.join('') : '<p class="loading-msg">No saved alerts yet.</p>';
+    }
+    window.deleteSearchAlert=async(id)=>{
+      await supabase.from('search_alerts').delete().eq('id',id);
+      loadSearchAlerts();
+    };
+    window.deleteRestockAlert=async(id)=>{
+      await supabase.from('restock_alerts').delete().eq('id',id);
+      loadSearchAlerts();
+    };
+
+    async function loadInviteTab(){
+      const link=location.origin+location.pathname.replace('profile.html','login.html')+'?ref='+currentUser.id;
+      document.getElementById('invite-link').value=link;
+      const {count}=await supabase.from('profiles').select('id',{count:'exact',head:true}).eq('referred_by',currentUser.id);
+      document.getElementById('referral-count-text').textContent=(count||0)+' friend'+(count===1?'':'s')+' joined using your link so far';
+    }
+    window.copyInviteLink=()=>{
+      const el=document.getElementById('invite-link');
+      el.select(); document.execCommand('copy');
+      alert('Link copied!');
+    };
+    window.shareInviteLink=async()=>{
+      const link=document.getElementById('invite-link').value;
+      const text='Join me on Student Marketplace — buy & sell with fellow students 🎓';
+      if(navigator.share){ try{ await navigator.share({title:'Student Marketplace',text,url:link}); }catch(e){} }
+      else { window.copyInviteLink(); }
     };
 
     window.requestAccountDeletion=async()=>{
@@ -733,12 +762,6 @@
     });
 
     init();
-    setTimeout(()=>{
-      const stillHidden = document.getElementById('profile-content').style.display === 'none' &&
-        document.getElementById('auth-guard').style.display === 'none' &&
-        document.getElementById('redirecting-guard').style.display === 'none';
-      if (stillHidden) document.getElementById('load-error-guard').style.display = 'block';
-    }, 15000);
   </script>
   <nav class="bottom-nav">
     <a class="bottom-nav-item" href="index.html"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>

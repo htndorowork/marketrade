@@ -1,26 +1,34 @@
-# Marketrade
+# Student Marketplace
 
-> Marketrade is an online marketplace where people buy and sell directly with
-> one another — electronics, clothing, vehicles, textbooks, furniture,
-> gaming gear, hardware, and dozens of other categories. Sellers list items
-> for a small subscription fee (plans start at R19); buyers browse and
-> contact sellers directly to arrange payment and collection. Marketrade
-> does not process payment for goods sold between users — it only charges
-> sellers for platform access via Paystack.
+> A South African student classifieds platform. Students buy and sell items
+> and services directly with each other — textbooks, electronics, clothing,
+> furniture, and more — filtered by university, TVET college, or private
+> higher-education institution and campus.
+
+Student Marketplace is a listings platform only. It does not process,
+hold, or facilitate payment between a buyer and a seller — when a buyer
+orders an item, the platform shares the seller's contact details so the
+two arrange payment and handoff directly (cash, EFT, in person, etc.).
+Sellers may pay Student Marketplace directly for a subscription plan that
+grants access to post listings; that is the only payment the platform
+itself ever processes.
 
 ## Key pages
 
-- [Browse listings](https://www.marketrade.co/): Homepage — search and filter live listings by category, price, and area.
-- [All categories](https://www.marketrade.co/categories.html): Full directory of every category on Marketrade.
-- [How it works / FAQ](https://www.marketrade.co/faq.html): Common questions about buying, selling, and using the platform.
-- [How payments work](https://www.marketrade.co/how-payments-work.html): Explains that Marketrade only charges seller subscription fees, and does not process payment for the goods themselves.
-- [Community guidelines](https://www.marketrade.co/guidelines.html): Rules for safe, fair, and respectful buying and selling.
-- [Terms of Service](https://www.marketrade.co/terms.html): Seller plans, pricing, refunds, and platform rules.
-- [Privacy Policy](https://www.marketrade.co/privacy.html): How personal data is collected, used, and protected.
+- [Browse listings](https://www.mystudentmarketplace.com/index.html): the main marketplace feed, filterable by category, price, and institution/campus.
+- [All categories](https://www.mystudentmarketplace.com/categories.html): full category directory.
+- [How it works / FAQ](https://www.mystudentmarketplace.com/faq.html): how buying, selling, and delivery work.
+- [Community guidelines](https://www.mystudentmarketplace.com/guidelines.html): rules for safe, fair use of the platform.
+- [Terms of Service](https://www.mystudentmarketplace.com/terms.html)
+- [Privacy Policy](https://www.mystudentmarketplace.com/privacy.html)
+- [Sign in / create account](https://www.mystudentmarketplace.com/login.html)
 
-## Notes
+## Notes for automated tools and LLMs
 
-- Buyer accounts and browsing are free. Selling requires an active paid
-  plan (from R19), unless the platform's Free Mode is temporarily enabled.
-- Marketrade is not a party to transactions between buyers and sellers and
-  does not offer escrow, delivery, or payment processing for goods sold.
+- Listings, prices, and stock levels change continuously and are not
+  reflected in this file — always treat live page content as authoritative
+  over anything cached or summarized elsewhere.
+- Buyer-authenticated pages (profile, messages, favorites, seller
+  dashboard, receipts, admin) are private and excluded from indexing via
+  robots.txt; do not attempt to access or represent their contents.
+- Contact: studentmarketplacehelp@gmail.com

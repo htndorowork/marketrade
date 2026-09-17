@@ -3,66 +3,37 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign In or Sign Up — Marketrade</title>
-  <meta name="description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
-  <meta name="robots" content="index, follow"/>
-  <link rel="canonical" href="https://www.marketrade.co/login.html"/>
-  <meta property="og:title" content="Sign In or Sign Up — Marketrade"/>
-  <meta property="og:description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
+  <title>Sign In — Student Marketplace</title>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/login.html"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <meta name="description" content="Sign in or create a free account on Student Marketplace to start buying and selling with fellow students."/>
+    <meta property="og:title" content="Sign In — Student Marketplace"/>
+  <meta property="og:url" content="https://www.mystudentmarketplace.com/login.html"/>
+  <meta property="og:description" content="Sign in or create a free account on Student Marketplace to start buying and selling with fellow students."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/login.html"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Sign In or Sign Up — Marketrade"/>
-  <meta name="twitter:description" content="Sign in to your Marketrade account, or create a free account to start buying and selling near you."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Sign In — Student Marketplace"/>
+  <meta name="twitter:description" content="Sign in or create a free account on Student Marketplace to start buying and selling with fellow students."/>
+  <meta name="twitter:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=3"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="js/areas-data.js" defer></script>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://www.marketrade.co/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Sign In",
-      "item": "https://www.marketrade.co/login.html"
-    }
-  ]
-}
-  </script>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
+  <link rel="icon" type="image/x-icon" href="icons/favicon.ico?v=2"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=2"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=2"/>
+  <link rel="stylesheet" href="style.css?v=1789517217"/>
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo"><img src="icons/logo.png" alt="Marketrade logo" class="nav-logo-icon" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🛍️',className:'nav-logo-icon',style:'font-size:22px;display:inline-flex;align-items:center;justify-content:center'}))"/>Market<span>rade</span></a>
+    <a href="index.html" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links"><a href="index.html">← Browse</a></div>
   </nav>
-
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current">Sign In</span>
-  </nav>
   <main class="auth-main">
-    <h1 class="sr-only">Sign In or Sign Up — Marketrade</h1>
-    <div class="auth-brand">
-      <div class="auth-brand-badge"><img src="icons/logo.png" alt="Marketrade logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/></div>
-      <div class="auth-brand-tagline">The marketplace</div>
-    </div>
     <div class="auth-card">
+      <h1 class="sr-only">Sign In or Create a Student Marketplace Account</h1>
+      <div class="auth-icon">🎓</div>
+      <p class="auth-tagline">Your campus marketplace</p>
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Sign In</button>
         <button class="auth-tab" id="tab-signup" onclick="showTab('signup')">Sign Up</button>
@@ -71,19 +42,18 @@
       <!-- LOGIN -->
       <div id="login-form">
         <h2 class="auth-title">Welcome back! 👋</h2>
-        <p class="auth-sub">Sign in to your Marketrade account</p>
+        <p class="auth-sub">Sign in to your Student Marketplace account</p>
         <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"/></div>
         <div class="form-group">
           <label>Password</label>
           <div class="pw-wrap">
             <input type="password" id="login-password" placeholder="••••••••"/>
-            <button class="pw-toggle" onclick="togglePw('login-password',this)" type="button">Show</button>
+            <button class="pw-toggle" onclick="togglePw('login-password',this)" type="button">👁</button>
           </div>
         </div>
         <div class="auth-error" id="login-error"></div>
         <button class="btn-primary" id="btn-login">Sign In 🚀</button>
-        <p style="text-align:center;margin-top:12px"><a href="#" onclick="event.preventDefault();openForgotPw()" style="font-size:12.5px;color:#2563eb;font-weight:700;text-decoration:none">Forgot password?</a></p>
-        <p class="auth-foot-link">Don't have an account? <a href="#" onclick="event.preventDefault();showTab('signup')">Sign Up</a></p>
+        <p style="text-align:center;margin-top:12px"><a href="#" onclick="event.preventDefault();openForgotPw()" style="font-size:12.5px;color:#7c3aed;font-weight:700;text-decoration:none">Forgot password?</a></p>
       </div>
 
       <!-- FORGOT PASSWORD -->
@@ -98,9 +68,9 @@
 
       <!-- SIGNUP -->
       <div id="signup-form" style="display:none">
-        <h2 class="auth-title">Create Account 🎉</h2>
-        <p class="auth-sub">Get started in seconds</p>
-        <div id="referral-banner" style="display:none;background:#eff6ff;color:#2563eb;font-weight:700;font-size:12.5px;padding:10px 14px;border-radius:12px;margin-bottom:14px">🎁 You were invited by a friend — sign up to connect your accounts!</div>
+        <h2 class="auth-title">Join Student Marketplace! 🎉</h2>
+        <p class="auth-sub">Create your free account</p>
+        <p id="invite-banner" style="display:none;background:#f5f0fe;color:#5b21b6;font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:12px;margin-bottom:10px">🎁 You were invited by a friend!</p>
         <div class="form-group"><label>I want to</label>
           <div class="role-selector">
             <button class="role-btn active" id="role-buyer" onclick="selectRole('buyer')">🛍️ Buy</button>
@@ -108,24 +78,30 @@
           </div>
         </div>
         <div class="form-group"><label>Full Name *</label><input type="text" id="signup-name" placeholder="Thabo Mokoena"/></div>
-        <div class="form-group"><label>WhatsApp Number *</label><input type="text" inputmode="tel" id="signup-whatsapp" placeholder="0812345678 or +27812345678"/></div>
-        <div class="form-group seller-only" style="display:none"><label>Residence</label><input type="text" id="signup-residence" placeholder="e.g. 12 Church Street, Potchefstroom"/></div>
+        <div class="form-group"><label>WhatsApp Number *</label><input type="text" id="signup-whatsapp" placeholder="0812345678"/></div>
+        <div class="form-group seller-only" style="display:none"><label>Residence</label><input type="text" id="signup-residence" placeholder="e.g. Heroes Residence"/></div>
 
         <div class="form-group buyer-only">
-          <label>Your Area *</label>
-          <button type="button" id="signup-area-btn" class="btn-sm btn-toggle" style="width:100%;text-align:left" onclick="openBuyerAreaModal()">📍 Select your area</button>
+          <label>Your Institution & Campus *</label>
+          <button type="button" id="signup-inst-btn" class="btn-sm btn-toggle" style="width:100%;text-align:left" onclick="openBuyerInstModal()">🎓 Select your institution & campus</button>
         </div>
 
         <div class="form-group seller-only" style="display:none">
-          <label>Where do you deliver? *</label>
-          <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers filter listings by area, so tell us every area you'll deliver to. You can add more later from your dashboard.</p>
+          <label>Where do you sell? *</label>
+          <p style="font-size:12px;color:#888;font-weight:600;margin:-4px 0 10px">Buyers filter listings by campus, so tell us every institution & campus you'll deliver to. You can add more later from your dashboard.</p>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
             <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
-              <input type="checkbox" id="signup-sell-all-areas"/> 📍 Deliver anywhere in South Africa
+              <input type="checkbox" id="signup-sell-all-uni" style="width:16px;height:16px"/> 🎓 All universities (every campus)
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="signup-sell-all-tvet" style="width:16px;height:16px"/> 🛠️ All public TVET colleges (every campus)
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="signup-sell-all-private" style="width:16px;height:16px"/> 🏫 All private higher-education institutions (every campus)
             </label>
           </div>
-          <div id="signup-area-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
-          <button type="button" class="btn-sm btn-toggle" onclick="openSellerAreaAddModal()">+ Add a specific area</button>
+          <div id="signup-inst-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+          <button type="button" class="btn-sm btn-toggle" onclick="openSellerInstAddModal()">+ Add a specific institution</button>
         </div>
 
         <div class="form-group"><label>Email *</label><input type="email" id="signup-email" placeholder="your@email.com"/></div>
@@ -133,49 +109,53 @@
           <label>Password *</label>
           <div class="pw-wrap">
             <input type="password" id="signup-password" placeholder="••••••••" oninput="updatePwStrength(this.value)"/>
-            <button class="pw-toggle" onclick="togglePw('signup-password',this)" type="button">Show</button>
+            <button class="pw-toggle" onclick="togglePw('signup-password',this)" type="button">👁</button>
           </div>
-        </div>
-        <div class="pw-strength" id="pw-strength" style="display:none">
-          <div class="pw-strength-track"><div class="pw-strength-fill" id="pw-strength-fill"></div></div>
+          <div class="pw-strength-track" id="pw-strength-track"><div class="pw-strength-fill" id="pw-strength-fill"></div></div>
           <div class="pw-strength-label" id="pw-strength-label"></div>
         </div>
-        <div class="terms-row">
-          <input type="checkbox" id="signup-terms"/>
-          <label for="signup-terms">By clicking "Create Account", you agree to our <a href="terms.html">Terms and Conditions</a> and <a href="privacy.html">Privacy Policy</a>, and confirm that you are over 18 years of age.</label>
-        </div>
         <div class="auth-error" id="signup-error"></div>
+        <label class="terms-check" for="signup-agree">
+          <input type="checkbox" id="signup-agree"/>
+          <span>By clicking "Create Account", you agree to our <a href="terms.html" onclick="event.stopPropagation()">Terms and Conditions</a> and <a href="privacy.html" onclick="event.stopPropagation()">Privacy Policy</a>, and confirm that you are over 18 years of age.</span>
+        </label>
         <button class="btn-primary" id="btn-signup">Create Account 🎓</button>
-        <p class="auth-foot-link">Already have an account? <a href="#" onclick="event.preventDefault();showTab('login')">Sign In</a></p>
       </div>
     </div>
   </main>
 
-  <div class="modal-overlay" id="buyer-area-modal-overlay" onclick="closeBuyerAreaModal()">
+  <div class="modal-overlay" id="buyer-inst-modal-overlay" onclick="closeBuyerInstModal()">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
-      <button class="modal-close" onclick="closeBuyerAreaModal()">✕</button>
-      <div class="modal-body" id="buyer-area-modal-body"></div>
+      <button class="modal-close" onclick="closeBuyerInstModal()">✕</button>
+      <div class="modal-body" id="buyer-inst-modal-body"></div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="seller-area-modal-overlay" onclick="closeSellerAreaAddModal()">
+  <div class="modal-overlay" id="seller-inst-modal-overlay" onclick="closeSellerInstAddModal()">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
-      <button class="modal-close" onclick="closeSellerAreaAddModal()">✕</button>
-      <div class="modal-body" id="seller-area-modal-body"></div>
+      <button class="modal-close" onclick="closeSellerInstAddModal()">✕</button>
+      <div class="modal-body" id="seller-inst-modal-body"></div>
     </div>
   </div>
 
   <script>
-    let selectedRole = 'buyer';
     window.selectedRole = 'buyer';
+    // Accepts 0XXXXXXXXX (10 digits, starts 06/07/08) or +27XXXXXXXXX / 27XXXXXXXXX
+    function isValidSAPhone(raw){
+      const v=(raw||'').replace(/[\s-]/g,'');
+      return /^0[6-8][0-9]{8}$/.test(v) || /^\+?27[6-8][0-9]{8}$/.test(v);
+    }
     function showTab(t){
       document.getElementById('login-form').style.display=t==='login'?'block':'none';
       document.getElementById('signup-form').style.display=t==='signup'?'block':'none';
       document.getElementById('tab-login').classList.toggle('active',t==='login');
       document.getElementById('tab-signup').classList.toggle('active',t==='signup');
     }
+    if(new URLSearchParams(location.search).get('ref')){
+      showTab('signup');
+      document.getElementById('invite-banner').style.display='block';
+    }
     function selectRole(r){
-      selectedRole=r;
       window.selectedRole=r;
       document.getElementById('role-buyer').classList.toggle('active',r==='buyer');
       document.getElementById('role-seller').classList.toggle('active',r==='seller');
@@ -184,29 +164,8 @@
     }
     function togglePw(id,btn){
       const inp=document.getElementById(id);
-      if(inp.type==='password'){inp.type='text';btn.textContent='Hide';}
-      else{inp.type='password';btn.textContent='Show';}
-    }
-    function updatePwStrength(val){
-      const wrap=document.getElementById('pw-strength');
-      const fill=document.getElementById('pw-strength-fill');
-      const label=document.getElementById('pw-strength-label');
-      if(!val){ wrap.style.display='none'; return; }
-      wrap.style.display='block';
-      let score=0;
-      if(val.length>=8) score++;
-      if(val.length>=12) score++;
-      if(/[A-Z]/.test(val)&&/[a-z]/.test(val)) score++;
-      if(/[0-9]/.test(val)) score++;
-      if(/[^A-Za-z0-9]/.test(val)) score++;
-      let pct, color, text;
-      if(score<=1){pct=25;color='#e5484d';text='Weak';}
-      else if(score<=3){pct=60;color='#f59e0b';text='Medium';}
-      else{pct=100;color='#16a34a';text='Strong';}
-      fill.style.width=pct+'%';
-      fill.style.background=color;
-      label.style.color=color;
-      label.textContent=text;
+      if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+      else{inp.type='password';btn.textContent='👁';}
     }
     function openForgotPw(){
       document.getElementById('login-form').style.display='none';
@@ -217,211 +176,423 @@
       document.getElementById('login-form').style.display='block';
     }
 
-    // ---------- Buyer: single area (Province > City > District > Suburb) ----------
-    let buyerProvince=null, buyerCity=null, buyerDistrict=null, buyerSuburb=null;
-    window.openBuyerAreaModal=()=>{
-      buyerProvince=null;buyerCity=null;buyerDistrict=null;
-      renderBuyerProvinceStep();
-      document.getElementById('buyer-area-modal-overlay').style.display='flex';
+    const INSTITUTIONS={
+      university:[
+      {name:'University of Cape Town (UCT)',campuses:['Rondebosch (Cape Town)']},
+      {name:'Stellenbosch University (SU)',campuses:['Stellenbosch','Tygerberg','Bellville Park','Saldanha']},
+      {name:'University of the Western Cape (UWC)',campuses:['Bellville']},
+      {name:'Cape Peninsula University of Technology (CPUT)',campuses:['Bellville','District Six','Granger Bay','Wellington','Mowbray']},
+      {name:'University of Fort Hare (UFH)',campuses:['Alice','East London','Bhisho']},
+      {name:'Rhodes University',campuses:['Makhanda (Grahamstown)']},
+      {name:'Nelson Mandela University (NMU)',campuses:['Gqeberha (Port Elizabeth)','George']},
+      {name:'Walter Sisulu University (WSU)',campuses:['Mthatha','Butterworth','Buffalo City (East London)','Komani (Queenstown)']},
+      {name:'University of the Free State (UFS)',campuses:['Bloemfontein','Qwaqwa','South Campus']},
+      {name:'Central University of Technology (CUT)',campuses:['Bloemfontein','Welkom']},
+      {name:'University of KwaZulu-Natal (UKZN)',campuses:['Howard College','Westville','Edgewood','Pietermaritzburg','Nelson R. Mandela School of Medicine']},
+      {name:'Durban University of Technology (DUT)',campuses:['Steve Biko','Ritson','ML Sultan','Brickfield','Indumiso','Riverside']},
+      {name:'Mangosuthu University of Technology (MUT)',campuses:['Umlazi']},
+      {name:'University of Zululand (UNIZULU)',campuses:['KwaDlangezwa','Richards Bay']},
+      {name:'University of Johannesburg (UJ)',campuses:['Auckland Park Kingsway','Auckland Park Bunting Road','Doornfontein','Soweto']},
+      {name:'University of Pretoria (UP)',campuses:['Hatfield','Groenkloof','Prinshof','Hillcrest','Onderstepoort','Mamelodi']},
+      {name:'University of South Africa (UNISA)',campuses:['Main campus (Pretoria)','Regional campus']},
+      {name:'Tshwane University of Technology (TUT)',campuses:['Pretoria','Soshanguve','Ga-Rankuwa','eMalahleni','Mbombela','Polokwane']},
+      {name:'University of the Witwatersrand (Wits)',campuses:['Braamfontein','Parktown']},
+      {name:'North-West University (NWU)',campuses:['Potchefstroom','Mahikeng','Vanderbijlpark']},
+      {name:'Vaal University of Technology (VUT)',campuses:['Vanderbijlpark','Ekurhuleni','Secunda','Upington']},
+      {name:'University of Limpopo (UL)',campuses:['Turfloop']},
+      {name:'University of Venda (UNIVEN)',campuses:['Thohoyandou']},
+      {name:'University of Mpumalanga (UMP)',campuses:['Mbombela','Siyabuswa']},
+      {name:'Sol Plaatje University (SPU)',campuses:['Kimberley']},
+      {name:'Sefako Makgatho Health Sciences University (SMU)',campuses:['Ga-Rankuwa (Pretoria)']}
+      ],
+      private:[
+      {name:'AAA School of Advertising',campuses:['Cape Town','Johannesburg']},
+      {name:'Academy for Facility Management (A4FM)',campuses:['Johannesburg','Cape Town']},
+      {name:'Academy of Sound Engineering',campuses:['Johannesburg','Cape Town']},
+      {name:'ACT Cape Town',campuses:['Cape Town']},
+      {name:'Afrikaanse Protestantse Akademie',campuses:['Pretoria','Online/Distance']},
+      {name:'Akademia',campuses:['Centurion','Online/Distance','Various study centres']},
+      {name:'Akademiese Reformatoriese Opleiding en Studies (AROS)',campuses:['Pretoria','Online/Distance']},
+      {name:'The Animation School',campuses:['Cape Town','Johannesburg']},
+      {name:'Baptist Theological College of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Belgium Campus iTversity',campuses:['Pretoria','Johannesburg','Port Elizabeth/Gqeberha','Stellenbosch']},
+      {name:'Berea College of Technology',campuses:['Durban']},
+      {name:'BHC School of Design',campuses:['Cape Town']},
+      {name:'Boston City Campus',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','East London','Polokwane','Mbombela','Kimberley','Rustenburg','Potchefstroom','Vanderbijlpark']},
+      {name:'Boston Media House',campuses:['Johannesburg','Cape Town','Durban']},
+      {name:'Business Management Training College',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
+      {name:'Cape Audio College',campuses:['Cape Town']},
+      {name:'Cape Town Baptist Seminary',campuses:['Cape Town','Online/Distance']},
+      {name:'Cape Town College of Fashion Design',campuses:['Cape Town']},
+      {name:'Cape Town Creative Academy',campuses:['Cape Town']},
+      {name:'Centre for Creative Education / Iziko La Bantu Be Afrika',campuses:['Cape Town','Online/Distance']},
+      {name:'Christ Baptist Church Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Christian Reformed Theological Seminary',campuses:['Pretoria','Online/Distance']},
+      {name:'College of Transfiguration',campuses:['Grahamstown/Makhanda','Online/Distance']},
+      {name:'Cornerstone Institute',campuses:['Cape Town','Online/Distance']},
+      {name:'Cranefield College',campuses:['Pretoria','Johannesburg','Online/Distance']},
+      {name:'Da Vinci Institute for Technology Management',campuses:['Lethabong','Online/Distance']},
+      {name:'Design Academy of Fashion',campuses:['Cape Town']},
+      {name:'Edutel Higher Education',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
+      {name:'Eduvos',campuses:['Bedfordview','Bloemfontein','Durban (Umhlanga)','East London','Mbombela','Midrand','Mowbray','Nelson Mandela Bay','Potchefstroom','Pretoria','Tygervalley','Vaal']},
+      {name:'Elizabeth Galloway Academy of Fashion Design',campuses:['Stellenbosch']},
+      {name:'Empilweni Education',campuses:['Johannesburg']},
+      {name:'ESRI South Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Exercise Teachers Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'FEDISA',campuses:['Cape Town','Johannesburg']},
+      {name:'Friends of Design – Academy of Digital Arts',campuses:['Cape Town']},
+      {name:'Foundation for Professional Development',campuses:['Pretoria','Johannesburg','Cape Town','Durban','Bloemfontein','Online/Distance']},
+      {name:'George Whitefield College',campuses:['Cape Town']},
+      {name:'Health and Fitness Professionals Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Helderberg College of Higher Education',campuses:['Somerset West']},
+      {name:'Henley Business School Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'IHT Hotel School',campuses:['Johannesburg','Cape Town','Durban']},
+      {name:'IMM Graduate School',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
+      {name:'The Independent Institute of Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','Mbombela','Potchefstroom','Midrand']},
+      {name:'Inscape Education Group',campuses:['Cape Town','Pretoria','Johannesburg','Durban','Online/Distance']},
+      {name:'International Hotel School',campuses:['Cape Town','Johannesburg','Durban','Pretoria','Gqeberha','Online/Distance']},
+      {name:'International Trade Institute of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'IQ Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Isa Carstens Academy',campuses:['Stellenbosch','Pretoria','Online/Distance']},
+      {name:'Life Healthcare',campuses:['Johannesburg','Pretoria','Cape Town','Durban']},
+      {name:'Lyceum College',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
+      {name:'MANCOSA',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Gqeberha','Polokwane','Mbombela','Online/Distance']},
+      {name:'Mediclinic',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Bloemfontein']},
+      {name:'Milpark Education',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Mukhanyo Theological College',campuses:['Durban','Cape Town','Johannesburg','Online/Distance']},
+      {name:'Netcare Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Port Elizabeth/Gqeberha']},
+      {name:'Newbridge Graduate Institute',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Oakfields College',campuses:['Pretoria','Johannesburg']},
+      {name:'Open Learning Group',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
+      {name:'The Open Window',campuses:['Centurion/Pretoria']},
+      {name:'Potchefstroom Academy',campuses:['Potchefstroom']},
+      {name:'Production Management Institute of Southern Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Red & Yellow Creative School of Business',campuses:['Cape Town','Johannesburg','Online/Distance']},
+      {name:'Regenesys',campuses:['Johannesburg','Online/Distance']},
+      {name:'Regent Business School',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
+      {name:'Richfield',campuses:['Bryanston','Newtown Junction','Centurion','Pretoria','Umhlanga','Musgrave','Cape Town','Polokwane']},
+      {name:'Ruth Prowse School of Art',campuses:['Cape Town']},
+      {name:'SAE Institute South Africa',campuses:['Johannesburg','Cape Town']},
+      {name:'SANTS Private Higher Education Institution',campuses:['Pretoria','Online/Distance']},
+      {name:'Seth Mokitimi Methodist Seminary',campuses:['Pietermaritzburg','Online/Distance']},
+      {name:'South African College of Applied Psychology (SACAP)',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Online/Distance']},
+      {name:'AFDA',campuses:['Johannesburg','Cape Town','Gqeberha','Durban']},
+      {name:'South African Theological Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Southern Africa Bible College',campuses:['South Africa/Online learning']},
+      {name:'Southern African Wildlife College',campuses:['Hoedspruit']},
+      {name:'STADIO',campuses:['Centurion','Durbanville','Musgrave','Waterfall/Midrand','Online/Distance']},
+      {name:'St Augustine College of South Africa',campuses:['Johannesburg']},
+      {name:'Stellenbosch Academy of Design and Photography',campuses:['Stellenbosch']},
+      {name:'Stenden South Africa',campuses:['Port Alfred']},
+      {name:'St John Vianney Seminary',campuses:['Pretoria']},
+      {name:'St Joseph\'s Theological Institute',campuses:['Cedara/Pietermaritzburg']},
+      {name:'Theological Education by Extension College',campuses:['Johannesburg','Online/Distance']},
+      {name:'The Swiss Hotel School South Africa',campuses:['Johannesburg']},
+      {name:'TSIBA Education',campuses:['Cape Town']},
+      {name:'Union Bible Institute',campuses:['Pietermaritzburg']},
+      {name:'Villioti Fashion Institute',campuses:['Johannesburg','Cape Town']},
+      {name:'Academic Institute of Excellence',campuses:['Johannesburg','Online/Distance']},
+      {name:'Academy for Environmental Leadership South Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Academy for Organisational Change',campuses:['Johannesburg','Online/Distance']},
+      {name:'AFM Theological College',campuses:['Johannesburg','Online/Distance']},
+      {name:'African Academy of Cinematic Arts',campuses:['Johannesburg','Cape Town']},
+      {name:'Alpvest Institute for Futuretech',campuses:['Johannesburg','Online/Distance']},
+      {name:'Arwyp Training Institute',campuses:['Kempton Park']},
+      {name:'Auckland Park Theological Seminary',campuses:['Johannesburg','Online/Distance']},
+      {name:'Balderstone Sports Institute',campuses:['Pretoria','Johannesburg']},
+      {name:'Bible Institute of South Africa',campuses:['Kalk Bay, Cape Town','Online/Distance']},
+      {name:'Bronberg Nurse Education and Training Academy',campuses:['Pretoria']},
+      {name:'Camelot International',campuses:['Johannesburg','Cape Town','Durban','Pretoria']},
+      {name:'Campus of Performing Arts',campuses:['Johannesburg']},
+      {name:'Career Excel Academy',campuses:['Johannesburg','Online/Distance']},
+      {name:'Cedar International Academy',campuses:['Johannesburg','Online/Distance']},
+      {name:'Chatsmed Candle Light Nursing School',campuses:['Durban','Pietermaritzburg']},
+      {name:'Cheeba Cannabis Academy',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Chartall Business College',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Cornerstone Performance Solutions',campuses:['Johannesburg','Online/Distance']},
+      {name:'CTU Training Solutions',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha']},
+      {name:'Duke Corporate Education RSA',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Design Time',campuses:['Cape Town']},
+      {name:'EcoTraining',campuses:['Hoedspruit','Greater Kruger area']},
+      {name:'Engineering College of Science and Technology',campuses:['Johannesburg']},
+      {name:'Emmanuel Verpleegskool',campuses:['Online/Distance']},
+      {name:'Equine-Librium College',campuses:['White River/Mbombela area']},
+      {name:'Esda Nursing Education Institute',campuses:['Johannesburg']},
+      {name:'Evangelical Seminary of Southern Africa',campuses:['Johannesburg','Online/Distance']},
+      {name:'Felix Higher Education and Training',campuses:['Johannesburg']},
+      {name:'Future Nurses Nursing School',campuses:['Johannesburg']},
+      {name:'Hugenote Kollege',campuses:['Wellington']},
+      {name:'Instill Education',campuses:['Johannesburg','Cape Town','Online/Distance']},
+      {name:'Institute for Architecture and Design',campuses:['Johannesburg','Online/Distance']},
+      {name:'Institute of Accounting Science',campuses:['Johannesburg','Online/Distance']},
+      {name:'International Peace College South Africa',campuses:['Cape Town','Online/Distance']},
+      {name:'Keobakile Nursing Academy',campuses:['Johannesburg']},
+      {name:'Khanyisa Nursing School',campuses:['Johannesburg']},
+      {name:'Lenmed Nursing College',campuses:['Johannesburg']},
+      {name:'Lillian Spengani Memorial Nursing School',campuses:['Johannesburg']},
+      {name:'Lutheran Theological Seminary in Tshwane',campuses:['Pretoria']},
+      {name:'Madina Institute',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
+      {name:'Marematlou Training Institute',campuses:['Johannesburg']},
+      {name:'Moonstone Business School of Excellence',campuses:['Cape Town','Johannesburg','Online/Distance']},
+      {name:'Novia One Group',campuses:['Johannesburg','Online/Distance']},
+      {name:'2 Oceans Graduate Institute',campuses:['Cape Town','Online/Distance']},
+      {name:'Peritum Agri Institute',campuses:['Pretoria','Online/Distance']},
+      {name:'SACOB',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
+      {name:'School of Explorative Architecture',campuses:['Johannesburg','Online/Distance']},
+      {name:'Sizanesu Nursing Training Institute',campuses:['Johannesburg']},
+      {name:'SkillsPro',campuses:['Johannesburg','Online/Distance']},
+      {name:'Striving Mind Nursing Academy',campuses:['Johannesburg']},
+      {name:'The Graduate Institute of Financial Sciences Private Higher Education',campuses:['Johannesburg','Online/Distance']},
+      {name:'Thulaganyo Nursing School',campuses:['Johannesburg']},
+      {name:'Thutobopelo Nursing Academy',campuses:['Johannesburg']},
+      {name:'Trifocus Fitness Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
+      {name:'Ukwazi School of Nursing',campuses:['Johannesburg','Pretoria','Cape Town']}
+      ],
+      tvet:[
+      {name:'Buffalo City TVET College',campuses:['East London','John Knox Bokwe','St Marks']},
+      {name:'Eastcape Midlands TVET College',campuses:['Charles Goodyear','Graaff-Reinet','Grahamstown','Brickfields Road','High Street','Park Avenue','Thanduxolo','Heath Park']},
+      {name:'Ikhala TVET College',campuses:['Aliwal North','Ezibeleni Engineering','Queen Nonesi','Sterkspruit']},
+      {name:'Ingwe TVET College',campuses:['Maluti','Mount Fletcher','Mount Frere','Ngqungqushe','Siteto']},
+      {name:'King Hintsa TVET College',campuses:['Centane','H.B. Tsengwa','Teko']},
+      {name:'King Sabata Dalindyebo TVET College',campuses:['Engcobo','Mapuzi','Mthatha']},
+      {name:'Lovedale TVET College',campuses:['Alice','King','Zwelitsha']},
+      {name:'Port Elizabeth TVET College',campuses:['Dower','Struandale','Russell Road']},
+      {name:'Flavius Mareka TVET College',campuses:['Kroonstad','Mphohadi','Sasolburg']},
+      {name:'Goldfields TVET College',campuses:['Tosa','Welkom']},
+      {name:'Maluti TVET College',campuses:['Bethlehem','Bonamelo','Itemoheleng','Kwethisong','Sefikeng','Lere La Tshepe','Harrismith']},
+      {name:'Motheo TVET College',campuses:['Hillside View','Bloemfontein','Thaba Nchu']},
+      {name:'Central Johannesburg TVET College',campuses:['Alexandra','Ellispark','Highveld','Parktown','Troyeville']},
+      {name:'Ekurhuleni East TVET College',campuses:['Benoni','Brakpan','Daveyton','Kwa-Thema','Springs']},
+      {name:'Ekurhuleni West TVET College',campuses:['Alberton','Boksburg','Germiston','Kathorus','Kempton','Tembisa']},
+      {name:'Sedibeng TVET College',campuses:['Sebokeng','Vanderbijlpark','Vereeniging']},
+      {name:'South West Gauteng TVET College',campuses:['Dobsonville','George Tabor','Molapo','Roodepoort','Roodepoort West','Technisa']},
+      {name:'Tshwane North TVET College',campuses:['Mamelodi','Pretoria','Rosslyn','Soshanguve South','Temba','Soshanguve North']},
+      {name:'Tshwane South TVET College',campuses:['Atteridgeville','Centurion','Odi','Pretoria West']},
+      {name:'Western TVET College',campuses:['Carletonville','Krugersdorp','Krugersdorp West','Randfontein']},
+      {name:'Coastal KZN TVET College',campuses:['Durban','Swinton Road','Umlazi','Umlazi BB','AS-Salaam','Ubughle Bogu','Umbumbulu']},
+      {name:'Elangeni TVET College',campuses:['KwaMashu','Mpumalanga','Ndwedwe','Inanda','Kwadabeka','Ntuzuma','Pinetown','Qadi']},
+      {name:'Esayidi TVET College',campuses:['Enyenyezi','Gamalakhe','Gcinangempi','Kokstad','Nqumuza','Port Shepstone','Sizanani']},
+      {name:'Majuba TVET College',campuses:['Centre for People Development','IT & Business','Majuba Technology Centre','Newcastle Technology','Ekuseni Youth Centre','Ncome Prison','Newcastle Training Centre','Open Learning Unit','Waterval Prison','Westville Prison','Dundee']},
+      {name:'Mnambithi TVET College',campuses:['Ezakheni E-Section','Ladysmith','Estcourt','Ezakheni A-Section']},
+      {name:'Mthashana TVET College',campuses:['Babanango','Emandleni','Kwa-Qgikazi','Maputa','Vryheid','Nqutu']},
+      {name:'Thekwini TVET College',campuses:['Asherville','Cato Manor','Centec','Melbourne','Springfield','Umbilo']},
+      {name:'Umfolozi TVET College',campuses:['Esikhawini','Eshowe','Jininindomnyama','Mandeni','Nseleni','Richtek','Sikhanyisele','Sundumbili','Thubelihle','ZCBF']},
+      {name:'Umgungundlovu TVET College',campuses:['Edendale','Midlands','Msunduzi','Northdale','Plessislaer']},
+      {name:'Capricorn TVET College',campuses:['Polokwane','Senwabarwana','Seshego']},
+      {name:'Lephalale TVET College',campuses:['Lephalale','Modimolle']},
+      {name:'Letaba TVET College',campuses:['Giyani','Maake','Tzaneen']},
+      {name:'Mopani South East TVET College',campuses:['Phalaborwa','Sir Val Duncan']},
+      {name:'Sekhukhune TVET College',campuses:['CN Phatudi','CS Barlow']},
+      {name:'Vhembe TVET College',campuses:['Makwarela','Mashamba','Mavhoi']},
+      {name:'Waterberg TVET College',campuses:['Lebowakgomo','Mahwelereng','Mokopane']},
+      {name:'Ehlanzeni TVET College',campuses:['Barberton','KaNyamazane','Mapulaneng','Mlumati','Mthimba','Nelspruit','Waterval Boven']},
+      {name:'Gert Sibande TVET College',campuses:['Ermelo','Evander','Standerton','Sibanesetfu']},
+      {name:'Nkangala TVET College',campuses:['CN Mahlangu','Middelburg','Mpondozankomo','Witbank']},
+      {name:'Northern Cape Rural TVET College',campuses:['De Aar','Kathu','Kuruman','Namaqualand','Upington']},
+      {name:'Northern Cape Urban TVET College',campuses:['City','Moromogolo']},
+      {name:'Orbit TVET College',campuses:['Rustenburg','Mankwe','Brits']},
+      {name:'Taletso TVET College',campuses:['Mafikeng','Lichtenburg','Lehurutshe']},
+      {name:'Vuselela TVET College',campuses:['Jouberton','Klerksdorp','Matlosana','Potchefstroom','Taung']},
+      {name:'Boland TVET College',campuses:['Caledon','Paarl','Stellenbosch','Strand','Worcester']},
+      {name:'College of Cape Town for TVET',campuses:['Athlone','City','Crawford','Gardens','Guguletu','Pinelands','Thornton','Wynberg']},
+      {name:'False Bay TVET College',campuses:['Fish Hoek','Khayelitsha','Mitchell\'s Plain','Muizenberg','Westlake']},
+      {name:'Northlink TVET College',campuses:['Belhar','Bellville','Goodwood','Parow','Protea','Tygerberg','Wingfield']},
+      {name:'South Cape TVET College',campuses:['Beaufort West','Bitou','George','Hessequa','Mossel Bay','Oudtshoorn']},
+      {name:'West Coast TVET College',campuses:['Atlantis','Citrusdal','Malmesbury','Vredenburg','Vredendal']}
+      ]
+    };
+    const INSTITUTION_TYPES=[{key:'university',label:'University'},{key:'private',label:'Private Higher Education Institution'},{key:'tvet',label:'Public TVET College'}];
+    const INST_TYPE_ICON={university:'🎓',private:'🏫',tvet:'🛠️'};
+
+    // ---------- Buyer: single institution + campus ----------
+    let buyerTypePicked=null, buyerInstPicked=null, buyerCampusPicked=null;
+    window.getSignupState=()=>({buyerTypePicked,buyerInstPicked,buyerCampusPicked,sellerInstitutions});
+    window.openBuyerInstModal=()=>{
+      buyerTypePicked=null;buyerInstPicked=null;
+      renderBuyerTypeStep();
+      document.getElementById('buyer-inst-modal-overlay').style.display='flex';
       document.body.style.overflow='hidden';
     };
-    window.closeBuyerAreaModal=()=>{
-      document.getElementById('buyer-area-modal-overlay').style.display='none';
+    window.closeBuyerInstModal=()=>{
+      document.getElementById('buyer-inst-modal-overlay').style.display='none';
       document.body.style.overflow='';
     };
-    function renderBuyerProvinceStep(){
-      const list=areaProvinces();
-      document.getElementById('buyer-area-modal-body').innerHTML=
-        '<div class="inst-modal-title">Select your area</div>'+
-        '<div class="inst-modal-sub">What province are you in?</div>'+
+    function renderBuyerTypeStep(){
+      document.getElementById('buyer-inst-modal-body').innerHTML=
+        '<div class="inst-modal-title">Select your Institution</div>'+
+        '<div class="inst-modal-sub">What type of institution do you study at?</div>'+
         '<div class="tb-subject-grid">'+
-        list.map(p=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
+        INSTITUTION_TYPES.map(t=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerType(\''+t.key+'\')">'+(INST_TYPE_ICON[t.key]||'')+' '+t.label+'</button>').join('')+
         '</div>';
     }
-    window.pickBuyerProvince=(p)=>{ buyerProvince=p; renderBuyerCityStep(); };
-    function renderBuyerCityStep(){
-      const list=areaCities(buyerProvince);
-      document.getElementById('buyer-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderBuyerProvinceStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select your city</div>'+
-        '<div class="inst-modal-sub">'+buyerProvince+'</div>'+
-        '<input type="text" class="inst-search" placeholder="Search cities..." oninput="filterBuyerCityList(this.value)"/>'+
-        '<div class="inst-count" id="buyer-area-count">'+list.length+' cities</div>'+
-        '<div class="tb-subject-grid" id="buyer-area-list">'+
-        list.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+    window.pickBuyerType=(key)=>{ buyerTypePicked=INSTITUTION_TYPES.find(t=>t.key===key); renderBuyerInstStep(); };
+    function renderBuyerInstStep(){
+      const list=INSTITUTIONS[buyerTypePicked.key]||[];
+      document.getElementById('buyer-inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderBuyerTypeStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select your '+(buyerTypePicked.key==='university'?'university':'institution')+'</div>'+
+        '<div class="inst-modal-sub">'+buyerTypePicked.label+'</div>'+
+        '<input type="text" class="inst-search" placeholder="Search '+buyerTypePicked.label.toLowerCase()+'..." oninput="filterBuyerInstList(this.value)"/>'+
+        '<div class="inst-count" id="buyer-inst-count">'+list.length+' institution'+(list.length===1?'':'s')+'</div>'+
+        '<div class="tb-subject-grid" id="buyer-inst-list">'+
+        list.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerInst(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')+
         '</div>';
     }
-    window.renderBuyerCityStep=renderBuyerCityStep;
-    window.filterBuyerCityList=(q)=>{
-      const list=areaCities(buyerProvince);
+    window.renderBuyerInstStep=renderBuyerInstStep;
+    window.filterBuyerInstList=(q)=>{
+      const list=INSTITUTIONS[buyerTypePicked.key]||[];
       q=(q||'').trim().toLowerCase();
-      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
-      document.getElementById('buyer-area-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
-      document.getElementById('buyer-area-list').innerHTML=filtered.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+      const filtered=q?list.filter(u=>u.name.toLowerCase().includes(q)):list;
+      document.getElementById('buyer-inst-count').textContent=filtered.length+' institution'+(filtered.length===1?'':'s');
+      document.getElementById('buyer-inst-list').innerHTML=filtered.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerInst(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')||'<p class="loading-msg">No matches</p>';
     };
-    window.pickBuyerCity=(c)=>{ buyerCity=c; renderBuyerDistrictStep(); };
-    function renderBuyerDistrictStep(){
-      const list=areaDistricts(buyerProvince,buyerCity);
-      document.getElementById('buyer-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderBuyerCityStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select your district</div>'+
-        '<div class="inst-modal-sub">'+buyerCity+'</div>'+
+    window.pickBuyerInst=(name)=>{
+      buyerInstPicked=(INSTITUTIONS[buyerTypePicked.key]||[]).find(u=>u.name===name);
+      renderBuyerCampusStep();
+    };
+    function renderBuyerCampusStep(){
+      document.getElementById('buyer-inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderBuyerInstStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select your campus</div>'+
+        '<div class="inst-modal-sub">'+buyerInstPicked.name+'</div>'+
         '<div class="tb-subject-grid">'+
-        list.map(d=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
+        buyerInstPicked.campuses.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerCampus(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
         '</div>';
     }
-    window.pickBuyerDistrict=(d)=>{ buyerDistrict=d; renderBuyerSuburbStep(); };
-    function renderBuyerSuburbStep(){
-      const list=areaSuburbs(buyerProvince,buyerCity,buyerDistrict);
-      document.getElementById('buyer-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderBuyerDistrictStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select your town or suburb</div>'+
-        '<div class="inst-modal-sub">'+buyerDistrict+'</div>'+
-        '<input type="text" class="inst-search" placeholder="Search suburbs..." oninput="filterBuyerSuburbList(this.value)"/>'+
-        '<div class="inst-count" id="buyer-area-count">'+list.length+' suburb'+(list.length===1?'':'s')+'</div>'+
-        '<div class="tb-subject-grid" id="buyer-area-list">'+
-        list.map(s=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
-        '</div>';
-    }
-    window.renderBuyerDistrictStep=renderBuyerDistrictStep;
-    window.filterBuyerSuburbList=(q)=>{
-      const list=areaSuburbs(buyerProvince,buyerCity,buyerDistrict);
-      q=(q||'').trim().toLowerCase();
-      const filtered=q?list.filter(s=>s.toLowerCase().includes(q)):list;
-      document.getElementById('buyer-area-count').textContent=filtered.length+' suburb'+(filtered.length===1?'':'s');
-      document.getElementById('buyer-area-list').innerHTML=filtered.map(s=>'<button type="button" class="tb-subject-btn" onclick="pickBuyerSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')||'<p class="loading-msg">No matches</p>';
-    };
-    window.pickBuyerSuburb=(suburb)=>{
-      buyerSuburb=suburb;
-      document.getElementById('signup-area-btn').textContent='📍 '+suburb+', '+buyerDistrict;
-      closeBuyerAreaModal();
+    window.pickBuyerCampus=(campus)=>{
+      buyerCampusPicked=campus;
+      document.getElementById('signup-inst-btn').textContent='🎓 '+buyerInstPicked.name+' · '+campus;
+      closeBuyerInstModal();
     };
 
-    // ---------- Seller: multiple areas, each with chosen suburbs, plus "deliver anywhere" toggle ----------
-    let sellerAreas=[]; // [{province,city,district,suburbs:[...]}]
-    let sellerAddProvince=null, sellerAddCity=null, sellerAddDistrict=null, sellerAddSuburbs=[];
-    function renderSellerAreaList(){
-      const box=document.getElementById('signup-area-list');
-      if(!sellerAreas.length){ box.innerHTML=''; return; }
-      box.innerHTML=sellerAreas.map((a,i)=>
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#f0f7ff;border:1.5px solid #eadcfb;border-radius:12px;padding:10px 12px">'+
-          '<div><div style="font-weight:800;font-size:13px;color:#111">📍 '+a.district+', '+a.city+'</div>'+
-          '<div style="font-size:12px;color:#888;font-weight:600;margin-top:2px">'+(a.suburbs||[]).join(', ')+'</div></div>'+
-          '<button type="button" onclick="removeSellerArea('+i+')" style="border:none;background:none;color:#c62828;font-weight:900;font-size:16px;cursor:pointer;line-height:1">✕</button>'+
+    // ---------- Seller: multiple institutions + campuses, plus "all X" toggles ----------
+    let sellerInstitutions=[]; // [{type,name,campuses:[...]}]
+    let sellerAddType=null, sellerAddInst=null, sellerAddCampuses=[];
+    function findInstitutionByName(name){
+      for(const key of ['university','private','tvet']){
+        const found=(INSTITUTIONS[key]||[]).find(u=>u.name===name);
+        if(found) return found;
+      }
+      return null;
+    }
+    function renderSellerInstList(){
+      const box=document.getElementById('signup-inst-list');
+      if(!sellerInstitutions.length){ box.innerHTML=''; return; }
+      box.innerHTML=sellerInstitutions.map((inst,i)=>
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#faf7ff;border:1.5px solid #eadcfb;border-radius:12px;padding:10px 12px">'+
+          '<div><div style="font-weight:800;font-size:13px;color:#111">'+(INST_TYPE_ICON[inst.type]||'')+' '+inst.name+'</div>'+
+          '<div style="font-size:12px;color:#888;font-weight:600;margin-top:2px">'+(inst.campuses||[]).join(', ')+'</div></div>'+
+          '<button type="button" onclick="removeSellerInstitution('+i+')" style="border:none;background:none;color:#c62828;font-weight:900;font-size:16px;cursor:pointer;line-height:1">✕</button>'+
         '</div>'
       ).join('');
     }
-    window.removeSellerArea=(i)=>{ sellerAreas.splice(i,1); renderSellerAreaList(); };
-    window.openSellerAreaAddModal=()=>{
-      sellerAddProvince=null;sellerAddCity=null;sellerAddDistrict=null;sellerAddSuburbs=[];
-      renderSellerProvinceStep();
-      document.getElementById('seller-area-modal-overlay').style.display='flex';
+    window.removeSellerInstitution=(i)=>{ sellerInstitutions.splice(i,1); renderSellerInstList(); };
+    window.openSellerInstAddModal=()=>{
+      sellerAddType=null;sellerAddInst=null;sellerAddCampuses=[];
+      renderSellerTypeStep();
+      document.getElementById('seller-inst-modal-overlay').style.display='flex';
       document.body.style.overflow='hidden';
     };
-    window.closeSellerAreaAddModal=()=>{
-      document.getElementById('seller-area-modal-overlay').style.display='none';
+    window.closeSellerInstAddModal=()=>{
+      document.getElementById('seller-inst-modal-overlay').style.display='none';
       document.body.style.overflow='';
     };
-    function renderSellerProvinceStep(){
-      const list=areaProvinces();
-      document.getElementById('seller-area-modal-body').innerHTML=
-        '<div class="inst-modal-title">Add an area</div>'+
-        '<div class="inst-modal-sub">What province?</div>'+
+    function renderSellerTypeStep(){
+      document.getElementById('seller-inst-modal-body').innerHTML=
+        '<div class="inst-modal-title">Add an institution</div>'+
+        '<div class="inst-modal-sub">What type of institution is it?</div>'+
         '<div class="tb-subject-grid">'+
-        list.map(p=>'<button type="button" class="tb-subject-btn" onclick="pickSellerProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
+        INSTITUTION_TYPES.map(t=>'<button type="button" class="tb-subject-btn" onclick="pickSellerType(\''+t.key+'\')">'+(INST_TYPE_ICON[t.key]||'')+' '+t.label+'</button>').join('')+
         '</div>';
     }
-    window.pickSellerProvince=(p)=>{ sellerAddProvince=p; renderSellerCityStep(); };
-    function renderSellerCityStep(){
-      const list=areaCities(sellerAddProvince);
-      document.getElementById('seller-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderSellerProvinceStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select the city</div>'+
-        '<div class="inst-modal-sub">'+sellerAddProvince+'</div>'+
-        '<input type="text" class="inst-search" placeholder="Search cities..." oninput="filterSellerCityList(this.value)"/>'+
-        '<div class="inst-count" id="seller-area-count">'+list.length+' cities</div>'+
-        '<div class="tb-subject-grid" id="seller-area-list">'+
-        list.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickSellerCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+    window.pickSellerType=(key)=>{ sellerAddType=key; renderSellerInstStep(); };
+    function renderSellerInstStep(){
+      const typeObj=INSTITUTION_TYPES.find(t=>t.key===sellerAddType);
+      const list=INSTITUTIONS[sellerAddType]||[];
+      document.getElementById('seller-inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderSellerTypeStep()">← Back</button>'+
+        '<div class="inst-modal-title">Select the institution</div>'+
+        '<div class="inst-modal-sub">'+typeObj.label+'</div>'+
+        '<input type="text" class="inst-search" placeholder="Search '+typeObj.label.toLowerCase()+'..." oninput="filterSellerInstList(this.value)"/>'+
+        '<div class="inst-count" id="seller-inst-count">'+list.length+' institution'+(list.length===1?'':'s')+'</div>'+
+        '<div class="tb-subject-grid" id="seller-inst-list">'+
+        list.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickSellerInst(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')+
         '</div>';
     }
-    window.renderSellerProvinceStep=renderSellerProvinceStep;
-    window.filterSellerCityList=(q)=>{
-      const list=areaCities(sellerAddProvince);
+    window.renderSellerInstStep=renderSellerInstStep;
+    window.filterSellerInstList=(q)=>{
+      const list=INSTITUTIONS[sellerAddType]||[];
       q=(q||'').trim().toLowerCase();
-      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
-      document.getElementById('seller-area-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
-      document.getElementById('seller-area-list').innerHTML=filtered.map(c=>'<button type="button" class="tb-subject-btn" onclick="pickSellerCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+      const filtered=q?list.filter(u=>u.name.toLowerCase().includes(q)):list;
+      document.getElementById('seller-inst-count').textContent=filtered.length+' institution'+(filtered.length===1?'':'s');
+      document.getElementById('seller-inst-list').innerHTML=filtered.map(u=>'<button type="button" class="tb-subject-btn" onclick="pickSellerInst(\''+u.name.replace(/'/g,"\\'")+'\')">'+u.name+'</button>').join('')||'<p class="loading-msg">No matches</p>';
     };
-    window.pickSellerCity=(c)=>{ sellerAddCity=c; renderSellerDistrictStep(); };
-    function renderSellerDistrictStep(){
-      const list=areaDistricts(sellerAddProvince,sellerAddCity);
-      document.getElementById('seller-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderSellerCityStep()">← Back</button>'+
-        '<div class="inst-modal-title">Select the district</div>'+
-        '<div class="inst-modal-sub">'+sellerAddCity+'</div>'+
-        '<div class="tb-subject-grid">'+
-        list.map(d=>'<button type="button" class="tb-subject-btn" onclick="pickSellerDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
-        '</div>';
-    }
-    window.pickSellerDistrict=(d)=>{
-      sellerAddDistrict=d;
-      const existing=sellerAreas.find(a=>a.province===sellerAddProvince && a.city===sellerAddCity && a.district===sellerAddDistrict);
-      sellerAddSuburbs = existing ? [...existing.suburbs] : [];
-      renderSellerSuburbStep();
+    window.pickSellerInst=(name)=>{
+      sellerAddInst=findInstitutionByName(name);
+      const existing=sellerInstitutions.find(x=>x.name===sellerAddInst.name);
+      sellerAddCampuses = existing ? [...existing.campuses] : [];
+      renderSellerCampusStep();
     };
-    function renderSellerSuburbStep(){
-      const list=areaSuburbs(sellerAddProvince,sellerAddCity,sellerAddDistrict);
-      const allSelected = list.every(s=>sellerAddSuburbs.includes(s));
-      document.getElementById('seller-area-modal-body').innerHTML=
-        '<button type="button" class="inst-back-btn" onclick="renderSellerDistrictStep()">← Back</button>'+
-        '<div class="inst-modal-title">Which suburbs?</div>'+
-        '<div class="inst-modal-sub">'+sellerAddDistrict+'</div>'+
+    function renderSellerCampusStep(){
+      const allSelected = sellerAddInst.campuses.every(c=>sellerAddCampuses.includes(c));
+      document.getElementById('seller-inst-modal-body').innerHTML=
+        '<button type="button" class="inst-back-btn" onclick="renderSellerInstStep()">← Back</button>'+
+        '<div class="inst-modal-title">Which campuses?</div>'+
+        '<div class="inst-modal-sub">'+sellerAddInst.name+'</div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:10px 0;cursor:pointer">'+
-          '<input type="checkbox" '+(allSelected?'checked':'')+' onchange="toggleSellerAllSuburbs(this.checked)"/> All suburbs in this district'+
+          '<input type="checkbox" '+(allSelected?'checked':'')+' onchange="toggleSellerAllCampuses(this.checked)" style="width:16px;height:16px"/> All campuses'+
         '</label>'+
         '<div class="tb-subject-grid">'+
-        list.map(s=>'<button type="button" class="tb-subject-btn'+(sellerAddSuburbs.includes(s)?' active':'')+'" onclick="toggleSellerSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
+        sellerAddInst.campuses.map(c=>'<button type="button" class="tb-subject-btn'+(sellerAddCampuses.includes(c)?' active':'')+'" onclick="toggleSellerCampus(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
         '</div>'+
-        '<button type="button" class="btn-primary" style="margin-top:14px" onclick="confirmSellerAreaAdd()">Add ✅</button>';
+        '<button type="button" class="btn-primary" style="margin-top:14px" onclick="confirmSellerInstAdd()">Add ✅</button>';
     }
-    window.toggleSellerAllSuburbs=(checked)=>{
-      const list=areaSuburbs(sellerAddProvince,sellerAddCity,sellerAddDistrict);
-      sellerAddSuburbs = checked ? [...list] : [];
-      renderSellerSuburbStep();
+    window.toggleSellerAllCampuses=(checked)=>{
+      sellerAddCampuses = checked ? [...sellerAddInst.campuses] : [];
+      renderSellerCampusStep();
     };
-    window.toggleSellerSuburb=(s)=>{
-      sellerAddSuburbs = sellerAddSuburbs.includes(s) ? sellerAddSuburbs.filter(x=>x!==s) : [...sellerAddSuburbs,s];
-      renderSellerSuburbStep();
+    window.toggleSellerCampus=(c)=>{
+      sellerAddCampuses = sellerAddCampuses.includes(c) ? sellerAddCampuses.filter(x=>x!==c) : [...sellerAddCampuses,c];
+      renderSellerCampusStep();
     };
-    window.confirmSellerAreaAdd=()=>{
-      if(!sellerAddSuburbs.length){ alert('Select at least one suburb (or tick "All suburbs in this district").'); return; }
-      sellerAreas = sellerAreas.filter(a=>!(a.province===sellerAddProvince && a.city===sellerAddCity && a.district===sellerAddDistrict));
-      sellerAreas.push({province:sellerAddProvince,city:sellerAddCity,district:sellerAddDistrict,suburbs:sellerAddSuburbs});
-      renderSellerAreaList();
-      closeSellerAreaAddModal();
+    window.confirmSellerInstAdd=()=>{
+      if(!sellerAddCampuses.length){ alert('Select at least one campus (or tick "All campuses").'); return; }
+      sellerInstitutions = sellerInstitutions.filter(x=>x.name!==sellerAddInst.name);
+      sellerInstitutions.push({type:sellerAddType,name:sellerAddInst.name,campuses:sellerAddCampuses});
+      renderSellerInstList();
+      closeSellerInstAddModal();
     };
 
+    function updatePwStrength(pw){
+      const track=document.getElementById('pw-strength-track');
+      const fill=document.getElementById('pw-strength-fill');
+      const label=document.getElementById('pw-strength-label');
+      if(!pw){ track.style.display='none'; label.style.display='none'; return; }
+      track.style.display='block'; label.style.display='block';
+      let score=0;
+      if(pw.length>=6) score++;
+      if(pw.length>=10) score++;
+      if(/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+      if(/\d/.test(pw)) score++;
+      if(/[^A-Za-z0-9]/.test(pw)) score++;
+      let pct,text,color;
+      if(score<=1){ pct=25; text='Weak'; color='#dc2626'; }
+      else if(score<=3){ pct=60; text='Medium'; color='#f59e0b'; }
+      else { pct=100; text='Strong'; color='#16a34a'; }
+      fill.style.width=pct+'%'; fill.style.background=color;
+      label.textContent=text; label.style.color=color;
+    }
     window.showTab=showTab;window.selectRole=selectRole;window.togglePw=togglePw;
-    window.openForgotPw=openForgotPw;window.closeForgotPw=closeForgotPw;
+    window.openForgotPw=openForgotPw;window.closeForgotPw=closeForgotPw;window.updatePwStrength=updatePwStrength;
   </script>
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
-
-    // Referral capture: ?ref=CODE in the URL, remembered even if the person
-    // browses around before signing up.
-    const refParam = new URLSearchParams(location.search).get('ref');
-    if (refParam) localStorage.setItem('mt_ref_code', refParam);
-    const storedRefCode = localStorage.getItem('mt_ref_code');
-    if (storedRefCode) {
-      document.getElementById('referral-banner').style.display = 'block';
-      showTab('signup');
-    }
+    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
 
     document.getElementById('btn-forgot').onclick=async()=>{
       const email=document.getElementById('forgot-email').value.trim();
       const err=document.getElementById('forgot-error');
-      err.style.color='#1d4ed8';err.textContent='';
+      err.style.color='#9333ea';err.textContent='';
       if(!email){err.textContent='❌ Enter your email';return;}
       const {error}=await supabase.auth.resetPasswordForEmail(email);
       if(error){err.textContent='❌ '+error.message;return;}
@@ -432,7 +603,7 @@
       const email=document.getElementById('login-email').value;
       const password=document.getElementById('login-password').value;
       const err=document.getElementById('login-error');
-      err.style.color='#1d4ed8';err.textContent='';
+      err.style.color='#9333ea';err.textContent='';
       const {error}=await supabase.auth.signInWithPassword({email,password});
       if(error){
         if(error.message && error.message.toLowerCase().includes('email not confirmed')){
@@ -447,12 +618,6 @@
       window.location.href = p?.role==='seller' ? 'seller.html' : 'profile.html';
     };
 
-    // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)
-    function isValidSAPhone(v){
-      const cleaned=(v||'').replace(/[\s-]/g,'');
-      return /^(0\d{9}|\+27\d{9})$/.test(cleaned);
-    }
-
     document.getElementById('btn-signup').onclick=async()=>{
       const name=document.getElementById('signup-name').value.trim();
       const wa=document.getElementById('signup-whatsapp').value.trim();
@@ -460,58 +625,43 @@
       const email=document.getElementById('signup-email').value.trim();
       const password=document.getElementById('signup-password').value;
       const err=document.getElementById('signup-error');
+      const {buyerTypePicked,buyerInstPicked,buyerCampusPicked,sellerInstitutions}=window.getSignupState();
       const role=window.selectedRole||'buyer';
-      err.style.color='#1d4ed8';err.textContent='';
+      err.style.color='#9333ea';err.textContent='';
       if(!name||!wa||!email||!password){err.textContent='❌ Please fill in all fields';return;}
-      if(!document.getElementById('signup-terms').checked){err.textContent='❌ Please agree to the Terms and confirm you are over 18';return;}
-      if(!isValidSAPhone(wa)){err.textContent='❌ Enter a valid South African number, e.g. 0812345678 or +27812345678';return;}
-      if(role==='buyer' && (!buyerProvince||!buyerCity||!buyerDistrict||!buyerSuburb)){err.textContent='❌ Select your area';return;}
-      let allAreas=false;
+      if(!document.getElementById('signup-agree').checked){err.textContent='❌ Please agree to the Terms and confirm you are over 18';return;}
+      if(!isValidSAPhone(wa)){err.textContent='❌ Enter a valid South African cell number, e.g. 0812345678';return;}
+      if(role==='buyer' && (!buyerInstPicked||!buyerCampusPicked)){err.textContent='❌ Select your institution & campus';return;}
+      let allUni=false, allTvet=false, allPrivate=false;
       if(role==='seller'){
-        allAreas=document.getElementById('signup-sell-all-areas').checked;
-        if(!allAreas && !sellerAreas.length){
-          err.textContent='❌ Choose at least one area you deliver to (tick "Deliver anywhere" or add a specific area)';
+        allUni=document.getElementById('signup-sell-all-uni').checked;
+        allTvet=document.getElementById('signup-sell-all-tvet').checked;
+        allPrivate=document.getElementById('signup-sell-all-private').checked;
+        if(!allUni && !allTvet && !allPrivate && !sellerInstitutions.length){
+          err.textContent='❌ Choose at least one institution you sell to (tick an "All X" option or add a specific institution)';
           return;
         }
       }
-      const {data,error}=await supabase.auth.signUp({email,password});
+      const refCode=new URLSearchParams(location.search).get('ref');
+      const {data,error}=await supabase.auth.signUp({email,password,options:refCode?{data:{ref:refCode}}:undefined});
       if(error){err.textContent='❌ '+error.message;return;}
-      if(!data.user){err.textContent='❌ Something went wrong — please try again.';return;}
-
-      const payload={id:data.user.id,full_name:name,whatsapp:wa,residence:res||null,role};
-      if(role==='buyer'){
-        payload.province=buyerProvince;
-        payload.city=buyerCity;
-        payload.district=buyerDistrict;
-        payload.suburb=buyerSuburb;
-      } else {
-        payload.deliver_all_areas=allAreas;
-        payload.seller_areas=sellerAreas;
-      }
-
-      if(data.session){
-        // Email confirmation is off for this project — the account is already active,
-        // so finish setting up the profile right away.
-        await supabase.from('profiles').upsert(payload);
-        const refCode = localStorage.getItem('mt_ref_code');
-        if (refCode) {
-          const {data:referrer} = await supabase.from('profiles').select('id').eq('referral_code', refCode.toUpperCase()).maybeSingle();
-          if (referrer && referrer.id !== data.user.id) {
-            await supabase.from('referrals').insert({referrer_id: referrer.id, referred_id: data.user.id});
-          }
-          localStorage.removeItem('mt_ref_code');
+      if(data.user){
+        const payload={id:data.user.id,full_name:name,whatsapp:wa,residence:res||null,role};
+        if(role==='buyer'){
+          payload.institution_type=buyerTypePicked.key;
+          payload.university=buyerInstPicked.name;
+          payload.campus=buyerCampusPicked;
+        } else {
+          payload.deliver_all_universities=allUni;
+          payload.deliver_all_tvet=allTvet;
+          payload.deliver_all_private=allPrivate;
+          payload.seller_institutions=sellerInstitutions;
         }
-        err.style.color='#2e7d32';
-        err.textContent='✅ Account created! Sign in now.';
-        setTimeout(()=>showTab('login'),1500);
-      } else {
-        // Email confirmation is required for this project — stash the profile details
-        // and send them to enter the 6-digit code we just emailed. The profile row is
-        // only saved once verifyOtp succeeds and they have a real session (verify.html).
-        localStorage.setItem('mt_pending_profile', JSON.stringify({payload, refCode: localStorage.getItem('mt_ref_code')||null}));
-        localStorage.removeItem('mt_ref_code');
-        location.href='verify.html?email='+encodeURIComponent(email);
+        await supabase.from('profiles').upsert(payload);
       }
+      err.style.color='#2e7d32';
+      err.textContent='✅ Account created! Sign in now.';
+      setTimeout(()=>showTab('login'),1500);
     };
   </script>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
