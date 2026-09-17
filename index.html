@@ -1752,18 +1752,28 @@
     }
 
     (function(){
-      const lb=document.getElementById('lightbox');
+      // Attach the swipe-gesture listeners to the photo viewport itself, not
+      // the whole #lightbox container — the X, prev/next and dot buttons are
+      // siblings of the viewport, and iOS Safari is notably stricter than
+      // Android about suppressing the synthetic click after a touchmove calls
+      // preventDefault() anywhere in that gesture, even from a few pixels of
+      // natural finger movement during an ordinary tap. Scoping the listeners
+      // to just the viewport keeps taps on those buttons from ever being
+      // treated as part of a swipe in the first place.
+      const viewport=document.getElementById('lightbox-viewport');
       const track=document.getElementById('lightbox-track');
-      enableSwipeTrack(lb, track, {
+      enableSwipeTrack(viewport, track, {
         getIndex:()=>lbIdx, setIndex:(i)=>{lbIdx=i;}, getCount:()=>lbImgs.length, loop:true,
         onSettled:()=>updateLightboxUI()
       });
     })();
 
     (function(){
-      const gal=document.getElementById('modal-gallery');
+      // Same fix here: scope to #gallery-slides, not the whole #modal-gallery
+      // container the prev/next/dot buttons also live in.
+      const slides=document.getElementById('gallery-slides');
       const track=document.getElementById('gallery-slides');
-      enableSwipeTrack(gal, track, {
+      enableSwipeTrack(slides, track, {
         getIndex:()=>galleryIdx, setIndex:(i)=>{galleryIdx=i;}, getCount:()=>track.children.length, loop:false,
         onSettled:()=>document.querySelectorAll('.gallery-dot').forEach((d,j)=>d.classList.toggle('active',j===galleryIdx))
       });
