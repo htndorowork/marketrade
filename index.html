@@ -1,65 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    // Registered as early as possible so we don't miss the browser's install-availability event
-    window._deferredInstallPrompt=null;
-    window.addEventListener('beforeinstallprompt',(e)=>{
-      e.preventDefault();
-      window._deferredInstallPrompt=e;
-      window._onInstallPromptReady && window._onInstallPromptReady();
-    });
-  </script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Student Marketplace 🎓</title>
-  <link rel="canonical" href="https://www.mystudentmarketplace.com/index.html"/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-    <meta name="description" content="🎓 Your campus. Your marketplace. Buy & sell textbooks, electronics, clothing & more with fellow students — fast, easy & safe 🤝"/>
-    <meta property="og:title" content="Student Marketplace 🎓"/>
-  <meta property="og:url" content="https://www.mystudentmarketplace.com/index.html"/>
-  <meta property="og:description" content="🎓 Your campus. Your marketplace. Buy & sell textbooks, electronics, clothing & more with fellow students — fast, easy & safe 🤝"/>
+  <title>Marketrade — Buy and Sell Near You</title>
+  <meta name="description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://www.marketrade.co/"/>
+  <meta property="og:title" content="Marketrade — Buy and Sell Near You"/>
+  <meta property="og:description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
-  <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="Student Marketplace 🎓"/>
-  <meta name="twitter:description" content="🎓 Your campus. Your marketplace. Buy & sell textbooks, electronics, clothing & more with fellow students — fast, easy & safe 🤝"/>
-  <meta name="twitter:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Marketrade — Buy and Sell Near You"/>
+  <meta name="twitter:description" content="Marketrade is the marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and dozens more categories with real people near you."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#7c3aed"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=2"/>
-  <link rel="icon" type="image/x-icon" href="icons/favicon.ico?v=2"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=2"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=2"/>
-  <link rel="stylesheet" href="style.css?v=1789517217"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=3"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Student Marketplace",
-    "url": "https://www.mystudentmarketplace.com/",
-    "logo": "https://www.mystudentmarketplace.com/icons/icon-192.png?v=2",
-    "email": "studentmarketplacehelp@gmail.com",
-    "sameAs": [
-      "https://instagram.com/mystudentmarketplacee",
-      "https://www.facebook.com/share/1ExUfH1RSm/",
-      "https://tiktok.com/@student_marketplace"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.marketrade.co/#website",
+        "url": "https://www.marketrade.co/",
+        "name": "Marketrade",
+        "description": "The marketplace for everyone — buy and sell electronics, clothing, vehicles, textbooks, furniture and more with real people near you.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.marketrade.co/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://www.marketrade.co/#business",
+        "name": "Marketrade",
+        "url": "https://www.marketrade.co/",
+        "logo": "https://www.marketrade.co/icons/icon-512.png",
+        "image": "https://www.marketrade.co/social-share.png",
+        "description": "Marketrade is an online marketplace where people buy and sell electronics, clothing, vehicles, textbooks, furniture, gaming gear and more directly with one another.",
+        "telephone": "+27623584921",
+        "areaServed": "South Africa",
+        "sameAs": [
+          "https://instagram.com/marketrade.co",
+          "https://www.facebook.com/share/1EvtMfWTCg/",
+          "https://tiktok.com/@marketrade.co"
+        ]
+      }
     ]
   }
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Student Marketplace",
-    "url": "https://www.mystudentmarketplace.com/"
-  }
-  </script>
+  <script src="js/areas-data.js" defer></script>
 </head>
 <body>
   <div id="toast-stack" aria-live="polite"></div>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
+    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
     <div class="nav-links nav-links-simple">
       <a href="index.html">Browse</a>
       <a href="favorites.html" id="nav-favorites" style="display:none">❤️ Favorites</a>
@@ -75,21 +81,15 @@
     <div class="nav-cart" onclick="openCart()" title="Cart">🛒<span class="cart-badge" id="cart-badge" style="display:none">0</span></div>
   </nav>
 
-  <div id="install-banner" style="display:none;background:#7c3aed;color:#fff;padding:10px 16px;align-items:center;justify-content:center;gap:12px;font-size:13px;font-weight:800;text-align:center">
-    <span>📲 Install Student Marketplace for quick access &amp; notifications</span>
-    <button onclick="installApp()" style="background:#fff;color:#7c3aed;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit">Install</button>
-    <button onclick="document.getElementById('install-banner').style.display='none';localStorage.setItem('sm_install_dismissed','1')" style="background:none;border:none;color:#e8ddfa;font-size:18px;cursor:pointer;line-height:1;padding:0 4px">×</button>
-  </div>
-
   <section class="hero">
     <div class="hero-dots"></div>
     <div class="hero-inner">
-      <button class="hero-tag" id="uni-select-btn" onclick="openUniModal()" style="border:none;cursor:pointer;font-family:inherit">🌍 All institutions</button>
-      <h1>Your campus.<br/>Your <span>marketplace.</span></h1>
-      <p>Buy & sell with fellow students — fast, easy & safe 🙌</p>
+      <button class="hero-tag" id="area-select-btn" onclick="openAreaModal()" style="border:none;cursor:pointer;font-family:inherit">📍 Select your area</button>
+      <h1>Your area,<br/>your <span>marketplace.</span></h1>
+      <p>Buy &amp; sell with your community — fast, easy &amp; safe 🙌</p>
       <div style="position:relative;max-width:500px;margin:0 auto">
         <div class="search-bar" style="max-width:none;margin:0">
-          <input type="text" id="search-input" placeholder="What are you looking for? 👀" autocomplete="off" onkeydown="if(event.key==='Enter'){hideSuggestions();doFilter()}" oninput="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,150)"/>
+          <input type="text" id="search-input" placeholder="What are you looking for?" autocomplete="off" onkeydown="if(event.key==='Enter'){hideSuggestions();doFilter()}" oninput="showSuggestions(this.value)" onblur="setTimeout(hideSuggestions,150)"/>
           <button onclick="hideSuggestions();doFilter()">Search 🔍</button>
         </div>
         <div id="search-suggestions" class="search-suggestions" style="display:none"></div>
@@ -115,23 +115,28 @@
     <div class="cat" id="cat-decor" onclick="openFlatSubcats('Decor',this)">🖼️ Home Decor</div>
     <div class="cat" id="cat-appliances" onclick="openFlatSubcats('Appliances',this)">🔌 Appliances</div>
     <div class="cat" id="cat-tools" onclick="openFlatSubcats('Tools',this)">🔧 Tools</div>
-    <div class="cat" id="cat-sports" onclick="openFlatSubcats('Sports',this)">🏃 Sports & Outdoor</div>
-    <div class="cat" id="cat-toys" onclick="openFlatSubcats('Toys',this)">🧸 Toys & Hobbies</div>
-    <div class="cat" id="cat-books" onclick="openFlatSubcats('Books',this)">📖 Books & Media</div>
+    <div class="cat" id="cat-hardware" onclick="openFlatSubcats('Hardware',this)">🔨 Hardware</div>
+    <div class="cat" id="cat-gaming" onclick="openFlatSubcats('Gaming',this)">🎮 Gaming</div>
+    <div class="cat" id="cat-sports" onclick="openFlatSubcats('Sports',this)">🏃 Sports &amp; Outdoor</div>
+    <div class="cat" id="cat-toys" onclick="openFlatSubcats('Toys',this)">🧸 Toys &amp; Hobbies</div>
+    <div class="cat" id="cat-books" onclick="openFlatSubcats('Books',this)">📖 Books &amp; Media</div>
     <div class="cat" id="cat-music" onclick="openFlatSubcats('Music',this)">🎸 Music</div>
     <div class="cat" id="cat-cameras" onclick="openFlatSubcats('Cameras',this)">📸 Cameras</div>
-    <div class="cat" id="cat-gaming" onclick="openFlatSubcats('Gaming',this)">🎮 Gaming</div>
-    <div class="cat" id="cat-tickets" onclick="openFlatSubcats('Tickets',this)">🎟️ Tickets</div>
     <div class="cat" id="cat-pets" onclick="openFlatSubcats('Pets',this)">🐾 Pets</div>
-    <div class="cat" id="cat-baby" onclick="openFlatSubcats('Baby',this)">👶 Baby & Kids</div>
-    <div class="cat" id="cat-plants" onclick="openFlatSubcats('Plants',this)">🌱 Plants & Garden</div>
-    <div class="cat" id="cat-events" onclick="openFlatSubcats('Events',this)">🎉 Events & Party</div>
-    <div class="cat" id="cat-health" onclick="openFlatSubcats('Health',this)">🩹 Health & Wellness</div>
-    <div class="cat" id="cat-data" onclick="openFlatSubcats('Data',this)">📶 Data & Airtime</div>
+    <div class="cat" id="cat-baby" onclick="openFlatSubcats('Baby',this)">👶 Baby &amp; Kids</div>
+    <div class="cat" id="cat-plants" onclick="openFlatSubcats('Plants',this)">🌱 Plants &amp; Garden</div>
+    <div class="cat" id="cat-events" onclick="openFlatSubcats('Events',this)">🎉 Events &amp; Party</div>
+    <div class="cat" id="cat-health" onclick="openFlatSubcats('Health',this)">🩹 Health &amp; Wellness</div>
+    <div class="cat" id="cat-data" onclick="openFlatSubcats('Data',this)">📶 Data &amp; Airtime</div>
     <div class="cat" id="cat-career" onclick="openFlatSubcats('Career',this)">💼 Career</div>
     <div class="cat" id="cat-transport" onclick="openFlatSubcats('Transport',this)">🚲 Transport</div>
-    <div class="cat" id="cat-accommodation" onclick="openFlatSubcats('Accommodation',this)">🏠 Accommodation</div>
+    <div class="cat" id="cat-vehicles" onclick="openFlatSubcats('Vehicles',this)">🚗 Vehicles</div>
+    <div class="cat" id="cat-watermobile" onclick="openFlatSubcats('Watermobile',this)">⛵ Boats &amp; Watermobile</div>
+    <div class="cat" id="cat-properties" onclick="openFlatSubcats('Properties',this)">🏠 Properties</div>
     <div class="cat" id="cat-tutoring" onclick="openFlatSubcats('Tutoring',this)">🎓 Tutoring</div>
+    <div class="cat" id="cat-jobs" onclick="openFlatSubcats('Jobs',this)">🧑‍💼 Jobs &amp; Work</div>
+    <div class="cat" id="cat-camping" onclick="openFlatSubcats('Camping',this)">🏕️ Camping</div>
+    <div class="cat" id="cat-boardgames" onclick="openFlatSubcats('BoardGames',this)">🎲 Board Games</div>
     <div class="cat" id="cat-services" onclick="openFlatSubcats('Services',this)">🛠️ Services</div>
     <div class="cat" id="cat-others" onclick="selectCat('Others',this)">🔀 Others</div>
     </div>
@@ -150,10 +155,10 @@
       <div class="filter-group">
         <span class="filter-label">🔀 Sort by</span>
         <select id="sort-select" onchange="doFilter()">
+          <option value="random">🔀 Random</option>
           <option value="newest">Newest first</option>
           <option value="price_asc">Price: Low to High</option>
           <option value="price_desc">Price: High to Low</option>
-          <option value="random" selected>🔀 Shuffle</option>
         </select>
       </div>
       <div class="filter-divider"></div>
@@ -167,12 +172,13 @@
       </div>
       <div class="filter-divider"></div>
       <label class="filter-toggle">
-        <input type="checkbox" id="my-campus-only" onchange="doFilter()"/>
+        <input type="checkbox" id="my-area-only" onchange="doFilter()"/>
         <span class="filter-toggle-track"><span class="filter-toggle-thumb"></span></span>
-        <span class="filter-toggle-text">📍 Only my campus</span>
+        <span class="filter-toggle-text">📍 Only my area</span>
       </label>
       <button class="filter-reset" onclick="resetFilters()" type="button">↺ Reset</button>
       <button class="filter-apply" onclick="applyFilters()" type="button">Apply ✓</button>
+      <button class="filter-apply" style="background:#fff;color:#2563eb;border:2px solid #2563eb" onclick="saveSearchAlert()" type="button">🔔 Alert me</button>
     </div>
 
     <div class="grid" id="listings-grid">
@@ -181,8 +187,6 @@
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
     </div>
-    <div id="infinite-scroll-sentinel" style="height:1px"></div>
-    <div id="infinite-scroll-spinner" style="display:none;text-align:center;padding:18px 0"><div class="spinner"></div></div>
 
     <div id="recently-viewed-section" style="display:none;margin-top:28px">
       <div class="section-header"><div class="section-title" id="recently-viewed-title" style="font-size:15px">🕐 Recently viewed</div></div>
@@ -190,11 +194,11 @@
     </div>
   </main>
 
-  <!-- UNIVERSITY / CAMPUS SELECTOR MODAL -->
-  <div class="modal-overlay" id="uni-modal-overlay" onclick="closeUniModal()">
+  <!-- AREA SELECTOR MODAL (Province > City > District > Town/Suburb) -->
+  <div class="modal-overlay" id="area-modal-overlay" onclick="closeAreaModal()">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
-      <button class="modal-close" onclick="closeUniModal()">✕</button>
-      <div style="padding:22px 20px" id="uni-modal-body"></div>
+      <button class="modal-close" onclick="closeAreaModal()">✕</button>
+      <div style="padding:22px 20px" id="area-modal-body"></div>
     </div>
   </div>
 
@@ -223,12 +227,12 @@
           </div>
           <span id="modal-stock-note" style="font-size:12px;color:#888;font-weight:600"></span>
         </div>
-        <button id="btn-restock-alert" style="display:none;width:100%;margin-bottom:12px;padding:10px;border-radius:10px;border:2px solid #7c3aed;background:#f5f0fe;color:#7c3aed;font-weight:800;font-size:13px;cursor:pointer">🔔 Notify me when back in stock</button>
-        <div id="modal-signin-note" style="display:none;background:#f5f0fe;border:2px solid #d8c4f7;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;font-size:13px;font-weight:700;color:#9333ea">
-          🔒 <a href="login.html" style="color:#7c3aed;text-decoration:none">Sign in</a> to order this item
+        <div id="modal-signin-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;font-size:13px;font-weight:700;color:#1d4ed8">
+          🔒 <a href="login.html" style="color:#2563eb;text-decoration:none">Sign in</a> to order this item
         </div>
         <button class="btn-order" id="btn-add-to-cart">🛒 Add to Cart</button>
         <button class="btn-order-cart" id="btn-order-now">Order Now</button>
+        <button class="btn-order" id="btn-restock-alert" style="display:none;background:#fff;color:#2563eb;border:2px solid #2563eb" onclick="requestRestockAlert()">🔔 Notify me when back in stock</button>
         <div id="modal-similar-section" style="display:none;margin-top:18px">
           <div style="font-size:13px;font-weight:800;color:#888;margin-bottom:8px">You might also like</div>
           <div class="grid" id="modal-similar-grid" style="grid-template-columns:repeat(2,1fr);gap:8px"></div>
@@ -268,17 +272,15 @@
   </div>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox" style="display:none;position:fixed;inset:0;background:#000;z-index:2000;touch-action:pan-y" onclick="closeLightbox()">
-    <div class="lightbox-frame" onclick="event.stopPropagation()">
-      <div class="lb-slides" id="lb-slides"></div>
-    </div>
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y" onclick="closeLightbox()">
     <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;font-weight:800;z-index:10">✕</button>
-    <button onclick="event.stopPropagation();lightboxSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800;z-index:10" id="lb-prev">‹</button>
-    <button onclick="event.stopPropagation();lightboxSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800;z-index:10" id="lb-next">›</button>
-    <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 0 18px;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;flex-direction:column;align-items:center;gap:8px;z-index:10;pointer-events:none">
-      <div style="display:flex;gap:8px" id="lb-dots"></div>
-      <div style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600" id="lb-counter"></div>
+    <button onclick="event.stopPropagation();lightboxSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-prev">‹</button>
+    <button onclick="event.stopPropagation();lightboxSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-next">›</button>
+    <div id="lightbox-viewport" style="width:min(88vw,60vh);aspect-ratio:3/4;overflow:hidden;display:flex;align-items:center;border-radius:12px;background:#111;box-shadow:0 8px 40px rgba(0,0,0,0.5);touch-action:pan-y" onclick="event.stopPropagation()">
+      <div id="lightbox-track" style="display:flex;width:100%;height:100%;transition:transform 0.3s ease;will-change:transform"></div>
     </div>
+    <div style="display:flex;gap:8px;margin-top:16px" id="lb-dots"></div>
+    <div style="color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;margin-top:8px" id="lb-counter"></div>
   </div>
 
   <!-- CONTACT MODAL -->
@@ -287,37 +289,9 @@
       <div class="modal-body" style="text-align:center;padding:32px 24px">
         <div style="font-size:48px;margin-bottom:12px">✅</div>
         <h2 style="font-size:20px;font-weight:900;margin-bottom:8px">Order Confirmed!</h2>
-        <p style="font-size:14px;color:#666;font-weight:600;margin-bottom:20px">Contact the seller to arrange collection & payment</p>
+        <p style="font-size:14px;color:#666;font-weight:600;margin-bottom:20px">Contact the seller to arrange collection &amp; payment</p>
         <div class="contact-box" id="contact-box"></div>
         <button class="btn-order" style="margin-top:20px" onclick="document.getElementById('contact-overlay').style.display='none'">Done ✓</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHECKOUT: delivery method + pay (TradeSafe escrow) -->
-  <div class="modal-overlay" id="checkout-flow-overlay">
-    <div class="modal" style="max-width:420px">
-      <div class="modal-body" style="padding:24px">
-        <h2 style="font-size:18px;font-weight:900;margin-bottom:4px">How will you get this? 📦</h2>
-        <p style="font-size:12.5px;color:#888;font-weight:600;margin-bottom:16px">Your payment is held safely in escrow by TradeSafe until you've got your item.</p>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
-          <label style="display:flex;align-items:center;gap:10px;border:2px solid #eee;border-radius:14px;padding:12px 14px;cursor:pointer" id="cf-method-pickup-label">
-            <input type="radio" name="cf-method" value="pickup" checked onchange="cfSetMethod('pickup')"/>
-            <span><strong style="font-size:13.5px">🤝 In-person handover</strong><br/><span style="font-size:11.5px;color:#888;font-weight:600">Meet the seller. Funds release once you share your Collection PIN.</span></span>
-          </label>
-          <label style="display:flex;align-items:center;gap:10px;border:2px solid #eee;border-radius:14px;padding:12px 14px;cursor:pointer" id="cf-method-pargo-label">
-            <input type="radio" name="cf-method" value="pargo" onchange="cfSetMethod('pargo')"/>
-            <span><strong style="font-size:13.5px">🚚 Pargo pickup point</strong><br/><span style="font-size:11.5px;color:#888;font-weight:600">Nationwide drop-off/collection. Auto-releases 24h after delivery if there's no dispute.</span></span>
-          </label>
-        </div>
-        <div id="cf-pargo-picker" style="display:none;margin-bottom:14px">
-          <input type="text" id="cf-pargo-search" placeholder="Search suburb or postal code…" style="width:100%;padding:10px 14px;border:2px solid #eee;border-radius:12px;font-family:inherit;font-size:13.5px;box-sizing:border-box" oninput="cfSearchPargoPoints(this.value)"/>
-          <div id="cf-pargo-results" style="margin-top:8px;max-height:160px;overflow-y:auto"></div>
-          <div id="cf-pargo-selected" style="display:none;margin-top:8px;font-size:12.5px;font-weight:700;color:#2e7d32"></div>
-        </div>
-        <p id="cf-error" style="display:none;color:#c0392b;font-size:12.5px;font-weight:700;margin-bottom:10px"></p>
-        <button class="btn-order" onclick="cfConfirmAndPay()" id="cf-pay-btn">Pay with card / Ozow / SnapScan / RCS →</button>
-        <button style="width:100%;background:none;border:none;color:#888;font-size:12.5px;font-weight:700;margin-top:10px;cursor:pointer" onclick="document.getElementById('checkout-flow-overlay').style.display='none'">Cancel</button>
       </div>
     </div>
   </div>
@@ -332,63 +306,49 @@
     <div class="cart-body" id="cart-body"><div class="cart-empty">Your cart is empty 🛍️</div></div>
     <div class="cart-footer" id="cart-footer" style="display:none">
       <div class="cart-total"><span class="cart-total-label">Total</span><span class="cart-total-price" id="cart-total">R0</span></div>
-      <button class="btn-checkout" onclick="checkout()">Checkout & Order All 🚀</button>
+      <button class="btn-checkout" onclick="checkout()">Checkout &amp; Order All 🚀</button>
     </div>
   </div>
 
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-social">
-        <div class="footer-social-title">Follow Us</div>
-        <div class="footer-social-line"><a href="https://instagram.com/mystudentmarketplacee" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> mystudentmarketplacee</a></div>
-        <div class="footer-social-line"><a href="https://www.facebook.com/share/1ExUfH1RSm/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.5c0-.9.25-1.5 1.5-1.5H16.5V4.3c-.27-.04-1.2-.13-2.28-.13-2.25 0-3.8 1.37-3.8 3.9V10.5H8v3h2.42V21h3.08z"/></svg> Student Marketplace</a></div>
-        <div class="footer-social-line"><a href="https://tiktok.com/@student_marketplace" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3v13.5a2.5 2.5 0 1 1-2.5-2.5c.2 0 .4.02.6.06V9.9a5.5 5.5 0 1 0 4.9 5.47V8.7a6.9 6.9 0 0 0 4 1.28V6.9a4.2 4.2 0 0 1-4-4.9z"/></svg> student_marketplace</a></div>
+    <div class="footer-grid">
+      <div class="footer-col footer-social-col">
+        <div class="footer-col-label">Follow Us</div>
+        <div class="footer-social">
+          <a href="https://instagram.com/marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg><span>marketrade.co</span></a>
+          <a href="https://www.facebook.com/share/1EvtMfWTCg/" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><span>Marketrade</span></a>
+          <a href="https://tiktok.com/@marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.66-.58-1.08-1.4-1.16-2.32h-2.75v11.55c0 1.24-1 2.25-2.24 2.25a2.25 2.25 0 0 1-.85-4.34 2.24 2.24 0 0 1 .85-.16c.24 0 .48.03.7.1v-2.8a5.06 5.06 0 0 0-5.79 4.99 5.07 5.07 0 0 0 8.63 3.6 5.06 5.06 0 0 0 1.51-3.6V9.7a7.7 7.7 0 0 0 4.5 1.45V8.4a4.85 4.85 0 0 1-3.4-2.58z"/></svg><span>marketrade.co</span></a>
+        </div>
       </div>
-      <div class="footer-main">
-        <div class="footer-title">Student Marketplace 🎓</div>
-        <div class="footer-sub">The student marketplace for all</div>
+      <div class="footer-col footer-center">
+        <div class="footer-title">Marketrade 🛍️</div>
+        <div class="footer-sub">The marketplace for everyone</div>
         <div class="footer-links">
-      <a class="footer-link" href="mailto:studentmarketplacehelp@gmail.com">📧 Report an issue</a>
-      <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
-      <a class="footer-link" href="index.html">Browse listings</a>
-      <a class="footer-link" href="faq.html">How It Works</a>
-      <a class="footer-link" href="terms.html">Terms</a>
-      <a class="footer-link" href="privacy.html">Privacy</a>
-      <a class="footer-link" href="guidelines.html">Guidelines</a>
-    </div>
-        <div class="footer-copy">© 2025 Student Marketplace · Built for all students</div>
+          <a class="footer-link" href="mailto:marketrade.co@gmail.com">📧 Report an issue</a>
+          <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
+          <a class="footer-link" href="index.html">Browse listings</a>
+          <a class="footer-link" href="faq.html">How It Works</a>
+          <a class="footer-link" href="terms.html">Terms</a>
+          <a class="footer-link" href="how-payments-work.html">How Payments Work</a>
+          <a class="footer-link" href="privacy.html">Privacy</a>
+          <a class="footer-link" href="guidelines.html">Guidelines</a>
+        </div>
+        <div class="footer-copy">© 2025 Marketrade · Built for everyone</div>
       </div>
-      <div class="footer-business">
-        <div class="footer-business-title">Business Info</div>
-        <div class="footer-business-line">📞 <a href="tel:+27623584921">062 358 4921</a></div>
-        <div class="footer-business-line">📄 <a href="terms.html#refund-policy">Refund &amp; Return Policy</a></div>
+      <div class="footer-col footer-business">
+        <div class="footer-col-label">Business Info</div>
+        <a href="tel:+27623584921">📞 062 358 4921</a>
+        <a href="terms.html#refunds">📄 Refund &amp; Return Policy</a>
       </div>
     </div>
-    </footer>
+  </footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true; }
-    function showInstallBanner(){
-      if(isStandalone()) return;
-      if(localStorage.getItem('sm_install_dismissed')==='1') return;
-      if(!window._deferredInstallPrompt) return;
-      document.getElementById('install-banner').style.display='flex';
-    }
-    window._onInstallPromptReady=showInstallBanner;
-    showInstallBanner();
-    window.installApp=async()=>{
-      if(!window._deferredInstallPrompt) return;
-      window._deferredInstallPrompt.prompt();
-      await window._deferredInstallPrompt.userChoice;
-      window._deferredInstallPrompt=null;
-      document.getElementById('install-banner').style.display='none';
-    };
-
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Transport:'🚲',Vehicles:'🚗',Watermobile:'⛵',Properties:'🏠',Jobs:'🧑\u200d💼',Camping:'🏕️',BoardGames:'🎲',Services:'🛠️',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1',text:'#e65c00'},Clothing:{bg:'#fce4ec',text:'#c2185b'},Electronics:{bg:'#e8eaf6',text:'#3949ab'},Food:{bg:'#e8f5e9',text:'#2e7d32'},Beauty:{bg:'#fce4ec',text:'#ad1457'},Tutoring:{bg:'#e1f5ee',text:'#0f6e56'},Utensils:{bg:'#fff3e0',text:'#e65100'},Jewellery:{bg:'#fdf0e6',text:'#a0522d'},Bags:{bg:'#ede7f6',text:'#5e35b1'},Toys:{bg:'#e3f2fd',text:'#1565c0'},Pets:{bg:'#f1f8e9',text:'#558b2f'},Tools:{bg:'#eceff1',text:'#37474f'},Hardware:{bg:'#efebe9',text:'#5d4037'},Gaming:{bg:'#ede7f6',text:'#4527a0'},Snacks:{bg:'#fff8e1',text:'#f9a825'},Sports:{bg:'#e8f5e9',text:'#1b5e20'},Books:{bg:'#efebe9',text:'#4e342e'},Music:{bg:'#f3e5f5',text:'#6a1b9a'},Cameras:{bg:'#eceff1',text:'#263238'},Events:{bg:'#fce4ec',text:'#d81b60'},Plants:{bg:'#e8f5e9',text:'#33691e'},Decor:{bg:'#fff3e0',text:'#bf360c'},Baby:{bg:'#e1f5fe',text:'#0277bd'},Data:{bg:'#e8eaf6',text:'#283593'},Health:{bg:'#ffebee',text:'#c62828'},Career:{bg:'#e0f2f1',text:'#00695c'},Transport:{bg:'#e0f2f1',text:'#00695c'},Vehicles:{bg:'#e3f2fd',text:'#1a3c8f'},Watermobile:{bg:'#e0f7fa',text:'#00636e'},Properties:{bg:'#fff3e0',text:'#bf360c'},Jobs:{bg:'#e0f2f1',text:'#00695c'},Camping:{bg:'#e8f5e9',text:'#2e5c1e'},BoardGames:{bg:'#f3e5f5',text:'#6a1b9a'}};
 
     const TB_YEARS=['1st Year','2nd Year','3rd Year','Postgraduate'];
     const TB_TAXONOMY={
@@ -474,11 +434,11 @@
       'Academic mentoring','First-year support tutoring','Final-year project support'
     ];
 
-    const ACCOMMODATION_SUBCATS=[
-      'Single room','Shared room','Bachelor (studio) apartment','One-bedroom apartment','Two-bedroom apartment',
-      'Three-bedroom apartment','Shared flat/apartment','Shared house','Commune house',
-      'Private student residence room','Ensuite room','Non-ensuite room','Self-catering apartment',
-      'Furnished apartment','Unfurnished apartment','Loft apartment','Duplex apartment'
+    const PROPERTIES_SUBCATS=[
+      'Car Parks & Storage','Commercial Properties for Rent','Commercial Properties for Sale',
+      'Flats for Rent','Holiday Homes','Houses & Flats for Sale','Houses for Rent',
+      'Land & Plots for Sale','Other Property','Roommate & Accommodation Wanted',
+      'Rooms for Rent','Short Term'
     ];
 
     const TRANSPORT_SUBCATS=[
@@ -496,11 +456,19 @@
       'Laundry and ironing','Carpet cleaning','Move-in/move-out cleaning','Graphic design','Logo design',
       'Photography','Videography','Social media management','Website creation',
       'Printing business cards and flyers','Water delivery','Gas refill delivery','Convenience Services',
-      'Transport services','Dj services',
+      'Transport services',
       'Rental: Bicycle','Rental: Electric scooter','Rental: Skateboard','Rental: Motorcycle/Moped',
       'Rental: Car','Rental: Laptop','Rental: Projector','Rental: Speaker/PA system',
       'Rental: Camera/Photography gear','Rental: Furniture','Rental: Costume','Rental: Event equipment',
-      'Rental: Tools'
+      'Rental: Tools',
+      'Appliance Repairs','Automotive Services','Building & Trades','Chauffeur & Airport Transfer',
+      'Child Care','Cleaning Services','Courses & Training','DJ & Entertainment Services',
+      'DSTV Services','Electronics & IT Services','Event Services','Healer Services',
+      'Health & Beauty Services','Landscaping & Gardening Services','Legal Services','Manufacturing Services',
+      'Other Services','Party & Catering','Pet Services','Photography & Video Services',
+      'Real Estate Services','Recruitment Services','Removals & Storage','Sports & Fitness Training',
+      'Tax & Financial Services','Travel Agents & Tours','Tutors & Education Services',
+      'Wedding Venues & Wedding Services'
     ];
 
     const STATIONARY_GROUPS={
@@ -582,7 +550,7 @@
       'Suitcases','Travel bags','School bags','Tote/Grocery bags','Pouches'
     ];
     const TOYS_SUBCATS=[
-      'Board games','Card games','Puzzles','Building blocks/Lego','Action figures','Dolls',
+      'Building blocks/Lego','Action figures','Dolls',
       'Plush toys/Stuffed animals','Remote control toys','Educational toys','Outdoor toys',
       'Water toys','Toy cars','Play sets','Art & craft kits','Musical toys','Party games',
       'Fidget toys','Baby toys','Video game consoles','Video games'
@@ -602,6 +570,19 @@
       'Step stools','Wheelbarrows','Garden tools','Shovels','Rakes','Paint brushes','Paint rollers',
       'Sandpaper','Nails','Screws','Bolts & nuts','Cable ties','Duct tape','Super glue','Lubricants/WD-40'
     ];
+    const HARDWARE_SUBCATS=[
+      'Door handles & knobs','Door hinges','Locks & padlocks','Window fittings','Cabinet handles','Cabinet hinges',
+      'Chains & ropes','Wire mesh','Pipes & fittings','Plumbing fittings','Taps & fixtures','Electrical wiring',
+      'Switches & sockets','Light fittings','Bricks & blocks','Cement & building materials','Timber/Wood',
+      'Roofing materials','Fencing & gates','Security gates & burglar bars','Gutters & downpipes',
+      'Insulation materials','Adhesives & sealants','Silicone & fillers'
+    ];
+    const GAMING_SUBCATS=[
+      'Consoles','Handheld consoles','Controllers','Console games','PC games','Gaming PCs','Gaming laptops',
+      'Graphics cards','Gaming keyboards','Gaming mice','Gaming headsets','Gaming chairs','Gaming desks',
+      'Monitors','VR headsets','Steering wheels/Racing sims','Retro/Vintage consoles','Game cartridges/discs',
+      'Memory cards','Charging docks','Trading cards','Board games','Gaming merchandise'
+    ];
     const SNACKS_SUBCATS=[
       'Chips (crisps)','Popcorn','Chocolate','Chocolate bars','Sweets/Candy','Biscuits','Cookies',
       'Wafers','Nuts','Trail mix','Dried fruit','Protein bars','Granola bars','Rusks','Crackers',
@@ -611,9 +592,24 @@
       'Dumbbells','Resistance bands','Yoga mats','Gym gloves','Skipping ropes','Weight plates',
       'Treadmills','Exercise bikes','Soccer balls','Rugby balls','Netballs','Basketballs','Cricket bats',
       'Team jerseys','Cycling helmets','Running shoes','Sports water bottles','Shaker bottles',
-      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
-      'Hiking backpacks','Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
+      'Fishing rods','Swimming goggles','Gum guards/mouthguards','Shin guards',
       'Boxing gloves','Sports/gym bags'
+    ];
+
+    const CAMPING_SUBCATS=[
+      'Camping tents','Sleeping bags','Camping chairs','Coolers/cooler boxes','Braai stands',
+      'Hiking backpacks','Camping stoves','Gas canisters','Lanterns & torches','Camping tables',
+      'Portable camping fridges','Camping cutlery & cookware','Ground mats/sleeping pads','Gazebos',
+      'Firewood & fire starters','Portable camping generators','Water containers','Camping hammocks',
+      'Multi-tools & camping knives','Insect repellent gear','First aid kits (outdoor)'
+    ];
+
+    const BOARDGAMES_SUBCATS=[
+      'Family board games','Strategy board games','Party board games','Card games',
+      'Chess sets','Checkers/Draughts sets','Backgammon sets','Dominoes',
+      'Poker sets & chips','Dice games','Trivia games','Puzzle board games',
+      'Role-playing/tabletop games','Jigsaw puzzles','Kids board games','Classic board games',
+      'Board game accessories'
     ];
     const BOOKS_SUBCATS=[
       'Fiction novels','Non-fiction books','Comics & manga','Magazines','Poetry collections',
@@ -630,18 +626,7 @@
       'Camera lenses','Tripods','Ring lights','Photo backdrops','Camera bags','Memory cards',
       'Drones','GoPros/action cameras','Camera batteries & chargers','Gimbals/stabilizers'
     ];
-    const GAMING_SUBCATS=[
-      'PS5 consoles & games','PS4 consoles & games','Xbox consoles & games','Nintendo Switch consoles & games',
-      'PC games','Gaming laptops & PCs','Controllers','Gaming headsets','Gaming keyboards & mice',
-      'Gaming chairs','Gaming monitors','VR headsets','Game cards/vouchers','Retro consoles & games',
-      'Gaming accessories'
-    ];
-    const TICKETS_SUBCATS=[
-      'Concert tickets','Sports event tickets','Theatre/show tickets','Festival tickets','Movie tickets',
-      'Comedy show tickets','Club/event tickets','Graduation tickets','Other tickets'
-    ];
     const EVENTS_SUBCATS=[
-      'Events, Gigs & Nightlife','Flea Market & Jumble Sale',
       'Balloons','Party decorations','Banners & bunting','Costumes','Party lighting',
       'Speakers for events','Disposable cups & plates','Photo booth props','Candles',
       'Gift wrapping supplies','Fairy lights','Table linens','Party favors','Cake toppers'
@@ -676,6 +661,26 @@
       'Graduation attire','Internship starter kits'
     ];
 
+    const VEHICLES_SUBCATS=[
+      'Sedan','Hatchback','SUV','Bakkie/Pickup truck','Minibus/Taxi','Panel van','Coupe','Convertible',
+      'Motorbike/Motorcycle','Scooter/Moped','Quad bike/ATV','Trailer','Caravan',
+      'Car parts & spares','Tyres & Accessories','Car batteries','Car Audio & Electronics','Dash cams',
+      'GPS trackers','Roof racks','Tow bars','Car seat covers','Car Care & Cleaning',
+      'Automotive Accessories','Maintenance & Service','Workshop Cleaning & Maintenance',
+      'Car jacks & tools','Helmets & riding gear','Number plates'
+    ];
+
+    const WATERMOBILE_SUBCATS=['All Watermobile','Parts','Accessories'];
+
+    const JOBS_SUBCATS=[
+      'Accounting & Finance','Advertising & Marketing','Agriculture & Farm Jobs','Arts & Entertainment',
+      'Au Pair & Babysitting','Beauty','Clerical & Administrative','Construction & Trade','Customer Service',
+      'Engineering & Architecture','FMCG','General Worker & Labour','Healthcare & Medical','Hospitality & Tourism',
+      'Human Resources','Information Technology','Legal','Logistics, Transport & Drivers','Management',
+      'Manufacturing','Retail','Sales & Marketing','Security','Skilled Trades','Teaching & Education',
+      'Internships & Graduate Programs','Part-Time & Freelance','Remote & Work From Home','Other Jobs'
+    ];
+
     // Generic config for every category that gets a flat (single-level) subcategory drill-down
     const FLAT_SUBCATS={
       Electronics:{field:'electronics_subcategory',emoji:'📱',items:ELECTRONICS_SUBCATS},
@@ -685,13 +690,13 @@
       Toys:{field:'toys_subcategory',emoji:'🧸',items:TOYS_SUBCATS},
       Pets:{field:'pets_subcategory',emoji:'🐾',items:PETS_SUBCATS},
       Tools:{field:'tools_subcategory',emoji:'🔧',items:TOOLS_SUBCATS},
+      Hardware:{field:'hardware_subcategory',emoji:'🔨',items:HARDWARE_SUBCATS},
+      Gaming:{field:'gaming_subcategory',emoji:'🎮',items:GAMING_SUBCATS},
       Snacks:{field:'snacks_subcategory',emoji:'🍿',items:SNACKS_SUBCATS},
       Sports:{field:'sports_subcategory',emoji:'🏃',items:SPORTS_SUBCATS},
       Books:{field:'books_subcategory',emoji:'📖',items:BOOKS_SUBCATS},
       Music:{field:'music_subcategory',emoji:'🎸',items:MUSIC_SUBCATS},
       Cameras:{field:'cameras_subcategory',emoji:'📸',items:CAMERAS_SUBCATS},
-      Gaming:{field:'gaming_subcategory',emoji:'🎮',items:GAMING_SUBCATS},
-      Tickets:{field:'tickets_subcategory',emoji:'🎟️',items:TICKETS_SUBCATS},
       Events:{field:'events_subcategory',emoji:'🎉',items:EVENTS_SUBCATS},
       Plants:{field:'plants_subcategory',emoji:'🌱',items:PLANTS_SUBCATS},
       Decor:{field:'decor_subcategory',emoji:'🖼️',items:DECOR_SUBCATS},
@@ -703,8 +708,13 @@
       Food:{field:'food_subcategory',emoji:'🍱',items:FOOD_SUBCATS},
       Beauty:{field:'beauty_subcategory',emoji:'💄',items:BEAUTY_SUBCATS},
       Tutoring:{field:'tutoring_subcategory',emoji:'🎓',items:TUTORING_SUBCATS},
-      Accommodation:{field:'accommodation_subcategory',emoji:'🏠',items:ACCOMMODATION_SUBCATS},
+      Properties:{field:'properties_subcategory',emoji:'🏠',items:PROPERTIES_SUBCATS},
       Transport:{field:'transport_subcategory',emoji:'🚲',items:TRANSPORT_SUBCATS},
+      Vehicles:{field:'vehicles_subcategory',emoji:'🚗',items:VEHICLES_SUBCATS},
+      Watermobile:{field:'watermobile_subcategory',emoji:'⛵',items:WATERMOBILE_SUBCATS},
+      Jobs:{field:'jobs_subcategory',emoji:'🧑\u200d💼',items:JOBS_SUBCATS},
+      Camping:{field:'camping_subcategory',emoji:'🏕️',items:CAMPING_SUBCATS},
+      BoardGames:{field:'boardgames_subcategory',emoji:'🎲',items:BOARDGAMES_SUBCATS},
       Services:{field:'services_subcategory',emoji:'🛠️',items:SERVICES_SUBCATS},
       Stationary:{field:'stationary_subcategory',emoji:'✏️',items:STATIONARY_SUBCATS,groups:STATIONARY_GROUPS},
       Appliances:{field:'appliances_subcategory',emoji:'🔌',items:APPLIANCES_SUBCATS},
@@ -714,8 +724,14 @@
     let flatChipsExpanded=false; // whether the full subcategory chip grid is currently revealed (only after "Show all" is pressed)
 
     let all=[], cat='All', currentListing=null, galleryIdx=0, modalQty=1, currentUser=null, cart=[], renderLimit=24, lastFilteredList=[];
-    let freeModeOn=false;
-    let dbOffset=0, dbPageSize=300, dbHasMore=true, dbLoading=false;
+    // Declared up here (not just above render()) because render() is a hoisted
+    // function declaration that can be — and is — invoked via doFilter() before
+    // the interpreter reaches wherever this line sits textually. A `let` stays
+    // in the temporal dead zone until its own line actually executes, so this
+    // has to run before any code path that can call render(), not merely
+    // before render()'s own definition.
+    let infiniteScrollObserver=null, loadingMore=false;
+    let randomOrderSeed=new Map(); // listing id -> stable random value, so favoriting/re-filtering doesn't reshuffle the page
 
     // Lightweight typo tolerance: exact substring match first, then falls back to
     // per-word edit-distance <=1 for words of 4+ letters (catches things like "laptp" -> "laptop")
@@ -740,43 +756,71 @@
       });
     }
 
-    // Does this seller (profile) deliver to the buyer's saved {uni,campus,type}?
+    // Does this seller (profile) deliver to the buyer's saved {province,city,district,suburb}?
     function sellerDeliversTo(p,saved){
       if(!p||!saved) return false;
-      if(saved.type==='university' && p.deliver_all_universities) return true;
-      if(saved.type==='tvet' && p.deliver_all_tvet) return true;
-      if(saved.type==='private' && p.deliver_all_private) return true;
-      const list=Array.isArray(p.seller_institutions)?p.seller_institutions:[];
-      return list.some(inst=>inst.name===saved.uni && (inst.campuses||[]).includes(saved.campus));
+      if(p.deliver_all_areas) return true;
+      const list=Array.isArray(p.seller_areas)?p.seller_areas:[];
+      return list.some(a=>a.province===saved.province && a.city===saved.city && a.district===saved.district && (a.suburbs||[]).includes(saved.suburb));
     }
 
     // Human-readable summary of where a seller delivers, for the listing modal
     function describeDeliveryScope(p){
       if(!p) return null;
       const parts=[];
-      if(p.deliver_all_universities) parts.push('all universities');
-      if(p.deliver_all_tvet) parts.push('all TVET colleges');
-      if(p.deliver_all_private) parts.push('all private institutions');
-      const list=Array.isArray(p.seller_institutions)?p.seller_institutions:[];
-      list.forEach(inst=>parts.push(inst.name+' ('+(inst.campuses||[]).join(', ')+')'));
+      if(p.deliver_all_areas) parts.push('all areas');
+      const list=Array.isArray(p.seller_areas)?p.seller_areas:[];
+      list.forEach(a=>parts.push(a.district+' ('+(a.suburbs||[]).join(', ')+')'));
       return parts.length ? parts.join(' · ') : null;
     }
     let tbYear=null, tbSubject=null;
     let tbSubjectsExpanded=false; // whether the faculty/subject grid is currently revealed (only after "View all X textbooks" is pressed)
 
-    // Init — run every independent fetch in parallel instead of one after
-    // another. free_mode, auth, and the listings query don't depend on each
-    // other's *results* to be kicked off (only free_mode's value needs to
-    // resolve before fetchListingsPage's filter step runs, which Promise.all
-    // guarantees). This alone cuts several sequential network round-trips
-    // down to roughly the time of the single slowest one.
-    const [{data:fm}, {data:{user}}] = await Promise.all([
-      supabase.from('settings').select('value').eq('key','free_mode').single(),
-      supabase.auth.getUser()
-    ]);
-    freeModeOn = fm?.value === 'true';
+    // Init
+    const {data:{user}}=await supabase.auth.getUser();
     currentUser=user;
     let myFavorites=new Set();
+
+    // Bounded pagination: never pull the entire listings table in one go.
+    // Fetch a generous first page, then quietly fetch more pages on demand
+    // as the person scrolls past what's loaded (see loadMoreListings below).
+    const SERVER_PAGE_SIZE = 300;
+    let serverOffset = 0, serverHasMore = true;
+
+    let freeModeOn = false;
+    async function fetchListingsPage(offset){
+      const {data} = await supabase.from('listings')
+        .select('*,profiles(full_name,residence,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin)')
+        .eq('is_available',true).eq('is_draft',false)
+        .order('renewed_at',{ascending:false,nullsFirst:false})
+        .range(offset, offset+SERVER_PAGE_SIZE-1);
+      const today=new Date().toISOString().slice(0,10);
+      const filtered=(data||[]).filter(l=>{
+        const p=l.profiles;
+        if(!p) return false;
+        if(p.is_blocked===true) return false;
+        if(p.is_admin===true) return true;
+        if(freeModeOn) return true;
+        return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
+      });
+      serverHasMore = (data||[]).length === SERVER_PAGE_SIZE;
+      serverOffset = offset + (data||[]).length;
+      return filtered;
+    }
+
+    // Kick off the listings fetch immediately — it's the actual content of this
+    // page, so it should never sit behind unrelated auth/profile round-trips.
+    // Free Mode (an admin-wide toggle) lets sellers without a paid plan post and
+    // show up in Browse just like paid sellers, so check it before we filter.
+    // NOTE: deliberately not using .single()/.maybeSingle() here — those throw/
+    // return null if the settings table ever ends up with more than one row for
+    // this key (e.g. a migration re-run), which would silently hide every
+    // unpaid seller's listings from Browse. Reading the array and taking the
+    // first match degrades gracefully instead.
+    const freeModePromise = supabase.from('settings').select('value').eq('key','free_mode_active').limit(1)
+      .then(({data})=>{ freeModeOn = data?.[0]?.value==='true'; });
+    const listingsPromise = freeModePromise.then(()=>fetchListingsPage(0));
+
     if(user){
       document.getElementById('nav-auth').textContent='Sign out';
       document.getElementById('nav-auth').href='#';
@@ -788,140 +832,50 @@
       supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).neq('sender_id',user.id).eq('is_read',false).then(({count})=>{
         if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';const bb=document.getElementById('bnav-msg-badge');if(bb){bb.textContent=count;bb.style.display='flex';}}
       });
-      // If the buyer hasn't picked an institution on this device yet, use the one they set at signup
-      if(!localStorage.getItem('sm_university')){
-        supabase.from('profiles').select('institution_type,university,campus').eq('id',user.id).single().then(({data:pr})=>{
-          if(pr?.institution_type && pr?.university && pr?.campus){
-            localStorage.setItem('sm_university',JSON.stringify({uni:pr.university,campus:pr.campus,type:pr.institution_type}));
-            if(typeof updateUniBtnLabel==='function') updateUniBtnLabel();
+      // If the buyer hasn't picked an area on this device yet, use the one they set at signup
+      if(!localStorage.getItem('sm_area') && localStorage.getItem('sm_area_all')!=='1'){
+        supabase.from('profiles').select('province,city,district,suburb').eq('id',user.id).single().then(({data:pr})=>{
+          if(pr?.province && pr?.city && pr?.district && pr?.suburb){
+            localStorage.setItem('sm_area',JSON.stringify({province:pr.province,city:pr.city,district:pr.district,suburb:pr.suburb}));
+            if(typeof updateAreaBtnLabel==='function') updateAreaBtnLabel();
           }
         });
       }
       loadNotifications();
-      loadCart();
-      // role only affects a nav link's href (cosmetic) — never block render on it
-      supabase.from('profiles').select('role').eq('id',user.id).single().then(({data:p})=>{
-        if(p?.role==='seller') document.getElementById('nav-profile').href='seller.html';
-      });
+      // Independent of each other and of the listings fetch above — run them together.
+      const [{data:p},{data:favs,error:favErr}]=await Promise.all([
+        supabase.from('profiles').select('role').eq('id',user.id).single(),
+        supabase.from('favorites').select('listing_id').eq('user_id',user.id)
+      ]);
+      if(p?.role==='seller') document.getElementById('nav-profile').href='seller.html';
+      if(favErr) console.error('Could not load favorites:',favErr.message);
+      myFavorites=new Set((favs||[]).map(f=>f.listing_id));
     }
 
-    // Bounded, SERVER-SIDE-FILTERED pagination: pulling the entire listings
-    // table (or even just "the current page") into the browser and filtering
-    // it in JS breaks down at real scale — a category/price/search filter
-    // would only ever see whatever page happened to already be fetched.
-    // currentFilters holds the active filter state; every fetch (initial,
-    // filter-change, or load-more) asks the DB for exactly the matching rows.
-    let currentFilters={cat:'All',flatSubcat:null,tbYear:null,tbSubject:null,stationaryGroup:null,q:'',minP:null,maxP:null,myCampusOnly:false,sortMode:'random'};
-
-    function buildListingsQuery(f){
-      let query=supabase.from('listings').select('*,profiles(full_name,residence,university,deliver_all_universities,deliver_all_tvet,deliver_all_private,seller_institutions,is_blocked,subscription_paid_until,is_admin)').eq('is_available',true).eq('is_draft',false);
-
-      let postFilter=null; // applied client-side, but only ever to an already DB-narrowed page — never the whole table
-
-      if(f.cat==='Textbooks'){
-        query=query.eq('category','Textbooks');
-        if(f.tbYear) query=query.eq('textbook_year',f.tbYear);
-        if(f.tbSubject) query=query.eq('textbook_subject',f.tbSubject);
-      } else if(f.cat==='Beauty' && (f.flatSubcat==="Men's Perfume" || f.flatSubcat==="Women's Perfume")){
-        query=query.in('category',['Beauty','Perfumes']);
-        postFilter=l=>(l.category==='Perfumes' && l.perfumes_subcategory===f.flatSubcat) || (l.category==='Beauty' && (l.beauty_subcategory===f.flatSubcat || l.beauty_subcategory==='Perfume'));
-      } else if(f.cat==='Beauty' && f.flatSubcat==='Perfume'){
-        query=query.in('category',['Beauty','Perfumes']);
-        postFilter=l=>l.category==='Perfumes' || (l.category==='Beauty' && (l.beauty_subcategory==='Perfume' || l.beauty_subcategory==="Men's Perfume" || l.beauty_subcategory==="Women's Perfume"));
-      } else if(f.cat==='Beauty'){
-        query=query.in('category',['Beauty','Perfumes']);
-        if(f.flatSubcat) query=query.eq('beauty_subcategory',f.flatSubcat);
-      } else if(f.cat==='Stationary'){
-        query=query.eq('category','Stationary');
-        if(f.flatSubcat){
-          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].includes(f.flatSubcat));
-          query=legacyKeys.length?query.in('stationary_subcategory',[f.flatSubcat,...legacyKeys]):query.eq('stationary_subcategory',f.flatSubcat);
-        } else if(f.stationaryGroup){
-          const items=STATIONARY_GROUPS[f.stationaryGroup]||[];
-          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].some(i=>items.includes(i)));
-          query=query.in('stationary_subcategory',[...items,...legacyKeys]);
-        }
-      } else if(FLAT_SUBCATS[f.cat]){
-        query=query.eq('category',f.cat);
-        if(f.flatSubcat) query=query.eq(FLAT_SUBCATS[f.cat].field,f.flatSubcat);
-      } else if(f.cat!=='All'){
-        query=query.eq('category',f.cat);
-      }
-
-      // Sanitize: commas/parens would break the .or() filter's own syntax
-      // (they're structural characters in PostgREST's filter string), so strip
-      // them from what the user typed rather than let a malformed filter 500.
-      const safeQ=f.q.replace(/[,()]/g,'').trim();
-      if(safeQ) query=query.or('title.ilike.%'+safeQ+'%,description.ilike.%'+safeQ+'%');
-      if(f.minP!=null && !isNaN(f.minP)) query=query.gte('effective_price',f.minP);
-      if(f.maxP!=null && !isNaN(f.maxP)) query=query.lte('effective_price',f.maxP);
-
-      if(f.sortMode==='price_asc') query=query.order('effective_price',{ascending:true});
-      else if(f.sortMode==='price_desc') query=query.order('effective_price',{ascending:false});
-      else query=query.order('renewed_at',{ascending:false,nullsFirst:false});
-
-      return {query,postFilter};
-    }
-
-    async function fetchListingsPage(){
-      const {query,postFilter}=buildListingsQuery(currentFilters);
-      const {data}=await query.range(dbOffset,dbOffset+dbPageSize-1);
-      const today=new Date().toISOString().slice(0,10);
-      let filtered=(data||[]).filter(l=>{
-        const p=l.profiles;
-        if(!p) return false;
-        if(p.is_blocked===true) return false;
-        if(p.is_admin===true) return true;
-        if(freeModeOn) return true;
-        return !!(p.subscription_paid_until && p.subscription_paid_until >= today);
-      });
-      if(postFilter) filtered=filtered.filter(postFilter);
-      if(currentFilters.myCampusOnly){
-        const saved=JSON.parse(localStorage.getItem('sm_university')||'null');
-        if(saved) filtered=filtered.filter(l=>sellerDeliversTo(l.profiles,saved));
-      }
-      // True DB-level ORDER BY random() would re-randomize on every .range()
-      // fetch and break pagination (duplicate/skipped rows across pages), so
-      // the query itself stays in stable order — shuffle each already-fetched
-      // page here instead, client-side, after it arrives.
-      if(currentFilters.sortMode==='random'){
-        for(let i=filtered.length-1;i>0;i--){
-          const j=Math.floor(Math.random()*(i+1));
-          [filtered[i],filtered[j]]=[filtered[j],filtered[i]];
-        }
-      }
-      dbHasMore=(data||[]).length===dbPageSize;
-      dbOffset+=dbPageSize;
-      return filtered;
-    }
-
-    // Favorites (needed by render(), for heart icons) and the listings page
-    // itself don't depend on each other — fetch both at once instead of
-    // one after the other.
-    const [favResult, listingsResult] = await Promise.all([
-      user ? supabase.from('favorites').select('listing_id').eq('user_id',user.id) : Promise.resolve({data:[]}),
-      fetchListingsPage()
-    ]);
-    if(favResult.error) console.error('Could not load favorites:',favResult.error.message);
-    myFavorites=new Set((favResult.data||[]).map(f=>f.listing_id));
-    all=listingsResult;
-
-    // Verified-seller badge (5+ completed sales) is only ever shown inside
-    // the listing detail modal, never in the initial grid — no reason to
-    // make the whole page wait on it. Render immediately; this fills in
-    // whenever it resolves, ready by the time anyone opens a listing.
     let verifiedSellers=new Set();
-    const sellerIds=[...new Set(all.map(l=>l.seller_id))];
-    if(sellerIds.length){
-      supabase.from('orders').select('seller_id').eq('status','completed').in('seller_id',sellerIds).then(({data:completedOrders})=>{
-        const counts={};
-        (completedOrders||[]).forEach(o=>{counts[o.seller_id]=(counts[o.seller_id]||0)+1;});
-        verifiedSellers=new Set(Object.keys(counts).filter(id=>counts[id]>=5));
-      });
+    async function markVerifiedSellers(listingsBatch){
+      const ids=[...new Set(listingsBatch.map(l=>l.seller_id))];
+      if(!ids.length) return;
+      const {data:completedOrders}=await supabase.from('orders').select('seller_id').eq('status','completed').in('seller_id',ids);
+      const counts={};
+      (completedOrders||[]).forEach(o=>{counts[o.seller_id]=(counts[o.seller_id]||0)+1;});
+      Object.keys(counts).filter(id=>counts[id]>=5).forEach(id=>verifiedSellers.add(id));
     }
 
-    render(all);
-    renderRecentlyViewed();
+    all = await listingsPromise;
+    // push out-of-stock items to the end so they don't crowd out available ones
+    all.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+    // Restore any saved cart now that `all` is actually populated — loadCart()
+    // matches saved items against `all`, so calling it any earlier (it used to
+    // run while the user's profile/favorites were being fetched, well before
+    // this line) meant every restore silently failed and the cart looked
+    // empty even though it was still sitting in localStorage.
+    if(user) loadCart();
+    await markVerifiedSellers(all);
+
+    // Apply whichever sort is selected (defaults to Random) right away, so the
+    // page never shows one order and then reshuffles on the first interaction.
+    doFilter();
     const pendingOpenId=new URLSearchParams(location.search).get('open');
     const pendingCat=new URLSearchParams(location.search).get('cat');
 
@@ -932,7 +886,6 @@
         g.innerHTML='<div class="loading-msg" style="text-align:center">'+
           '<p>No listings match your filters 🤔</p>'+
           '<button class="btn-primary" style="margin-top:10px;padding:10px 24px;border-radius:50px" onclick="resetFilters()">Reset filters</button>'+
-          (currentUser?'<div style="margin-top:10px"><button class="btn-sm btn-toggle" onclick="createSearchAlert()">🔔 Notify me when something matches</button></div>':'')+
           '</div>';
         return;
       }
@@ -942,7 +895,7 @@
         const e=CAT_EMOJI[l.category]||'🛍️';
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         const db=l.discount_percent>0?'<div class="discount-tag">-'+l.discount_percent+'% OFF</div>':'';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
         const photoCount=[l.image_url,l.image_url_2,l.image_url_3,l.image_url_4,l.image_url_5,l.image_url_6].filter(Boolean).length;
         const photoDots=photoCount>1?'<div class="photo-dots">'+Array(photoCount).fill('•').join('')+'</div>':'';
         const stock=l.quantity>5?'<div class="card-stock">'+l.quantity+' in stock</div>':l.quantity>0?'<div class="card-stock low">Only '+l.quantity+' left!</div>':'<div class="card-stock out">Out of stock</div>';
@@ -951,62 +904,102 @@
         const heart=currentUser?'<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Favorite">'+(isFav?'❤️':'🤍')+'</button>':'';
         const condTag=l.condition?'<span class="condition-tag">'+escapeHtml(l.condition)+'</span>':'';
         const negTag=l.is_negotiable?'<span class="negotiable-tag">💬 Negotiable</span>':'';
+        const verifiedTag=verifiedSellers.has(l.seller_id)?'<span class="verified-badge">✅ Verified</span>':'';
         return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
           '<div class="card-img" style="background:'+c.bg+'">'+db+heart+img+photoDots+'</div>'+
           '<div class="card-body">'+
           '<div class="card-title">'+escapeHtml(l.title)+'</div>'+
+          (verifiedTag?'<div class="card-seller">'+verifiedTag+'</div>':'')+
           (negTag?'<div>'+negTag+'</div>':'')+
           stock+
           '<div class="card-footer"><span class="price">R'+fp+'</span>'+
           '<button class="btn-add-cart" '+(outOfStock?'disabled':'')+' onclick="event.stopPropagation();window._quickAdd(\''+l.id+'\')">'+(outOfStock?'Out of stock':'+ Cart')+'</button>'+
           '</div></div></div>';
       }).join('');
-      // Endless scroll: the sentinel below the grid stays put; the
-      // IntersectionObserver set up further down watches it and calls
-      // loadMoreListings() itself once it scrolls into view, so there's
-      // nothing to render here when there's more to show.
-    }
-    let scrollLoading=false;
-    window.loadMoreListings=async()=>{
-      if(scrollLoading)return;
-      const hasMoreToShow=lastFilteredList.length>renderLimit || (dbHasMore && !dbLoading);
-      if(!hasMoreToShow)return;
-      scrollLoading=true;
-      const spinner=document.getElementById('infinite-scroll-spinner');
-      if(spinner)spinner.style.display='block';
-      renderLimit+=24;
-      // If we're about to run out of already-fetched rows but the DB has more
-      // (beyond this page's 300), pull the next page in before re-rendering.
-      // `all` is already DB-filtered/sorted to match currentFilters, so no
-      // re-filtering needed here — just append and render.
-      if(!dbLoading && dbHasMore && renderLimit>=all.length-24){
-        dbLoading=true;
-        const nextPage=await fetchListingsPage();
-        all=all.concat(nextPage);
-        dbLoading=false;
-        render(all);
+      if(list.length>renderLimit){
+        ensureInfiniteScrollSentinel();
       } else {
-        render(lastFilteredList);
+        document.getElementById('infinite-scroll-sentinel')?.remove();
+        infiniteScrollObserver?.disconnect();
+        infiniteScrollObserver=null;
       }
-      if(spinner)spinner.style.display='none';
-      scrollLoading=false;
-    };
-    // Endless scroll: watch a 1px sentinel just below the grid and load the
-    // next batch as soon as it's about to enter the viewport, instead of
-    // making the person tap a "Load more" button.
-    const scrollSentinel=document.getElementById('infinite-scroll-sentinel');
-    if(scrollSentinel && 'IntersectionObserver' in window){
-      new IntersectionObserver((entries)=>{
-        if(entries.some(e=>e.isIntersecting)) window.loadMoreListings();
-      },{rootMargin:'600px 0px'}).observe(scrollSentinel);
     }
+    function ensureInfiniteScrollSentinel(){
+      const g=document.getElementById('listings-grid');
+      if(document.getElementById('infinite-scroll-sentinel')) return;
+      const sentinel=document.createElement('div');
+      sentinel.id='infinite-scroll-sentinel';
+      sentinel.style.height='1px';
+      g.insertAdjacentElement('afterend', sentinel);
+      infiniteScrollObserver=new IntersectionObserver((entries)=>{
+        if(entries[0].isIntersecting) window.loadMoreListings();
+      },{rootMargin:'800px'});
+      infiniteScrollObserver.observe(sentinel);
+    }
+    window.loadMoreListings=async ()=>{
+      if(loadingMore) return;
+      if(renderLimit>=lastFilteredList.length && !serverHasMore) return;
+      loadingMore=true;
+      renderLimit+=24;
+      // Running low on the locally-filtered buffer and the server has more
+      // rows beyond what we've fetched so far — pull the next page before
+      // the person actually hits the end, so filters/search still work
+      // beyond the first batch without ever loading the whole table.
+      if (renderLimit >= lastFilteredList.length - 12 && serverHasMore) {
+        const g=document.getElementById('listings-grid');
+        g.insertAdjacentHTML('afterend','<p id="load-more-spinner" class="loading-msg" style="text-align:center;margin-top:10px">Loading more... ⏳</p>');
+        const nextBatch = await fetchListingsPage(serverOffset);
+        document.getElementById('load-more-spinner')?.remove();
+        all = all.concat(nextBatch);
+        await markVerifiedSellers(nextBatch);
+        doFilter(false);
+        loadingMore=false;
+        return;
+      }
+      render(lastFilteredList);
+      loadingMore=false;
+    };
     window.resetFilters=()=>{
       document.getElementById('search-input').value='';
       document.getElementById('price-min').value='';
       document.getElementById('price-max').value='';
       document.getElementById('sort-select').value='random';
-      document.getElementById('my-campus-only').checked=false;
+      document.getElementById('my-area-only').checked=false;
       selectCat('All',document.querySelector('.cat'));
+    };
+    window.checkRestockAlertState=async(listingId)=>{
+      const btn=document.getElementById('btn-restock-alert');
+      if(!currentUser){ btn.textContent='🔔 Sign in to get notified'; return; }
+      const {data}=await supabase.from('restock_alerts').select('id').eq('user_id',currentUser.id).eq('listing_id',listingId).maybeSingle();
+      btn.textContent = data ? '🔔 We\'ll notify you — tap to cancel' : '🔔 Notify me when back in stock';
+      btn.dataset.subscribed = data ? '1' : '0';
+    };
+    window.requestRestockAlert=async()=>{
+      if(!currentListing)return;
+      if(!currentUser){ showToast('Sign in to get notified 🔔'); window.location.href='login.html'; return; }
+      const btn=document.getElementById('btn-restock-alert');
+      if(btn.dataset.subscribed==='1'){
+        await supabase.from('restock_alerts').delete().eq('user_id',currentUser.id).eq('listing_id',currentListing.id);
+        showToast('Alert cancelled');
+      } else {
+        const {error}=await supabase.from('restock_alerts').insert({user_id:currentUser.id, listing_id:currentListing.id});
+        if(error && !error.message.includes('duplicate')){ showToast('Could not save alert: '+error.message); return; }
+        showToast('🔔 We\'ll message you the moment it\'s back in stock!');
+      }
+      checkRestockAlertState(currentListing.id);
+    };
+    window.saveSearchAlert=async()=>{
+      if(!currentUser){ showToast('Sign in to save a price/search alert 🔔'); window.location.href='login.html'; return; }
+      const keyword=(document.getElementById('search-input').value||'').trim();
+      const maxPrice=parseFloat(document.getElementById('price-max').value)||null;
+      const areaOnly=document.getElementById('my-area-only').checked;
+      if(!keyword && cat==='All' && !maxPrice){ showToast('Type a keyword, pick a category, or set a max price first'); return; }
+      const {error}=await supabase.from('saved_searches').insert({
+        user_id:currentUser.id, keyword:keyword||null, category:cat==='All'?null:cat,
+        max_price:maxPrice, area_only:areaOnly
+      });
+      if(error){ showToast('Could not save alert: '+error.message); return; }
+      showToast('🔔 Alert saved! We will notify you when a matching item is posted.');
     };
     window.toggleFilterPanel=()=>{
       document.getElementById('filter-toolbar').classList.toggle('open');
@@ -1017,21 +1010,6 @@
       document.getElementById('filter-toolbar').classList.remove('open');
       document.getElementById('filter-toggle-btn').classList.remove('open');
       document.getElementById('listings-grid').scrollIntoView({block:'start'});
-    };
-    window.createSearchAlert=async()=>{
-      if(!currentUser){ showToast('Sign in to set up alerts','error'); return; }
-      const q=(document.getElementById('search-input').value||'').trim();
-      const maxP=document.getElementById('price-max').value;
-      const catVal=(cat && cat!=='All')?cat:null;
-      if(!q && !catVal && !maxP){ showToast('Search for something or set a filter first','error'); return; }
-      const {error}=await supabase.from('search_alerts').insert({
-        user_id:currentUser.id,
-        query:q||null,
-        category:catVal,
-        max_price:maxP?parseFloat(maxP):null
-      });
-      if(error){ showToast('❌ '+error.message,'error'); return; }
-      showToast('🔔 We\'ll notify you when something matches!','success');
     };
     window._toggleFav=async(id)=>{
       if(!currentUser){location.href='login.html';return;}
@@ -1058,7 +1036,7 @@
       document.getElementById('recently-viewed-grid').innerHTML=items.map(l=>{
         const c=CAT_COLOR[l.category]||{bg:'#f5f5f5'};
         const e=CAT_EMOJI[l.category]||'🛍️';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title||'Listing')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:36px">${e}</span>`;
         return '<div class="card" onclick="window._open(\''+l.id+'\')">'+
           '<div class="card-img" style="background:'+c.bg+'">'+img+'</div>'+
           '<div class="card-body"><div class="card-title">'+escapeHtml(l.title)+'</div>'+
@@ -1081,7 +1059,7 @@
       await loadNotifications();
       const notifs=window._notifs||[];
       dd.innerHTML=notifs.length
-        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+escapeHtml(n.message)+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
+        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+n.message+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
         : '<div class="notif-empty">No notifications yet 🔔</div>';
       dd.style.display='block';
     };
@@ -1099,7 +1077,7 @@
     window.shareListing=async()=>{
       if(!currentListing)return;
       const url=location.origin+location.pathname.replace(/[^/]*$/,'')+'index.html?open='+currentListing.id;
-      const shareData={title:currentListing.title,text:'Check this out on Student Marketplace: '+currentListing.title,url};
+      const shareData={title:currentListing.title,text:'Check this out on Marketrade: '+currentListing.title,url};
       if(navigator.share){
         try{ await navigator.share(shareData); }catch(e){/* user cancelled, ignore */}
       } else {
@@ -1130,7 +1108,7 @@
       const slides=document.getElementById('gallery-slides');
       const dots=document.getElementById('gallery-dots');
       if(imgs.length){
-        slides.innerHTML=imgs.map((u,i)=>'<div class="gallery-slide"><img loading="lazy" src="'+u+'" alt="" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox('+i+')" /></div>').join('');
+        slides.innerHTML=imgs.map((u,i)=>'<div class="gallery-slide"><img loading="lazy" src="'+u+'" alt="'+escapeHtml(l.title||'Listing')+' — photo '+(i+1)+'" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox('+i+')" /></div>').join('');
         dots.innerHTML=imgs.map((_,i)=>'<div class="gallery-dot'+(i===0?' active':'')+'" onclick="goSlide('+i+')"></div>').join('');
         document.getElementById('gallery-prev').style.display=imgs.length>1?'flex':'none';
         document.getElementById('gallery-next').style.display=imgs.length>1?'flex':'none';
@@ -1140,22 +1118,41 @@
         document.getElementById('gallery-prev').style.display='none';
         document.getElementById('gallery-next').style.display='none';
       }
-      slides.style.transition='transform 0.3s ease';
       slides.style.transform='translateX(0)';
       document.getElementById('modal-badge').innerHTML='<span class="badge" style="background:'+c.bg+';color:'+c.text+'">'+l.category+'</span>';
       document.getElementById('modal-title').textContent=l.title;
-      document.getElementById('modal-price').innerHTML=l.discount_percent>0?'<span style="text-decoration:line-through;color:#aaa;font-size:14px">R'+l.price+'</span> <span style="color:#7c3aed;font-weight:900;font-size:20px">R'+fp+'</span>':'<span style="font-size:22px;font-weight:900">R'+fp+'</span>';
+      document.getElementById('modal-price').innerHTML=l.discount_percent>0?'<span style="text-decoration:line-through;color:#aaa;font-size:14px">R'+l.price+'</span> <span style="color:#2563eb;font-weight:900;font-size:20px">R'+fp+'</span>':'<span style="font-size:22px;font-weight:900">R'+fp+'</span>';
       document.getElementById('modal-desc').textContent=l.description||'No description.';
       const flatConf2=FLAT_SUBCATS[l.category];
       const flatVal2=flatConf2?l[flatConf2.field]:null;
-      const deliveryTxt = describeDeliveryScope(l.profiles);
       const extraTags = (l.condition?'<div><strong>🏷️ Condition:</strong> '+escapeHtml(l.condition)+'</div>':'')+(l.is_negotiable?'<div><strong>💬 Price is negotiable</strong></div>':'')+(l.delivery_fee>0?'<div><strong>🚚 Delivery fee:</strong> R'+l.delivery_fee+'</div>':'');
-      document.getElementById('modal-seller-info').innerHTML='<div><strong>👤 Seller:</strong> '+escapeHtml(l.profiles?.full_name||'Unknown')+(verifiedSellers.has(l.seller_id)?' <span class="verified-badge">✅ Verified</span>':'')+'</div>'+(l.profiles?.residence?'<div><strong>📍 Residence:</strong> '+escapeHtml(l.profiles.residence)+'</div>':'')+((l.category==='Textbooks'&&l.textbook_year)?'<div><strong>🎓 Year:</strong> '+escapeHtml(l.textbook_year)+'</div>'+(l.textbook_subject?'<div><strong>📖 Subject:</strong> '+escapeHtml(l.textbook_subject)+'</div>':''):'')+(flatVal2?'<div><strong>'+flatConf2.emoji+' Type:</strong> '+escapeHtml(flatVal2)+'</div>':'')+extraTags+(deliveryTxt?'<div><strong>🚚 Delivers to:</strong> '+escapeHtml(deliveryTxt)+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="store.html?seller='+l.seller_id+'" style="font-weight:800;color:#7c3aed;text-decoration:none">🏪 Visit store</a><a href="listing-reviews.html?listing='+l.id+'" style="font-weight:800;color:#7c3aed;text-decoration:none">⭐ Reviews</a><a href="messages.html?seller='+l.seller_id+'&listing='+l.id+'" style="font-weight:800;color:#7c3aed;text-decoration:none">💬 Message seller</a><a href="#" onclick="event.preventDefault();shareListing()" style="font-weight:800;color:#7c3aed;text-decoration:none">🔗 Share</a></div>';
+      const vehTags = (l.category==='Vehicles') ? (
+        (l.vehicle_location?'<div><strong>📍 Location:</strong> '+escapeHtml(l.vehicle_location)+'</div>':'')+
+        (l.vehicle_year?'<div><strong>📅 Year:</strong> '+escapeHtml(String(l.vehicle_year))+'</div>':'')+
+        (l.vehicle_transmission?'<div><strong>⚙️ Transmission:</strong> '+escapeHtml(l.vehicle_transmission)+'</div>':'')+
+        (l.vehicle_for_sale_by?'<div><strong>🏷️ For Sale By:</strong> '+escapeHtml(l.vehicle_for_sale_by)+'</div>':'')+
+        (l.vehicle_fuel_type?'<div><strong>⛽ Fuel Type:</strong> '+escapeHtml(l.vehicle_fuel_type)+'</div>':'')+
+        (l.vehicle_make?'<div><strong>🚗 Make:</strong> '+escapeHtml(l.vehicle_make)+'</div>':'')+
+        (l.vehicle_model?'<div><strong>🚘 Model:</strong> '+escapeHtml(l.vehicle_model)+'</div>':'')+
+        (l.vehicle_colour?'<div><strong>🎨 Colour:</strong> '+escapeHtml(l.vehicle_colour)+'</div>':'')+
+        (l.vehicle_kilometers?'<div><strong>🛣️ Kilometers:</strong> '+Number(l.vehicle_kilometers).toLocaleString()+'km</div>':'')
+      ) : '';
+      document.getElementById('modal-seller-info').innerHTML='<div><strong>👤 Seller:</strong> '+escapeHtml(l.profiles?.full_name||'Unknown')+'</div>'+(l.profiles?.residence?'<div><strong>📍 Residence:</strong> '+escapeHtml(l.profiles.residence)+'</div>':'')+((l.category==='Textbooks'&&l.textbook_year)?'<div><strong>🎓 Year:</strong> '+escapeHtml(l.textbook_year)+'</div>'+(l.textbook_subject?'<div><strong>📖 Subject:</strong> '+escapeHtml(l.textbook_subject)+'</div>':''):'')+(flatVal2?'<div><strong>'+flatConf2.emoji+' Type:</strong> '+escapeHtml(flatVal2)+'</div>':'')+vehTags+extraTags+'<div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="store.html?seller='+l.seller_id+'" style="font-weight:800;color:#2563eb;text-decoration:none">🏪 Visit store</a><a href="listing-reviews.html?listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">⭐ Reviews</a><a href="messages.html?seller='+l.seller_id+'&listing='+l.id+'" style="font-weight:800;color:#2563eb;text-decoration:none">💬 Message seller</a><a href="#" onclick="event.preventDefault();shareListing()" style="font-weight:800;color:#2563eb;text-decoration:none">🔗 Share</a></div>';
       document.getElementById('modal-qty').textContent=1;
       document.getElementById('modal-stock-note').textContent=l.quantity>0?l.quantity+' available':'Out of stock';
       document.getElementById('btn-add-to-cart').disabled=l.quantity<=0;
       document.getElementById('btn-order-now').disabled=l.quantity<=0;
-      setupRestockAlertButton(l);
+      const restockBtn=document.getElementById('btn-restock-alert');
+      if(l.quantity<=0){
+        document.getElementById('btn-add-to-cart').style.display='none';
+        document.getElementById('btn-order-now').style.display='none';
+        restockBtn.style.display='block';
+        checkRestockAlertState(l.id);
+      } else {
+        document.getElementById('btn-add-to-cart').style.display='block';
+        document.getElementById('btn-order-now').style.display='block';
+        restockBtn.style.display='none';
+      }
       // Show sign in notice if not logged in
       const signInNote = document.getElementById('modal-signin-note');
       if(!currentUser){
@@ -1182,7 +1179,7 @@
         document.getElementById('modal-similar-grid').innerHTML=similar.map(s=>{
           const sc=CAT_COLOR[s.category]||{bg:'#f5f5f5'};
           const se=CAT_EMOJI[s.category]||'🛍️';
-          const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+s.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
+          const simg=s.image_url?'<img loading="lazy" src="'+s.image_url+'" alt="'+escapeHtml(s.title||'Listing')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:28px">${se}</span>`;
           return '<div class="card" onclick="window._open(\''+s.id+'\')" style="cursor:pointer">'+
             '<div class="card-img" style="background:'+sc.bg+'">'+simg+'</div>'+
             '<div class="card-body" style="padding:8px"><div class="card-title" style="font-size:12px">'+escapeHtml(s.title)+'</div>'+
@@ -1202,7 +1199,7 @@
     window.closeReportModal=()=>{document.getElementById('report-modal-overlay').style.display='none';};
     window.submitReport=async()=>{
       const err=document.getElementById('report-error');
-      err.style.color='#9333ea';err.textContent='';
+      err.style.color='#1d4ed8';err.textContent='';
       if(!currentListing){err.textContent='❌ No listing selected';return;}
       const {error}=await supabase.from('reports').insert({
         reporter_id:currentUser.id,
@@ -1226,59 +1223,6 @@
     };
     window.goSlide=(i)=>{galleryIdx=i;document.getElementById('gallery-slides').style.transform='translateX(-'+i*100+'%)';document.querySelectorAll('.gallery-dot').forEach((d,j)=>d.classList.toggle('active',j===i));};
 
-    // Swipe-to-change-photo on the listing gallery (touch drag with smooth snap)
-    (function initGallerySwipe(){
-      const gallery=document.getElementById('modal-gallery');
-      const slides=document.getElementById('gallery-slides');
-      if(!gallery||!slides)return;
-      let startX=0, startY=0, dragging=false, dragDelta=0, horizontal=false, directionLocked=false;
-      const imgCount=()=>[currentListing?.image_url,currentListing?.image_url_2,currentListing?.image_url_3,currentListing?.image_url_4,currentListing?.image_url_5,currentListing?.image_url_6].filter(Boolean).length;
-      gallery.addEventListener('touchstart',(e)=>{
-        if(imgCount()<=1)return;
-        const t=e.touches[0];
-        startX=t.clientX; startY=t.clientY; dragging=true; horizontal=false; directionLocked=false; dragDelta=0;
-        slides.style.transition='none';
-      },{passive:true});
-      gallery.addEventListener('touchmove',(e)=>{
-        if(!dragging)return;
-        const t=e.touches[0];
-        const dx=t.clientX-startX, dy=t.clientY-startY;
-        // Decide once, on the first move past the threshold, whether this is
-        // a horizontal swipe or a vertical scroll — and stick with it. Re-
-        // checking on every move (the old behaviour) let a bit of vertical
-        // wobble mid-swipe flip `horizontal` back to false, which froze the
-        // drag in place while the finger kept moving. That's the "janky"
-        // swipe: lock the direction instead so the photo tracks the finger
-        // smoothly for the whole gesture.
-        if(!directionLocked){
-          if(Math.abs(dx)<6 && Math.abs(dy)<6) return;
-          horizontal = Math.abs(dx)>Math.abs(dy);
-          directionLocked=true;
-          if(!horizontal){ dragging=false; return; }
-        }
-        e.preventDefault();
-        dragDelta=dx;
-        slides.style.transform='translateX(calc(-'+(galleryIdx*100)+'% + '+dragDelta+'px))';
-      },{passive:false});
-      gallery.addEventListener('touchend',()=>{
-        if(!dragging){ horizontal=false; directionLocked=false; return; }
-        dragging=false;
-        slides.style.transition='transform 0.3s ease';
-        const threshold=gallery.clientWidth*0.18;
-        if(horizontal && Math.abs(dragDelta)>threshold){
-          slideGallery(dragDelta<0?1:-1);
-        } else {
-          slides.style.transform='translateX(-'+(galleryIdx*100)+'%)';
-        }
-        horizontal=false; directionLocked=false; dragDelta=0;
-      });
-      gallery.addEventListener('touchcancel',()=>{
-        dragging=false; horizontal=false; directionLocked=false; dragDelta=0;
-        slides.style.transition='transform 0.3s ease';
-        slides.style.transform='translateX(-'+(galleryIdx*100)+'%)';
-      });
-    })();
-
     window.changeQty=(dir)=>{
       if(!currentListing)return;
       const max=currentListing.quantity||1;
@@ -1292,33 +1236,11 @@
       addToCart(l,1);
     };
 
-    async function setupRestockAlertButton(l){
-      const btn=document.getElementById('btn-restock-alert');
-      if(l.quantity>0){ btn.style.display='none'; return; }
-      if(!currentUser){ btn.style.display='none'; return; }
-      btn.style.display='block';
-      const {data:existing}=await supabase.from('restock_alerts').select('id').eq('user_id',currentUser.id).eq('listing_id',l.id).maybeSingle();
-      if(existing){
-        btn.textContent='✅ We\'ll notify you';
-        btn.disabled=true;
-      } else {
-        btn.textContent='🔔 Notify me when back in stock';
-        btn.disabled=false;
-        btn.onclick=async()=>{
-          btn.disabled=true;
-          const {error}=await supabase.from('restock_alerts').insert({user_id:currentUser.id,listing_id:l.id});
-          if(error && error.code!=='23505'){ btn.disabled=false; alert('Could not set up alert. Please try again.'); return; }
-          btn.textContent='✅ We\'ll notify you';
-        };
-      }
-    }
-
     document.getElementById('btn-add-to-cart').onclick=()=>{
       if(!currentUser){window.location.href='login.html';return;}
       if(!currentListing)return;
       addToCart(currentListing,modalQty);
-      // Stay on the listing — addToCart() already shows a confirmation toast,
-      // no need to jump the user into the cart view.
+      closeModal();
     };
 
     document.getElementById('btn-order-now').onclick=async()=>{
@@ -1364,21 +1286,11 @@
     async function loadCart(){
       const saved=localStorage.getItem('cv_cart');
       if(!saved)return;
-      let items;
-      try { items = JSON.parse(saved); } catch(_) { return; }
-      if(!Array.isArray(items) || !items.length) return;
-      // Fetch these listings directly by id instead of relying on `all` (the
-      // currently-loaded/filtered browse page) — `all` may not contain a cart
-      // item yet (or ever, if it's outside the current filter/page), which was
-      // silently dropping saved cart items on every refresh.
-      const {data:rows} = await supabase.from('listings').select('*').in('id', items.map(i=>i.id));
-      const byId = new Map((rows||[]).map(r=>[r.id,r]));
-      cart.length = 0;
+      const items=JSON.parse(saved);
       for(const item of items){
-        const l = byId.get(item.id);
-        if(l) cart.push({listing:l, qty:item.qty});
+        const l=all.find(x=>x.id===item.id);
+        if(l)cart.push({listing:l,qty:item.qty});
       }
-      saveCart(); // drops any items that no longer exist, so the badge count stays accurate
       updateCartUI();
     }
 
@@ -1395,12 +1307,12 @@
       body.innerHTML=cart.map((c,i)=>{
         const fp=c.listing.discount_percent>0?Math.round(c.listing.price*(1-c.listing.discount_percent/100)):c.listing.price;
         totalPrice+=fp*c.qty;
-        const img=c.listing.image_url?'<img loading="lazy" src="'+c.listing.image_url+'" alt="'+c.listing.title.replace(/"/g,'')+'">':(CAT_EMOJI[c.listing.category]||'📦');
+        const img=c.listing.image_url?'<img loading="lazy" src="'+c.listing.image_url+'" alt="'+escapeHtml(c.listing.title||'Listing')+'"/>':(CAT_EMOJI[c.listing.category]||'📦');
         return '<div class="cart-item">'+
           '<div class="cart-item-img">'+img+'</div>'+
           '<div class="cart-item-info">'+
-          '<div class="cart-item-title">'+c.listing.title+'</div>'+
-          '<div class="cart-item-seller">by '+(c.listing.profiles?.full_name||'Seller')+'</div>'+
+          '<div class="cart-item-title">'+escapeHtml(c.listing.title)+'</div>'+
+          '<div class="cart-item-seller">by '+escapeHtml(c.listing.profiles?.full_name||'Seller')+'</div>'+
           '<div class="cart-item-price">R'+fp+' × '+c.qty+' = R'+(fp*c.qty)+'</div>'+
           '<div class="qty-ctrl-cart" style="margin-top:6px">'+
           '<button class="qty-btn-sm" onclick="window._cartQty('+i+',-1)">−</button>'+
@@ -1452,142 +1364,65 @@
       const raw=error?.message||'Unknown error';
       // A missing RPC (schema/migration not applied yet) surfaces as a "not found" style error from PostgREST
       if(/function .*place_order.*does not exist|could not find the function|schema cache/i.test(raw)){
-        return 'Ordering isn\'t set up yet on this store (missing database function). Please contact the site owner. (Run escrow_system_migration.sql.)';
+        return 'Ordering isn\'t set up yet on this store (missing database function). Please contact the site owner.';
       }
       return raw;
     }
-
-    // ---------------------------------------------------------------
-    // Paid checkout (TradeSafe escrow + optional Pargo delivery)
-    //
-    // Cart items are checked out ONE AT A TIME: each becomes its own
-    // order + its own TradeSafe transaction, and paying for one means a
-    // full page redirect to TradeSafe's hosted checkout. The remaining
-    // queue is kept in sessionStorage so payment-return.html can pick up
-    // where we left off after each redirect. (Combining several items
-    // from the same seller into a single TradeSafe transaction — so one
-    // redirect pays for all of them — is a nice follow-up but adds real
-    // complexity; this keeps each payment's money/status unambiguous.)
-    // ---------------------------------------------------------------
-    let cfPendingItems=[]; // [{listingId, title, qty}]
-    let cfPargoSelection=null; // {id, name}
 
     window.checkout=async()=>{
       if(!currentUser){window.location.href='login.html';return;}
       if(!cart.length)return;
       const info=await getBuyerContactInfo();
       if(!info)return;
-      cfPendingItems=cart.map(c=>({listingId:c.listing.id, title:c.listing.title, qty:c.qty}));
-      openCheckoutFlow();
+      const btn=document.querySelector('.btn-checkout');
+      const origTxt=btn?btn.textContent:'';
+      if(btn){btn.disabled=true;btn.textContent='Placing order...';}
+      let sellers={};
+      try{
+        for(const c of cart){
+          const l=c.listing;
+          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:c.qty});
+          if(error){showToast('❌ Order failed: '+orderErrorMessage(error),'error');return;}
+          const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+          const sid=data.seller_id;
+          if(!sellers[sid])sellers[sid]={name:data.seller_name||'Seller',wa:data.seller_whatsapp||'N/A',res:data.seller_residence||'',items:[]};
+          sellers[sid].items.push((data.listing_title||l.title)+' ×'+c.qty+' (R'+(fp*c.qty)+')');
+          l.quantity=Math.max(0,(l.quantity||0)-c.qty);
+        }
+        cart=[];saveCart();updateCartUI();closeCart();
+        showToast('✅ Order placed! Contact details below.','success');
+        showSellerContacts(sellers);
+        doFilter();
+      } catch(e){
+        showToast('❌ Order failed: '+(e?.message||'Unknown error'),'error');
+      } finally {
+        if(btn){btn.disabled=false;btn.textContent=origTxt;}
+      }
     };
 
-    async function placeOrder(items){ // "Buy Now" from a single listing
+    async function placeOrder(items){
       if(!currentUser){window.location.href='login.html';return;}
       const info=await getBuyerContactInfo();
       if(!info)return;
-      cfPendingItems=items.map(({listing:l,qty})=>({listingId:l.id, title:l.title, qty}));
-      closeModal();
-      openCheckoutFlow();
-    }
-
-    function openCheckoutFlow(){
-      cfPargoSelection=null;
-      document.getElementById('cf-pargo-picker').style.display='none';
-      document.getElementById('cf-pargo-selected').style.display='none';
-      document.getElementById('cf-pargo-results').innerHTML='';
-      document.getElementById('cf-pargo-search').value='';
-      document.getElementById('cf-error').style.display='none';
-      document.querySelector('input[name="cf-method"][value="pickup"]').checked=true;
-      document.getElementById('checkout-flow-overlay').style.display='flex';
-    }
-    window.cfSetMethod=(m)=>{
-      document.getElementById('cf-pargo-picker').style.display=m==='pargo'?'block':'none';
-    };
-    let cfSearchDebounce=null;
-    window.cfSearchPargoPoints=(q)=>{
-      clearTimeout(cfSearchDebounce);
-      const box=document.getElementById('cf-pargo-results');
-      if(!q||q.trim().length<2){box.innerHTML='';return;}
-      cfSearchDebounce=setTimeout(async()=>{
-        box.innerHTML='<div style="font-size:12px;color:#aaa;padding:6px">Searching…</div>';
-        try{
-          const {data:{session}}=await supabase.auth.getSession();
-          const res=await fetch('https://kqsqtasykdtpdrkqyaxp.supabase.co/functions/v1/pargo-shipment/points?q='+encodeURIComponent(q),{
-            headers:{Authorization:'Bearer '+(session?.access_token||'')}
-          });
-          const data=await res.json();
-          const points=data?.points||[];
-          if(!points.length){
-            box.innerHTML='<div style="font-size:12px;color:#aaa;padding:6px">No pickup points found yet — Pargo delivery isn\'t fully connected on this store. Choose in-person handover instead, or try a different search.</div>';
-            return;
-          }
-          box.innerHTML=points.map(p=>'<div onclick=\'cfSelectPargoPoint('+JSON.stringify(JSON.stringify(p))+')\' style="padding:8px 10px;border:1px solid #eee;border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:12.5px;font-weight:700">📍 '+escapeHtml(p.name||p.id)+'<div style="font-size:11px;color:#888;font-weight:600">'+escapeHtml(p.address||'')+'</div></div>').join('');
-        }catch(e){
-          box.innerHTML='<div style="font-size:12px;color:#aaa;padding:6px">Pargo search isn\'t available right now — choose in-person handover instead.</div>';
-        }
-      },350);
-    };
-    window.cfSelectPargoPoint=(pJson)=>{
-      const p=JSON.parse(pJson);
-      cfPargoSelection={id:p.id, name:p.name||p.id};
-      document.getElementById('cf-pargo-results').innerHTML='';
-      document.getElementById('cf-pargo-search').value='';
-      const sel=document.getElementById('cf-pargo-selected');
-      sel.style.display='block';
-      sel.textContent='✓ Selected: '+cfPargoSelection.name;
-    };
-
-    window.cfConfirmAndPay=async()=>{
-      const method=document.querySelector('input[name="cf-method"]:checked').value;
-      const errEl=document.getElementById('cf-error');
-      errEl.style.display='none';
-      if(method==='pargo' && !cfPargoSelection){
-        errEl.textContent='Pick a Pargo point first, or switch to in-person handover.';
-        errEl.style.display='block';
-        return;
-      }
-      const btn=document.getElementById('cf-pay-btn');
-      btn.disabled=true; btn.textContent='Setting up payment…';
+      let sellers={};
       try{
-        sessionStorage.setItem('smp_checkout_queue', JSON.stringify({
-          items: cfPendingItems,
-          idx: 0,
-          delivery_method: method,
-          pargo_point_id: cfPargoSelection?.id||null,
-          pargo_point_name: cfPargoSelection?.name||null,
-        }));
-        if(method==='pickup'){ cart=[]; saveCart(); updateCartUI(); closeCart(); }
-        await processNextCheckoutItem();
-      }catch(e){
-        errEl.textContent=orderErrorMessage(e);
-        errEl.style.display='block';
-        btn.disabled=false; btn.textContent='Pay with card / Ozow / SnapScan / RCS →';
+        for(const {listing:l,qty} of items){
+          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:qty});
+          if(error){showToast('❌ Order failed: '+orderErrorMessage(error),'error');return;}
+          const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+          const sid=data.seller_id;
+          if(!sellers[sid])sellers[sid]={name:data.seller_name||'Seller',wa:data.seller_whatsapp||'N/A',res:data.seller_residence||'',items:[]};
+          sellers[sid].items.push((data.listing_title||l.title)+' ×'+qty+' (R'+(fp*qty)+')');
+          l.quantity=Math.max(0,(l.quantity||0)-qty);
+        }
+        closeModal();
+        showToast('✅ Order placed! Contact details below.','success');
+        showSellerContacts(sellers);
+        doFilter();
+      } catch(e){
+        showToast('❌ Order failed: '+(e?.message||'Unknown error'),'error');
       }
-    };
-
-    // Also called from payment-return.html to advance to the next item
-    // in the queue after a successful payment — kept as a global so that
-    // page's own small script can call it after loading this same logic.
-    window.processNextCheckoutItem=async function(){
-      const raw=sessionStorage.getItem('smp_checkout_queue');
-      if(!raw)return {done:true};
-      const q=JSON.parse(raw);
-      if(q.idx>=q.items.length){
-        sessionStorage.removeItem('smp_checkout_queue');
-        return {done:true};
-      }
-      const item=q.items[q.idx];
-      const {data,error}=await supabase.rpc('place_order_paid',{
-        p_listing_id:item.listingId, p_quantity:item.qty,
-        p_delivery_method:q.delivery_method,
-        p_pargo_point_id:q.pargo_point_id, p_pargo_point_name:q.pargo_point_name
-      });
-      if(error) throw new Error(orderErrorMessage(error));
-      const {data:fnData, error:fnError}=await supabase.functions.invoke('tradesafe-checkout',{body:{order_id:data.order_id}});
-      if(fnError || !fnData?.checkout_url) throw new Error(fnData?.error||fnError?.message||'Could not start payment');
-      window.location.href=fnData.checkout_url; // full redirect to TradeSafe's hosted checkout
-      return {done:false, redirected:true};
-    };
+    }
 
     window.closeModal=()=>{document.getElementById('modal-overlay').style.display='none';document.body.style.overflow='';};
     window.selectCat=(c,el)=>{
@@ -1597,23 +1432,72 @@
       el.classList.add('active');
       doFilter();
     };
-    window.doFilter=async()=>{
-      renderLimit=24;
-      dbOffset=0;
-      dbHasMore=true;
-      currentFilters={
-        cat, flatSubcat, tbYear, tbSubject, stationaryGroup,
-        q:(document.getElementById('search-input').value||'').trim(),
-        minP:parseFloat(document.getElementById('price-min').value),
-        maxP:parseFloat(document.getElementById('price-max').value),
-        myCampusOnly:document.getElementById('my-campus-only').checked,
-        sortMode:document.getElementById('sort-select').value,
-      };
-      all=await fetchListingsPage();
-      render(all);
+    function doFilter(resetPage=true){
+      if (resetPage) renderLimit=24;
+      const q=(document.getElementById('search-input').value||'').toLowerCase();
+      let f=all;
+      if(cat==='Textbooks'){
+        f=f.filter(l=>l.category==='Textbooks');
+        if(tbYear)f=f.filter(l=>l.textbook_year===tbYear);
+        if(tbSubject)f=f.filter(l=>l.textbook_subject===tbSubject);
+      } else if(cat==='Beauty' && (flatSubcat==="Men's Perfume" || flatSubcat==="Women's Perfume")){
+        f=f.filter(l=>
+          (l.category==='Perfumes' && l.perfumes_subcategory===flatSubcat) ||
+          (l.category==='Beauty' && (l.beauty_subcategory===flatSubcat || l.beauty_subcategory==='Perfume'))
+        );
+      } else if(cat==='Beauty' && flatSubcat==='Perfume'){
+        f=f.filter(l=>
+          l.category==='Perfumes' ||
+          (l.category==='Beauty' && (l.beauty_subcategory==='Perfume' || l.beauty_subcategory==="Men's Perfume" || l.beauty_subcategory==="Women's Perfume"))
+        );
+      } else if(cat==='Beauty'){
+        f=f.filter(l=>l.category==='Beauty' || l.category==='Perfumes');
+        if(flatSubcat)f=f.filter(l=>l.beauty_subcategory===flatSubcat);
+      } else if(cat==='Stationary'){
+        f=f.filter(l=>l.category==='Stationary');
+        if(flatSubcat){
+          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].includes(flatSubcat));
+          f=f.filter(l=>l.stationary_subcategory===flatSubcat || legacyKeys.includes(l.stationary_subcategory));
+        } else if(stationaryGroup){
+          const items=STATIONARY_GROUPS[stationaryGroup]||[];
+          const legacyKeys=Object.keys(STATIONARY_LEGACY).filter(k=>STATIONARY_LEGACY[k].some(i=>items.includes(i)));
+          f=f.filter(l=>items.includes(l.stationary_subcategory) || legacyKeys.includes(l.stationary_subcategory));
+        }
+      } else if(FLAT_SUBCATS[cat]){
+        f=f.filter(l=>l.category===cat);
+        if(flatSubcat)f=f.filter(l=>l[FLAT_SUBCATS[cat].field]===flatSubcat);
+      } else if(cat!=='All'){
+        f=f.filter(l=>l.category===cat);
+      }
+      if(q)f=f.filter(l=>fuzzyMatch(l.title,q)||fuzzyMatch(l.description||'',q));
+
+      const minP=parseFloat(document.getElementById('price-min').value);
+      const maxP=parseFloat(document.getElementById('price-max').value);
+      if(!isNaN(minP)) f=f.filter(l=>(l.discount_percent>0?l.price*(1-l.discount_percent/100):l.price)>=minP);
+      if(!isNaN(maxP)) f=f.filter(l=>(l.discount_percent>0?l.price*(1-l.discount_percent/100):l.price)<=maxP);
+
+      if(document.getElementById('my-area-only').checked){
+        const saved=JSON.parse(localStorage.getItem('sm_area')||'null');
+        if(saved){
+          f=f.filter(l=>sellerDeliversTo(l.profiles,saved));
+        }
+      }
+
+      const sortMode=document.getElementById('sort-select').value;
+      f=[...f];
+      if(sortMode==='price_asc') f.sort((a,b)=>(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price)-(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price));
+      else if(sortMode==='price_desc') f.sort((a,b)=>(b.discount_percent>0?b.price*(1-b.discount_percent/100):b.price)-(a.discount_percent>0?a.price*(1-a.discount_percent/100):a.price));
+      else if(sortMode==='random'){
+        f.forEach(l=>{ if(!randomOrderSeed.has(l.id)) randomOrderSeed.set(l.id, Math.random()); });
+        f.sort((a,b)=>randomOrderSeed.get(a.id)-randomOrderSeed.get(b.id));
+      }
+      else f.sort((a,b)=>new Date(b.renewed_at||b.created_at)-new Date(a.renewed_at||a.created_at));
+
+      render(f);
       renderRecentlyViewed();
-    };
-    window.filterListings=window.doFilter;
+    }
+    window.doFilter=doFilter;
+    window.filterListings=doFilter;
 
     // ===== SEARCH AUTOCOMPLETE =====
     window.showSuggestions=(q)=>{
@@ -1796,81 +1680,92 @@
       lbImgs=[currentListing.image_url,currentListing.image_url_2,currentListing.image_url_3,currentListing.image_url_4,currentListing.image_url_5,currentListing.image_url_6].filter(Boolean);
       if(!lbImgs.length)return;
       lbIdx=idx||0;
-      const track=document.getElementById('lb-slides');
-      track.innerHTML=lbImgs.map((u,i)=>'<div class="lb-slide"><img loading="lazy" src="'+u+'" alt="'+((currentListing?.title||'Listing photo')+' — photo '+(i+1)+' of '+lbImgs.length).replace(/"/g,'')+'"/></div>').join('');
-      track.style.transition='none';
-      track.style.transform='translateX(-'+(lbIdx*100)+'%)';
-      renderLightbox();
+      buildLightboxTrack();
+      setLightboxTransform(false);
+      updateLightboxUI();
       const lb=document.getElementById('lightbox');
       lb.style.display='flex';
       document.body.style.overflow='hidden';
     };
-    function renderLightbox(){
+    function buildLightboxTrack(){
+      document.getElementById('lightbox-track').innerHTML = lbImgs.map((u,i)=>
+        '<div style="min-width:100%;height:100%;flex-shrink:0;display:flex;align-items:center;justify-content:center">'+
+        '<img loading="lazy" src="'+u+'" alt="'+escapeHtml(currentListing?.title||'Listing')+' — photo '+(i+1)+'" style="max-width:100%;max-height:100%;object-fit:contain"/></div>'
+      ).join('');
+    }
+    function setLightboxTransform(animate){
+      const track=document.getElementById('lightbox-track');
+      track.style.transition = animate===false ? 'none' : 'transform 0.3s ease';
+      track.style.transform='translateX(-'+(lbIdx*100)+'%)';
+    }
+    function updateLightboxUI(){
       document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbImgs.length;
       document.getElementById('lb-prev').style.display=lbImgs.length>1?'block':'none';
       document.getElementById('lb-next').style.display=lbImgs.length>1?'block':'none';
       document.getElementById('lb-dots').innerHTML=lbImgs.map((_,i)=>'<div onclick="event.stopPropagation();lbGo('+i+')" style="width:8px;height:8px;border-radius:50%;background:'+(i===lbIdx?'#fff':'rgba(255,255,255,0.35)')+';cursor:pointer"></div>').join('');
     }
-    function goLightboxSlide(){
-      const track=document.getElementById('lb-slides');
-      track.style.transition='transform 0.25s ease';
-      track.style.transform='translateX(-'+(lbIdx*100)+'%)';
-      renderLightbox();
-    }
-    window.lightboxSlide=(dir)=>{lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;goLightboxSlide();};
-    window.lbGo=(i)=>{lbIdx=i;goLightboxSlide();};
+    window.lightboxSlide=(dir)=>{lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;setLightboxTransform(true);updateLightboxUI();};
+    window.lbGo=(i)=>{lbIdx=i;setLightboxTransform(true);updateLightboxUI();};
     window.closeLightbox=()=>{document.getElementById('lightbox').style.display='none';document.body.style.overflow='hidden';};
 
-    // Swipe-to-change-photo in the fullscreen lightbox. This drives the same
-    // kind of sliding track as the product-card gallery (initGallerySwipe)
-    // instead of animating a single <img> off-screen and swapping its src —
-    // that old approach never showed the next photo while you dragged, so
-    // the swipe felt disconnected from your finger. Dragging the real track
-    // means the next/previous photo slides in live, same as the card gallery.
-    (function initLightboxSwipe(){
-      const lb=document.getElementById('lightbox');
-      const frame=document.querySelector('.lightbox-frame');
-      if(!lb||!frame)return;
-      let startX=0, startY=0, dragging=false, dragDelta=0, horizontal=false, directionLocked=false;
-      const track=()=>document.getElementById('lb-slides');
-      lb.addEventListener('touchstart',(e)=>{
-        if(lbImgs.length<=1)return;
-        const t=e.touches[0];
-        startX=t.clientX; startY=t.clientY; dragging=true; horizontal=false; directionLocked=false; dragDelta=0;
-        track().style.transition='none';
+    // Smooth drag-following swipe for the lightbox — the image tracks the finger in real time,
+    // then eases into place (or snaps back) on release.
+    // Shared drag-following swipe behavior: the track follows the finger in real time
+    // (preventDefault once horizontal intent is clear, so the browser's own scroll/back
+    // gestures never hijack the swipe), then eases to the target slide — or snaps back —
+    // on release. Handles touchcancel too, so an interrupted gesture never leaves the
+    // track stuck without its transition.
+    function enableSwipeTrack(container, track, opts){
+      let sx=0, sy=0, dragging=false, locked=null;
+      const reset=(animate)=>{
+        dragging=false; locked=null;
+        track.style.transition = animate===false ? 'none' : 'transform 0.3s ease';
+        track.style.transform='translateX(-'+(opts.getIndex()*100)+'%)';
+      };
+      container.addEventListener('touchstart',(e)=>{
+        if(opts.getCount()<2)return;
+        sx=e.touches[0].clientX; sy=e.touches[0].clientY; dragging=true; locked=null;
+        track.style.transition='none';
       },{passive:true});
-      lb.addEventListener('touchmove',(e)=>{
+      container.addEventListener('touchmove',(e)=>{
         if(!dragging)return;
-        const t=e.touches[0];
-        const dx=t.clientX-startX, dy=t.clientY-startY;
-        // Lock the swipe direction on first move past the threshold instead
-        // of re-deciding every event — see the note in initGallerySwipe.
-        if(!directionLocked){
-          if(Math.abs(dx)<6 && Math.abs(dy)<6) return;
-          horizontal = Math.abs(dx)>Math.abs(dy);
-          directionLocked=true;
-          if(!horizontal){ dragging=false; return; }
-        }
+        const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+        if(locked===null) locked = Math.abs(dx)>Math.abs(dy) ? 'x' : 'y';
+        if(locked==='y')return;
         e.preventDefault();
-        dragDelta=dx;
-        track().style.transform='translateX(calc(-'+(lbIdx*100)+'% + '+dragDelta+'px))';
+        track.style.transform='translateX(calc(-'+(opts.getIndex()*100)+'% + '+dx+'px))';
       },{passive:false});
-      lb.addEventListener('touchend',()=>{
-        if(!dragging){ horizontal=false; directionLocked=false; return; }
-        dragging=false;
-        track().style.transition='transform 0.25s ease';
-        const threshold=frame.clientWidth*0.18;
-        if(horizontal && Math.abs(dragDelta)>threshold){
-          lightboxSlide(dragDelta<0?1:-1);
-        } else {
-          track().style.transform='translateX(-'+(lbIdx*100)+'%)';
+      container.addEventListener('touchend',(e)=>{
+        if(!dragging)return;
+        const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+        if(locked==='x' && Math.abs(dx)>40){
+          const count=opts.getCount();
+          const next = opts.loop
+            ? (opts.getIndex()+(dx<0?1:-1)+count)%count
+            : Math.max(0, Math.min(count-1, opts.getIndex()+(dx<0?1:-1)));
+          opts.setIndex(next);
         }
-        horizontal=false; directionLocked=false; dragDelta=0;
+        reset(true);
+        if(opts.onSettled) opts.onSettled();
+      },{passive:true});
+      container.addEventListener('touchcancel',()=>{ if(dragging) reset(true); },{passive:true});
+    }
+
+    (function(){
+      const lb=document.getElementById('lightbox');
+      const track=document.getElementById('lightbox-track');
+      enableSwipeTrack(lb, track, {
+        getIndex:()=>lbIdx, setIndex:(i)=>{lbIdx=i;}, getCount:()=>lbImgs.length, loop:true,
+        onSettled:()=>updateLightboxUI()
       });
-      lb.addEventListener('touchcancel',()=>{
-        dragging=false; horizontal=false; directionLocked=false; dragDelta=0;
-        track().style.transition='transform 0.25s ease';
-        track().style.transform='translateX(-'+(lbIdx*100)+'%)';
+    })();
+
+    (function(){
+      const gal=document.getElementById('modal-gallery');
+      const track=document.getElementById('gallery-slides');
+      enableSwipeTrack(gal, track, {
+        getIndex:()=>galleryIdx, setIndex:(i)=>{galleryIdx=i;}, getCount:()=>track.children.length, loop:false,
+        onSettled:()=>document.querySelectorAll('.gallery-dot').forEach((d,j)=>d.classList.toggle('active',j===galleryIdx))
       });
     })();
 
@@ -1889,317 +1784,119 @@
       document.getElementById('cats-bar').scrollBy({left:dir*220,behavior:'smooth'});
     };
 
-    // ===== INSTITUTION / CAMPUS SELECTOR =====
-    const INSTITUTIONS={
-      university:[
-      {name:'University of Cape Town (UCT)',campuses:['Rondebosch (Cape Town)']},
-      {name:'Stellenbosch University (SU)',campuses:['Stellenbosch','Tygerberg','Bellville Park','Saldanha']},
-      {name:'University of the Western Cape (UWC)',campuses:['Bellville']},
-      {name:'Cape Peninsula University of Technology (CPUT)',campuses:['Bellville','District Six','Granger Bay','Wellington','Mowbray']},
-      {name:'University of Fort Hare (UFH)',campuses:['Alice','East London','Bhisho']},
-      {name:'Rhodes University',campuses:['Makhanda (Grahamstown)']},
-      {name:'Nelson Mandela University (NMU)',campuses:['Gqeberha (Port Elizabeth)','George']},
-      {name:'Walter Sisulu University (WSU)',campuses:['Mthatha','Butterworth','Buffalo City (East London)','Komani (Queenstown)']},
-      {name:'University of the Free State (UFS)',campuses:['Bloemfontein','Qwaqwa','South Campus']},
-      {name:'Central University of Technology (CUT)',campuses:['Bloemfontein','Welkom']},
-      {name:'University of KwaZulu-Natal (UKZN)',campuses:['Howard College','Westville','Edgewood','Pietermaritzburg','Nelson R. Mandela School of Medicine']},
-      {name:'Durban University of Technology (DUT)',campuses:['Steve Biko','Ritson','ML Sultan','Brickfield','Indumiso','Riverside']},
-      {name:'Mangosuthu University of Technology (MUT)',campuses:['Umlazi']},
-      {name:'University of Zululand (UNIZULU)',campuses:['KwaDlangezwa','Richards Bay']},
-      {name:'University of Johannesburg (UJ)',campuses:['Auckland Park Kingsway','Auckland Park Bunting Road','Doornfontein','Soweto']},
-      {name:'University of Pretoria (UP)',campuses:['Hatfield','Groenkloof','Prinshof','Hillcrest','Onderstepoort','Mamelodi']},
-      {name:'University of South Africa (UNISA)',campuses:['Main campus (Pretoria)','Regional campus']},
-      {name:'Tshwane University of Technology (TUT)',campuses:['Pretoria','Soshanguve','Ga-Rankuwa','eMalahleni','Mbombela','Polokwane']},
-      {name:'University of the Witwatersrand (Wits)',campuses:['Braamfontein','Parktown']},
-      {name:'North-West University (NWU)',campuses:['Potchefstroom','Mahikeng','Vanderbijlpark']},
-      {name:'Vaal University of Technology (VUT)',campuses:['Vanderbijlpark','Ekurhuleni','Secunda','Upington']},
-      {name:'University of Limpopo (UL)',campuses:['Turfloop']},
-      {name:'University of Venda (UNIVEN)',campuses:['Thohoyandou']},
-      {name:'University of Mpumalanga (UMP)',campuses:['Mbombela','Siyabuswa']},
-      {name:'Sol Plaatje University (SPU)',campuses:['Kimberley']},
-      {name:'Sefako Makgatho Health Sciences University (SMU)',campuses:['Ga-Rankuwa (Pretoria)']}
-      ],
-      private:[
-      {name:'AAA School of Advertising',campuses:['Cape Town','Johannesburg']},
-      {name:'Academy for Facility Management (A4FM)',campuses:['Johannesburg','Cape Town']},
-      {name:'Academy of Sound Engineering',campuses:['Johannesburg','Cape Town']},
-      {name:'ACT Cape Town',campuses:['Cape Town']},
-      {name:'Afrikaanse Protestantse Akademie',campuses:['Pretoria','Online/Distance']},
-      {name:'Akademia',campuses:['Centurion','Online/Distance','Various study centres']},
-      {name:'Akademiese Reformatoriese Opleiding en Studies (AROS)',campuses:['Pretoria','Online/Distance']},
-      {name:'The Animation School',campuses:['Cape Town','Johannesburg']},
-      {name:'Baptist Theological College of Southern Africa',campuses:['Johannesburg','Online/Distance']},
-      {name:'Belgium Campus iTversity',campuses:['Pretoria','Johannesburg','Port Elizabeth/Gqeberha','Stellenbosch']},
-      {name:'Berea College of Technology',campuses:['Durban']},
-      {name:'BHC School of Design',campuses:['Cape Town']},
-      {name:'Boston City Campus',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','East London','Polokwane','Mbombela','Kimberley','Rustenburg','Potchefstroom','Vanderbijlpark']},
-      {name:'Boston Media House',campuses:['Johannesburg','Cape Town','Durban']},
-      {name:'Business Management Training College',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
-      {name:'Cape Audio College',campuses:['Cape Town']},
-      {name:'Cape Town Baptist Seminary',campuses:['Cape Town','Online/Distance']},
-      {name:'Cape Town College of Fashion Design',campuses:['Cape Town']},
-      {name:'Cape Town Creative Academy',campuses:['Cape Town']},
-      {name:'Centre for Creative Education / Iziko La Bantu Be Afrika',campuses:['Cape Town','Online/Distance']},
-      {name:'Christ Baptist Church Seminary',campuses:['Johannesburg','Online/Distance']},
-      {name:'Christian Reformed Theological Seminary',campuses:['Pretoria','Online/Distance']},
-      {name:'College of Transfiguration',campuses:['Grahamstown/Makhanda','Online/Distance']},
-      {name:'Cornerstone Institute',campuses:['Cape Town','Online/Distance']},
-      {name:'Cranefield College',campuses:['Pretoria','Johannesburg','Online/Distance']},
-      {name:'Da Vinci Institute for Technology Management',campuses:['Lethabong','Online/Distance']},
-      {name:'Design Academy of Fashion',campuses:['Cape Town']},
-      {name:'Edutel Higher Education',campuses:['Johannesburg','Pretoria','Durban','Cape Town']},
-      {name:'Eduvos',campuses:['Bedfordview','Bloemfontein','Durban (Umhlanga)','East London','Mbombela','Midrand','Mowbray','Nelson Mandela Bay','Potchefstroom','Pretoria','Tygervalley','Vaal']},
-      {name:'Elizabeth Galloway Academy of Fashion Design',campuses:['Stellenbosch']},
-      {name:'Empilweni Education',campuses:['Johannesburg']},
-      {name:'ESRI South Africa',campuses:['Johannesburg','Online/Distance']},
-      {name:'Exercise Teachers Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'FEDISA',campuses:['Cape Town','Johannesburg']},
-      {name:'Friends of Design – Academy of Digital Arts',campuses:['Cape Town']},
-      {name:'Foundation for Professional Development',campuses:['Pretoria','Johannesburg','Cape Town','Durban','Bloemfontein','Online/Distance']},
-      {name:'George Whitefield College',campuses:['Cape Town']},
-      {name:'Health and Fitness Professionals Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Helderberg College of Higher Education',campuses:['Somerset West']},
-      {name:'Henley Business School Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'IHT Hotel School',campuses:['Johannesburg','Cape Town','Durban']},
-      {name:'IMM Graduate School',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
-      {name:'The Independent Institute of Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha','Mbombela','Potchefstroom','Midrand']},
-      {name:'Inscape Education Group',campuses:['Cape Town','Pretoria','Johannesburg','Durban','Online/Distance']},
-      {name:'International Hotel School',campuses:['Cape Town','Johannesburg','Durban','Pretoria','Gqeberha','Online/Distance']},
-      {name:'International Trade Institute of Southern Africa',campuses:['Johannesburg','Online/Distance']},
-      {name:'IQ Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Isa Carstens Academy',campuses:['Stellenbosch','Pretoria','Online/Distance']},
-      {name:'Life Healthcare',campuses:['Johannesburg','Pretoria','Cape Town','Durban']},
-      {name:'Lyceum College',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
-      {name:'MANCOSA',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Gqeberha','Polokwane','Mbombela','Online/Distance']},
-      {name:'Mediclinic',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Bloemfontein']},
-      {name:'Milpark Education',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Mukhanyo Theological College',campuses:['Durban','Cape Town','Johannesburg','Online/Distance']},
-      {name:'Netcare Education',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Port Elizabeth/Gqeberha']},
-      {name:'Newbridge Graduate Institute',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Oakfields College',campuses:['Pretoria','Johannesburg']},
-      {name:'Open Learning Group',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
-      {name:'The Open Window',campuses:['Centurion/Pretoria']},
-      {name:'Potchefstroom Academy',campuses:['Potchefstroom']},
-      {name:'Production Management Institute of Southern Africa',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Red & Yellow Creative School of Business',campuses:['Cape Town','Johannesburg','Online/Distance']},
-      {name:'Regenesys',campuses:['Johannesburg','Online/Distance']},
-      {name:'Regent Business School',campuses:['Durban','Johannesburg','Cape Town','Pretoria','Bloemfontein','Gqeberha','Online/Distance']},
-      {name:'Richfield',campuses:['Bryanston','Newtown Junction','Centurion','Pretoria','Umhlanga','Musgrave','Cape Town','Polokwane']},
-      {name:'Ruth Prowse School of Art',campuses:['Cape Town']},
-      {name:'SAE Institute South Africa',campuses:['Johannesburg','Cape Town']},
-      {name:'SANTS Private Higher Education Institution',campuses:['Pretoria','Online/Distance']},
-      {name:'Seth Mokitimi Methodist Seminary',campuses:['Pietermaritzburg','Online/Distance']},
-      {name:'South African College of Applied Psychology (SACAP)',campuses:['Cape Town','Johannesburg','Pretoria','Durban','Online/Distance']},
-      {name:'AFDA',campuses:['Johannesburg','Cape Town','Gqeberha','Durban']},
-      {name:'South African Theological Seminary',campuses:['Johannesburg','Online/Distance']},
-      {name:'Southern Africa Bible College',campuses:['South Africa/Online learning']},
-      {name:'Southern African Wildlife College',campuses:['Hoedspruit']},
-      {name:'STADIO',campuses:['Centurion','Durbanville','Musgrave','Waterfall/Midrand','Online/Distance']},
-      {name:'St Augustine College of South Africa',campuses:['Johannesburg']},
-      {name:'Stellenbosch Academy of Design and Photography',campuses:['Stellenbosch']},
-      {name:'Stenden South Africa',campuses:['Port Alfred']},
-      {name:'St John Vianney Seminary',campuses:['Pretoria']},
-      {name:'St Joseph\'s Theological Institute',campuses:['Cedara/Pietermaritzburg']},
-      {name:'Theological Education by Extension College',campuses:['Johannesburg','Online/Distance']},
-      {name:'The Swiss Hotel School South Africa',campuses:['Johannesburg']},
-      {name:'TSIBA Education',campuses:['Cape Town']},
-      {name:'Union Bible Institute',campuses:['Pietermaritzburg']},
-      {name:'Villioti Fashion Institute',campuses:['Johannesburg','Cape Town']},
-      {name:'Academic Institute of Excellence',campuses:['Johannesburg','Online/Distance']},
-      {name:'Academy for Environmental Leadership South Africa',campuses:['Johannesburg','Online/Distance']},
-      {name:'Academy for Organisational Change',campuses:['Johannesburg','Online/Distance']},
-      {name:'AFM Theological College',campuses:['Johannesburg','Online/Distance']},
-      {name:'African Academy of Cinematic Arts',campuses:['Johannesburg','Cape Town']},
-      {name:'Alpvest Institute for Futuretech',campuses:['Johannesburg','Online/Distance']},
-      {name:'Arwyp Training Institute',campuses:['Kempton Park']},
-      {name:'Auckland Park Theological Seminary',campuses:['Johannesburg','Online/Distance']},
-      {name:'Balderstone Sports Institute',campuses:['Pretoria','Johannesburg']},
-      {name:'Bible Institute of South Africa',campuses:['Kalk Bay, Cape Town','Online/Distance']},
-      {name:'Bronberg Nurse Education and Training Academy',campuses:['Pretoria']},
-      {name:'Camelot International',campuses:['Johannesburg','Cape Town','Durban','Pretoria']},
-      {name:'Campus of Performing Arts',campuses:['Johannesburg']},
-      {name:'Career Excel Academy',campuses:['Johannesburg','Online/Distance']},
-      {name:'Cedar International Academy',campuses:['Johannesburg','Online/Distance']},
-      {name:'Chatsmed Candle Light Nursing School',campuses:['Durban','Pietermaritzburg']},
-      {name:'Cheeba Cannabis Academy',campuses:['Johannesburg','Cape Town','Online/Distance']},
-      {name:'Chartall Business College',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Cornerstone Performance Solutions',campuses:['Johannesburg','Online/Distance']},
-      {name:'CTU Training Solutions',campuses:['Johannesburg','Pretoria','Cape Town','Durban','Bloemfontein','Gqeberha']},
-      {name:'Duke Corporate Education RSA',campuses:['Johannesburg','Cape Town','Online/Distance']},
-      {name:'Design Time',campuses:['Cape Town']},
-      {name:'EcoTraining',campuses:['Hoedspruit','Greater Kruger area']},
-      {name:'Engineering College of Science and Technology',campuses:['Johannesburg']},
-      {name:'Emmanuel Verpleegskool',campuses:['Online/Distance']},
-      {name:'Equine-Librium College',campuses:['White River/Mbombela area']},
-      {name:'Esda Nursing Education Institute',campuses:['Johannesburg']},
-      {name:'Evangelical Seminary of Southern Africa',campuses:['Johannesburg','Online/Distance']},
-      {name:'Felix Higher Education and Training',campuses:['Johannesburg']},
-      {name:'Future Nurses Nursing School',campuses:['Johannesburg']},
-      {name:'Hugenote Kollege',campuses:['Wellington']},
-      {name:'Instill Education',campuses:['Johannesburg','Cape Town','Online/Distance']},
-      {name:'Institute for Architecture and Design',campuses:['Johannesburg','Online/Distance']},
-      {name:'Institute of Accounting Science',campuses:['Johannesburg','Online/Distance']},
-      {name:'International Peace College South Africa',campuses:['Cape Town','Online/Distance']},
-      {name:'Keobakile Nursing Academy',campuses:['Johannesburg']},
-      {name:'Khanyisa Nursing School',campuses:['Johannesburg']},
-      {name:'Lenmed Nursing College',campuses:['Johannesburg']},
-      {name:'Lillian Spengani Memorial Nursing School',campuses:['Johannesburg']},
-      {name:'Lutheran Theological Seminary in Tshwane',campuses:['Pretoria']},
-      {name:'Madina Institute',campuses:['Cape Town','Johannesburg','Durban','Online/Distance']},
-      {name:'Marematlou Training Institute',campuses:['Johannesburg']},
-      {name:'Moonstone Business School of Excellence',campuses:['Cape Town','Johannesburg','Online/Distance']},
-      {name:'Novia One Group',campuses:['Johannesburg','Online/Distance']},
-      {name:'2 Oceans Graduate Institute',campuses:['Cape Town','Online/Distance']},
-      {name:'Peritum Agri Institute',campuses:['Pretoria','Online/Distance']},
-      {name:'SACOB',campuses:['Johannesburg','Cape Town','Durban','Pretoria','Online/Distance']},
-      {name:'School of Explorative Architecture',campuses:['Johannesburg','Online/Distance']},
-      {name:'Sizanesu Nursing Training Institute',campuses:['Johannesburg']},
-      {name:'SkillsPro',campuses:['Johannesburg','Online/Distance']},
-      {name:'Striving Mind Nursing Academy',campuses:['Johannesburg']},
-      {name:'The Graduate Institute of Financial Sciences Private Higher Education',campuses:['Johannesburg','Online/Distance']},
-      {name:'Thulaganyo Nursing School',campuses:['Johannesburg']},
-      {name:'Thutobopelo Nursing Academy',campuses:['Johannesburg']},
-      {name:'Trifocus Fitness Academy',campuses:['Johannesburg','Cape Town','Durban','Online/Distance']},
-      {name:'Ukwazi School of Nursing',campuses:['Johannesburg','Pretoria','Cape Town']}
-      ],
-      tvet:[
-      {name:'Buffalo City TVET College',campuses:['East London','John Knox Bokwe','St Marks']},
-      {name:'Eastcape Midlands TVET College',campuses:['Charles Goodyear','Graaff-Reinet','Grahamstown','Brickfields Road','High Street','Park Avenue','Thanduxolo','Heath Park']},
-      {name:'Ikhala TVET College',campuses:['Aliwal North','Ezibeleni Engineering','Queen Nonesi','Sterkspruit']},
-      {name:'Ingwe TVET College',campuses:['Maluti','Mount Fletcher','Mount Frere','Ngqungqushe','Siteto']},
-      {name:'King Hintsa TVET College',campuses:['Centane','H.B. Tsengwa','Teko']},
-      {name:'King Sabata Dalindyebo TVET College',campuses:['Engcobo','Mapuzi','Mthatha']},
-      {name:'Lovedale TVET College',campuses:['Alice','King','Zwelitsha']},
-      {name:'Port Elizabeth TVET College',campuses:['Dower','Struandale','Russell Road']},
-      {name:'Flavius Mareka TVET College',campuses:['Kroonstad','Mphohadi','Sasolburg']},
-      {name:'Goldfields TVET College',campuses:['Tosa','Welkom']},
-      {name:'Maluti TVET College',campuses:['Bethlehem','Bonamelo','Itemoheleng','Kwethisong','Sefikeng','Lere La Tshepe','Harrismith']},
-      {name:'Motheo TVET College',campuses:['Hillside View','Bloemfontein','Thaba Nchu']},
-      {name:'Central Johannesburg TVET College',campuses:['Alexandra','Ellispark','Highveld','Parktown','Troyeville']},
-      {name:'Ekurhuleni East TVET College',campuses:['Benoni','Brakpan','Daveyton','Kwa-Thema','Springs']},
-      {name:'Ekurhuleni West TVET College',campuses:['Alberton','Boksburg','Germiston','Kathorus','Kempton','Tembisa']},
-      {name:'Sedibeng TVET College',campuses:['Sebokeng','Vanderbijlpark','Vereeniging']},
-      {name:'South West Gauteng TVET College',campuses:['Dobsonville','George Tabor','Molapo','Roodepoort','Roodepoort West','Technisa']},
-      {name:'Tshwane North TVET College',campuses:['Mamelodi','Pretoria','Rosslyn','Soshanguve South','Temba','Soshanguve North']},
-      {name:'Tshwane South TVET College',campuses:['Atteridgeville','Centurion','Odi','Pretoria West']},
-      {name:'Western TVET College',campuses:['Carletonville','Krugersdorp','Krugersdorp West','Randfontein']},
-      {name:'Coastal KZN TVET College',campuses:['Durban','Swinton Road','Umlazi','Umlazi BB','AS-Salaam','Ubughle Bogu','Umbumbulu']},
-      {name:'Elangeni TVET College',campuses:['KwaMashu','Mpumalanga','Ndwedwe','Inanda','Kwadabeka','Ntuzuma','Pinetown','Qadi']},
-      {name:'Esayidi TVET College',campuses:['Enyenyezi','Gamalakhe','Gcinangempi','Kokstad','Nqumuza','Port Shepstone','Sizanani']},
-      {name:'Majuba TVET College',campuses:['Centre for People Development','IT & Business','Majuba Technology Centre','Newcastle Technology','Ekuseni Youth Centre','Ncome Prison','Newcastle Training Centre','Open Learning Unit','Waterval Prison','Westville Prison','Dundee']},
-      {name:'Mnambithi TVET College',campuses:['Ezakheni E-Section','Ladysmith','Estcourt','Ezakheni A-Section']},
-      {name:'Mthashana TVET College',campuses:['Babanango','Emandleni','Kwa-Qgikazi','Maputa','Vryheid','Nqutu']},
-      {name:'Thekwini TVET College',campuses:['Asherville','Cato Manor','Centec','Melbourne','Springfield','Umbilo']},
-      {name:'Umfolozi TVET College',campuses:['Esikhawini','Eshowe','Jininindomnyama','Mandeni','Nseleni','Richtek','Sikhanyisele','Sundumbili','Thubelihle','ZCBF']},
-      {name:'Umgungundlovu TVET College',campuses:['Edendale','Midlands','Msunduzi','Northdale','Plessislaer']},
-      {name:'Capricorn TVET College',campuses:['Polokwane','Senwabarwana','Seshego']},
-      {name:'Lephalale TVET College',campuses:['Lephalale','Modimolle']},
-      {name:'Letaba TVET College',campuses:['Giyani','Maake','Tzaneen']},
-      {name:'Mopani South East TVET College',campuses:['Phalaborwa','Sir Val Duncan']},
-      {name:'Sekhukhune TVET College',campuses:['CN Phatudi','CS Barlow']},
-      {name:'Vhembe TVET College',campuses:['Makwarela','Mashamba','Mavhoi']},
-      {name:'Waterberg TVET College',campuses:['Lebowakgomo','Mahwelereng','Mokopane']},
-      {name:'Ehlanzeni TVET College',campuses:['Barberton','KaNyamazane','Mapulaneng','Mlumati','Mthimba','Nelspruit','Waterval Boven']},
-      {name:'Gert Sibande TVET College',campuses:['Ermelo','Evander','Standerton','Sibanesetfu']},
-      {name:'Nkangala TVET College',campuses:['CN Mahlangu','Middelburg','Mpondozankomo','Witbank']},
-      {name:'Northern Cape Rural TVET College',campuses:['De Aar','Kathu','Kuruman','Namaqualand','Upington']},
-      {name:'Northern Cape Urban TVET College',campuses:['City','Moromogolo']},
-      {name:'Orbit TVET College',campuses:['Rustenburg','Mankwe','Brits']},
-      {name:'Taletso TVET College',campuses:['Mafikeng','Lichtenburg','Lehurutshe']},
-      {name:'Vuselela TVET College',campuses:['Jouberton','Klerksdorp','Matlosana','Potchefstroom','Taung']},
-      {name:'Boland TVET College',campuses:['Caledon','Paarl','Stellenbosch','Strand','Worcester']},
-      {name:'College of Cape Town for TVET',campuses:['Athlone','City','Crawford','Gardens','Guguletu','Pinelands','Thornton','Wynberg']},
-      {name:'False Bay TVET College',campuses:['Fish Hoek','Khayelitsha','Mitchell\'s Plain','Muizenberg','Westlake']},
-      {name:'Northlink TVET College',campuses:['Belhar','Bellville','Goodwood','Parow','Protea','Tygerberg','Wingfield']},
-      {name:'South Cape TVET College',campuses:['Beaufort West','Bitou','George','Hessequa','Mossel Bay','Oudtshoorn']},
-      {name:'West Coast TVET College',campuses:['Atlantis','Citrusdal','Malmesbury','Vredenburg','Vredendal']}
-      ]
-    };
-    const INSTITUTION_TYPES=[{key:'university',label:'University'},{key:'private',label:'Private Higher Education Institution'},{key:'tvet',label:'Public TVET College'}];
-    let typePicked=null;
-    let uniPicked=null;
+    // ===== AREA SELECTOR (Province > City > District > Town/Suburb) =====
+    let provincePicked=null, cityPicked=null, districtPicked=null;
 
-    function updateUniBtnLabel(){
-      const btn=document.getElementById('uni-select-btn');
-      const saved=JSON.parse(localStorage.getItem('sm_university')||'null');
-      if(saved){ btn.textContent='🎓 '+saved.uni+' · '+saved.campus; }
-      else { btn.textContent='🌍 All institutions'; }
+    function updateAreaBtnLabel(){
+      const btn=document.getElementById('area-select-btn');
+      if(localStorage.getItem('sm_area_all')==='1'){ btn.textContent='📍 All areas'; return; }
+      const saved=JSON.parse(localStorage.getItem('sm_area')||'null');
+      if(saved){ btn.textContent='📍 '+saved.suburb+', '+saved.district; }
+      else { btn.textContent='📍 Select your area'; }
     }
-    updateUniBtnLabel();
+    updateAreaBtnLabel();
 
-    const INST_TYPE_ICON={university:'🎓',private:'🏫',tvet:'🛠️'};
+    window.pickAllAreas=()=>{
+      localStorage.removeItem('sm_area');
+      localStorage.setItem('sm_area_all','1');
+      const chk=document.getElementById('my-area-only');
+      if(chk) chk.checked=false;
+      updateAreaBtnLabel();
+      closeAreaModal();
+      if(typeof doFilter==='function') doFilter();
+    };
 
-    window.openUniModal=()=>{
-      typePicked=null;
-      uniPicked=null;
-      renderTypeList();
-      document.getElementById('uni-modal-overlay').style.display='flex';
+    window.openAreaModal=()=>{
+      provincePicked=null; cityPicked=null; districtPicked=null;
+      renderProvinceList();
+      document.getElementById('area-modal-overlay').style.display='flex';
       document.body.style.overflow='hidden';
     };
-    window.closeUniModal=()=>{
-      document.getElementById('uni-modal-overlay').style.display='none';
+    window.closeAreaModal=()=>{
+      document.getElementById('area-modal-overlay').style.display='none';
       document.body.style.overflow='';
     };
-    function renderTypeList(){
-      const body=document.getElementById('uni-modal-body');
-      body.innerHTML='<div class="inst-modal-title">Select your Institution</div>'+
-        '<div class="inst-modal-sub">What type of institution do you study at?</div>'+
-        '<button class="tb-subject-btn" style="border-color:#7c3aed;color:#7c3aed;font-weight:800;margin-bottom:10px" onclick="pickAllInstitutions()">🌍 All — browse every institution</button>'+
-        '<div class="inst-count">'+INSTITUTION_TYPES.length+' institution types</div>'+
+    function renderProvinceList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaProvinces();
+      body.innerHTML='<div class="inst-modal-title">Select your area</div>'+
+        '<div class="inst-modal-sub">What province are you in?</div>'+
+        '<button type="button" class="tb-year-btn tb-year-all" style="width:100%;margin-bottom:14px" onclick="pickAllAreas()">🌍 All areas — see every listing everywhere</button>'+
+        '<div class="inst-count">'+list.length+' provinces</div>'+
         '<div class="tb-subject-grid">'+
-        INSTITUTION_TYPES.map(t=>'<button class="tb-subject-btn" onclick="pickType(\''+t.key+'\')">'+(INST_TYPE_ICON[t.key]||'')+' '+t.label+'</button>').join('')+
+        list.map(p=>'<button class="tb-subject-btn" onclick="pickProvince(\''+p.replace(/'/g,"\\'")+'\')">'+p+'</button>').join('')+
         '</div>';
     }
-    window.renderTypeList=renderTypeList;
-    window.pickAllInstitutions=()=>{
-      localStorage.removeItem('sm_university');
-      document.getElementById('my-campus-only').checked=false;
-      updateUniBtnLabel();
-      closeUniModal();
-      doFilter();
+    window.renderProvinceList=renderProvinceList;
+    window.pickProvince=(p)=>{
+      provincePicked=p;
+      renderCityList();
     };
-    window.pickType=(key)=>{
-      typePicked=INSTITUTION_TYPES.find(t=>t.key===key);
-      renderUniList();
-    };
-    function renderUniList(){
-      const body=document.getElementById('uni-modal-body');
-      const list=INSTITUTIONS[typePicked.key];
-      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderTypeList()">← Back</button>'+
-        '<div class="inst-modal-title">Select your '+(typePicked.key==='university'?'university':'institution')+'</div>'+
-        '<div class="inst-modal-sub">'+typePicked.label+'</div>'+
-        '<input type="text" id="inst-search" class="inst-search" placeholder="Search '+typePicked.label.toLowerCase()+'..." oninput="filterInstList(this.value)"/>'+
-        '<div class="inst-count" id="inst-count">'+list.length+' institutions</div>'+
+    function renderCityList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaCities(provincePicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderProvinceList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your city</div>'+
+        '<div class="inst-modal-sub">'+provincePicked+'</div>'+
+        '<input type="text" id="inst-search" class="inst-search" placeholder="Search cities..." oninput="filterCityList(this.value)"/>'+
+        '<div class="inst-count" id="inst-count">'+list.length+' cities'+'</div>'+
         '<div class="tb-subject-grid" id="inst-list">'+
-        list.map((u,i)=>'<button class="tb-subject-btn" onclick="pickUni('+i+')">'+u.name+'</button>').join('')+
+        list.map(c=>'<button class="tb-subject-btn" onclick="pickCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
         '</div>';
     }
-    window.renderUniList=renderUniList;
-    window.filterInstList=(q)=>{
-      const list=INSTITUTIONS[typePicked.key];
+    window.renderCityList=renderCityList;
+    window.filterCityList=(q)=>{
+      const list=areaCities(provincePicked);
       q=q.trim().toLowerCase();
-      const filtered = q ? list.map((u,i)=>({u,i})).filter(x=>x.u.name.toLowerCase().includes(q)) : list.map((u,i)=>({u,i}));
-      document.getElementById('inst-count').textContent = filtered.length+' institution'+(filtered.length===1?'':'s');
-      document.getElementById('inst-list').innerHTML = filtered.map(x=>'<button class="tb-subject-btn" onclick="pickUni('+x.i+')">'+x.u.name+'</button>').join('') || '<p class="loading-msg">No matches</p>';
+      const filtered=q?list.filter(c=>c.toLowerCase().includes(q)):list;
+      document.getElementById('inst-count').textContent=filtered.length+' cit'+(filtered.length===1?'y':'ies');
+      document.getElementById('inst-list').innerHTML=filtered.map(c=>'<button class="tb-subject-btn" onclick="pickCity(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')||'<p class="loading-msg">No matches</p>';
     };
-    window.pickUni=(i)=>{
-      uniPicked=INSTITUTIONS[typePicked.key][i];
-      renderCampusList();
+    window.pickCity=(c)=>{
+      cityPicked=c;
+      renderDistrictList();
     };
-    function renderCampusList(){
-      const body=document.getElementById('uni-modal-body');
-      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderUniList()">← Back</button>'+
-        '<div class="inst-modal-title">Select your campus</div>'+
-        '<div class="inst-modal-sub">'+uniPicked.name+'</div>'+
+    function renderDistrictList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaDistricts(provincePicked,cityPicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderCityList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your district</div>'+
+        '<div class="inst-modal-sub">'+cityPicked+'</div>'+
+        '<div class="inst-count">'+list.length+' districts</div>'+
         '<div class="tb-subject-grid">'+
-        uniPicked.campuses.map(c=>'<button class="tb-subject-btn" onclick="pickCampus(\''+c.replace(/'/g,"\\'")+'\')">'+c+'</button>').join('')+
+        list.map(d=>'<button class="tb-subject-btn" onclick="pickDistrict(\''+d.replace(/'/g,"\\'")+'\')">'+d+'</button>').join('')+
         '</div>';
     }
-    window.renderCampusList=renderCampusList;
-    window.pickCampus=(campus)=>{
-      localStorage.setItem('sm_university',JSON.stringify({uni:uniPicked.name,campus,type:typePicked.key}));
-      updateUniBtnLabel();
-      closeUniModal();
+    window.renderDistrictList=renderDistrictList;
+    window.pickDistrict=(d)=>{
+      districtPicked=d;
+      renderSuburbList();
+    };
+    function renderSuburbList(){
+      const body=document.getElementById('area-modal-body');
+      const list=areaSuburbs(provincePicked,cityPicked,districtPicked);
+      body.innerHTML='<button type="button" class="inst-back-btn" onclick="renderDistrictList()">← Back</button>'+
+        '<div class="inst-modal-title">Select your town or suburb</div>'+
+        '<div class="inst-modal-sub">'+districtPicked+'</div>'+
+        '<input type="text" id="inst-search" class="inst-search" placeholder="Search suburbs..." oninput="filterSuburbList(this.value)"/>'+
+        '<div class="inst-count" id="inst-count">'+list.length+' suburb'+(list.length===1?'':'s')+'</div>'+
+        '<div class="tb-subject-grid" id="inst-list">'+
+        list.map(s=>'<button class="tb-subject-btn" onclick="pickSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')+
+        '</div>';
+    }
+    window.renderSuburbList=renderSuburbList;
+    window.filterSuburbList=(q)=>{
+      const list=areaSuburbs(provincePicked,cityPicked,districtPicked);
+      q=q.trim().toLowerCase();
+      const filtered=q?list.filter(s=>s.toLowerCase().includes(q)):list;
+      document.getElementById('inst-count').textContent=filtered.length+' suburb'+(filtered.length===1?'':'s');
+      document.getElementById('inst-list').innerHTML=filtered.map(s=>'<button class="tb-subject-btn" onclick="pickSuburb(\''+s.replace(/'/g,"\\'")+'\')">'+s+'</button>').join('')||'<p class="loading-msg">No matches</p>';
+    };
+    window.pickSuburb=(suburb)=>{
+      localStorage.removeItem('sm_area_all');
+      localStorage.setItem('sm_area',JSON.stringify({province:provincePicked,city:cityPicked,district:districtPicked,suburb}));
+      updateAreaBtnLabel();
+      closeAreaModal();
     };
 
     // Auto-open a listing if we arrived here via a store.html link (?open=<id>)
@@ -2216,9 +1913,19 @@
       } else if(el){
         selectCat(pendingCat,el);
       }
-      const catsEl=document.getElementById('categories');
-      if(catsEl && catsEl.offsetParent!==null) catsEl.scrollIntoView({block:'start'});
-      else document.getElementById('listings-grid').scrollIntoView({block:'start'});
+      // Prefer scrolling straight to the subcategory panel that just opened —
+      // the top chip bar (#categories) is hidden on mobile (see the
+      // @media max-width:640px rule in style.css), so its offsetParent is
+      // null there and the old fallback used to jump all the way down to
+      // the listings grid instead, past the panel the user actually needs.
+      const tbPanel=document.getElementById('tb-panel');
+      if(tbPanel && tbPanel.style.display!=='none' && tbPanel.offsetParent!==null){
+        tbPanel.scrollIntoView({block:'start'});
+      } else {
+        const catsEl=document.getElementById('categories');
+        if(catsEl && catsEl.offsetParent!==null) catsEl.scrollIntoView({block:'start'});
+        else document.getElementById('listings-grid').scrollIntoView({block:'start'});
+      }
     }
   </script>
   <nav class="bottom-nav">
