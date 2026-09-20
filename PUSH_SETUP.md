@@ -5,11 +5,11 @@ is already built and live in the app. Three things only you can do, because
 they involve secrets and infrastructure outside this codebase:
 
 ## 1. Run the SQL
-In Supabase SQL Editor for `kqsqtasykdtpdrkqyaxp`, run:
+In Supabase SQL Editor for `spupfdclswjlpwiebwlq`, run:
 - `push_notifications_migration.sql` (requires `security_hardening.sql` already applied)
 
 Before running it, open the file and replace:
-- `YOUR_PROJECT` → your actual project ref (`kqsqtasykdtpdrkqyaxp`)
+- `YOUR_PROJECT` → your actual project ref (`spupfdclswjlpwiebwlq`)
 - `PUSH_SHARED_SECRET` → any random string you make up (e.g. a UUID) — this
   proves to the edge function that the call really came from your database.
   Use the **same string** in step 3 below.
@@ -18,42 +18,21 @@ Before running it, open the file and replace:
 The function code is in `supabase-functions/send-push/index.ts` in this project
 — copy it into your Supabase functions folder and deploy:
 ```bash
-supabase functions deploy send-push --no-verify-jwt --project-ref kqsqtasykdtpdrkqyaxp
+supabase functions deploy send-push --no-verify-jwt --project-ref spupfdclswjlpwiebwlq
 ```
 
 ## 3. Set the function's secrets
 ```bash
 supabase secrets set \
-  VAPID_PUBLIC_KEY=BDyOj8uuDSlLJDGHXjMZYWWvELnV2jtbQ5YY93jxZ_TNYAcDLgUUaaOntRyt-iOWUvEV-aIZbBIfCrLEQ_fxnD4 \
-  VAPID_PRIVATE_KEY=<your private key — see below, NEVER commit the real value to git> \
+  VAPID_PUBLIC_KEY=BIPWChuqnVCAAzRbAamZlN7OGZrGyCtgVVpptkRm8KSGJI7rgnkyRGDD1HjDak4MX1OUTjMk1s2Uhv22IG1S5wM \
+  VAPID_PRIVATE_KEY=K9kaklXlYxhNGWjmIJsTxNN_30LoK_bG3MhI8238y8k \
   VAPID_SUBJECT=mailto:studentmarketplacehelp@gmail.com \
   PUSH_SHARED_SECRET=<the same string you used in the SQL file> \
-  --project-ref kqsqtasykdtpdrkqyaxp
+  --project-ref spupfdclswjlpwiebwlq
 ```
 
-**Where to get the private key:** it's yours alone and only you have it — it
-was shown to you once when this key pair was generated and is intentionally
-NOT written down anywhere in this repo (an earlier version of this file did
-include it in plain text, which is a real secret leak if that file was ever
-pushed to a public or even private GitHub repo — treat that old key as
-compromised; it's why this is now a brand-new key pair). If you've lost your
-copy of the private key, generate a completely new pair (see below) rather
-than trying to recover the old one, and update BOTH this secret and
-`VAPID_PUBLIC_KEY` in `seller.html`/`profile.html` together — a mismatched
-pair breaks push notifications entirely.
-
-To generate a new pair yourself at any time:
-```bash
-npx web-push generate-vapid-keys
-```
-
-This is a brand-new, unique key pair generated specifically for this project
-(the previous key pair was a shared/template value and has been replaced
-everywhere — frontend and these instructions both updated together, so there's
-no mismatch between what the browser sends and what the edge function signs
-with).
-**The private key must never appear in any HTML file, this file, or any file
-committed to git** — it only goes in
+The VAPID key pair above was generated for you and is ready to use as-is.
+**The private key must never appear in any HTML file** — it only goes in
 this secrets command, never in the frontend. The public key is already
 embedded in the frontend (`index.html`, `seller.html`, `profile.html`)
 where users subscribe.

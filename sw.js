@@ -1,4 +1,4 @@
-// sw.js — Student Marketplace service worker
+// sw.js — Marketrade service worker
 // Handles: showing push notifications, and opening/focusing the app when tapped.
 
 self.addEventListener('install', (event) => {
@@ -10,7 +10,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let data = { title: 'Student Marketplace', body: 'You have a new notification', url: '/index.html' };
+  let data = { title: 'Marketrade', body: 'You have a new notification', url: '/index.html' };
   try {
     if (event.data) data = { ...data, ...event.data.json() };
   } catch (e) {
