@@ -50,7 +50,7 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="index.html" class="nav-logo">Market<span>rade</span> 🛍️</a>
+    <a href="index.html" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
     <div class="nav-links">
       <a href="index.html">Browse</a>
     </div>
@@ -1352,23 +1352,32 @@
             const canvas = document.createElement('canvas');
             canvas.width=width; canvas.height=height;
             const ctx=canvas.getContext('2d');
+            // drawImage's target size is in the SOURCE's own (pre-rotation)
+            // space — the transform below is what actually rotates it into
+            // the canvas's upright width/height. Must be computed before the
+            // switch: for swapped orientations (5-8) these differ from the
+            // canvas's own width/height once MAX-downscaling is involved,
+            // since the two are no longer interchangeable like they were
+            // pre-resize.
+            const drawW = swapped ? height : width;
+            const drawH = swapped ? width : height;
             // Standard EXIF-orientation-to-canvas-transform mapping so the
             // pixels land upright regardless of how the camera stored them.
+            // The translate offsets must be in the same (source, pre-rotation)
+            // space as drawW/drawH above, NOT the final canvas width/height —
+            // using the canvas dims here was the bug: it skewed every resized
+            // portrait photo (any iOS photo with EXIF orientation 6 being the
+            // common case) into a wrongly-cropped, zoomed-in result.
             switch(orientation){
               case 2: ctx.transform(-1,0,0,1,width,0); break;
               case 3: ctx.transform(-1,0,0,-1,width,height); break;
               case 4: ctx.transform(1,0,0,-1,0,height); break;
               case 5: ctx.transform(0,1,1,0,0,0); break;
-              case 6: ctx.transform(0,1,-1,0,height,0); break;
-              case 7: ctx.transform(0,-1,-1,0,height,width); break;
-              case 8: ctx.transform(0,-1,1,0,0,width); break;
+              case 6: ctx.transform(0,1,-1,0,drawH,0); break;
+              case 7: ctx.transform(0,-1,-1,0,drawH,drawW); break;
+              case 8: ctx.transform(0,-1,1,0,0,drawW); break;
               default: break; // 1, or unrecognized: draw as-is
             }
-            // drawImage's target size is in the SOURCE's own (pre-rotation)
-            // space — the transform above is what actually rotates it into
-            // the canvas's upright width/height.
-            const drawW = swapped ? height : width;
-            const drawH = swapped ? width : height;
             ctx.drawImage(img,0,0,drawW,drawH);
             canvas.toBlob(blob=>{
               if(!blob) return reject(new Error('Compression failed'));

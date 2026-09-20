@@ -901,7 +901,8 @@ BEGIN
   SELECT * INTO v_seller FROM profiles WHERE id = v_listing.seller_id;
   IF COALESCE(v_seller.is_blocked, false) THEN RAISE EXCEPTION 'Seller unavailable'; END IF;
   IF NOT COALESCE(v_seller.is_admin, false) THEN
-    IF v_seller.subscription_paid_until IS NULL OR v_seller.subscription_paid_until < CURRENT_DATE THEN
+    IF (v_seller.subscription_paid_until IS NULL OR v_seller.subscription_paid_until < CURRENT_DATE)
+       AND NOT EXISTS (SELECT 1 FROM settings WHERE key = 'free_mode_active' AND value = 'true') THEN
       RAISE EXCEPTION 'Seller unavailable';
     END IF;
   END IF;
