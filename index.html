@@ -272,15 +272,15 @@
   </div>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y" onclick="closeLightbox()">
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;touch-action:none" onclick="closeLightbox()">
     <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;font-weight:800;z-index:10">✕</button>
     <button onclick="event.stopPropagation();lightboxSlide(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-prev">‹</button>
     <button onclick="event.stopPropagation();lightboxSlide(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:800" id="lb-next">›</button>
-    <div id="lightbox-viewport" style="width:100vw;height:calc(100vh - 90px);height:calc(100dvh - 90px);overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:pan-y" onclick="event.stopPropagation()">
+    <div id="lightbox-viewport" style="align-self:stretch;flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:pan-y" onclick="event.stopPropagation()">
       <div id="lightbox-track" style="display:flex;width:100%;height:100%;transition:transform 0.3s ease;will-change:transform"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:16px" id="lb-dots"></div>
-    <div style="color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;margin-top:8px" id="lb-counter"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-shrink:0" id="lb-dots"></div>
+    <div style="color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;margin-top:8px;flex-shrink:0" id="lb-counter"></div>
   </div>
 
   <!-- CONTACT MODAL -->
@@ -1178,8 +1178,15 @@
       recent.unshift(id);
       localStorage.setItem('sm_recently_viewed',JSON.stringify(recent.slice(0,12)));
 
-      // Similar listings (same category, excluding this one)
-      const similar=all.filter(x=>x.category===l.category&&x.id!==l.id).slice(0,4);
+      // Similar listings (same category, excluding this one). Category text
+      // can differ in case/whitespace between listings, which silently broke
+      // the match — normalize before comparing. Falls back to any other
+      // listings when nothing shares the category, so the section only ever
+      // stays hidden when this is truly the only listing on the whole site.
+      const normCat=c=>(c||'').trim().toLowerCase();
+      let similar=all.filter(x=>normCat(x.category)===normCat(l.category)&&x.id!==l.id);
+      if(!similar.length) similar=all.filter(x=>x.id!==l.id);
+      similar=similar.slice(0,4);
       const simSection=document.getElementById('modal-similar-section');
       if(similar.length){
         simSection.style.display='block';
