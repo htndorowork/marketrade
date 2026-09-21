@@ -7,43 +7,43 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/categories.html</loc>
+    <loc>https://www.marketrade.co/categories</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/faq.html</loc>
+    <loc>https://www.marketrade.co/faq</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/guidelines.html</loc>
+    <loc>https://www.marketrade.co/guidelines</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/terms.html</loc>
+    <loc>https://www.marketrade.co/terms</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/privacy.html</loc>
+    <loc>https://www.marketrade.co/privacy</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/how-payments-work.html</loc>
+    <loc>https://www.marketrade.co/how-payments-work</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://www.marketrade.co/login.html</loc>
+    <loc>https://www.marketrade.co/login</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

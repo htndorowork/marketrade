@@ -1,0 +1,47 @@
+# Auto-generated: clean URLs (no .html) for Marketrade
+# 1) Permanently redirect old .html URLs to their clean equivalent
+#    (keeps old links/bookmarks working, and tells search engines to
+#    update their index instead of seeing it as duplicate content).
+/index.html   /   301!
+/404.html   /404   301!
+/admin.html   /admin   301!
+/categories.html   /categories   301!
+/faq.html   /faq   301!
+/favorites.html   /favorites   301!
+/guidelines.html   /guidelines   301!
+/how-payments-work.html   /how-payments-work   301!
+/listing-reviews.html   /listing-reviews   301!
+/login.html   /login   301!
+/messages.html   /messages   301!
+/payment-cancel.html   /payment-cancel   301!
+/payment-return.html   /payment-return   301!
+/privacy.html   /privacy   301!
+/profile.html   /profile   301!
+/receipt.html   /receipt   301!
+/seller.html   /seller   301!
+/store.html   /store   301!
+/terms.html   /terms   301!
+/verify.html   /verify   301!
+
+# 2) Serve each clean URL from its real .html file (invisible rewrite,
+#    no redirect — this is what makes /login actually load content).
+/   /index.html   200
+/404   /404.html   200
+/admin   /admin.html   200
+/categories   /categories.html   200
+/faq   /faq.html   200
+/favorites   /favorites.html   200
+/guidelines   /guidelines.html   200
+/how-payments-work   /how-payments-work.html   200
+/listing-reviews   /listing-reviews.html   200
+/login   /login.html   200
+/messages   /messages.html   200
+/payment-cancel   /payment-cancel.html   200
+/payment-return   /payment-return.html   200
+/privacy   /privacy.html   200
+/profile   /profile.html   200
+/receipt   /receipt.html   200
+/seller   /seller.html   200
+/store   /store.html   200
+/terms   /terms.html   200
+/verify   /verify.html   200
