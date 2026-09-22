@@ -1695,12 +1695,17 @@
       lbImgs=[currentListing.image_url,currentListing.image_url_2,currentListing.image_url_3,currentListing.image_url_4,currentListing.image_url_5,currentListing.image_url_6].filter(Boolean);
       if(!lbImgs.length)return;
       lbIdx=idx||0;
-      buildLightboxTrack();
-      setLightboxTransform(false);
-      updateLightboxUI();
+      // display must be set to 'flex' BEFORE building/measuring the track:
+      // buildLightboxTrack() reads the viewport's clientWidth, which is 0
+      // while the lightbox is still display:none, so every slide was being
+      // built at 0px wide — invisible, leaving just the dark backdrop with
+      // the page behind faintly showing through.
       const lb=document.getElementById('lightbox');
       lb.style.display='flex';
       document.body.style.overflow='hidden';
+      buildLightboxTrack();
+      setLightboxTransform(false);
+      updateLightboxUI();
     };
     // Slide widths are measured in real pixels (via clientWidth) rather than
     // left as CSS percentages. Percentage-based slide widths inside nested
