@@ -1718,7 +1718,7 @@
       const vw=document.getElementById('lightbox-viewport').clientWidth;
       document.getElementById('lightbox-track').innerHTML = lbImgs.map((u,i)=>
         '<div style="width:'+vw+'px;min-width:'+vw+'px;height:100%;flex-shrink:0;display:flex;align-items:center;justify-content:center">'+
-        '<img loading="lazy" src="'+u+'" alt="'+escapeHtml(currentListing?.title||'Listing')+' — photo '+(i+1)+'" style="width:100%;height:100%;object-fit:cover"/></div>'
+        '<img loading="lazy" src="'+u+'" alt="'+escapeHtml(currentListing?.title||'Listing')+' — photo '+(i+1)+'" style="max-width:100%;max-height:100%;object-fit:contain"/></div>'
       ).join('');
     }
     function setLightboxTransform(animate){
