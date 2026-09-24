@@ -1885,8 +1885,22 @@ AS $$
 DECLARE
   v_recipient uuid;
   v_sender_name text;
+  v_muted boolean := false;
 BEGIN
   v_recipient := CASE WHEN NEW.sender_id = NEW.buyer_id THEN NEW.seller_id ELSE NEW.buyer_id END;
+
+  IF to_regclass('public.conversation_settings') IS NOT NULL THEN
+    SELECT (cs.muted_always OR (cs.muted_until IS NOT NULL AND cs.muted_until > now()))
+      INTO v_muted
+      FROM conversation_settings cs
+     WHERE cs.user_id = v_recipient
+       AND cs.thread_key = lower(NEW.sender_id::text);   -- the recipient's conversation with the sender
+  END IF;
+
+  IF COALESCE(v_muted, false) THEN
+    RETURN NEW;   -- muted: the message is delivered, but no notification / push is created
+  END IF;
+
   SELECT COALESCE(store_name, full_name, 'Someone') INTO v_sender_name FROM profiles WHERE id = NEW.sender_id;
 
   INSERT INTO notifications (user_id, type, message, listing_id)
@@ -2341,6 +2355,312 @@ GRANT EXECUTE ON FUNCTION public.touch_presence() TO authenticated;
 -- anon may look up status too, so signed-out visitors browsing a listing can see
 -- whether the seller is online.
 GRANT EXECUTE ON FUNCTION public.get_presence(uuid[]) TO anon, authenticated;
+
+-- ############################################################
+-- # 15. CHAT OPTIONS — pin / mute / archive (was: conversation_options_migration.sql)
+-- ############################################################
+
+-- ============================================================
+-- CHAT OPTIONS: pin / mute / archive a conversation
+-- Run in the MARKETPLACE Supabase SQL Editor. Safe to re-run.
+-- ============================================================
+
+-- ---------- 1) Per-user settings for each conversation ----------
+-- A "conversation" is one row in the chat list = you + ONE other person, no matter
+-- how many listings you've talked about. thread_key is that other person's user id
+-- (lower-case text), which is exactly how messages.html and notify_new_message()
+-- identify a conversation. These settings belong to ONE user: muting or archiving
+-- a chat never affects the other person.
+CREATE TABLE IF NOT EXISTS conversation_settings (
+  user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  thread_key text NOT NULL CHECK (char_length(thread_key) <= 120),
+  pinned_at timestamptz,                          -- set = pinned to the top of the list
+  muted_until timestamptz,                        -- "Mute for 24 hours"
+  muted_always boolean NOT NULL DEFAULT false,    -- "Mute always"
+  archived_at timestamptz,                        -- set = archived
+  archived_incoming_count integer NOT NULL DEFAULT 0, -- how many messages THEY had sent (across all listings) when archived;
+                                                  -- a newer message from them brings the chat back (unless muted)
+  PRIMARY KEY (user_id, thread_key)
+);
+
+-- ---------- 1b) Upgrade: one chat per person (was one chat per listing) ----------
+-- Any settings saved under the old  '<buyer>|<seller>|<listing>'  keys are merged into one
+-- row per person. Pinned/muted if ANY of that person's old chats was; archived only if
+-- EVERY one of them was. Does nothing (and is safe to re-run) once no old-style keys remain.
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM conversation_settings WHERE thread_key LIKE '%|%') THEN
+    CREATE TEMP TABLE _cs_old ON COMMIT DROP AS
+    SELECT cs.*,
+           lower(CASE WHEN split_part(cs.thread_key, '|', 1) = cs.user_id::text
+                      THEN split_part(cs.thread_key, '|', 2)
+                      ELSE split_part(cs.thread_key, '|', 1) END) AS other_id
+    FROM conversation_settings cs
+    WHERE cs.thread_key LIKE '%|%';
+
+    CREATE TEMP TABLE _cs_new ON COMMIT DROP AS
+    SELECT o.user_id,
+           o.other_id AS thread_key,
+           max(o.pinned_at) AS pinned_at,
+           bool_or(o.muted_always) AS muted_always,
+           max(o.muted_until) AS muted_until,
+           max(o.archived_at) AS archived_at,
+           (count(*) FILTER (WHERE o.archived_at IS NOT NULL) >= (
+              SELECT count(DISTINCT COALESCE(m.listing_id::text, 'none')) FROM messages m
+              WHERE (m.buyer_id = o.user_id AND m.seller_id::text = o.other_id)
+                 OR (m.seller_id = o.user_id AND m.buyer_id::text = o.other_id)
+           )) AS all_archived
+    FROM _cs_old o
+    GROUP BY o.user_id, o.other_id;
+
+    DELETE FROM conversation_settings WHERE thread_key LIKE '%|%';
+
+    INSERT INTO conversation_settings
+      (user_id, thread_key, pinned_at, muted_always, muted_until, archived_at, archived_incoming_count)
+    SELECT n.user_id, n.thread_key, n.pinned_at, n.muted_always, n.muted_until,
+           CASE WHEN n.all_archived THEN n.archived_at END,
+           CASE WHEN n.all_archived THEN (
+                SELECT count(*) FROM messages m
+                WHERE m.sender_id::text = n.thread_key
+                  AND (m.buyer_id = n.user_id OR m.seller_id = n.user_id)
+           )::int ELSE 0 END
+    FROM _cs_new n
+    ON CONFLICT (user_id, thread_key) DO UPDATE SET
+      pinned_at    = GREATEST(conversation_settings.pinned_at, EXCLUDED.pinned_at),
+      muted_always = conversation_settings.muted_always OR EXCLUDED.muted_always,
+      muted_until  = GREATEST(conversation_settings.muted_until, EXCLUDED.muted_until);
+  END IF;
+END $$;
+
+ALTER TABLE conversation_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "conv_settings_own_select" ON conversation_settings;
+DROP POLICY IF EXISTS "conv_settings_own_insert" ON conversation_settings;
+DROP POLICY IF EXISTS "conv_settings_own_update" ON conversation_settings;
+DROP POLICY IF EXISTS "conv_settings_own_delete" ON conversation_settings;
+
+CREATE POLICY "conv_settings_own_select" ON conversation_settings FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "conv_settings_own_insert" ON conversation_settings FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "conv_settings_own_update" ON conversation_settings FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "conv_settings_own_delete" ON conversation_settings FOR DELETE USING (auth.uid() = user_id);
+
+-- ---------- 2) Muting is enforced on the SERVER ----------
+-- Every push notification and bell notification for a new message starts as a row
+-- inserted here, so if the recipient has muted their conversation with the sender we don't
+-- create one. (Just hiding it in the app would still buzz their phone.)
+-- The guard on to_regclass() means this function keeps working even if it's ever
+-- created before the table exists, so it can never break sending a message.
+CREATE OR REPLACE FUNCTION public.notify_new_message()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_recipient uuid;
+  v_sender_name text;
+  v_muted boolean := false;
+BEGIN
+  v_recipient := CASE WHEN NEW.sender_id = NEW.buyer_id THEN NEW.seller_id ELSE NEW.buyer_id END;
+
+  IF to_regclass('public.conversation_settings') IS NOT NULL THEN
+    SELECT (cs.muted_always OR (cs.muted_until IS NOT NULL AND cs.muted_until > now()))
+      INTO v_muted
+      FROM conversation_settings cs
+     WHERE cs.user_id = v_recipient
+       AND cs.thread_key = lower(NEW.sender_id::text);   -- the recipient's conversation with the sender
+  END IF;
+
+  IF COALESCE(v_muted, false) THEN
+    RETURN NEW;   -- muted: the message is delivered, but no notification / push is created
+  END IF;
+
+  SELECT COALESCE(store_name, full_name, 'Someone') INTO v_sender_name FROM profiles WHERE id = NEW.sender_id;
+
+  INSERT INTO notifications (user_id, type, message, listing_id)
+  VALUES (v_recipient, 'new_message', v_sender_name || ' sent you a message 💬', NEW.listing_id);
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_notify_new_message ON messages;
+CREATE TRIGGER trg_notify_new_message
+  AFTER INSERT ON messages
+  FOR EACH ROW EXECUTE FUNCTION public.notify_new_message();
+
+-- ############################################################
+-- # 16. SELLER ANALYTICS — total sales & orders by period (was: seller_analytics_migration.sql)
+-- ############################################################
+
+-- ============================================================
+-- SELLER ANALYTICS: total sales (daily/weekly/monthly/yearly), orders, and more
+-- Run in the MARKETPLACE Supabase SQL Editor. Safe to re-run.
+-- ============================================================
+--
+-- What counts as a "sale": an order with payment_status = 'paid' — i.e. the
+-- buyer's payment actually cleared through TradeSafe. This is true the moment
+-- payment clears, whether the money is still held in escrow, has been
+-- released to the seller's wallet, or is under dispute — it's what the buyer
+-- was charged, which is what "sales" means everywhere else (Shopify, Takealot,
+-- etc.). Orders that were never paid for (abandoned checkouts) are reported
+-- separately as "pending payment" so they don't inflate sales figures.
+--
+-- Timezone: `orders.created_at` is stored as a naive `timestamp`, written by
+-- `now()` on a database whose session timezone is UTC (Supabase's default) —
+-- so the stored value IS a UTC wall-clock reading. Every date bucket below
+-- converts that UTC reading to Africa/Johannesburg (SAST, UTC+2, no DST)
+-- before truncating to a day/week/month/year, so "Today" and "This week"
+-- match the seller's own calendar rather than a server clock in another
+-- timezone.
+
+CREATE OR REPLACE FUNCTION public.seller_local_time(p_ts timestamp)
+RETURNS timestamp
+LANGUAGE sql IMMUTABLE
+AS $$ SELECT (p_ts AT TIME ZONE 'UTC') AT TIME ZONE 'Africa/Johannesburg' $$;
+
+-- ---------- Summary: today / this week / this month / this year / all-time, + more ----------
+CREATE OR REPLACE FUNCTION public.get_seller_analytics_summary()
+RETURNS jsonb
+LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_seller uuid := auth.uid();
+  v_now timestamp := public.seller_local_time(now()::timestamp);
+  v_today_start timestamp := date_trunc('day', v_now);
+  v_week_start timestamp := date_trunc('week', v_now);     -- Monday, per Postgres default
+  v_month_start timestamp := date_trunc('month', v_now);
+  v_year_start timestamp := date_trunc('year', v_now);
+  v_result jsonb;
+BEGIN
+  IF v_seller IS NULL THEN RAISE EXCEPTION 'Not signed in'; END IF;
+
+  SELECT jsonb_build_object(
+    'today',      jsonb_build_object('revenue', COALESCE(SUM(amount) FILTER (WHERE public.seller_local_time(created_at) >= v_today_start), 0), 'orders', COUNT(*) FILTER (WHERE public.seller_local_time(created_at) >= v_today_start)),
+    'this_week',  jsonb_build_object('revenue', COALESCE(SUM(amount) FILTER (WHERE public.seller_local_time(created_at) >= v_week_start), 0), 'orders', COUNT(*) FILTER (WHERE public.seller_local_time(created_at) >= v_week_start)),
+    'this_month', jsonb_build_object('revenue', COALESCE(SUM(amount) FILTER (WHERE public.seller_local_time(created_at) >= v_month_start), 0), 'orders', COUNT(*) FILTER (WHERE public.seller_local_time(created_at) >= v_month_start)),
+    'this_year',  jsonb_build_object('revenue', COALESCE(SUM(amount) FILTER (WHERE public.seller_local_time(created_at) >= v_year_start), 0), 'orders', COUNT(*) FILTER (WHERE public.seller_local_time(created_at) >= v_year_start)),
+    'all_time',   jsonb_build_object('revenue', COALESCE(SUM(amount), 0), 'orders', COUNT(*)),
+    'items_sold', COALESCE(SUM(quantity), 0),
+    'avg_order_value', CASE WHEN COUNT(*) > 0 THEN ROUND(SUM(amount) / COUNT(*), 2) ELSE 0 END
+  )
+  INTO v_result
+  FROM orders
+  WHERE seller_id = v_seller AND payment_status = 'paid';
+
+  -- Non-sale context: money still reserved but not yet a confirmed sale,
+  -- money held in escrow vs. released, and anything under dispute.
+  v_result := v_result || (
+    SELECT jsonb_build_object(
+      'pending_payment', jsonb_build_object('count', COUNT(*) FILTER (WHERE payment_status = 'unpaid'), 'amount', COALESCE(SUM(amount) FILTER (WHERE payment_status = 'unpaid'), 0)),
+      'in_escrow',        jsonb_build_object('count', COUNT(*) FILTER (WHERE payment_status = 'paid' AND escrow_status = 'held'), 'amount', COALESCE(SUM(amount) FILTER (WHERE payment_status = 'paid' AND escrow_status = 'held'), 0)),
+      'completed',        jsonb_build_object('count', COUNT(*) FILTER (WHERE payment_status = 'paid' AND status = 'completed'), 'amount', COALESCE(SUM(amount) FILTER (WHERE payment_status = 'paid' AND status = 'completed'), 0)),
+      'disputed',         COUNT(*) FILTER (WHERE payment_status = 'paid' AND escrow_status = 'disputed'),
+      'refunded',         COUNT(*) FILTER (WHERE payment_status = 'refunded')
+    )
+    FROM orders WHERE seller_id = v_seller
+  );
+
+  -- Top 5 listings by revenue (all-time, paid orders only)
+  v_result := v_result || jsonb_build_object('top_listings', COALESCE((
+    SELECT jsonb_agg(row_to_json(t))
+    FROM (
+      SELECT o.listing_id, COALESCE(l.title, 'Deleted listing') AS title,
+             SUM(o.amount) AS revenue, SUM(o.quantity) AS units
+      FROM orders o LEFT JOIN listings l ON l.id = o.listing_id
+      WHERE o.seller_id = v_seller AND o.payment_status = 'paid'
+      GROUP BY o.listing_id, l.title
+      ORDER BY SUM(o.amount) DESC
+      LIMIT 5
+    ) t
+  ), '[]'::jsonb));
+
+  RETURN v_result;
+END;
+$$;
+
+-- ---------- Trend series for the Daily / Weekly / Monthly / Yearly chart ----------
+CREATE OR REPLACE FUNCTION public.get_seller_sales_series(p_granularity text)
+RETURNS TABLE (period_start date, revenue numeric, orders integer)
+LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_seller uuid := auth.uid();
+  v_unit text;
+  v_count integer;
+  v_now timestamp := public.seller_local_time(now()::timestamp);
+BEGIN
+  IF v_seller IS NULL THEN RAISE EXCEPTION 'Not signed in'; END IF;
+  v_unit := CASE p_granularity WHEN 'daily' THEN 'day' WHEN 'weekly' THEN 'week' WHEN 'monthly' THEN 'month' WHEN 'yearly' THEN 'year' ELSE NULL END;
+  IF v_unit IS NULL THEN RAISE EXCEPTION 'Invalid granularity'; END IF;
+  v_count := CASE p_granularity WHEN 'daily' THEN 30 WHEN 'weekly' THEN 12 WHEN 'monthly' THEN 12 ELSE 6 END;
+
+  RETURN QUERY
+  WITH periods AS (
+    SELECT date_trunc(v_unit, v_now) - (n || ' ' || v_unit)::interval AS p
+    FROM generate_series(0, v_count - 1) AS n
+  ),
+  sales AS (
+    SELECT date_trunc(v_unit, public.seller_local_time(created_at)) AS p,
+           SUM(amount) AS revenue, COUNT(*) AS orders
+    FROM orders
+    WHERE seller_id = v_seller AND payment_status = 'paid'
+      AND public.seller_local_time(created_at) >= date_trunc(v_unit, v_now) - ((v_count - 1) || ' ' || v_unit)::interval
+    GROUP BY 1
+  )
+  SELECT periods.p::date, COALESCE(sales.revenue, 0), COALESCE(sales.orders, 0)::integer
+  FROM periods LEFT JOIN sales ON sales.p = periods.p
+  ORDER BY periods.p;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.get_seller_analytics_summary() FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.get_seller_sales_series(text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.seller_local_time(timestamp) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_seller_analytics_summary() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_seller_sales_series(text) TO authenticated;
+
+-- ############################################################
+-- # 17. OAUTH SIGN-IN — referral capture for Google/Apple (was: oauth_referral_migration.sql)
+-- ############################################################
+
+-- ============================================================
+-- OAUTH SIGN-IN: referral capture for Google/Apple sign-ups
+-- Run in the MARKETPLACE Supabase SQL Editor. Safe to re-run.
+-- ============================================================
+--
+-- Email/password sign-up already attributes a referral by passing ?ref=<id>
+-- into auth.signUp()'s user metadata, which the handle_new_user() trigger
+-- reads. Supabase's OAuth sign-in (signInWithOAuth) has no equivalent way to
+-- pass custom metadata through to the provider redirect, so a referral code
+-- picked up on the sign-in page has to be "claimed" after the OAuth redirect
+-- completes instead. This function does that claim, with the same safety
+-- checks the trigger already applies (no self-referral, referrer must be a
+-- real profile) plus one more: it will never overwrite an attribution that's
+-- already set, so it can't be used to hijack an existing account's referral.
+CREATE OR REPLACE FUNCTION public.claim_referral_code(p_ref uuid)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF auth.uid() IS NULL OR p_ref IS NULL OR p_ref = auth.uid() THEN RETURN; END IF;
+  UPDATE profiles
+  SET referred_by = p_ref
+  WHERE id = auth.uid()
+    AND referred_by IS NULL
+    AND EXISTS (SELECT 1 FROM profiles WHERE id = p_ref);
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.claim_referral_code(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.claim_referral_code(uuid) TO authenticated;
 
 -- ============================================================
 -- DONE. All sections applied.

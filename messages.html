@@ -3,149 +3,186 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Messages — Marketrade</title>
-  <meta name="description" content="Chat with buyers and sellers on Marketrade."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Messages — Marketrade"/>
-  <meta property="og:description" content="Chat with buyers and sellers on Marketrade."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Messages — Marketrade"/>
-  <meta name="twitter:description" content="Chat with buyers and sellers on Marketrade."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <title>Messages — Student Marketplace</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/messages"/>
+  <meta name="description" content="Your conversations with buyers and sellers on Student Marketplace."/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
   <style>
-    .msg-wrap { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr; gap: 16px; height: calc(100vh - 90px); height: calc(100dvh - 90px); }
+    body { overflow-x: hidden; }
+    .msg-wrap { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr; gap: 16px; height: calc(100vh - 90px); height: calc(100dvh - 90px); box-sizing: border-box; }
     @media (max-width: 700px) {
       .msg-wrap { grid-template-columns: 1fr; height: calc(100vh - 128px); height: calc(100dvh - 128px); }
       .msg-wrap .chat-panel { display: none; }
       .msg-wrap.chat-open .chat-panel { display: flex; }
       .msg-wrap.chat-open .thread-list { display: none; }
     }
-    .chat-back-btn { display: none; background: none; border: none; cursor: pointer; font-size: 18px; font-weight: 900; color: #2563eb; padding: 0 10px 0 0; font-family: inherit; flex-shrink: 0; }
+    .chat-back-btn { display: none; background: none; border: none; cursor: pointer; font-size: 18px; font-weight: 900; color: #7c3aed; padding: 0 12px 0 0; font-family: inherit; }
     @media (max-width: 700px) { .chat-back-btn { display: inline-block; } }
-    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .thread-item { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
-    .thread-item:hover, .thread-item.active { background: #eff6ff; }
+    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+    .thread-search-box { padding: 10px; border-bottom: 1px solid #f5f5f5; flex-shrink: 0; }
+    .thread-search-box input { width: 100%; box-sizing: border-box; border: 2px solid #f0f0f0; border-radius: 50px; padding: 9px 14px; font-family: inherit; font-size: 13.5px; -webkit-appearance: none; }
+    .thread-search-results { flex-shrink: 0; max-height: 240px; overflow-y: auto; border-bottom: 1px solid #f5f5f5; }
+    .thread-search-result { padding: 10px 16px; border-bottom: 1px solid #f8f8f8; cursor: pointer; font-size: 13px; font-weight: 700; color: #333; }
+    .thread-search-result:hover { background: #f5f0fe; }
+    .thread-search-result small { display: block; font-size: 11px; font-weight: 600; color: #aaa; margin-top: 1px; }
+    .thread-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .thread-item { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .thread-item:hover, .thread-item.active { background: #f5f0fe; }
+    .thread-avatar { flex-shrink: 0; display: flex; }
+    .thread-info { min-width: 0; flex: 1; }
     .thread-name { font-weight: 800; font-size: 13.5px; color: #111; }
     .thread-preview { font-size: 12px; color: #888; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; margin-left: 6px; }
-    .thread-list-bar { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; position: sticky; top: 0; background: #fff; z-index: 1; }
-    .thread-list-bar-row { display: flex; align-items: center; gap: 10px; }
-    .thread-list-bar-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 8px 14px; font-family: inherit; font-size: 13.5px; -webkit-appearance: none; box-sizing: border-box; }
-    .archive-toggle { background: none; border: none; font-size: 11.5px; font-weight: 800; color: #888; cursor: pointer; padding: 6px 4px; font-family: inherit; white-space: nowrap; }
-    .archive-toggle.active { color: #2563eb; }
+    .thread-unread { display: inline-block; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; margin-left: 6px; }
     .chat-panel { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; display: flex; flex-direction: column; height: 100%; min-height: 0; }
-    .chat-header { padding: 10px 14px; border-bottom: 2px solid #f5f5f5; display: flex; align-items: center; gap: 10px; }
-    .chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: #eef1fb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #2563eb; overflow: hidden; flex-shrink: 0; }
-    .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .chat-header { padding: 12px 16px; border-bottom: 2px solid #f5f5f5; display: flex; align-items: center; gap: 10px; position: relative; }
+    .chat-avatar { flex-shrink: 0; display: flex; }
     .chat-header-info { flex: 1; min-width: 0; }
-    .chat-header-name { font-weight: 800; font-size: 14.5px; color: #111; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .chat-header-status { font-size: 11.5px; color: #888; font-weight: 700; display: flex; align-items: center; gap: 5px; min-height: 15px; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; display: inline-block; flex-shrink: 0; }
-    .status-dot.online { background: #16a34a; }
-    .chat-header-icons { display: flex; gap: 2px; flex-shrink: 0; }
-    .chat-icon-btn { background: none; border: none; font-size: 17px; cursor: pointer; padding: 7px; border-radius: 50%; color: #555; line-height: 1; }
-    .chat-icon-btn:hover { background: #f5f5f5; }
-    .chat-search-row { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f5f5f5; background: #fafbfd; }
-    .chat-search-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 7px 14px; font-family: inherit; font-size: 13px; -webkit-appearance: none; }
-    .chat-search-row button { background: none; border: none; font-size: 15px; cursor: pointer; color: #888; flex-shrink: 0; }
-    .chat-search-count { font-size: 11px; color: #aaa; font-weight: 700; flex-shrink: 0; }
+    .chat-header-name { font-weight: 800; font-size: 14px; color: #111; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-header-sub { font-size: 11.5px; color: #aaa; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-search-toggle { font-size: 17px; }
+    .chat-header-status { line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-searchbar { display: none; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 2px solid #f5f5f5; background: #faf7ff; }
+    .chat-searchbar.open { display: flex; }
+    .chat-searchbar input { flex: 1; min-width: 0; border: 2px solid #eadffd; border-radius: 50px; padding: 8px 14px; font-family: inherit; font-size: 14px; font-weight: 600; -webkit-appearance: none; background: #fff; }
+    .chat-searchbar input:focus { outline: none; border-color: #7c3aed; }
+    .chat-search-count { font-size: 12px; font-weight: 800; color: #7c3aed; min-width: 56px; text-align: center; white-space: nowrap; }
+    .chat-search-nav { background: none; border: none; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; font-size: 15px; font-weight: 900; color: #555; font-family: inherit; flex-shrink: 0; }
+    .chat-search-nav:hover:not(:disabled) { background: #eadffd; }
+    .chat-search-nav:disabled { opacity: .35; cursor: default; }
+    mark.hit { background: #fde68a; color: #111; border-radius: 3px; padding: 0 1px; }
+    mark.hit.current { background: #f97316; color: #fff; }
+    .thread-search-result .tsr-row { display: flex; align-items: center; gap: 10px; }
+    .thread-search-result .tsr-snippet { font-size: 12px; font-weight: 600; color: #777; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-search-result .tsr-snippet mark.hit { padding: 0 1px; }
+    .thread-search-result .tsr-count { font-size: 11px; color: #aaa; font-weight: 700; }
+    .chat-menu-btn { background: none; border: none; cursor: pointer; font-size: 20px; font-weight: 900; color: #888; padding: 4px 8px; font-family: inherit; line-height: 1; }
+    .chat-options-dropdown { display: none; position: absolute; top: 54px; right: 10px; background: #fff; border: 2px solid #f0f0f0; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.12); min-width: 230px; max-height: calc(100vh - 140px); overflow-y: auto; z-index: 20; }
+    .chat-options-dropdown.open { display: block; }
+    .chat-option-item { display: block; width: 100%; text-align: left; background: none; border: none; padding: 12px 16px; font-family: inherit; font-size: 13px; font-weight: 700; color: #333; cursor: pointer; border-bottom: 1px solid #f5f5f5; }
+    .chat-option-item:last-child { border-bottom: none; }
+    .chat-option-item:hover { background: #f8f8f8; }
+    .chat-option-item.danger { color: #dc2626; }
+    .chat-option-item .opt-sub { display: block; font-size: 11px; font-weight: 600; color: #999; margin-top: 2px; }
+    .chat-options-title, .chat-option-cancel { display: none; }
+    .chat-options-backdrop { display: none; }
+    /* On phones the menu is a bottom sheet with a title and a Cancel button */
+    @media (max-width: 700px) {
+      .chat-options-backdrop.open { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 998; }
+      .chat-options-dropdown { position: fixed; top: auto; left: 0; right: 0; bottom: 0; min-width: 0; max-height: 88vh; max-height: 88dvh; border: none; border-radius: 22px 22px 0 0; box-shadow: 0 -12px 40px rgba(0,0,0,.28); z-index: 999; padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .chat-options-title { display: block; text-align: center; padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #888; border-bottom: 1px solid #f0f0f0; }
+      .chat-option-item { padding: 16px 20px; font-size: 16px; }
+      .chat-option-item .opt-sub { font-size: 12.5px; }
+      .chat-option-cancel { display: block; text-align: center; color: #888; }
+    }
+    .thread-flags { display: flex; gap: 4px; flex-shrink: 0; font-size: 12px; }
+    .thread-sub { font-size: 11.5px; color: #999; font-weight: 600; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-unread.muted { background: #b8b8c2; }
+    .listing-chip { display: inline-flex; align-items: center; align-self: center; flex-shrink: 0; max-width: 92%; background: #f5f0fe; color: #6d28d9; font-size: 11.5px; font-weight: 800; padding: 6px 13px; border-radius: 50px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 6px 0 2px; }
+    .listing-chip:hover { background: #ebe1fd; }
+    .listing-ctx { display: none; align-items: center; gap: 8px; padding: 8px 14px; background: #f5f0fe; border-top: 1px solid #ebe1fd; font-size: 12.5px; font-weight: 700; color: #5b21b6; }
+    .listing-ctx span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .listing-ctx button { background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 900; color: #7c3aed; padding: 2px 6px; font-family: inherit; }
+    .thread-archive-row { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; font-size: 13.5px; font-weight: 800; color: #555; display: flex; align-items: center; gap: 8px; }
+    .thread-archive-row:hover { background: #f5f0fe; }
+    .thread-archive-row .thread-unread { margin-left: auto; background: #b8b8c2; }
+    .thread-section-label { padding: 8px 16px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #aaa; background: #fafafa; border-bottom: 1px solid #f5f5f5; }
+    .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 96px; background: #222; color: #fff; padding: 11px 18px; border-radius: 50px; font-size: 13.5px; font-weight: 700; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw; text-align: center; }
+    .toast.show { opacity: 1; }
     .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; }
-    .chat-date-divider { text-align: center; font-size: 11.5px; font-weight: 800; color: #aaa; margin: 6px 0; }
-    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; scroll-margin: 60px; }
-    .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
+    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; overflow-wrap: break-word; word-break: break-word; }
+    .bubble.me { align-self: flex-end; background: #7c3aed; color: #fff; border-bottom-right-radius: 4px; }
     .bubble.them { align-self: flex-start; background: #f5f5f5; color: #333; border-bottom-left-radius: 4px; }
-    .bubble.highlight { box-shadow: 0 0 0 3px #f59e0b; }
-    .bubble-time { font-size: 10px; opacity: 0.75; margin-top: 4px; }
-    .bubble-status { font-size: 10px; opacity: 0.9; margin-top: 4px; display: flex; align-items: center; gap: 5px; justify-content: flex-end; }
-    .bubble-tick-read { color: #7dd3fc; font-weight: 800; }
-    .bubble-img { max-width: 100%; max-height: 260px; border-radius: 12px; display: block; margin-bottom: 4px; cursor: pointer; object-fit: cover; }
-    .chat-input-row { display: flex; gap: 8px; align-items: center; padding: 12px; border-top: 2px solid #f5f5f5; }
-    .chat-input-row input[type="text"] { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 10px 16px; font-family: inherit; font-size: 16px; -webkit-appearance: none; }
-    .chat-photo-btn { background: none; border: none; font-size: 21px; cursor: pointer; color: #2563eb; flex-shrink: 0; padding: 4px; }
+    .bubble-time { font-size: 10px; opacity: 0.7; margin-top: 4px; display: flex; align-items: center; gap: 3px; justify-content: flex-end; }
+    .bubble.them .bubble-time { justify-content: flex-start; }
+    .bubble-tick { font-size: 11px; }
+    .chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 2px solid #f5f5f5; align-items: center; }
+    .chat-input-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 10px 16px; font-family: inherit; font-size: 16px; -webkit-appearance: none; }
     .msg-wrap { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
-    .chat-input-row button.send-btn { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 50px; font-family: inherit; font-weight: 800; cursor: pointer; flex-shrink: 0; }
-    .chat-options-title { font-size: 13px; font-weight: 900; text-align: center; padding: 18px 0 4px; color: #aaa; letter-spacing: 0.6px; text-transform: uppercase; }
-    .chat-option-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 15px 22px; border: none; background: none; border-top: 1px solid #f5f5f5; font-weight: 800; font-size: 14.5px; cursor: pointer; font-family: inherit; color: #2563eb; text-align: left; }
-    .chat-option-row.danger { color: #dc2626; }
-    .chat-option-row.neutral { color: #374151; }
-    .chat-option-row.cancel { color: #888; justify-content: center; }
+    .chat-send-btn { background: #7c3aed; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; font-family: inherit; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+    .chat-send-btn:disabled { opacity: 0.5; }
   </style>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links nav-links-simple">
       <a href="/">Browse</a>
-      <a href="profile" id="nav-profile">My Profile</a>
+      <a href="/profile" id="nav-profile">My Profile</a>
     </div>
   </nav>
 
   <div class="msg-wrap" id="msg-wrap">
-    <h1 class="sr-only">Messages — Marketrade</h1>
     <div class="thread-list" id="thread-list">
-      <div class="thread-list-bar">
-        <div class="thread-list-bar-row">
-          <input type="text" id="thread-search" placeholder="🔍 Search conversations..." oninput="window.filterThreads(this.value)"/>
-          <button type="button" class="archive-toggle" id="archive-toggle-btn" onclick="window.toggleArchivedView()">🗄️ Archived</button>
-        </div>
+      <div class="thread-search-box">
+        <input type="text" id="user-search" placeholder="🔍 Search people and messages..." autocomplete="off"/>
       </div>
-      <div id="thread-list-items"><p class="loading-msg">Loading conversations... ⏳</p></div>
+      <div class="thread-search-results" id="user-search-results" style="display:none"></div>
+      <div class="thread-scroll" id="thread-scroll"><p class="loading-msg">Loading conversations... ⏳</p></div>
     </div>
     <div class="chat-panel" id="chat-panel">
-      <div class="chat-header" id="chat-header">
+      <div class="chat-header">
         <button class="chat-back-btn" onclick="closeThread()" aria-label="Back to conversations">←</button>
-        <div class="chat-avatar" id="chat-avatar">💬</div>
+        <div class="chat-avatar" id="chat-avatar" style="display:none"></div>
         <div class="chat-header-info">
-          <div class="chat-header-name" id="chat-header-name">Select a conversation</div>
-          <div class="chat-header-status" id="chat-header-status"></div>
+          <div class="chat-header-name" id="chat-header-text">Select a conversation</div>
+          <div class="chat-header-status"><span class="pstatus" id="chat-header-status" data-uid=""></span></div>
+          <div class="chat-header-sub" id="chat-header-sub" style="display:none"></div>
         </div>
-        <div class="chat-header-icons" id="chat-header-icons" style="display:none">
-          <button class="chat-icon-btn" onclick="toggleChatSearch()" aria-label="Search in conversation">🔍</button>
-          <button class="chat-icon-btn" onclick="openChatOptions()" aria-label="Chat options">⋮</button>
+        <button class="chat-menu-btn chat-search-toggle" id="chat-search-btn" style="display:none" onclick="toggleChatSearch()" aria-label="Search in this conversation" title="Search in this conversation">🔍</button>
+        <button class="chat-menu-btn" id="chat-menu-btn" style="display:none" onclick="toggleChatOptions()">⋮</button>
+        <div class="chat-options-backdrop" id="chat-options-backdrop" onclick="closeChatOptions()"></div>
+        <div class="chat-options-dropdown" id="chat-options-dropdown">
+          <div class="chat-options-title">Chat options</div>
+          <button class="chat-option-item" onclick="viewSellerProfile()">👤 View Profile</button>
+          <button class="chat-option-item" id="opt-pin" onclick="togglePinThread()">📌 Pin Conversation</button>
+          <button class="chat-option-item" id="opt-mute-24" onclick="muteThread('24h')">🔇 Mute for 24 hours</button>
+          <button class="chat-option-item" id="opt-mute-always" onclick="muteThread('always')">🔕 Mute always</button>
+          <button class="chat-option-item" id="opt-unmute" onclick="unmuteThread()" style="display:none">🔔 Unmute conversation</button>
+          <button class="chat-option-item" id="opt-archive" onclick="toggleArchiveThread()">🗄️ Archive Conversation</button>
+          <button class="chat-option-item danger" id="chat-option-block" onclick="toggleBlockThread()">🚫 Block User</button>
+          <button class="chat-option-item danger" onclick="openReportUserModal()">🚩 Report User</button>
+          <button class="chat-option-item chat-option-cancel" onclick="closeChatOptions()">Cancel</button>
         </div>
       </div>
-      <div class="chat-search-row" id="chat-search-row" style="display:none">
-        <input type="text" id="chat-search-input" placeholder="Search in this conversation..." oninput="searchInChat(this.value)"/>
+      <div class="chat-searchbar" id="chat-searchbar">
+        <input type="text" id="chat-search-input" placeholder="Search in this conversation..." autocomplete="off" aria-label="Search in this conversation"/>
         <span class="chat-search-count" id="chat-search-count"></span>
-        <button onclick="closeChatSearch()" aria-label="Close search">✕</button>
+        <button class="chat-search-nav" id="chat-search-prev" onclick="stepChatSearch(-1)" aria-label="Previous (older) match" title="Older match (Enter)">↑</button>
+        <button class="chat-search-nav" id="chat-search-next" onclick="stepChatSearch(1)" aria-label="Next (newer) match" title="Newer match (Shift+Enter)">↓</button>
+        <button class="chat-search-nav" onclick="closeChatSearch()" aria-label="Close search" title="Close (Esc)">✕</button>
       </div>
       <div class="chat-messages" id="chat-messages"><p class="loading-msg" style="margin:auto">Pick a conversation on the left, or message a seller from a listing 💬</p></div>
+      <p id="blocked-notice" style="display:none;text-align:center;font-size:12.5px;color:#aaa;font-weight:700;padding:10px">🚫 You've blocked this user — unblock them to send a message.</p>
+      <div class="listing-ctx" id="listing-ctx"><span id="listing-ctx-text"></span><button onclick="clearListingCtx()" aria-label="Don't mention this listing" title="Don't mention this listing">✕</button></div>
       <div class="chat-input-row" id="chat-input-row" style="display:none">
-        <button class="chat-photo-btn" onclick="document.getElementById('chat-photo-input').click()" aria-label="Send a photo">📷</button>
-        <input type="file" id="chat-photo-input" accept="image/*" style="display:none" onchange="sendPhoto(this.files[0])"/>
         <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()"/>
-        <button class="send-btn" onclick="sendMessage()">Send</button>
+        <button class="chat-send-btn" onclick="sendMessage()" aria-label="Send">➤</button>
       </div>
     </div>
   </div>
 
-  <!-- CHAT OPTIONS -->
-  <div class="modal-overlay" id="chat-options-overlay" onclick="closeChatOptions()">
-    <div class="modal" style="max-width:380px" onclick="event.stopPropagation()">
-      <div class="chat-options-title">Chat Options</div>
-      <div id="chat-options-body"></div>
+  <div class="modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal()" style="display:none">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:340px">
+      <button class="modal-close" onclick="closeProfileModal()">✕</button>
+      <div id="profile-modal-body" style="padding:32px 20px 26px;text-align:center"></div>
     </div>
   </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- REPORT USER -->
-  <div class="modal-overlay" id="report-user-overlay" onclick="closeReportUser()">
+  <div class="modal-overlay" id="report-user-modal-overlay" onclick="closeReportUserModal()" style="display:none">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
-      <button class="modal-close" onclick="closeReportUser()">✕</button>
-      <div class="modal-body">
-        <div class="tb-heading">🚩 Report User</div>
+      <button class="modal-close" onclick="closeReportUserModal()">✕</button>
+      <div style="padding:22px 20px">
+        <div class="tb-heading">🚩 Report this user</div>
         <div class="form-group">
           <label>Reason</label>
           <select id="report-user-reason">
@@ -168,375 +205,674 @@
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+    import { startPresence, fetchPresence, applyPresence } from './presence.js?v=1';
+    import { avatarHTML, pickAvatar } from './avatar.js?v=1';
+    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
 
-    let currentUser=null, activeThread=null, pollTimer=null;
-    // Escapes user-typed text (names, message content) before it goes into
-    // innerHTML, so a malicious name or message can't run as HTML/JS on the
-    // other party's screen.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    let blockState={}; // counterpart_id -> {is_blocked, is_muted, muted_until, is_archived}
-    let onlineUsers = new Set();
+    let currentUser=null, activeThread=null, pollTimer=null, blockedIds=new Set(), convSettings={}, showArchived=false;
+
+    // Profile pictures and online status of the people I'm chatting with
+    const avatars = {};                 // userId -> picture url
+    const presence = {};                // userId -> seconds since last seen
+    const presenceLoaded = new Set();   // ids we've asked the server about (so "Offline" isn't shown before we know)
+    // One chat-list row = me + ONE other person, however many listings we've talked about.
+    // A thread is { cid: <the other person's id>, messages: [newest first] }. The key is that
+    // person's id (lower-case), which is exactly what the database uses for pin/mute/archive.
+    const threadKey = t => String(t.cid).toLowerCase();
+    const otherId = t => t.cid;
+    // Each message still stores buyer_id + seller_id (they decide who may read it), so this
+    // finds "the other person" of any single message.
+    const cidOfMsg = m => String(m.buyer_id===user.id ? m.seller_id : m.buyer_id).toLowerCase();
 
     const {data:{user}} = await supabase.auth.getUser();
-    if(!user){ window.location.href='login'; throw new Error('Redirecting to login'); }
+    if(!user){ window.location.href='/login'; }
     currentUser=user;
+    if(user) startPresence(supabase,user.id);
 
-    function isCurrentlyMuted(st){
-      if(!st?.is_muted) return false;
-      if(!st.muted_until) return true;
-      return new Date(st.muted_until) > new Date();
+    async function loadBlockedUsers(){
+      const {data} = await supabase.from('blocked_users').select('blocked_id').eq('blocker_id',user.id);
+      blockedIds = new Set((data||[]).map(b=>b.blocked_id));
     }
 
-    async function loadBlockState(){
-      const {data}=await supabase.from('blocked_users').select('*').eq('blocker_id',user.id);
-      blockState={};
-      (data||[]).forEach(r=>{ blockState[r.blocked_id]={is_blocked:r.is_blocked, is_muted:r.is_muted, muted_until:r.muted_until, is_archived:r.is_archived}; });
+    // ----- pin / mute / archive state (per conversation, per user) -----
+    const settingsOf = t => convSettings[threadKey(t)] || {};
+    const isPinned = st => !!(st && st.pinned_at);
+    const isMuted = st => !!(st && (st.muted_always || (st.muted_until && new Date(st.muted_until) > new Date())));
+    const incomingCount = t => t.messages.filter(m=>m.sender_id!==user.id).length;
+    // Archived stays archived until you unarchive it — EXCEPT a new message from the other person
+    // brings it back to your chats (unless the chat is muted, then it stays out of the way).
+    function isArchived(t){
+      const st = settingsOf(t);
+      if(!st.archived_at) return false;
+      if(isMuted(st)) return true;
+      return incomingCount(t) <= (st.archived_incoming_count||0);
     }
-
-    // ===== PRESENCE (real-time — only reflects people who currently have this
-    // page open; it never claims someone is online without a live signal) =====
-    const presenceChannel = supabase.channel('online-users', { config: { presence: { key: user.id } } });
-    presenceChannel
-      .on('presence', { event: 'sync' }, () => {
-        onlineUsers = new Set(Object.keys(presenceChannel.presenceState()));
-        updatePresenceUI();
-      })
-      .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') await presenceChannel.track({ online_at: new Date().toISOString() });
+    function sortThreads(arr){
+      arr.sort((a,b)=>{
+        const pa=isPinned(settingsOf(a)), pb=isPinned(settingsOf(b));
+        if(pa!==pb) return pa ? -1 : 1;                       // pinned chats first
+        return new Date(b.messages[0].created_at)-new Date(a.messages[0].created_at); // then newest activity
       });
-    function updatePresenceUI(){
-      if(!activeThread) return;
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      const el = document.getElementById('chat-header-status');
-      const online = onlineUsers.has(counterpartId);
-      const muted = isCurrentlyMuted(blockState[counterpartId]);
-      el.innerHTML = '<span class="status-dot'+(online?' online':'')+'"></span> '+(online?'Online':'Offline')+(muted?' · 🔇 Muted':'');
+    }
+    async function saveSetting(t, patch){
+      const key = threadKey(t);
+      const {error} = await supabase.from('conversation_settings')
+        .upsert({user_id:user.id, thread_key:key, ...patch},{onConflict:'user_id,thread_key'});
+      if(error){ toast('❌ Couldn\'t save that: '+error.message); return false; }
+      convSettings[key] = {...(convSettings[key]||{}), user_id:user.id, thread_key:key, ...patch};
+      return true;
+    }
+    let toastTimer=null;
+    function toast(msg){
+      const el=document.getElementById('toast');
+      el.textContent=msg; el.classList.add('show');
+      clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
     }
 
-    // ===== PIN (stored locally per-browser — no server-side concept of pins) =====
-    function pinKey(t){ return t.buyer_id+'|'+t.seller_id+'|'+(t.listing_id||'none'); }
-    function getPinned(){ try{ return new Set(JSON.parse(localStorage.getItem('mt_pinned_threads')||'[]')); }catch(e){ return new Set(); } }
-    function setPinned(set){ localStorage.setItem('mt_pinned_threads', JSON.stringify([...set])); }
+    function threadRowHTML(t,i){
+      const names = window._names||{};
+      const counterpartId = otherId(t);
+      const st = settingsOf(t), muted = isMuted(st);
+      const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
+      return '<div class="thread-item" data-idx="'+i+'" onclick="openThread('+i+')">'+
+        '<div class="thread-avatar">'+avatarHTML({url:avatars[counterpartId],name:names[counterpartId]||'User',size:38,uid:counterpartId,dot:true})+'</div>'+
+        '<div class="thread-info"><div class="thread-name">'+escapeHtml(names[counterpartId]||'User')+(unread?'<span class="thread-unread'+(muted?' muted':'')+'">'+unread+'</span>':'')+'</div>'+
+        (t.messages[0]?'<div class="thread-sub">'+escapeHtml((t.messages[0].sender_id===user.id?'You: ':'')+t.messages[0].content)+'</div>':'')+'</div>'+
+        '<div class="thread-flags">'+(muted?'<span title="Muted">🔕</span>':'')+(isPinned(st)?'<span title="Pinned">📌</span>':'')+'</div>'+
+        '</div>';
+    }
+    function renderThreadList(){
+      const list = document.getElementById('thread-scroll');
+      const threads = window._threads||[];
+      if(!threads.length){ list.innerHTML='<p class="loading-msg">No conversations yet</p>'; return; }
+      const main=[], archived=[];
+      threads.forEach((t,i)=>(isArchived(t)?archived:main).push(i));
+      if(showArchived && !archived.length) showArchived=false;   // nothing left in the archive: back to normal
+      let html='';
+      if(showArchived){
+        html += '<div class="thread-archive-row" onclick="toggleArchivedView(false)">← Back to chats</div><div class="thread-section-label">Archived chats</div>';
+        html += archived.map(i=>threadRowHTML(threads[i],i)).join('');
+      } else {
+        if(archived.length) html += '<div class="thread-archive-row" onclick="toggleArchivedView(true)">🗄️ Archived<span class="thread-unread">'+archived.length+'</span></div>';
+        html += main.length ? main.map(i=>threadRowHTML(threads[i],i)).join('') : '<p class="loading-msg">No active conversations</p>';
+      }
+      list.innerHTML = html;
+      // keep the open conversation highlighted when the list is rebuilt
+      if(activeThread){
+        const ai = threads.findIndex(t=>threadKey(t)===threadKey(activeThread));
+        if(ai>-1) list.querySelector('.thread-item[data-idx="'+ai+'"]')?.classList.add('active');
+      }
+      paintPresence();
+    }
+    window.toggleArchivedView = (on) => { showArchived = !!on; renderThreadList(); };
+    // Re-sort + redraw after any pin/mute/archive change
+    function applySettingsChange(){
+      sortThreads(window._threads||[]);
+      renderThreadList();
+      refreshChatOptions();
+    }
 
-    let searchQuery = '';
-    let showArchivedOnly = false;
     async function loadThreads(){
-      const {data} = await supabase.from('messages').select('*,listings(title)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false});
+      const [{data}, settingsRes] = await Promise.all([
+        supabase.from('messages').select('*,listings(title)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false}),
+        supabase.from('conversation_settings').select('*').eq('user_id',user.id)
+      ]);
+      // If the settings table isn't there yet, the chat list still works — options just won't save until the migration is run.
+      convSettings = {};
+      (settingsRes?.data||[]).forEach(r=>{ convSettings[r.thread_key]=r; });
       const msgs = data||[];
+      // Group into ONE thread per other person (all listings together)
       const threadMap = {};
       msgs.forEach(m=>{
-        const key = m.buyer_id+'|'+m.seller_id+'|'+(m.listing_id||'none');
-        if(!threadMap[key]) threadMap[key] = {buyer_id:m.buyer_id, seller_id:m.seller_id, listing_id:m.listing_id, listingTitle:m.listings?.title, messages:[]};
+        const key = cidOfMsg(m);
+        if(!threadMap[key]) threadMap[key] = {cid:key, messages:[]};
         threadMap[key].messages.push(m);
       });
       const threads = Object.values(threadMap);
 
-      // Fetch counterpart names/avatars — only for people already in a thread with
-      // this user, never a lookup across the whole site's user base.
-      const counterpartIds = [...new Set(threads.map(t=>t.buyer_id===user.id?t.seller_id:t.buyer_id))];
-      let names={}, avatars={};
-      if(counterpartIds.length){
-        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name,store_logo_url').in('id',counterpartIds);
-        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User'; avatars[p.id]=p.store_logo_url||null;});
-      }
-
-      window._threads = threads;
-      window._names = names;
-      window._avatars = avatars;
-      renderThreadList();
-      if(activeThread){
-        // Keep the open thread's header in sync (e.g. archived elsewhere) and refresh its messages.
-        const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-        const stillIdx = threads.findIndex(t=>pinKey(t)===pinKey(activeThread));
-        if(stillIdx>-1){
-          const wasLen = activeThread.messages.length;
-          activeThread = threads[stillIdx];
-          if(activeThread.messages.length!==wasLen) renderMessages();
+      // An archived chat that got a new message from them (and isn't muted) has come back to your chats.
+      // Make that permanent, so muting/unmuting it later can't quietly push it back into the archive.
+      threads.forEach(t=>{
+        const st = settingsOf(t);
+        if(st.archived_at && !isMuted(st) && incomingCount(t) > (st.archived_incoming_count||0)){
+          const key = threadKey(t);
+          convSettings[key] = {...st, archived_at:null, archived_incoming_count:0};
+          supabase.from('conversation_settings').upsert({user_id:user.id, thread_key:key, archived_at:null, archived_incoming_count:0},{onConflict:'user_id,thread_key'}).then(()=>{},()=>{});
         }
-        updatePresenceUI();
+      });
+
+      // Fetch counterpart names
+      const counterpartIds = threads.map(t=>t.cid);
+      let names={};
+      if(counterpartIds.length){
+        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name,avatar_url,store_logo_url').in('id',counterpartIds);
+        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User'; avatars[p.id]=pickAvatar(p);});
+      }
+      window._names = names;
+      window._threads = threads;
+      sortThreads(threads);
+      renderThreadList();
+      // ask the server about people we haven't looked up yet
+      const fresh = counterpartIds.filter(id=>!presenceLoaded.has(id));
+      if(fresh.length) refreshPresence(fresh);
+      // messages that arrived live or that we just sent don't carry their listing's title yet — copy it over
+      if(activeThread){
+        const cur = threads.find(t=>threadKey(t)===threadKey(activeThread));
+        if(cur){
+          const byId = new Map(cur.messages.map(x=>[x.id,x]));
+          let changed = false;
+          activeThread.messages.forEach(m=>{ const f=byId.get(m.id); if(f && !m.listings && f.listings){ m.listings=f.listings; changed=true; } });
+          if(changed && !cs.open) renderMessages();
+        }
       }
     }
 
-    // Renders the thread list, filtered to whatever's currently in the search box,
-    // pinned threads first, and archived threads hidden unless the Archived toggle is on.
-    function renderThreadList(){
-      const q = searchQuery.trim().toLowerCase();
-      const list = document.getElementById('thread-list-items');
+    // ----- online / offline status -----
+    async function refreshPresence(ids){
+      if(!ids){
+        ids = new Set((window._threads||[]).map(otherId));
+        if(activeThread) ids.add(otherId(activeThread));
+        ids = [...ids];
+      }
+      if(!ids.length) return;
+      const m = await fetchPresence(supabase, ids);
+      ids.forEach(id=>{ presenceLoaded.add(id); if(id in m) presence[id]=m[id]; else delete presence[id]; });
+      paintPresence();
+    }
+    function paintPresence(){
+      // document, not #msg-wrap: the "View Profile" card lives in its own overlay
+      // outside #msg-wrap, and still needs its dot/status kept in sync.
+      applyPresence(presence, document);
+      // don't claim "Offline" for someone we haven't looked up yet
+      document.querySelectorAll('.pstatus[data-uid]').forEach(el=>{
+        if(!presenceLoaded.has(el.dataset.uid)){ el.textContent=''; el.classList.remove('on'); }
+      });
+    }
+    setInterval(()=>{ if(document.visibilityState==='visible') refreshPresence(); }, 45000);
+    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') refreshPresence(); });
+
+    // ----- search helpers -----
+    function highlightHTML(text, q){
+      if(!q) return escapeHtml(text);
+      const re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      return String(text).split(re).map((part,i)=> i%2 ? '<mark class="hit">'+escapeHtml(part)+'</mark>' : escapeHtml(part)).join('');
+    }
+
+    window.openThreadFromSearch = (idx, withQuery) => {
+      const box = document.getElementById('user-search');
+      const q = withQuery ? box.value.trim() : '';
+      document.getElementById('user-search-results').style.display='none';
+      box.value='';
+      window.openThread(idx, q);
+    };
+
+    // Sidebar search: finds people by name AND text inside any conversation.
+    // Clicking a message hit opens that chat with the in-chat search pre-filled.
+    document.getElementById('user-search').addEventListener('input', (e) => {
+      const raw = e.target.value.trim();
+      const q = raw.toLowerCase();
+      const results = document.getElementById('user-search-results');
+      if (!q) { results.style.display='none'; results.innerHTML=''; return; }
       const threads = window._threads||[];
       const names = window._names||{};
-      const pinned = getPinned();
-      if(!threads.length){ list.innerHTML='<p class="loading-msg">No conversations yet</p>'; return; }
-
-      let withIdx = threads.map((t,i)=>({t,i})).filter(({t})=>{
-        const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-        const archived = !!blockState[counterpartId]?.is_archived;
-        if(showArchivedOnly !== archived) return false;
-        if(!q) return true;
-        return (names[counterpartId]||'User').toLowerCase().includes(q);
-      });
-      const btn = document.getElementById('archive-toggle-btn');
-      btn.classList.toggle('active', showArchivedOnly);
-      btn.textContent = showArchivedOnly ? '← Back' : '🗄️ Archived';
-
-      if(!withIdx.length){ list.innerHTML='<p class="loading-msg">'+(showArchivedOnly?'No archived conversations':(q?'No conversations match "'+searchQuery.trim()+'"':'No conversations yet'))+'</p>'; return; }
-      withIdx.sort((a,b)=>{
-        const ap = pinned.has(pinKey(a.t)), bp = pinned.has(pinKey(b.t));
-        if(ap!==bp) return ap?-1:1;
-        return new Date(b.t.messages[0].created_at)-new Date(a.t.messages[0].created_at);
-      });
-      list.innerHTML = withIdx.map(({t,i})=>{
-        const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-        const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
-        const isPinned = pinned.has(pinKey(t));
-        return '<div class="thread-item" data-idx="'+i+'" onclick="openThread('+i+')">'+
-          '<div class="thread-name">'+(isPinned?'📌 ':'')+escapeHtml(names[counterpartId]||'User')+(unread?'<span class="thread-unread">'+unread+'</span>':'')+'</div>'+
-          '</div>';
+      const matches = threads.map((t,i)=>{
+        const cid = otherId(t);
+        const name = names[cid]||'User';
+        const msgs = t.messages.filter(m=>m.content && m.content.toLowerCase().includes(q));
+        return {idx:i, cid, name, msgs, nameMatch:name.toLowerCase().includes(q)};
+      }).filter(x=>x.nameMatch||x.msgs.length).slice(0,30);
+      if (!matches.length) {
+        results.innerHTML = '<div class="thread-search-result" style="cursor:default;color:#aaa">No people or messages match</div>';
+        results.style.display='block';
+        return;
+      }
+      results.innerHTML = matches.map(x=>{
+        let snippet = '';
+        if (x.msgs.length) {
+          const text = x.msgs[0].content; // newest matching message
+          const at = text.toLowerCase().indexOf(q);
+          const from = Math.max(0, at-25);
+          const part = (from>0?'…':'')+text.slice(from, from+90)+(from+90<text.length?'…':'');
+          snippet = '<div class="tsr-snippet">'+highlightHTML(part, raw)+'</div><div class="tsr-count">'+x.msgs.length+' message'+(x.msgs.length===1?'':'s')+'</div>';
+        }
+        return '<div class="thread-search-result" onclick="openThreadFromSearch('+x.idx+','+(x.msgs.length?'true':'false')+')">'+
+          '<div class="tsr-row">'+avatarHTML({url:avatars[x.cid],name:x.name,size:30,uid:x.cid,dot:true})+'<span>'+escapeHtml(x.name)+'</span></div>'+snippet+'</div>';
       }).join('');
-    }
-    window.filterThreads = (val) => { searchQuery = val; renderThreadList(); };
-    window.toggleArchivedView = () => { showArchivedOnly = !showArchivedOnly; renderThreadList(); };
+      results.style.display='block';
+      paintPresence();
+    });
+    document.addEventListener('click',(e)=>{
+      const box = document.querySelector('.thread-search-box');
+      const results = document.getElementById('user-search-results');
+      if (results.style.display==='block' && box && !box.contains(e.target) && !results.contains(e.target)) {
+        results.style.display='none';
+      }
+    });
 
-    window.openThread = async (idx) => {
+    window.openThread = async (idx, searchQ) => {
       const t = window._threads[idx];
       activeThread = t;
       document.getElementById('msg-wrap').classList.add('chat-open');
       document.querySelectorAll('.thread-item').forEach(el=>el.classList.remove('active'));
       document.querySelector('.thread-item[data-idx="'+idx+'"]')?.classList.add('active');
-      const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-      document.getElementById('chat-header-name').textContent = window._names[counterpartId]||'User';
-      const avatarUrl = window._avatars?.[counterpartId];
-      const initial = (window._names[counterpartId]||'U').charAt(0).toUpperCase();
-      document.getElementById('chat-avatar').innerHTML = avatarUrl ? '<img src="'+escapeHtml(avatarUrl)+'" alt="" />' : escapeHtml(initial);
-      document.getElementById('chat-header-icons').style.display='flex';
-      document.getElementById('chat-input-row').style.display='flex';
-      closeChatSearch();
-      updatePresenceUI();
+      const counterpartId = t.cid;
+      const name = window._names[counterpartId]||'User';
+      setChatHeader(name, null, counterpartId);
+      clearListingCtx();
+      updateBlockUI(counterpartId);
+      closeChatSearch(true);
       renderMessages();
+      if(searchQ) openChatSearch(searchQ);
+      if(!presenceLoaded.has(counterpartId)) refreshPresence([counterpartId]);
       // Mark unread as read
       const unreadIds = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).map(m=>m.id);
       if(unreadIds.length) await supabase.from('messages').update({is_read:true}).in('id',unreadIds);
     };
 
-    window.closeThread = () => {
-      document.getElementById('msg-wrap').classList.remove('chat-open');
-    };
-
-    function dayLabel(d){
-      const date = new Date(d);
-      const today = new Date(); today.setHours(0,0,0,0);
-      const yest = new Date(today); yest.setDate(yest.getDate()-1);
-      const dOnly = new Date(date); dOnly.setHours(0,0,0,0);
-      if(dOnly.getTime()===today.getTime()) return 'Today';
-      if(dOnly.getTime()===yest.getTime()) return 'Yesterday';
-      return date.toLocaleDateString('en-ZA',{day:'numeric',month:'short',year: dOnly.getFullYear()!==today.getFullYear()?'numeric':undefined});
+    function setChatHeader(name, sub, counterpartId){
+      document.getElementById('chat-header-text').textContent = name;
+      const subEl = document.getElementById('chat-header-sub');
+      if(sub){ subEl.textContent = sub; subEl.style.display='block'; } else { subEl.style.display='none'; }
+      const avatar = document.getElementById('chat-avatar');
+      avatar.innerHTML = avatarHTML({url:avatars[counterpartId],name,size:40,uid:counterpartId,dot:true});
+      avatar.style.display = 'flex';
+      document.getElementById('chat-header-status').dataset.uid = counterpartId||'';
+      paintPresence();
+      document.getElementById('chat-search-btn').style.display = 'inline-block';
+      document.getElementById('chat-menu-btn').style.display = 'inline-block';
+      closeChatOptions();
     }
-
-    function renderMessages(){
-      const box = document.getElementById('chat-messages');
-      const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-      let html = '', lastDay = null;
-      sorted.forEach(m=>{
-        const label = dayLabel(m.created_at);
-        if(label !== lastDay){ html += '<div class="chat-date-divider">'+label+'</div>'; lastDay = label; }
-        const mine = m.sender_id===user.id;
-        const img = m.image_url ? '<img class="bubble-img" src="'+escapeHtml(m.image_url)+'" alt="Photo message" onclick="window.open(this.src,\'_blank\')"/>' : '';
-        const text = m.content ? escapeHtml(m.content) : '';
-        const status = mine ? '<div class="bubble-status">'+new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})+' <span class="'+(m.is_read?'bubble-tick-read':'')+'">'+(m.is_read?'✓✓':'✓')+'</span></div>' :
-          '<div class="bubble-time">'+new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})+'</div>';
-        html += '<div class="bubble '+(mine?'me':'them')+'" data-mid="'+m.id+'">'+img+text+status+'</div>';
-      });
-      box.innerHTML = html;
-      box.scrollTop = box.scrollHeight;
-    }
-
-    window.sendMessage = async () => {
-      const input = document.getElementById('chat-input');
-      const content = input.value.trim();
-      if(!content || !activeThread) return;
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      if(blockState[counterpartId]?.is_blocked){ alert('You have blocked this user. Unblock them to send a message.'); return; }
-      const payload = {
-        buyer_id: activeThread.buyer_id, seller_id: activeThread.seller_id,
-        listing_id: activeThread.listing_id, sender_id: user.id, content
-      };
-      const {data,error} = await supabase.from('messages').insert(payload).select().single();
-      if(error){ alert(error.message.includes('row-level security')?'Could not send — this user has blocked you.':'Could not send: '+error.message); return; }
-      input.value='';
-      activeThread.messages.unshift(data);
-      renderMessages();
+    window.toggleChatOptions = () => {
+      const dd = document.getElementById('chat-options-dropdown');
+      if(dd.classList.contains('open')){ closeChatOptions(); return; }
+      refreshChatOptions();
+      dd.classList.add('open');
+      document.getElementById('chat-options-backdrop').classList.add('open');
     };
+    window.closeChatOptions = () => {
+      document.getElementById('chat-options-dropdown').classList.remove('open');
+      document.getElementById('chat-options-backdrop').classList.remove('open');
+    };
+    document.addEventListener('click',(e)=>{
+      const dd = document.getElementById('chat-options-dropdown');
+      const btn = document.getElementById('chat-menu-btn');
+      if(dd.classList.contains('open') && !dd.contains(e.target) && e.target!==btn){
+        closeChatOptions();
+      }
+    });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeChatOptions(); });
 
-    window.sendPhoto = async (file) => {
-      if(!file || !activeThread) return;
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      if(blockState[counterpartId]?.is_blocked){ alert('You have blocked this user. Unblock them to send a message.'); return; }
-      if(file.size > 5*1024*1024){ alert('Photo is too large — please pick one under 5MB.'); return; }
-      const fname = user.id+'/'+Date.now()+'-'+file.name.replace(/[^a-zA-Z0-9.]/g,'_');
-      const {error: upErr} = await supabase.storage.from('message-images').upload(fname, file);
-      if(upErr){ alert('Could not upload photo: '+upErr.message); return; }
-      const {data:pub} = supabase.storage.from('message-images').getPublicUrl(fname);
-      const payload = {
-        buyer_id: activeThread.buyer_id, seller_id: activeThread.seller_id,
-        listing_id: activeThread.listing_id, sender_id: user.id, content: '', image_url: pub.publicUrl
-      };
-      const {data,error} = await supabase.from('messages').insert(payload).select().single();
-      if(error){ alert('Could not send: '+error.message); return; }
-      document.getElementById('chat-photo-input').value='';
-      activeThread.messages.unshift(data);
-      renderMessages();
-    };
-
-    // ===== IN-CHAT SEARCH (over already-loaded messages in this thread only) =====
-    window.toggleChatSearch = () => {
-      const row = document.getElementById('chat-search-row');
-      const opening = row.style.display==='none';
-      row.style.display = opening ? 'flex' : 'none';
-      if(opening) document.getElementById('chat-search-input').focus();
-      else closeChatSearch();
-    };
-    window.closeChatSearch = () => {
-      document.getElementById('chat-search-row').style.display='none';
-      document.getElementById('chat-search-input').value='';
-      document.getElementById('chat-search-count').textContent='';
-      document.querySelectorAll('.bubble.highlight').forEach(b=>b.classList.remove('highlight'));
-    };
-    window.searchInChat = (q) => {
-      document.querySelectorAll('.bubble.highlight').forEach(b=>b.classList.remove('highlight'));
-      const countEl = document.getElementById('chat-search-count');
-      const term = q.trim().toLowerCase();
-      if(!term){ countEl.textContent=''; return; }
-      const matches = [...document.querySelectorAll('.chat-messages .bubble')].filter(b=>b.textContent.toLowerCase().includes(term));
-      countEl.textContent = matches.length ? matches.length+' match'+(matches.length===1?'':'es') : 'No matches';
-      matches.forEach(b=>b.classList.add('highlight'));
-      if(matches.length) matches[matches.length-1].scrollIntoView({block:'center'});
-    };
-
-    // ===== CHAT OPTIONS MENU =====
-    window.openChatOptions = () => {
+    // Menu labels always reflect the current state of THIS conversation
+    function refreshChatOptions(){
       if(!activeThread) return;
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      const st = blockState[counterpartId]||{};
-      const pinned = getPinned().has(pinKey(activeThread));
-      const archived = !!st.is_archived;
-      const blocked = !!st.is_blocked;
-      const body = document.getElementById('chat-options-body');
-      body.innerHTML = [
-        '<a class="chat-option-row" href="store?seller='+counterpartId+'">👤 View Profile</a>',
-        '<button class="chat-option-row" onclick="window.togglePin()">📌 '+(pinned?'Unpin Conversation':'Pin Conversation')+'</button>',
-        '<button class="chat-option-row neutral" onclick="window.muteFor24h()">🔇 Mute for 24 hours</button>',
-        '<button class="chat-option-row neutral" onclick="window.muteAlways()">🔕 Mute always</button>',
-        '<button class="chat-option-row neutral" onclick="window.unmuteConversation()">🔔 Unmute conversation</button>',
-        '<button class="chat-option-row neutral" onclick="window.toggleArchive()">🗄️ '+(archived?'Unarchive':'Archive')+' Conversation</button>',
-        '<button class="chat-option-row danger" onclick="window.toggleBlockUser()">🚫 '+(blocked?'Unblock User':'Block User')+'</button>',
-        '<button class="chat-option-row" onclick="window.openReportUser()">🚩 Report User</button>',
-        '<button class="chat-option-row cancel" onclick="closeChatOptions()">Cancel</button>'
-      ].join('');
-      document.getElementById('chat-options-overlay').style.display='flex';
-    };
-    window.closeChatOptions = () => { document.getElementById('chat-options-overlay').style.display='none'; };
-
-    window.togglePin = () => {
-      const key = pinKey(activeThread);
-      const pinned = getPinned();
-      if(pinned.has(key)) pinned.delete(key); else pinned.add(key);
-      setPinned(pinned);
-      renderThreadList();
-      closeChatOptions();
-    };
-
-    async function setMuteState(is_muted, muted_until){
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      const st = blockState[counterpartId]||{is_blocked:false,is_archived:false};
-      const {error} = await supabase.from('blocked_users').upsert({blocker_id:user.id,blocked_id:counterpartId,is_blocked:st.is_blocked,is_archived:st.is_archived,is_muted,muted_until},{onConflict:'blocker_id,blocked_id'});
-      if(error){ alert('Could not update: '+error.message); return; }
-      await loadBlockState();
-      updatePresenceUI();
-      closeChatOptions();
+      const st = settingsOf(activeThread), muted = isMuted(st);
+      const $ = id => document.getElementById(id);
+      $('opt-pin').textContent = isPinned(st) ? '📌 Unpin Conversation' : '📌 Pin Conversation';
+      $('opt-mute-24').style.display = muted ? 'none' : 'block';
+      $('opt-mute-always').style.display = muted ? 'none' : 'block';
+      const un = $('opt-unmute');
+      un.style.display = muted ? 'block' : 'none';
+      if(muted){
+        const until = st.muted_always ? 'Muted always' : 'Muted until '+new Date(st.muted_until).toLocaleString('en-ZA',{weekday:'short',hour:'2-digit',minute:'2-digit'});
+        un.innerHTML = '🔔 Unmute conversation<span class="opt-sub">'+until+'</span>';
+      }
+      $('opt-archive').textContent = isArchived(activeThread) ? '🗄️ Unarchive Conversation' : '🗄️ Archive Conversation';
     }
-    window.muteFor24h = () => setMuteState(true, new Date(Date.now()+24*60*60*1000).toISOString());
-    window.muteAlways = () => setMuteState(true, null);
-    window.unmuteConversation = () => setMuteState(false, null);
 
-    window.toggleArchive = async () => {
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      const st = blockState[counterpartId]||{is_blocked:false,is_muted:false,muted_until:null};
-      const {error} = await supabase.from('blocked_users').upsert({blocker_id:user.id,blocked_id:counterpartId,is_blocked:st.is_blocked,is_muted:st.is_muted,muted_until:st.muted_until,is_archived:!st.is_archived},{onConflict:'blocker_id,blocked_id'});
-      if(error){ alert('Could not update: '+error.message); return; }
-      await loadBlockState();
-      renderThreadList();
-      closeChatOptions();
-      if(!showArchivedOnly && !st.is_archived) closeThread(); // it just left the visible list on mobile
+    window.togglePinThread = async () => {
+      if(!activeThread) return; closeChatOptions();
+      const pinned = isPinned(settingsOf(activeThread));
+      if(await saveSetting(activeThread,{pinned_at: pinned ? null : new Date().toISOString()})){
+        toast(pinned ? '📌 Unpinned' : '📌 Pinned to the top');
+        applySettingsChange();
+      }
+    };
+    window.muteThread = async (mode) => {
+      if(!activeThread) return; closeChatOptions();
+      const patch = mode==='always'
+        ? {muted_always:true, muted_until:null}
+        : {muted_always:false, muted_until:new Date(Date.now()+24*60*60*1000).toISOString()};
+      if(await saveSetting(activeThread,patch)){
+        toast(mode==='always' ? '🔕 Muted — no notifications from this chat' : '🔇 Muted for 24 hours');
+        applySettingsChange();
+      }
+    };
+    window.unmuteThread = async () => {
+      if(!activeThread) return; closeChatOptions();
+      if(await saveSetting(activeThread,{muted_always:false, muted_until:null})){
+        toast('🔔 Unmuted');
+        applySettingsChange();
+      }
+    };
+    window.toggleArchiveThread = async () => {
+      if(!activeThread) return; closeChatOptions();
+      const t = activeThread;
+      if(isArchived(t)){
+        if(await saveSetting(t,{archived_at:null, archived_incoming_count:0})){
+          toast('🗄️ Moved back to your chats');
+          applySettingsChange();
+        }
+        return;
+      }
+      // remember how many messages THEY had sent, so only a newer one brings the chat back
+      const inList = (window._threads||[]).find(x=>threadKey(x)===threadKey(t));
+      const incoming = Math.max(incomingCount(t), inList ? incomingCount(inList) : 0);
+      if(await saveSetting(t,{archived_at:new Date().toISOString(), archived_incoming_count:incoming})){
+        toast('🗄️ Conversation archived');
+        applySettingsChange();
+        if(window.matchMedia('(max-width: 700px)').matches) window.closeThread(); // phone: go back to the list
+      }
     };
 
-    window.toggleBlockUser = async () => {
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
-      const st = blockState[counterpartId]||{is_muted:false,muted_until:null,is_archived:false};
-      if(!st.is_blocked && !confirm('Block this user? They will no longer be able to message you.')) return;
-      const {error} = await supabase.from('blocked_users').upsert({blocker_id:user.id,blocked_id:counterpartId,is_blocked:!st.is_blocked,is_muted:st.is_muted,muted_until:st.muted_until,is_archived:st.is_archived},{onConflict:'blocker_id,blocked_id'});
-      if(error){ alert('Could not update: '+error.message); return; }
-      await loadBlockState();
+    // View Profile: sellers have a store page; buyers don't, so they get a small profile card
+    window.viewSellerProfile = async () => {
+      if(!activeThread) return; closeChatOptions();
+      const counterpartId = otherId(activeThread);
+      const {data:p} = await supabase.from('profiles').select('id,full_name,store_name,role,avatar_url,store_logo_url,created_at').eq('id',counterpartId).maybeSingle();
+      if(p && p.role==='seller'){ window.location.href = '/store?seller='+counterpartId; return; }
+      const name = (p && (p.full_name||p.store_name)) || (window._names||{})[counterpartId] || 'User';
+      let since = '';
+      if(p && p.created_at){
+        const d = new Date(p.created_at);
+        if(!isNaN(d)) since = '<div style="font-size:12.5px;color:#999;font-weight:700;margin-top:6px">Member since '+d.toLocaleDateString('en-ZA',{month:'long',year:'numeric'})+'</div>';
+      }
+      document.getElementById('profile-modal-body').innerHTML =
+        avatarHTML({url:(p&&pickAvatar(p))||avatars[counterpartId],name,size:84,uid:counterpartId,dot:true})+
+        '<div style="font-size:18px;font-weight:900;color:#111;margin-top:12px">'+escapeHtml(name)+'</div>'+
+        '<div class="pstatus" data-uid="'+escapeHtml(counterpartId)+'" style="margin-top:6px"></div>'+
+        '<div style="font-size:13px;color:#777;font-weight:700;margin-top:6px">Student on Student Marketplace</div>'+since;
+      document.getElementById('profile-modal-overlay').style.display='flex';
+      paintPresence();
+    };
+    window.closeProfileModal = () => { document.getElementById('profile-modal-overlay').style.display='none'; };
+
+    function updateBlockUI(counterpartId){
+      const isBlocked = blockedIds.has(counterpartId);
+      const btn = document.getElementById('chat-option-block');
+      btn.textContent = isBlocked ? '✅ Unblock User' : '🚫 Block User';
+      document.getElementById('chat-input-row').style.display = isBlocked ? 'none' : 'flex';
+      document.getElementById('blocked-notice').style.display = isBlocked ? 'block' : 'none';
+    }
+
+    window.toggleBlockThread = async () => {
+      if(!activeThread) return;
       closeChatOptions();
+      const counterpartId = otherId(activeThread);
+      if(blockedIds.has(counterpartId)){
+        if(!confirm('Unblock this user? They\'ll be able to message you again.')) return;
+        await supabase.from('blocked_users').delete().eq('blocker_id',user.id).eq('blocked_id',counterpartId);
+        blockedIds.delete(counterpartId);
+      } else {
+        if(!confirm('Block this user? They won\'t be able to message you anymore, and you won\'t see new messages from them.')) return;
+        await supabase.from('blocked_users').insert({blocker_id:user.id, blocked_id:counterpartId});
+        blockedIds.add(counterpartId);
+      }
+      updateBlockUI(counterpartId);
     };
 
-    // ===== REPORT USER =====
-    window.openReportUser = () => {
+    window.openReportUserModal = () => {
       closeChatOptions();
+      if(!activeThread) return;
       document.getElementById('report-user-error').textContent='';
       document.getElementById('report-user-details').value='';
-      document.getElementById('report-user-overlay').style.display='flex';
+      document.getElementById('report-user-modal-overlay').style.display='flex';
     };
-    window.closeReportUser = () => { document.getElementById('report-user-overlay').style.display='none'; };
+    window.closeReportUserModal = () => {
+      document.getElementById('report-user-modal-overlay').style.display='none';
+    };
     window.submitReportUser = async () => {
       const err = document.getElementById('report-user-error');
-      err.style.color='#1d4ed8'; err.textContent='';
+      err.style.color='#9333ea'; err.textContent='';
       if(!activeThread){ err.textContent='❌ No conversation selected'; return; }
-      const counterpartId = activeThread.buyer_id===user.id?activeThread.seller_id:activeThread.buyer_id;
+      const counterpartId = otherId(activeThread);
       const {error} = await supabase.from('reports').insert({
-        reporter_id:user.id,
-        reported_user_id:counterpartId,
-        listing_id:activeThread.listing_id||null,
-        reason:document.getElementById('report-user-reason').value,
-        details:document.getElementById('report-user-details').value.trim()||null
+        reporter_id: user.id,
+        reported_user_id: counterpartId,
+        listing_id: (activeThread.messages[0] && activeThread.messages[0].listing_id) || null,
+        reason: document.getElementById('report-user-reason').value,
+        details: document.getElementById('report-user-details').value.trim()||null
       });
       if(error){ err.textContent='❌ '+error.message; return; }
       err.style.color='#2e7d32'; err.textContent='✅ Report submitted. Thanks for helping keep the marketplace safe!';
-      setTimeout(closeReportUser,1800);
+      setTimeout(closeReportUserModal, 1800);
     };
 
-    // Start a new thread from ?seller=&listing= params
+    window.closeThread = () => {
+      window.closeChatSearch(true);
+      document.getElementById('msg-wrap').classList.remove('chat-open');
+    };
+
+    function escapeHtml(s){
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+    // ----- search inside the open conversation -----
+    const cs = { open:false, q:'', hits:[], cur:-1 };
+    let csTimer = null;
+
+    function updateSearchCount(){
+      const c = document.getElementById('chat-search-count');
+      const n = cs.hits.length;
+      c.textContent = !cs.q ? '' : (n ? (cs.cur+1)+' of '+n : 'No results');
+      document.getElementById('chat-search-prev').disabled = n<2;
+      document.getElementById('chat-search-next').disabled = n<2;
+    }
+    function markCurrentHit(scroll){
+      cs.hits.forEach((el,i)=>el.classList.toggle('current', i===cs.cur));
+      if(scroll && cs.hits[cs.cur]) cs.hits[cs.cur].scrollIntoView({block:'center'});
+      updateSearchCount();
+    }
+    function renderMessages(opts){
+      opts = opts||{};
+      const box = document.getElementById('chat-messages');
+      const prevScroll = box.scrollTop;
+      const q = cs.open ? cs.q : '';
+      const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+      // titles of the listings mentioned in this chat (some messages don't carry the joined title)
+      const titles = {};
+      sorted.forEach(m=>{ if(m.listing_id && m.listings && m.listings.title) titles[m.listing_id]=m.listings.title; });
+      let lastListing = null;
+      box.innerHTML = sorted.map(m=>{
+        const isMe = m.sender_id===user.id;
+        const time = new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+        const ticks = isMe ? '<span class="bubble-tick">'+(m.is_read?'✓✓':'✓')+'</span>' : '';
+        // one chat per person: a small chip marks where the conversation moves on to a different listing
+        let chip = '';
+        if(m.listing_id && m.listing_id!==lastListing){
+          lastListing = m.listing_id;
+          chip = '<a class="listing-chip" href="/?open='+encodeURIComponent(m.listing_id)+'" title="Open this listing">🛍️ '+escapeHtml(titles[m.listing_id]||'A listing')+'</a>';
+        }
+        return chip+'<div class="bubble '+(isMe?'me':'them')+'">'+highlightHTML(m.content, q)+
+          '<div class="bubble-time">'+time+ticks+'</div></div>';
+      }).join('');
+      cs.hits = q ? [...box.querySelectorAll('mark.hit')] : [];
+      if(!q){ box.scrollTop = box.scrollHeight; updateSearchCount(); return; }
+      if(opts.fresh) cs.cur = cs.hits.length-1;            // a new query starts at the newest match
+      else cs.cur = Math.min(cs.cur, cs.hits.length-1);     // a live re-render keeps your place
+      if(cs.hits.length && cs.cur<0) cs.cur = 0;
+      if(opts.fresh) markCurrentHit(true);
+      else { box.scrollTop = prevScroll; markCurrentHit(false); }
+    }
+    function runChatSearch(){
+      cs.q = document.getElementById('chat-search-input').value.trim();
+      if(activeThread) renderMessages({fresh:true});
+    }
+    function openChatSearch(prefill){
+      if(!activeThread) return;
+      cs.open = true;
+      document.getElementById('chat-searchbar').classList.add('open');
+      const input = document.getElementById('chat-search-input');
+      if(prefill!==undefined){ input.value = prefill; }
+      input.focus();
+      runChatSearch();
+    }
+    window.closeChatSearch = (silent) => {
+      if(!cs.open && !cs.q) return;
+      cs.open = false; cs.q = ''; cs.hits = []; cs.cur = -1;
+      document.getElementById('chat-searchbar').classList.remove('open');
+      document.getElementById('chat-search-input').value = '';
+      updateSearchCount();
+      if(!silent && activeThread) renderMessages();
+    };
+    window.toggleChatSearch = () => { cs.open ? window.closeChatSearch() : openChatSearch(); };
+    window.stepChatSearch = (dir) => {
+      if(!cs.hits.length) return;
+      cs.cur = (cs.cur+dir+cs.hits.length) % cs.hits.length;
+      markCurrentHit(true);
+    };
+    document.getElementById('chat-search-input').addEventListener('input', ()=>{
+      clearTimeout(csTimer); csTimer = setTimeout(runChatSearch, 120);
+    });
+    document.getElementById('chat-search-input').addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){ e.preventDefault(); clearTimeout(csTimer); if(cs.q!==e.target.value.trim()) runChatSearch(); else window.stepChatSearch(e.shiftKey?1:-1); }
+      else if(e.key==='Escape'){ window.closeChatSearch(); }
+    });
+
+    let isSending = false;
+    window.sendMessage = async () => {
+      if (isSending) return; // guards against double-tap / double-Enter firing this twice
+      const input = document.getElementById('chat-input');
+      const content = input.value.trim();
+      if(!content || !activeThread) return;
+      isSending = true;
+      const sendBtn = document.querySelector('#chat-input-row button');
+      if (sendBtn) sendBtn.disabled = true;
+      input.value=''; // clear immediately so a repeated Enter/click can't resend the same text
+      const next = nextMessageContext(activeThread);
+      const payload = { buyer_id: next.buyer_id, seller_id: next.seller_id, listing_id: next.listing_id, sender_id: user.id, content };
+      try {
+        const {data,error} = await supabase.from('messages').insert(payload).select().single();
+        if(error){ alert('Could not send: '+error.message); input.value = content; return; }
+        // carry the listing's title along so its chip shows straight away
+        if(data.listing_id){
+          const known = (ctxListing && ctxListing.id===data.listing_id) ? ctxListing.title
+                      : (activeThread.messages.find(x=>x.listing_id===data.listing_id && x.listings) || {listings:null}).listings?.title;
+          if(known) data.listings = {title:known};
+        }
+        // Own realtime subscription will also receive this INSERT — addMessageOnce()
+        // keeps that from rendering it a second time.
+        addMessageOnce(activeThread, data);
+        clearListingCtx();   // the "about this listing" note has been used
+        renderMessages();
+      } finally {
+        isSending = false;
+        if (sendBtn) sendBtn.disabled = false;
+      }
+    };
+
+    // ----- "About this listing" -----
+    // Coming from a listing's "Message seller" button adds that listing to your NEXT message.
+    let ctxListing = null;   // { id, title, seller_id }
+    function paintListingCtx(){
+      const bar = document.getElementById('listing-ctx');
+      if(ctxListing){
+        document.getElementById('listing-ctx-text').textContent = '🛍️ Your next message is about: '+ctxListing.title;
+        bar.style.display = 'flex';
+      } else bar.style.display = 'none';
+    }
+    window.clearListingCtx = () => { ctxListing = null; paintListingCtx(); };
+    async function setListingCtx(t, listingId){
+      ctxListing = null;
+      // if the chat is already about this listing there's nothing to add
+      if(listingId && !(t.messages[0] && t.messages[0].listing_id===listingId)){
+        const {data:l} = await supabase.from('listings').select('id,title,seller_id').eq('id',listingId).maybeSingle();
+        // only meaningful if the listing belongs to me or to the person I'm writing to
+        if(l && (l.seller_id===user.id || String(l.seller_id).toLowerCase()===t.cid)) ctxListing = {id:l.id, title:l.title||'a listing', seller_id:String(l.seller_id).toLowerCase()};
+      }
+      paintListingCtx();
+    }
+    // Every message stores who the buyer and seller are (that's what decides who may read it).
+    // In one chat per person those roles can differ from message to message (you might buy from
+    // them AND sell to them), so work them out for the message being sent:
+    //  - a listing picked via "Message seller": its seller decides the roles
+    //  - otherwise: same roles + same listing as the latest message (the chat carries on)
+    //  - brand-new chat: the roles from the link you came in through
+    function nextMessageContext(t){
+      if(ctxListing){
+        if(ctxListing.seller_id===user.id) return {buyer_id:t.cid, seller_id:user.id, listing_id:ctxListing.id};
+        if(ctxListing.seller_id===t.cid)   return {buyer_id:user.id, seller_id:t.cid, listing_id:ctxListing.id};
+      }
+      const last = t.messages[0];
+      if(last) return {buyer_id:last.buyer_id, seller_id:last.seller_id, listing_id:last.listing_id||null};
+      return {buyer_id:t.roles.buyer_id, seller_id:t.roles.seller_id, listing_id:null};
+    }
+
+    // Adds a message to a thread's list only if it isn't already there (by id),
+    // since the sender's own INSERT is echoed back through their own realtime
+    // subscription — without this, every message you send would render twice.
+    function addMessageOnce(thread, m){
+      if (thread.messages.some(x=>x.id===m.id)) return false;
+      thread.messages.unshift(m);
+      return true;
+    }
+
+    // Opening the page from a listing / store / order: ?seller=<id> (I'm the buyer writing to a seller)
+    // or ?buyer=<id> (I'm the seller writing to a buyer), optionally with &listing=<id>.
+    // Either way it lands in the ONE chat with that person — an existing one if there is one.
     const params = new URLSearchParams(location.search);
-    const toSeller = params.get('seller');
-    const listingId = params.get('listing');
-    await loadBlockState();
-    if (toSeller && toSeller!==user.id) {
-      const {data:sellerProfile} = await supabase.from('profiles').select('full_name,store_name,store_logo_url').eq('id',toSeller).single();
-      activeThread = { buyer_id:user.id, seller_id:toSeller, listing_id:listingId||null, messages:[] };
+    const toSeller = (params.get('seller')||'').toLowerCase() || null;
+    const toBuyer = (params.get('buyer')||'').toLowerCase() || null;
+    const listingId = params.get('listing') || null;
+    const target = (toSeller && toSeller!==user.id) ? {cid:toSeller, iAm:'buyer'}
+                 : (toBuyer && toBuyer!==user.id) ? {cid:toBuyer, iAm:'seller'} : null;
+    if (target) {
+      const {data:prof} = await supabase.from('profiles').select('full_name,store_name,avatar_url,store_logo_url').eq('id',target.cid).maybeSingle();
+      avatars[target.cid] = pickAvatar(prof);
+      // shown straight away; replaced by the real chat below if one already exists
+      activeThread = { cid:target.cid, messages:[],
+        roles: target.iAm==='buyer' ? {buyer_id:user.id, seller_id:target.cid} : {buyer_id:target.cid, seller_id:user.id} };
       document.getElementById('msg-wrap').classList.add('chat-open');
-      document.getElementById('chat-header-name').textContent = sellerProfile?.store_name||sellerProfile?.full_name||'Seller';
-      const initial=(sellerProfile?.store_name||sellerProfile?.full_name||'U').charAt(0).toUpperCase();
-      document.getElementById('chat-avatar').innerHTML = sellerProfile?.store_logo_url ? '<img src="'+escapeHtml(sellerProfile.store_logo_url)+'" alt="" />' : escapeHtml(initial);
-      document.getElementById('chat-header-icons').style.display='flex';
-      document.getElementById('chat-input-row').style.display='flex';
+      setChatHeader((target.iAm==='buyer' ? (prof?.store_name||prof?.full_name||'Seller') : (prof?.full_name||'Buyer')), null, target.cid);
+      refreshPresence([target.cid]);
       document.getElementById('chat-messages').innerHTML = '<p class="loading-msg" style="margin:auto">Say hi 👋</p>';
-      updatePresenceUI();
     }
 
+    await loadBlockedUsers();
     await loadThreads();
-    // If we started a thread via URL params and it already exists, open the matching one instead of a blank one
-    if (toSeller) {
-      const idx = (window._threads||[]).findIndex(t=>t.seller_id===toSeller && t.buyer_id===user.id && (t.listing_id||null)===(listingId||null));
-      if (idx>-1) window.openThread(idx);
+    if (target) {
+      updateBlockUI(target.cid);
+      // already chatting with this person? open THAT chat (whatever listing it was about)
+      const idx = (window._threads||[]).findIndex(t=>threadKey(t)===target.cid);
+      if (idx>-1) await window.openThread(idx);
+      await setListingCtx(activeThread, listingId);
     }
 
-    pollTimer = setInterval(loadThreads, 10000);
+    // Realtime instead of polling: at scale, every open messages.html tab
+    // polling every 10s multiplies DB load across all concurrent users for
+    // no reason — a push-based subscription only does work when a message
+    // actually arrives. Two channels: new messages involving me (insert
+    // events), and my own blocked_users list (so a block/unblock from
+    // another tab/device stays in sync too).
+    supabase
+      .channel('messages-for-'+user.id)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'buyer_id=eq.'+user.id},handleIncomingMessage)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'seller_id=eq.'+user.id},handleIncomingMessage)
+      .subscribe();
+
+    function handleIncomingMessage(payload){
+      const m = payload.new;
+      // If it's the currently-open thread, append it live without a full reload.
+      if(activeThread && cidOfMsg(m)===threadKey(activeThread)){
+        if (addMessageOnce(activeThread, m)) renderMessages();
+        if(m.sender_id!==user.id) supabase.from('messages').update({is_read:true}).eq('id',m.id);
+      }
+      // Refresh the thread list either way, to update previews/unread counts.
+      loadThreads();
+    }
+
+    // Lightweight fallback: if the Realtime connection ever drops silently
+    // (flaky network, tab backgrounded), this safety-net poll is much
+    // slower than the old one (60s vs 10s) since it's only a backstop, not
+    // the primary delivery mechanism anymore.
+    pollTimer = setInterval(loadThreads, 60000);
   </script>
   <nav class="bottom-nav">
     <a class="bottom-nav-item" href="/"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>
-    <a class="bottom-nav-item" href="categories"><span class="bottom-nav-icon">🗂️</span><span class="bottom-nav-label">Categories</span></a>
-    <a class="bottom-nav-item active" href="messages"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-label">Messages</span></a>
-    <a class="bottom-nav-item" href="favorites"><span class="bottom-nav-icon">❤️</span><span class="bottom-nav-label">Favourites</span></a>
-    <a class="bottom-nav-item" href="profile"><span class="bottom-nav-icon">👤</span><span class="bottom-nav-label">Profile</span></a>
+    <a class="bottom-nav-item" href="/categories"><span class="bottom-nav-icon">🗂️</span><span class="bottom-nav-label">Categories</span></a>
+    <a class="bottom-nav-item active" href="/messages"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-label">Messages</span></a>
+    <a class="bottom-nav-item" href="/favorites"><span class="bottom-nav-icon">❤️</span><span class="bottom-nav-label">Favourites</span></a>
+    <a class="bottom-nav-item" href="/profile"><span class="bottom-nav-icon">👤</span><span class="bottom-nav-label">Profile</span></a>
   </nav>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
 </body>

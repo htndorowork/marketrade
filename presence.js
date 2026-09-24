@@ -44,19 +44,9 @@ export function isOnline(secondsAgo) {
   return typeof secondsAgo === 'number' && secondsAgo <= ONLINE_WINDOW_S;
 }
 
-function ago(s) {
-  if (s < 3600) return Math.max(1, Math.round(s / 60)) + ' min ago';
-  if (s < 86400) { const h = Math.floor(s / 3600); return h + (h === 1 ? ' hour ago' : ' hours ago'); }
-  if (s < 172800) return 'yesterday';
-  const d = Math.floor(s / 86400);
-  return d <= 30 ? d + ' days ago' : 'over a month ago';
-}
-
-// "Online" or "Offline · last seen 12 min ago" (just "Offline" if never seen)
+// "Online" or "Offline" — no "last seen" detail.
 export function presenceLabel(secondsAgo) {
-  if (isOnline(secondsAgo)) return 'Online';
-  if (typeof secondsAgo !== 'number') return 'Offline';
-  return 'Offline · last seen ' + ago(secondsAgo);
+  return isOnline(secondsAgo) ? 'Online' : 'Offline';
 }
 
 // Updates every .pdot[data-uid] (the green/grey dot on avatars) and

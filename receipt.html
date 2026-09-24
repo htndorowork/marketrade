@@ -3,58 +3,49 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order Receipt — Marketrade</title>
-  <meta name="description" content="View and print your Marketrade order receipt."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Order Receipt — Marketrade"/>
-  <meta property="og:description" content="View and print your Marketrade order receipt."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Order Receipt — Marketrade"/>
-  <meta name="twitter:description" content="View and print your Marketrade order receipt."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <title>Receipt — Student Marketplace</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/receipt"/>
+  <meta name="description" content="Order receipt for your Student Marketplace purchase."/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
   <style>
     .receipt-wrap{max-width:480px;margin:32px auto;padding:0 20px}
     .receipt{background:#fff;border:2px solid #f0f0f0;border-radius:18px;padding:28px}
     .receipt-header{text-align:center;border-bottom:2px dashed #eee;padding-bottom:16px;margin-bottom:16px}
     .receipt-logo{font-weight:900;font-size:20px}
-    .receipt-logo span{color:#2563eb}
+    .receipt-logo span{color:#7c3aed}
     .receipt-row{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;color:#444;font-weight:600}
     .receipt-row strong{color:#111;font-weight:800}
     .receipt-total{border-top:2px dashed #eee;margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;font-size:17px;font-weight:900}
-    .print-btn{display:block;width:100%;margin-top:18px;background:#2563eb;color:#fff;border:none;padding:12px;border-radius:12px;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+    .print-btn{display:block;width:100%;margin-top:18px;background:#7c3aed;color:#fff;border:none;padding:12px;border-radius:12px;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
     @media print { .nav,.footer,.print-btn{display:none!important} .receipt-wrap{margin:0} }
   </style>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links"><a href="/">Browse</a></div>
   </nav>
 
   <div class="receipt-wrap">
-    <h1 class="sr-only">Order Receipt — Marketrade</h1>
     <div class="receipt" id="receipt-body"><p class="loading-msg">Loading receipt... ⏳</p></div>
     <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
   </div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
-    // Escapes user-typed text before it goes into innerHTML.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
     const orderId = new URLSearchParams(location.search).get('order');
     const body = document.getElementById('receipt-body');
@@ -74,7 +65,7 @@
         const subtotal = unitPrice * o.quantity;
         const total = subtotal + deliveryFee;
         body.innerHTML =
-          '<div class="receipt-header"><div class="receipt-logo">market<span>rade</span> 🛍️</div>'+
+          '<div class="receipt-header"><div class="receipt-logo">student<span>market</span> 🎓</div>'+
           '<div style="font-size:12px;color:#aaa;font-weight:700;margin-top:4px">Order Receipt</div></div>'+
           '<div class="receipt-row"><span>Order ID</span><strong>'+o.id.slice(0,8)+'</strong></div>'+
           '<div class="receipt-row"><span>Date</span><strong>'+new Date(o.created_at).toLocaleDateString('en-ZA')+'</strong></div>'+
@@ -85,7 +76,9 @@
           '<div class="receipt-row"><span>Unit price</span><strong>R'+unitPrice+'</strong></div>'+
           (deliveryFee>0?'<div class="receipt-row"><span>Delivery fee</span><strong>R'+deliveryFee+'</strong></div>':'')+
           '<div class="receipt-total"><span>Total</span><span>R'+total+'</span></div>'+
-          '<div style="text-align:center;font-size:11px;color:#aaa;font-weight:600;margin-top:16px">Payment arranged directly between buyer and seller. This receipt confirms the order details recorded on Marketrade.</div>';
+          '<div class="receipt-row" style="margin-top:10px"><span>Delivery</span><strong>'+(o.delivery_method==='pargo'?'🚚 Pargo — '+escapeHtml(o.pargo_point_name||'pickup point'):'🤝 In-person handover')+'</strong></div>'+
+          '<div class="receipt-row"><span>Payment</span><strong>'+(o.payment_status==='paid'?'Paid via TradeSafe':(o.payment_status==='refunded'?'Refunded':'Unpaid'))+'</strong></div>'+
+          '<div style="text-align:center;font-size:11px;color:#aaa;font-weight:600;margin-top:16px">Payment is held securely in escrow by TradeSafe and released to the seller once the order is confirmed delivered or collected. This receipt confirms the order details recorded on Student Marketplace.</div>';
       }
     }
   </script>

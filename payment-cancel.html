@@ -3,41 +3,38 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment Cancelled — Marketrade</title>
-  <meta name="description" content="Your Marketrade payment was cancelled."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Payment Cancelled — Marketrade"/>
-  <meta property="og:description" content="Your Marketrade payment was cancelled."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Payment Cancelled — Marketrade"/>
-  <meta name="twitter:description" content="Your Marketrade payment was cancelled."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <title>Payment cancelled — Student Marketplace</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/payment-cancel"/>
+  <meta name="description" content="Your Student Marketplace order payment was cancelled."/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
   </nav>
   <main class="auth-main">
     <div class="auth-card" style="text-align:center">
       <div style="font-size:48px;margin-bottom:12px">↩️</div>
-      <h1 class="auth-title">Payment cancelled</h1>
-      <p class="auth-sub">No charge was made. You can choose a plan again whenever you’re ready to sell.</p>
-      <a href="seller" class="btn-primary" style="display:inline-block;margin-top:8px;text-decoration:none">Back to plans</a>
+      <h2 class="auth-title">Payment cancelled</h2>
+      <p class="auth-sub">No charge was made. The item you were paying for wasn't held for you — it'll be back on sale shortly, so you're welcome to try checkout again.</p>
+      <a href="/" class="btn-primary" style="display:inline-block;margin-top:8px;text-decoration:none">Back to browsing</a>
     </div>
   </main>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+  <script>
+    // A cancelled payment still leaves the earlier items in this queue paid
+    // for — only clear the queue itself so a later checkout doesn't
+    // accidentally try to resume this abandoned one.
+    try{ sessionStorage.removeItem('smp_checkout_queue'); }catch(e){}
+  </script>
 </body>
 </html>

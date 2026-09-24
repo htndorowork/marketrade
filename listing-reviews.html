@@ -3,35 +3,34 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Item Reviews — Marketrade</title>
-  <meta name="description" content="See what buyers said about this item on Marketrade."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Item Reviews — Marketrade"/>
-  <meta property="og:description" content="See what buyers said about this item on Marketrade."/>
+  <title>Item Reviews — Student Marketplace 🎓</title>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/listing-reviews"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <meta name="description" content="See what buyers said about this item."/>
+    <meta property="og:title" content="Item Reviews — Student Marketplace 🎓"/>
+  <meta property="og:url" content="https://www.mystudentmarketplace.com/listing-reviews"/>
+  <meta property="og:description" content="See what buyers said about this item."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Item Reviews — Marketrade"/>
-  <meta name="twitter:description" content="See what buyers said about this item on Marketrade."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Item Reviews — Student Marketplace 🎓"/>
+  <meta name="twitter:description" content="See what buyers said about this item."/>
+  <meta name="twitter:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
   <style>
     .lr-wrap { max-width: 640px; margin: 0 auto; padding: 24px 20px 40px; }
-    .lr-back { display: inline-flex; align-items: center; gap: 4px; color: #2563eb; font-size: 13.5px; font-weight: 800; text-decoration: none; margin-bottom: 18px; }
+    .lr-back { display: inline-flex; align-items: center; gap: 4px; color: #7c3aed; font-size: 13.5px; font-weight: 800; text-decoration: none; margin-bottom: 18px; }
     .lr-item-card { display: flex; gap: 14px; align-items: center; background: #fff; border: 2.5px solid #f0f0f0; border-radius: 18px; padding: 16px; margin-bottom: 20px; text-decoration: none; color: inherit; }
     .lr-item-img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background: #f5f5f5; }
     .lr-item-title { font-weight: 900; font-size: 15px; color: #111; }
-    .lr-item-price { font-weight: 800; font-size: 13px; color: #2563eb; margin-top: 2px; }
+    .lr-item-price { font-weight: 800; font-size: 13px; color: #7c3aed; margin-top: 2px; }
     .lr-summary { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
     .lr-avg { font-size: 34px; font-weight: 900; color: #111; }
     .lr-stars { color: #f5a623; font-size: 17px; letter-spacing: 1px; }
@@ -45,18 +44,17 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links nav-links-simple">
       <a href="/">Browse</a>
     </div>
   </nav>
 
   <div class="lr-wrap">
-    <h1 class="sr-only">Item Reviews — Marketrade</h1>
     <a href="#" class="lr-back" onclick="event.preventDefault();history.length>1?history.back():location.href='/'">← Back</a>
 
     <a href="#" id="lr-item-card" class="lr-item-card" style="display:none">
-      <img id="lr-item-img" class="lr-item-img" alt="Listing photo"/>
+      <img id="lr-item-img" class="lr-item-img" alt=""/>
       <div>
         <div class="lr-item-title" id="lr-item-title"></div>
         <div class="lr-item-price" id="lr-item-price"></div>
@@ -76,11 +74,12 @@
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
     const listingId = new URLSearchParams(location.search).get('listing');
-    // Escapes user-typed text before it goes into innerHTML.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     const listEl = document.getElementById('lr-list');
 
     if (!listingId) {
@@ -95,7 +94,6 @@
         document.getElementById('lr-item-card').href = '/?open=' + listingId;
         document.getElementById('lr-item-card').style.display = 'flex';
         document.getElementById('lr-item-img').src = listing.image_url || '';
-        document.getElementById('lr-item-img').alt = listing.title || 'Listing';
         document.getElementById('lr-item-title').textContent = listing.title || 'Item';
         document.getElementById('lr-item-price').textContent = 'R' + listing.price;
       }

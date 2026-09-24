@@ -3,28 +3,27 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seller Store — Marketrade</title>
-  <meta name="description" content="Browse this seller's store on Marketrade."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Seller Store — Marketrade"/>
-  <meta property="og:description" content="Browse this seller's store on Marketrade."/>
+  <title>Seller Store — Student Marketplace 🎓</title>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/store"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <meta name="description" content="View this seller's storefront on Student Marketplace — browse everything they currently have listed for sale."/>
+    <meta property="og:title" content="Seller Store — Student Marketplace 🎓"/>
+  <meta property="og:url" content="https://www.mystudentmarketplace.com/store"/>
+  <meta property="og:description" content="View this seller's storefront on Student Marketplace — browse everything they currently have listed for sale."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Seller Store — Marketrade"/>
-  <meta name="twitter:description" content="Browse this seller's store on Marketrade."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Seller Store — Student Marketplace 🎓"/>
+  <meta name="twitter:description" content="View this seller's storefront on Student Marketplace — browse everything they currently have listed for sale."/>
+  <meta name="twitter:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
   <style>
     .store-header { background:#fff; border-bottom:2px solid #f0f0f0; padding:32px 20px; display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
     .store-logo { width:88px; height:88px; border-radius:50%; background:#f4f4f5; display:flex; align-items:center; justify-content:center; font-size:36px; overflow:hidden; flex-shrink:0; border:3px solid #f0f0f0; }
@@ -35,19 +34,39 @@
     .store-stats-row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
     .store-stat-pill { background:#f4f4f5; border-radius:50px; padding:7px 16px; font-size:12.5px; font-weight:800; color:#444; }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.mystudentmarketplace.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Seller Store",
+      "item": "https://www.mystudentmarketplace.com/store"
+    }
+  ]
+}
+</script>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links">
       <a href="/">Browse</a>
-      <a href="profile" id="nav-profile" style="display:none">My Profile</a>
-      <a href="login" id="nav-auth">Sign in</a>
+      <a href="/profile" id="nav-profile" style="display:none">My Profile</a>
+      <a href="/login" id="nav-auth">Sign in</a>
       <div class="nav-cart" onclick="location.href='/'" title="Cart">🛒</div>
     </div>
   </nav>
+  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">Home</a><span class="sep">/</span><span aria-current="page">Seller Store</span></nav>
 
-  <h1 class="sr-only">Seller Store — Marketrade</h1>
   <div class="store-header" id="store-header">
     <p class="loading-msg">Loading store... ⏳</p>
   </div>
@@ -72,61 +91,60 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-grid">
-      <div class="footer-col footer-social-col">
-        <div class="footer-col-label">Follow Us</div>
-        <div class="footer-social">
-          <a href="https://instagram.com/marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg><span>marketrade.co</span></a>
-          <a href="https://www.facebook.com/share/1EvtMfWTCg/" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><span>Marketrade</span></a>
-          <a href="https://tiktok.com/@marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.66-.58-1.08-1.4-1.16-2.32h-2.75v11.55c0 1.24-1 2.25-2.24 2.25a2.25 2.25 0 0 1-.85-4.34 2.24 2.24 0 0 1 .85-.16c.24 0 .48.03.7.1v-2.8a5.06 5.06 0 0 0-5.79 4.99 5.07 5.07 0 0 0 8.63 3.6 5.06 5.06 0 0 0 1.51-3.6V9.7a7.7 7.7 0 0 0 4.5 1.45V8.4a4.85 4.85 0 0 1-3.4-2.58z"/></svg><span>marketrade.co</span></a>
-        </div>
+    <div class="footer-inner">
+      <div class="footer-social">
+        <div class="footer-social-title">Follow Us</div>
+        <div class="footer-social-line"><a href="https://instagram.com/mystudentmarketplacee" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> mystudentmarketplacee</a></div>
+        <div class="footer-social-line"><a href="https://www.facebook.com/share/1ExUfH1RSm/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.5c0-.9.25-1.5 1.5-1.5H16.5V4.3c-.27-.04-1.2-.13-2.28-.13-2.25 0-3.8 1.37-3.8 3.9V10.5H8v3h2.42V21h3.08z"/></svg> Student Marketplace</a></div>
+        <div class="footer-social-line"><a href="https://tiktok.com/@student_marketplace" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3v13.5a2.5 2.5 0 1 1-2.5-2.5c.2 0 .4.02.6.06V9.9a5.5 5.5 0 1 0 4.9 5.47V8.7a6.9 6.9 0 0 0 4 1.28V6.9a4.2 4.2 0 0 1-4-4.9z"/></svg> student_marketplace</a></div>
       </div>
-      <div class="footer-col footer-center">
-        <div class="footer-title">Marketrade 🛍️</div>
-        <div class="footer-sub">The marketplace for everyone</div>
+      <div class="footer-main">
+        <div class="footer-title">Student Marketplace 🎓</div>
+        <div class="footer-sub">The student marketplace for all</div>
         <div class="footer-links">
-          <a class="footer-link" href="mailto:marketrade.co@gmail.com">📧 Report an issue</a>
-          <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
-          <a class="footer-link" href="/">Browse listings</a>
-          <a class="footer-link" href="faq">How It Works</a>
-          <a class="footer-link" href="terms">Terms</a>
-          <a class="footer-link" href="how-payments-work">How Payments Work</a>
-          <a class="footer-link" href="privacy">Privacy</a>
-          <a class="footer-link" href="guidelines">Guidelines</a>
-        </div>
-        <div class="footer-copy">© 2025 Marketrade · Built for everyone</div>
+      <a class="footer-link" href="mailto:studentmarketplacehelp@gmail.com">📧 Report an issue</a>
+      <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
+      <a class="footer-link" href="/">Browse listings</a>
+      <a class="footer-link" href="/faq">How It Works</a>
+      <a class="footer-link" href="/terms">Terms</a>
+      <a class="footer-link" href="/privacy">Privacy</a>
+      <a class="footer-link" href="/guidelines">Guidelines</a>
+    </div>
+        <div class="footer-copy">© 2025 Student Marketplace · Built for all students</div>
       </div>
-      <div class="footer-col footer-business">
-        <div class="footer-col-label">Business Info</div>
-        <a href="tel:+27623584921">📞 062 358 4921</a>
-        <a href="terms#refunds">📄 Refund &amp; Return Policy</a>
+      <div class="footer-business">
+        <div class="footer-business-title">Business Info</div>
+        <div class="footer-business-line">📞 <a href="tel:+27623584921">062 358 4921</a></div>
+        <div class="footer-business-line">📄 <a href="/terms#refund-policy">Refund &amp; Return Policy</a></div>
       </div>
     </div>
-  </footer>
+    </footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    import { startPresence } from './presence.js?v=1';
     const supabase = createClient(
-      'https://spupfdclswjlpwiebwlq.supabase.co',
-      'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'
+      'https://kqsqtasykdtpdrkqyaxp.supabase.co',
+      'sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ'
     );
+    function escapeHtml(s){
+      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Transport:{bg:'#e0f2f1'},Vehicles:{bg:'#e3f2fd'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Hardware:{bg:'#efebe9'},Gaming:{bg:'#ede7f6'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'},Properties:{bg:'#fff3e0'},Jobs:{bg:'#e0f2f1'},Watermobile:{bg:'#e0f7fa'},Camping:{bg:'#e8f5e9'},BoardGames:{bg:'#f3e5f5'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Accommodation:{bg:'#fff3e0'},Transport:{bg:'#e0f2f1'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'}};
 
     const {data:{user}}=await supabase.auth.getUser();
+    if(user) startPresence(supabase,user.id);
     if(user){
       document.getElementById('nav-auth').textContent='Sign out';
       document.getElementById('nav-auth').href='#';
       document.getElementById('nav-auth').onclick=async()=>{await supabase.auth.signOut();location.reload();};
       document.getElementById('nav-profile').style.display='inline';
-      const {data:p}=await supabase.from('profiles').select('role').eq('id',user.id).single();
-      if(p?.role==='seller') document.getElementById('nav-profile').href='seller';
+      supabase.from('profiles').select('role').eq('id',user.id).single().then(({data:p})=>{
+        if(p?.role==='seller') document.getElementById('nav-profile').href='/seller';
+      });
     }
-
-    // Escapes user-typed text (names, bios, titles, review comments) before it
-    // goes into innerHTML, so a malicious value can't run as HTML/JS on this page.
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     const sellerId = new URLSearchParams(location.search).get('seller');
     const headerEl = document.getElementById('store-header');
@@ -136,22 +154,18 @@
       headerEl.innerHTML = '<p class="loading-msg">No seller specified 🤔</p>';
       gridEl.innerHTML = '';
     } else {
-      const [{data:profile},{data:listings},{data:reviews},{count:salesCountForBadge},{data:soldItems},{data:freeModeRow}] = await Promise.all([
-        supabase.from('profiles').select('full_name,residence,store_name,store_bio,store_logo_url,store_link,deliver_all_areas,seller_areas,is_blocked,subscription_paid_until,is_admin').eq('id',sellerId).single(),
+      const [{data:profile},{data:listings},{data:reviews},{count:salesCountForBadge},{data:soldItems},{data:fm}] = await Promise.all([
+        supabase.from('profiles').select('full_name,residence,store_name,store_bio,store_logo_url,store_link,deliver_all_universities,deliver_all_tvet,deliver_all_private,seller_institutions,is_blocked,subscription_paid_until,is_admin').eq('id',sellerId).single(),
         supabase.from('listings').select('*').eq('seller_id',sellerId).eq('is_available',true).eq('is_draft',false).order('created_at',{ascending:false}),
         supabase.from('reviews').select('rating,comment,created_at').eq('seller_id',sellerId).order('created_at',{ascending:false}),
         supabase.from('orders').select('id',{count:'exact',head:true}).eq('seller_id',sellerId).eq('status','completed'),
         supabase.from('listings').select('title,price,discount_percent,image_url,category').eq('seller_id',sellerId).eq('is_sold',true).order('renewed_at',{ascending:false}).limit(6),
-        supabase.from('settings').select('value').eq('key','free_mode_active').limit(1)
+        supabase.from('settings').select('value').eq('key','free_mode').single()
       ]);
 
       const today=new Date().toISOString().slice(0,10);
-      // Free Mode (an admin-wide toggle) lets sellers without a paid plan show
-      // their store just like paid sellers, so it overrides the paid-plan check.
-      // (Reading the array and taking the first row rather than .maybeSingle()
-      // so a duplicate settings row can't silently hide this seller's store.)
-      const freeModeOn = freeModeRow?.[0]?.value==='true';
-      const unpaid = !profile?.is_admin && !freeModeOn && (!profile?.subscription_paid_until || profile.subscription_paid_until < today);
+      const freeModeOn = fm?.value === 'true';
+      const unpaid = !freeModeOn && !profile?.is_admin && (!profile?.subscription_paid_until || profile.subscription_paid_until < today);
       if (profile && (profile.is_blocked===true || unpaid)) {
         headerEl.innerHTML = '<p class="loading-msg">This store is temporarily unavailable 🚧</p>';
         gridEl.innerHTML = '';
@@ -164,45 +178,28 @@
         const ratingTxt = (reviews && reviews.length) ? (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1)+' ⭐ ('+reviews.length+')' : 'No ratings yet';
         const verifiedTag = (salesCountForBadge||0)>=5 ? '<span class="verified-badge">✅ Verified Seller</span>' : '';
         const deliveryParts=[];
-        if(profile.deliver_all_areas) deliveryParts.push('all areas');
-        (Array.isArray(profile.seller_areas)?profile.seller_areas:[]).forEach(a=>deliveryParts.push(a.district+' ('+(a.suburbs||[]).join(', ')+')'));
-        const deliveryFull = deliveryParts.join(' · ');
-        const deliveryIsLong = deliveryFull.length > 90;
-        const deliveryPreview = deliveryIsLong ? deliveryFull.slice(0,70).trim()+'…' : deliveryFull;
-        const deliveryHtml = !deliveryParts.length ? '' :
-          !deliveryIsLong ? '<div class="store-meta">🚚 Delivers to: '+deliveryFull+'</div>' :
-          '<div class="store-meta">🚚 Delivers to: '+
-            '<span id="delivery-text">'+deliveryPreview+'</span> '+
-            '<button type="button" id="delivery-toggle-btn" onclick="window.toggleDeliveryAreas()" style="background:none;border:none;color:#2563eb;font-weight:800;font-size:12px;cursor:pointer;padding:0;text-decoration:underline;font-family:inherit">Show more</button>'+
-          '</div>';
+        if(profile.deliver_all_universities) deliveryParts.push('all universities');
+        if(profile.deliver_all_tvet) deliveryParts.push('all TVET colleges');
+        if(profile.deliver_all_private) deliveryParts.push('all private institutions');
+        (Array.isArray(profile.seller_institutions)?profile.seller_institutions:[]).forEach(inst=>deliveryParts.push(inst.name+' ('+(inst.campuses||[]).join(', ')+')'));
         headerEl.innerHTML =
           '<div class="store-logo">'+(profile.store_logo_url?'<img loading="lazy" src="'+profile.store_logo_url+'" alt="Store logo"/>':'🏪')+'</div>'+
           '<div>'+
-          '<div class="store-name">'+escapeHtml(displayName)+verifiedTag+'</div>'+
+          '<h1 class="store-name">'+escapeHtml(displayName)+verifiedTag+'</h1>'+
           (profile.store_bio?'<div class="store-bio">'+escapeHtml(profile.store_bio)+'</div>':'')+
-          (profile.store_link && /^https?:\/\//i.test(profile.store_link)?'<div class="store-meta"><a href="'+escapeHtml(profile.store_link)+'" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:700;text-decoration:none">🔗 '+escapeHtml(profile.store_link.replace(/^https?:\/\//i,''))+'</a></div>':'')+
           (profile.residence?'<div class="store-meta">📍 '+escapeHtml(profile.residence)+'</div>':'')+
-          deliveryHtml+
+          (deliveryParts.length?'<div class="store-meta">🚚 Delivers to: '+deliveryParts.join(' · ')+'</div>':'')+
+          (/^https?:\/\//i.test(profile.store_link||'')?'<div class="store-meta">🔗 <a href="'+profile.store_link.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener nofollow" style="color:#7c3aed;font-weight:800">'+profile.store_link.replace(/</g,'&lt;')+'</a></div>':'')+
           '<div class="store-stats-row">'+
           '<div class="store-stat-pill">📦 '+(listings?.length||0)+' listings</div>'+
           '<div class="store-stat-pill">'+ratingTxt+'</div>'+
           '</div></div>';
-        window._deliveryFull = deliveryFull;
-        window._deliveryPreview = deliveryPreview;
-        window.toggleDeliveryAreas = () => {
-          const span = document.getElementById('delivery-text');
-          const btn = document.getElementById('delivery-toggle-btn');
-          const expanded = btn.textContent === 'Show less';
-          span.textContent = expanded ? window._deliveryPreview : window._deliveryFull;
-          btn.textContent = expanded ? 'Show more' : 'Show less';
-        };
 
         document.getElementById('store-listings-title').textContent = displayName+"'s listings 🛍️";
 
         if (!listings || !listings.length) {
           gridEl.innerHTML = '<p class="loading-msg">This seller has no active listings right now 🚀</p>';
         } else {
-          listings.sort((a,b)=>(b.quantity>0)-(a.quantity>0));
           gridEl.innerHTML = listings.map(l=>{
             const c=CAT_COLOR[l.category]||{bg:'#f5f5f5'};
             const e=CAT_EMOJI[l.category]||'🛍️';

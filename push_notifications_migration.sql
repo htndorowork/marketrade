@@ -89,8 +89,22 @@ AS $$
 DECLARE
   v_recipient uuid;
   v_sender_name text;
+  v_muted boolean := false;
 BEGIN
   v_recipient := CASE WHEN NEW.sender_id = NEW.buyer_id THEN NEW.seller_id ELSE NEW.buyer_id END;
+
+  IF to_regclass('public.conversation_settings') IS NOT NULL THEN
+    SELECT (cs.muted_always OR (cs.muted_until IS NOT NULL AND cs.muted_until > now()))
+      INTO v_muted
+      FROM conversation_settings cs
+     WHERE cs.user_id = v_recipient
+       AND cs.thread_key = lower(NEW.sender_id::text);   -- the recipient's conversation with the sender
+  END IF;
+
+  IF COALESCE(v_muted, false) THEN
+    RETURN NEW;   -- muted: the message is delivered, but no notification / push is created
+  END IF;
+
   SELECT COALESCE(store_name, full_name, 'Someone') INTO v_sender_name FROM profiles WHERE id = NEW.sender_id;
 
   INSERT INTO notifications (user_id, type, message, listing_id)

@@ -3,53 +3,46 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Page Not Found — Marketrade</title>
-  <meta name="description" content="The page you're looking for doesn't exist or may have moved. Head back to Marketrade to keep browsing."/>
-  <meta name="robots" content="noindex, follow"/>
-  <meta property="og:title" content="Page Not Found — Marketrade"/>
-  <meta property="og:description" content="The page you're looking for doesn't exist or may have moved. Head back to Marketrade to keep browsing."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://www.marketrade.co/"/>
-  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
-  <meta property="og:site_name" content="Marketrade"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Page Not Found — Marketrade"/>
-  <meta name="twitter:description" content="The page you're looking for doesn't exist or may have moved. Head back to Marketrade to keep browsing."/>
-  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
+  <title>Page not found — Student Marketplace</title>
+  <link rel="canonical" href="https://www.mystudentmarketplace.com/404.html"/>
+  <meta name="description" content="The page you're looking for doesn't exist or may have moved."/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <meta name="robots" content="noindex"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#2563eb"/>
-  <link rel="icon" href="icons/icon-192.png?v=4"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="theme-color" content="#7c3aed"/>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="style.css?v=1790000004"/>
   <style>
-    .notfound-wrap{max-width:480px;margin:0 auto;padding:60px 24px;text-align:center}
-    .notfound-emoji{font-size:64px;margin-bottom:14px}
-    .notfound-wrap h1{font-size:26px;font-weight:900;margin-bottom:10px;color:#111}
-    .notfound-wrap p{font-size:14px;color:#666;font-weight:600;margin-bottom:28px;line-height:1.6}
-    .notfound-actions{display:flex;flex-direction:column;gap:10px;max-width:280px;margin:0 auto}
-    .notfound-actions a{display:block;padding:13px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none}
-    .notfound-actions .primary{background:#2563eb;color:#fff}
-    .notfound-actions .secondary{background:#eff6ff;color:#2563eb}
+    .nf-wrap{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px}
+    .nf-emoji{font-size:64px;margin-bottom:8px}
+    .nf-code{font-size:64px;font-weight:900;color:#7c3aed;line-height:1;margin-bottom:6px}
+    .nf-title{font-size:19px;font-weight:800;color:#222;margin-bottom:8px}
+    .nf-sub{font-size:14px;color:#888;max-width:360px;margin-bottom:26px;line-height:1.5}
+    .nf-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .nf-btn{padding:11px 26px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none;display:inline-block}
+    .nf-btn-primary{background:#7c3aed;color:#fff}
+    .nf-btn-outline{background:#fff;color:#7c3aed;border:2px solid #7c3aed}
   </style>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
     <div class="nav-links"><a href="/">Browse</a></div>
   </nav>
-  <div class="notfound-wrap">
-    <div class="notfound-emoji">🧭</div>
-    <h1>Page not found</h1>
-    <p>That page doesn't exist, or the link's outdated. Let's get you back to browsing.</p>
-    <div class="notfound-actions">
-      <a class="primary" href="/">🔍 Browse listings</a>
-      <a class="secondary" href="categories">🗂️ View categories</a>
+
+  <div class="nf-wrap">
+    <div class="nf-emoji">🧭</div>
+    <div class="nf-code">404</div>
+    <div class="nf-title">This page wandered off campus</div>
+    <div class="nf-sub">We couldn't find what you were looking for. It may have been sold, moved, or the link might just be off.</div>
+    <div class="nf-actions">
+      <a href="/" class="nf-btn nf-btn-primary">🏠 Back to Browse</a>
+      <a href="/faq" class="nf-btn nf-btn-outline">❓ Help &amp; FAQ</a>
     </div>
   </div>
-  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
 </body>
 </html>
