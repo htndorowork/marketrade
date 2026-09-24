@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Status — Marketrade</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=4"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+  </nav>
+  <main class="auth-main">
+    <div class="auth-card" style="text-align:center">
+      <div style="font-size:48px;margin-bottom:12px" id="ico">⏳</div>
+      <h1 class="auth-title" id="title">Checking your payment…</h1>
+      <p class="auth-sub" id="sub">One moment — we're confirming this directly with TradeSafe.</p>
+      <a href="profile" class="btn-primary" style="display:inline-block;margin-top:8px;text-decoration:none">View my orders</a>
+    </div>
+  </main>
+  <script>
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+    const FN_BASE = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/';
+    const orderId = new URLSearchParams(location.search).get('order_id');
+
+    (async function(){
+      const {data:{session}} = await supabase.auth.getSession();
+      const ico=document.getElementById('ico'), title=document.getElementById('title'), sub=document.getElementById('sub');
+      if(!session || !orderId){
+        ico.textContent='ℹ️'; title.textContent='Nothing to check here';
+        sub.textContent='If you just paid, check My Orders for the latest status.';
+        return;
+      }
+      try{
+        const res = await fetch(FN_BASE+'tradesafe-verify',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'},
+          body: JSON.stringify({order_id: orderId})
+        });
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok) throw new Error(data.error||'Could not verify payment.');
+        if(data.payment_status==='paid'){
+          ico.textContent='✅'; title.textContent='Payment received!';
+          sub.textContent='Your money is safely held in escrow. '+(data.order?.delivery_method==='in_person'
+            ? 'Give the seller your Collection PIN once you have the item — you\'ll find it on your order.'
+            : 'The seller will ship it to your Pargo point — payment releases automatically 24h after it arrives.');
+        } else if(data.payment_status==='pending'){
+          ico.textContent='⏳'; title.textContent='Still confirming…';
+          sub.textContent='TradeSafe hasn\'t confirmed this payment yet. This can take a minute for EFT — check My Orders shortly.';
+        } else {
+          ico.textContent='❌'; title.textContent='Payment not completed';
+          sub.textContent='This payment didn\'t go through, so nothing was charged and the item is back in stock. Feel free to try again.';
+        }
+      }catch(e){
+        ico.textContent='⚠️'; title.textContent='Could not confirm right now';
+        sub.textContent=e.message||'Check My Orders in a moment — we\'ll keep verifying in the background.';
+      }
+    })();
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

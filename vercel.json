@@ -1,1 +1,186 @@
-{ "cleanUrls": true }
+{
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/404.html",
+      "destination": "/404",
+      "permanent": true
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/admin",
+      "permanent": true
+    },
+    {
+      "source": "/categories.html",
+      "destination": "/categories",
+      "permanent": true
+    },
+    {
+      "source": "/faq.html",
+      "destination": "/faq",
+      "permanent": true
+    },
+    {
+      "source": "/favorites.html",
+      "destination": "/favorites",
+      "permanent": true
+    },
+    {
+      "source": "/guidelines.html",
+      "destination": "/guidelines",
+      "permanent": true
+    },
+    {
+      "source": "/how-payments-work.html",
+      "destination": "/how-payments-work",
+      "permanent": true
+    },
+    {
+      "source": "/listing-reviews.html",
+      "destination": "/listing-reviews",
+      "permanent": true
+    },
+    {
+      "source": "/login.html",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/messages.html",
+      "destination": "/messages",
+      "permanent": true
+    },
+    {
+      "source": "/payment-cancel.html",
+      "destination": "/payment-cancel",
+      "permanent": true
+    },
+    {
+      "source": "/payment-return.html",
+      "destination": "/payment-return",
+      "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/profile.html",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/receipt.html",
+      "destination": "/receipt",
+      "permanent": true
+    },
+    {
+      "source": "/seller.html",
+      "destination": "/seller",
+      "permanent": true
+    },
+    {
+      "source": "/store.html",
+      "destination": "/store",
+      "permanent": true
+    },
+    {
+      "source": "/terms.html",
+      "destination": "/terms",
+      "permanent": true
+    },
+    {
+      "source": "/verify.html",
+      "destination": "/verify",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/404",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/categories",
+      "destination": "/categories.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
+    },
+    {
+      "source": "/favorites",
+      "destination": "/favorites.html"
+    },
+    {
+      "source": "/guidelines",
+      "destination": "/guidelines.html"
+    },
+    {
+      "source": "/how-payments-work",
+      "destination": "/how-payments-work.html"
+    },
+    {
+      "source": "/listing-reviews",
+      "destination": "/listing-reviews.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/messages",
+      "destination": "/messages.html"
+    },
+    {
+      "source": "/payment-cancel",
+      "destination": "/payment-cancel.html"
+    },
+    {
+      "source": "/payment-return",
+      "destination": "/payment-return.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/profile.html"
+    },
+    {
+      "source": "/receipt",
+      "destination": "/receipt.html"
+    },
+    {
+      "source": "/seller",
+      "destination": "/seller.html"
+    },
+    {
+      "source": "/store",
+      "destination": "/store.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/verify",
+      "destination": "/verify.html"
+    }
+  ]
+}

@@ -4,18 +4,18 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>How Payments Work — Marketrade</title>
-  <meta name="description" content="Marketrade only charges sellers a subscription fee for platform access. We never process, hold, or facilitate payment for goods sold between users."/>
+  <meta name="description" content="Marketrade charges sellers a subscription fee via Paystack. Item payments are either arranged privately, or paid securely through TradeSafe escrow with Pargo delivery."/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://www.marketrade.co/how-payments-work"/>
   <meta property="og:title" content="How Payments Work — Marketrade"/>
-  <meta property="og:description" content="Marketrade only charges sellers a subscription fee for platform access. We never process, hold, or facilitate payment for goods sold between users."/>
+  <meta property="og:description" content="Marketrade charges sellers a subscription fee via Paystack. Item payments are either arranged privately, or paid securely through TradeSafe escrow with Pargo delivery."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://www.marketrade.co/how-payments-work"/>
   <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
   <meta property="og:site_name" content="Marketrade"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="How Payments Work — Marketrade"/>
-  <meta name="twitter:description" content="Marketrade only charges sellers a subscription fee for platform access. We never process, hold, or facilitate payment for goods sold between users."/>
+  <meta name="twitter:description" content="Marketrade charges sellers a subscription fee via Paystack. Item payments are either arranged privately, or paid securely through TradeSafe escrow with Pargo delivery."/>
   <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="theme-color" content="#2563eb"/>
@@ -76,29 +76,39 @@
     <div class="updated">Last updated: 2026</div>
 
     <div class="pay-summary">
-      <p>In short: Marketrade only ever charges sellers a fixed subscription fee for access to selling tools. We do not process, hold, collect, or facilitate payment for any item sold between a buyer and a seller — that exchange happens directly between the two of them, entirely outside our systems.</p>
+      <p>In short: Marketrade charges sellers a fixed subscription fee for access to selling tools — that's handled by Paystack, and it's the only thing Paystack is used for. Separately, buyers and sellers may choose real online payment for an individual item via TradeSafe, a dedicated escrow provider — TradeSafe holds that money, not Marketrade, and only releases it once the buyer has the item (or 24 hours after Pargo confirms delivery, whichever applies). Buyers and sellers can also skip both and simply arrange payment privately between themselves, as before.</p>
     </div>
 
     <h2>What Marketrade charges for</h2>
-    <p>Marketrade is a subscription platform. Sellers pay us directly for time-limited access to list items — plans currently range from R19 (48-hour Flash Sale) to R699 (6-month Semester Pass). This is the only thing our payment integration (Paystack) is used for. The fee is for the use of our software and listing visibility, not for any specific item a seller later sells.</p>
+    <p>Marketrade is a subscription platform. Sellers pay us directly for time-limited access to list items — plans currently range from R19 (48-hour Flash Sale) to R699 (6-month Semester Pass). This is the only thing our payment integration with Paystack is used for. The fee is for the use of our software and listing visibility, not for any specific item a seller later sells. We are not a payment facilitator, payment aggregator, or marketplace payment processor with respect to Paystack: any card or EFT payment made through Marketrade's Paystack checkout goes to Marketrade, for Marketrade's own subscription service, in full.</p>
 
-    <h2>What Marketrade does not charge for, hold, or touch</h2>
+    <h2>Paying for an item: two ways</h2>
+    <p>What happens for an individual item a buyer orders is entirely up to the buyer and seller — Marketrade offers two options at checkout:</p>
     <ul>
-      <li>We never process a card, EFT, or any other payment for the actual item a buyer is purchasing from a seller.</li>
-      <li>We never receive, hold, or move funds on behalf of a buyer or seller for a transaction between them.</li>
-      <li>We are not a party to that transaction and have no Paystack, banking, or escrow relationship covering it.</li>
-      <li>Buyers and sellers arrange and settle payment for goods directly with each other — typically via cash, EFT, or another method they agree on — coordinated through our in-app messaging or WhatsApp.</li>
+      <li><strong>Arrange privately (default).</strong> Buyer and seller settle up directly — typically cash, EFT, or another method they agree on — coordinated through our in-app messaging or WhatsApp. Marketrade never sees or touches this money.</li>
+      <li><strong>Secure Escrow Checkout (optional).</strong> The buyer can instead pay online (card, Ozow, SnapScan, or EFT) through TradeSafe's hosted checkout page. TradeSafe — not Marketrade — holds the money in escrow until either (a) the buyer meets the seller in person and gives them a one-time Collection PIN, which releases the funds immediately, or (b) the item is delivered to a Pargo pickup point, after which funds release automatically 24 hours later unless the buyer reports a problem. Marketrade's app never receives or touches card details; the payment page is TradeSafe's own hosted checkout, the same way Paystack hosts our subscription checkout.</li>
+    </ul>
+
+    <h2>What Marketrade itself does not charge for, hold, or touch</h2>
+    <ul>
+      <li>We never process a card, EFT, or any other item payment ourselves — that either happens privately between buyer and seller, or on TradeSafe's own hosted, licensed escrow platform.</li>
+      <li>We never receive or hold buyer-seller funds in a Marketrade bank account. Escrowed funds sit with TradeSafe until release; once released, they're reflected in the seller's in-app Wallet balance, which Marketrade pays out to the seller's bank account on request.</li>
+      <li>Our Paystack integration is used solely for seller subscriptions, as described above — it has no role in item payments, escrowed or private.</li>
     </ul>
 
     <h2>At a glance</h2>
     <table class="pay-table">
-      <tr><th>Transaction type</th><th>Who is paid</th><th>Does Marketrade process this?</th></tr>
-      <tr><td>Seller subscription (Flash Sale, Standard, etc.)</td><td>Marketrade</td><td>Yes — via Paystack</td></tr>
-      <tr><td>Payment for an item listed on Marketrade</td><td>The seller, directly</td><td>No — arranged privately between buyer and seller</td></tr>
+      <tr><th>Transaction type</th><th>Who's paid</th><th>Who processes it</th></tr>
+      <tr><td>Seller subscription (Flash Sale, Standard, etc.)</td><td>Marketrade</td><td>Paystack, for Marketrade</td></tr>
+      <tr><td>Item payment, arranged privately</td><td>The seller, directly</td><td>Nobody — settled privately between buyer and seller</td></tr>
+      <tr><td>Item payment, Secure Escrow Checkout</td><td>The seller (via Marketrade Wallet, on request)</td><td>TradeSafe, an independent licensed escrow provider</td></tr>
     </table>
 
+    <h2>Delivery for escrow orders</h2>
+    <p>Escrow orders may be handed over in person, or shipped to a Pargo pickup point near the buyer. Pargo is an independent courier/logistics provider — Marketrade only stores which pickup point was chosen and Pargo's own delivery status; we don't process any payment through Pargo itself.</p>
+
     <h2>Why this distinction matters</h2>
-    <p>Marketrade is a classifieds-style listing platform with paid seller subscriptions — comparable to a SaaS subscription business. We are not a payment facilitator, payment aggregator, or marketplace payment processor: we never route, split, or hold funds intended for a third party. Any card or EFT payment made through Marketrade goes to Marketrade, for Marketrade's own subscription service, in full.</p>
+    <p>Marketrade is a classifieds-style listing platform with paid seller subscriptions, comparable to a SaaS subscription business, plus an optional, purpose-built escrow integration for buyers and sellers who'd rather not exchange cash directly. We keep these clearly separated: Paystack is exclusively our own subscription revenue; TradeSafe is exclusively a licensed third-party escrow service for item payments that buyers opt into.</p>
 
     <h2>Questions</h2>
     <p>If you have questions about this — including as part of a payment provider's verification process — contact us via the "Report an issue" link in the footer.</p>

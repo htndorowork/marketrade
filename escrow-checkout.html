@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secure Checkout — Marketrade</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=4"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .esc-wrap{max-width:520px;margin:0 auto;padding:20px 16px 60px}
+    .esc-card{background:#fff;border:2px solid #f0f0f0;border-radius:16px;padding:18px;margin-bottom:16px}
+    .esc-title{font-weight:900;font-size:16px;margin-bottom:10px}
+    .esc-item{display:flex;gap:12px;align-items:center}
+    .esc-item img{width:56px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0}
+    .esc-row{display:flex;justify-content:space-between;font-size:13.5px;color:#444;padding:5px 0}
+    .esc-row.total{font-weight:900;color:#111;font-size:15px;border-top:2px solid #f5f5f5;margin-top:6px;padding-top:10px}
+    .esc-method{display:flex;gap:10px;border:2px solid #eee;border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer}
+    .esc-method.active{border-color:#2563eb;background:#eff6ff}
+    .esc-method input{margin-top:3px}
+    .esc-method-title{font-weight:800;font-size:14px}
+    .esc-method-sub{font-size:12px;color:#888;font-weight:600}
+    .esc-point{border:2px solid #eee;border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;font-size:13px}
+    .esc-point.active{border-color:#2563eb;background:#eff6ff}
+    .esc-point-name{font-weight:800}
+    .esc-point-addr{color:#888;font-size:12px;font-weight:600}
+    .esc-input{width:100%;padding:11px 12px;border:2px solid #eee;border-radius:10px;font-family:inherit;font-size:14px;margin-bottom:8px}
+    .esc-err{color:#dc2626;font-weight:700;font-size:13px;margin-top:8px;display:none}
+    .esc-badge{display:inline-block;background:#eff6ff;color:#1d4ed8;font-weight:800;font-size:11.5px;padding:3px 9px;border-radius:20px;margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+  </nav>
+
+  <div class="esc-wrap">
+    <div class="esc-badge">🔒 Secure Escrow Checkout — held by TradeSafe</div>
+
+    <div id="loading" style="text-align:center;padding:40px 0;color:#888;font-weight:700">Loading… ⏳</div>
+
+    <div id="content" style="display:none">
+      <div class="esc-card">
+        <div class="esc-title">Your item</div>
+        <div class="esc-item">
+          <img id="it-img" alt=""/>
+          <div>
+            <div style="font-weight:800" id="it-title"></div>
+            <div style="font-size:12.5px;color:#888;font-weight:600" id="it-qty"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="esc-row"><span>Item price</span><span id="row-unit"></span></div>
+          <div class="esc-row"><span>Delivery</span><span id="row-delivery"></span></div>
+          <div class="esc-row total"><span>Total (paid to escrow)</span><span id="row-total"></span></div>
+        </div>
+      </div>
+
+      <div class="esc-card">
+        <div class="esc-title">How will you get it?</div>
+        <label class="esc-method active" id="method-in_person">
+          <input type="radio" name="method" value="in_person" checked/>
+          <div>
+            <div class="esc-method-title">🤝 In-person handover</div>
+            <div class="esc-method-sub">Meet the seller. You'll get a 6-digit Collection PIN — give it to them once you have the item, and payment releases instantly.</div>
+          </div>
+        </label>
+        <label class="esc-method" id="method-pargo">
+          <input type="radio" name="method" value="pargo"/>
+          <div>
+            <div class="esc-method-title">📦 Pargo pickup point</div>
+            <div class="esc-method-sub">Seller ships to a Pargo point near you. Payment auto-releases to the seller 24h after it arrives, unless you report a problem.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="esc-card" id="pargo-panel" style="display:none">
+        <div class="esc-title">Choose a pickup point</div>
+        <input class="esc-input" id="pargo-search" placeholder="Suburb or postal code…"/>
+        <button class="btn-sm btn-toggle" id="pargo-search-btn" type="button">Search</button>
+        <div id="pargo-points" style="margin-top:10px"></div>
+      </div>
+
+      <div class="esc-card" id="idnum-panel" style="display:none">
+        <div class="esc-title">One more thing</div>
+        <p style="font-size:12.5px;color:#888;font-weight:600;margin-bottom:8px">TradeSafe (our escrow partner) requires an ID or passport number to verify buyers before holding funds. This is stored securely and only used for that verification.</p>
+        <input class="esc-input" id="id-number-input" placeholder="ID / passport number"/>
+      </div>
+
+      <button class="btn-primary" id="pay-btn" style="width:100%;padding:14px;font-size:15px">🔒 Pay Securely</button>
+      <div class="esc-err" id="esc-err"></div>
+      <p style="text-align:center;font-size:12px;color:#aaa;font-weight:600;margin-top:14px">
+        Prefer to arrange payment directly with the seller instead? <a href="/" style="color:#2563eb;font-weight:800">Go back</a> and use the regular checkout.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+    const FN_BASE = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/';
+    const params = new URLSearchParams(location.search);
+    const listingId = params.get('listing');
+    const qty = Math.max(1, parseInt(params.get('qty')||'1',10));
+
+    let listing=null, session=null, deliveryMethod='in_person', selectedPoint=null;
+
+    function money(n){ return 'R'+Number(n).toFixed(2).replace(/\.00$/,''); }
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    function renderTotals(){
+      const unit = listing.discount_percent>0 ? listing.price*(1-listing.discount_percent/100) : listing.price;
+      const delivery = deliveryMethod==='pargo' ? (Number(listing.delivery_fee)||0) : 0;
+      document.getElementById('row-unit').textContent = money(unit)+' × '+qty;
+      document.getElementById('row-delivery').textContent = delivery>0 ? money(delivery) : 'Free';
+      document.getElementById('row-total').textContent = money(unit*qty+delivery);
+    }
+
+    document.querySelectorAll('input[name="method"]').forEach(r=>{
+      r.addEventListener('change', ()=>{
+        deliveryMethod = r.value;
+        document.querySelectorAll('.esc-method').forEach(m=>m.classList.remove('active'));
+        document.getElementById('method-'+deliveryMethod).classList.add('active');
+        document.getElementById('pargo-panel').style.display = deliveryMethod==='pargo' ? 'block':'none';
+        renderTotals();
+      });
+    });
+
+    async function searchPargoPoints(){
+      const q = document.getElementById('pargo-search').value.trim();
+      if(!q) return;
+      const box = document.getElementById('pargo-points');
+      box.innerHTML = '<p class="loading-msg" style="font-size:12px">Searching… ⏳</p>';
+      try{
+        const res = await fetch(FN_BASE+'pargo-points',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'},
+          body: JSON.stringify({query:q})
+        });
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok){ box.innerHTML='<p style="font-size:12px;color:#dc2626;font-weight:700">'+escapeHtml(data.error||'Search failed')+'</p>'; return; }
+        if(!data.points?.length){ box.innerHTML='<p style="font-size:12px;color:#888">No pickup points found nearby — try a different suburb/postal code.</p>'; return; }
+        box.innerHTML = data.points.map(p=>
+          '<div class="esc-point" data-id="'+escapeHtml(p.id)+'" data-name="'+escapeHtml(p.name)+'">'+
+          '<div class="esc-point-name">'+escapeHtml(p.name)+'</div>'+
+          '<div class="esc-point-addr">'+escapeHtml(p.address||'')+'</div></div>'
+        ).join('');
+        box.querySelectorAll('.esc-point').forEach(el=>{
+          el.addEventListener('click',()=>{
+            box.querySelectorAll('.esc-point').forEach(x=>x.classList.remove('active'));
+            el.classList.add('active');
+            selectedPoint={id:el.dataset.id,name:el.dataset.name};
+          });
+        });
+      }catch(e){
+        box.innerHTML='<p style="font-size:12px;color:#dc2626;font-weight:700">Search failed — is Pargo delivery configured yet?</p>';
+      }
+    }
+    document.getElementById('pargo-search-btn').addEventListener('click', searchPargoPoints);
+    document.getElementById('pargo-search').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); searchPargoPoints(); }});
+
+    document.getElementById('pay-btn').addEventListener('click', async ()=>{
+      const errEl = document.getElementById('esc-err');
+      errEl.style.display='none';
+      if(deliveryMethod==='pargo' && !selectedPoint){
+        errEl.textContent='Please choose a Pargo pickup point first.'; errEl.style.display='block'; return;
+      }
+      const idNumInput = document.getElementById('id-number-input');
+      const btn = document.getElementById('pay-btn');
+      btn.disabled=true; btn.textContent='Starting checkout…';
+      try{
+        if(idNumInput && document.getElementById('idnum-panel').style.display!=='none'){
+          const idNum = idNumInput.value.trim();
+          if(!idNum){ throw new Error('Please enter your ID/passport number.'); }
+          const {error:profErr} = await supabase.from('profiles').update({id_number:idNum}).eq('id', session.user.id);
+          if(profErr) throw new Error('Could not save ID number: '+profErr.message);
+        }
+        const res = await fetch(FN_BASE+'tradesafe-checkout',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':'sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH'},
+          body: JSON.stringify({
+            listing_id: listingId,
+            quantity: qty,
+            delivery_method: deliveryMethod,
+            pargo_point_id: selectedPoint?.id || null,
+            pargo_point_name: selectedPoint?.name || null,
+            return_base: location.origin + '/'
+          })
+        });
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok) throw new Error(data.error || ('Checkout failed ('+res.status+')'));
+        window.location.href = data.checkout_url;
+      }catch(e){
+        errEl.textContent = e.message || 'Something went wrong.';
+        errEl.style.display='block';
+        btn.disabled=false; btn.textContent='🔒 Pay Securely';
+      }
+    });
+
+    (async function init(){
+      const {data:{session:s}} = await supabase.auth.getSession();
+      if(!s){ location.href='login?next=' + encodeURIComponent(location.pathname+location.search); return; }
+      session = s;
+      if(!listingId){ document.getElementById('loading').textContent='Missing item.'; return; }
+
+      const {data:l, error} = await supabase.from('listings').select('*').eq('id',listingId).single();
+      if(error || !l){ document.getElementById('loading').textContent='Item not found.'; return; }
+      listing = l;
+
+      const {data:profile} = await supabase.from('profiles').select('id_number').eq('id',session.user.id).single();
+      if(!profile?.id_number){ document.getElementById('idnum-panel').style.display='block'; }
+
+      document.getElementById('it-img').src = listing.image_url || 'icons/icon-192.png';
+      document.getElementById('it-title').textContent = listing.title;
+      document.getElementById('it-qty').textContent = 'Qty: '+qty;
+      renderTotals();
+
+      document.getElementById('loading').style.display='none';
+      document.getElementById('content').style.display='block';
+    })();
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

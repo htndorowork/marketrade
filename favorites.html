@@ -3,44 +3,48 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Favorites — Student Marketplace 🎓</title>
-  <meta name="robots" content="noindex,nofollow"/>
-  <link rel="canonical" href="https://www.mystudentmarketplace.com/favorites"/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <meta name="description" content="Your saved favorite listings on Student Marketplace."/>
-    <meta property="og:title" content="My Favorites — Student Marketplace 🎓"/>
-  <meta property="og:description" content="Your saved favorite listings on Student Marketplace."/>
+  <title>My Favorites — Marketrade</title>
+  <meta name="description" content="The listings you've saved on Marketrade."/>
+  <meta name="robots" content="noindex, follow"/>
+  <meta property="og:title" content="My Favorites — Marketrade"/>
+  <meta property="og:description" content="The listings you've saved on Marketrade."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://www.mystudentmarketplace.com/assets/og-image.png"/>
-  <meta name="twitter:card" content="summary"/>
+  <meta property="og:url" content="https://www.marketrade.co/"/>
+  <meta property="og:image" content="https://www.marketrade.co/social-share.png"/>
+  <meta property="og:site_name" content="Marketrade"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="My Favorites — Marketrade"/>
+  <meta name="twitter:description" content="The listings you've saved on Marketrade."/>
+  <meta name="twitter:image" content="https://www.marketrade.co/social-share.png"/>
   <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#7c3aed"/>
-  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
-  <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"/>
-  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96.png"/>
-  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-<link rel="stylesheet" href="style.css?v=1790000004"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=4"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-logo">Student<span>Marketplace</span> 🎓</a>
+    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
     <div class="nav-links nav-links-simple">
       <a href="/">Browse</a>
-      <a href="/favorites" id="nav-favorites" style="color:#7c3aed">❤️ Favorites</a>
-      <a href="/messages" id="nav-messages" style="display:none">💬 Messages<span class="inline-badge" id="msg-badge" style="display:none">0</span></a>
+      <a href="favorites" id="nav-favorites" style="color:#2563eb">❤️ Favorites</a>
+      <a href="messages" id="nav-messages" style="display:none">💬 Messages<span class="inline-badge" id="msg-badge" style="display:none">0</span></a>
       <div style="position:relative;display:inline-block" id="notif-wrap">
         <a href="#" id="nav-notif" onclick="toggleNotifDropdown();return false" style="display:none">🔔 Notifications<span class="inline-badge" id="notif-badge" style="display:none">0</span></a>
         <div id="notif-dropdown" class="notif-dropdown" style="display:none"></div>
       </div>
-      <a href="/profile" id="nav-profile" style="display:none">My Profile</a>
-      <a href="/login" id="nav-auth">Sign in</a>
+      <a href="profile" id="nav-profile" style="display:none">My Profile</a>
+      <a href="login" id="nav-auth">Sign in</a>
     </div>
     <a href="/" class="nav-cart" title="Cart">🛒<span class="cart-badge" id="cart-badge" style="display:none">0</span></a>
   </nav>
 
   <main class="main">
-    <div class="section-header"><div class="section-title">❤️ My Favorites</div></div>
+    <div class="section-header"><h1 class="section-title">❤️ My Favorites</h1></div>
     <div class="grid" id="fav-grid">
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
@@ -48,54 +52,52 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-social">
-        <div class="footer-social-title">Follow Us</div>
-        <div class="footer-social-line"><a href="https://instagram.com/mystudentmarketplacee" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> mystudentmarketplacee</a></div>
-        <div class="footer-social-line"><a href="https://www.facebook.com/share/1ExUfH1RSm/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.5c0-.9.25-1.5 1.5-1.5H16.5V4.3c-.27-.04-1.2-.13-2.28-.13-2.25 0-3.8 1.37-3.8 3.9V10.5H8v3h2.42V21h3.08z"/></svg> Student Marketplace</a></div>
-        <div class="footer-social-line"><a href="https://tiktok.com/@student_marketplace" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3v13.5a2.5 2.5 0 1 1-2.5-2.5c.2 0 .4.02.6.06V9.9a5.5 5.5 0 1 0 4.9 5.47V8.7a6.9 6.9 0 0 0 4 1.28V6.9a4.2 4.2 0 0 1-4-4.9z"/></svg> student_marketplace</a></div>
+    <div class="footer-grid">
+      <div class="footer-col footer-social-col">
+        <div class="footer-col-label">Follow Us</div>
+        <div class="footer-social">
+          <a href="https://instagram.com/marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg><span>marketrade.co</span></a>
+          <a href="https://www.facebook.com/share/1EvtMfWTCg/" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><span>Marketrade</span></a>
+          <a href="https://tiktok.com/@marketrade.co" target="_blank" rel="noopener"><svg class="footer-social-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.66-.58-1.08-1.4-1.16-2.32h-2.75v11.55c0 1.24-1 2.25-2.24 2.25a2.25 2.25 0 0 1-.85-4.34 2.24 2.24 0 0 1 .85-.16c.24 0 .48.03.7.1v-2.8a5.06 5.06 0 0 0-5.79 4.99 5.07 5.07 0 0 0 8.63 3.6 5.06 5.06 0 0 0 1.51-3.6V9.7a7.7 7.7 0 0 0 4.5 1.45V8.4a4.85 4.85 0 0 1-3.4-2.58z"/></svg><span>marketrade.co</span></a>
+        </div>
       </div>
-      <div class="footer-main">
-        <div class="footer-title">Student Marketplace 🎓</div>
-        <div class="footer-sub">The student marketplace for all</div>
+      <div class="footer-col footer-center">
+        <div class="footer-title">Marketrade 🛍️</div>
+        <div class="footer-sub">The marketplace for everyone</div>
         <div class="footer-links">
-      <a class="footer-link" href="mailto:studentmarketplacehelp@gmail.com">📧 Report an issue</a>
-      <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
-      <a class="footer-link" href="/">Browse listings</a>
-      <a class="footer-link" href="/faq">How It Works</a>
-      <a class="footer-link" href="/terms">Terms</a>
-      <a class="footer-link" href="/privacy">Privacy</a>
-      <a class="footer-link" href="/guidelines">Guidelines</a>
-    </div>
-        <div class="footer-copy">© 2025 Student Marketplace · Built for all students</div>
+          <a class="footer-link" href="mailto:marketrade.co@gmail.com">📧 Report an issue</a>
+          <a class="footer-link" href="https://wa.me/27694520629">📱 WhatsApp Support</a>
+          <a class="footer-link" href="/">Browse listings</a>
+          <a class="footer-link" href="faq">How It Works</a>
+          <a class="footer-link" href="terms">Terms</a>
+          <a class="footer-link" href="how-payments-work">How Payments Work</a>
+          <a class="footer-link" href="privacy">Privacy</a>
+          <a class="footer-link" href="guidelines">Guidelines</a>
+        </div>
+        <div class="footer-copy">© 2025 Marketrade · Built for everyone</div>
       </div>
-      <div class="footer-business">
-        <div class="footer-business-title">Business Info</div>
-        <div class="footer-business-line">📞 <a href="tel:+27623584921">062 358 4921</a></div>
-        <div class="footer-business-line">📄 <a href="/terms#refund-policy">Refund &amp; Return Policy</a></div>
+      <div class="footer-col footer-business">
+        <div class="footer-col-label">Business Info</div>
+        <a href="tel:+27623584921">📞 062 358 4921</a>
+        <a href="terms#refunds">📄 Refund &amp; Return Policy</a>
       </div>
     </div>
-    </footer>
+  </footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    import { unreadMessageCount } from './unread.js?v=1';
-    import { startPresence } from './presence.js?v=1';
-    const supabase = createClient('https://kqsqtasykdtpdrkqyaxp.supabase.co','sb_publishable_8S5WkeUpuQYSLWhIbUJr1w_VrwFatlZ');
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
-    function escapeHtml(s){
-      return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-
-    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Gaming:'🎮',Tickets:'🎟️',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Accommodation:'🏠',Transport:'🚲',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
-    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Accommodation:{bg:'#fff3e0'},Transport:{bg:'#e0f2f1'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'}};
+    const CAT_EMOJI={Textbooks:'📚',Clothing:'👗',Electronics:'📱',Food:'🍱',Beauty:'💄',Tutoring:'🎓',Utensils:'🍴',Jewellery:'💍',Bags:'👜',Toys:'🧸',Pets:'🐾',Tools:'🔧',Hardware:'🔨',Gaming:'🎮',Snacks:'🍿',Sports:'🏃',Books:'📖',Music:'🎸',Cameras:'📸',Events:'🎉',Plants:'🌱',Decor:'🖼️',Baby:'👶',Data:'📶',Health:'🩹',Career:'💼',Properties:'🏠',Jobs:'🧑‍💼',Watermobile:'⛵',Camping:'🏕️',BoardGames:'🎲',Transport:'🚲',Vehicles:'🚗',Services:'🛠️',Stationary:'✏️',Appliances:'🔌',Furniture:'🛋️',Others:'🔀'};
+    const CAT_COLOR={Textbooks:{bg:'#fff8e1'},Clothing:{bg:'#fce4ec'},Electronics:{bg:'#e8eaf6'},Food:{bg:'#e8f5e9'},Beauty:{bg:'#fce4ec'},Tutoring:{bg:'#e1f5ee'},Transport:{bg:'#e0f2f1'},Vehicles:{bg:'#e3f2fd'},Services:{bg:'#ede7f6'},Stationary:{bg:'#fffde7'},Appliances:{bg:'#eceff1'},Furniture:{bg:'#efebe9'},Utensils:{bg:'#fff3e0'},Jewellery:{bg:'#fdf0e6'},Bags:{bg:'#ede7f6'},Toys:{bg:'#e3f2fd'},Pets:{bg:'#f1f8e9'},Tools:{bg:'#eceff1'},Hardware:{bg:'#efebe9'},Gaming:{bg:'#ede7f6'},Snacks:{bg:'#fff8e1'},Sports:{bg:'#e8f5e9'},Books:{bg:'#efebe9'},Music:{bg:'#f3e5f5'},Cameras:{bg:'#eceff1'},Events:{bg:'#fce4ec'},Plants:{bg:'#e8f5e9'},Decor:{bg:'#fff3e0'},Baby:{bg:'#e1f5fe'},Data:{bg:'#e8eaf6'},Health:{bg:'#ffebee'},Career:{bg:'#e0f2f1'},Properties:{bg:'#fff3e0'},Jobs:{bg:'#e0f2f1'},Watermobile:{bg:'#e0f7fa'},Camping:{bg:'#e8f5e9'},BoardGames:{bg:'#f3e5f5'}};
 
     let myFavorites=new Set();
     let favListings=[];
+    // Escapes user-typed text before it goes into innerHTML.
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     const {data:{user}}=await supabase.auth.getUser();
-    if(user) startPresence(supabase,user.id);
-    if(!user){ window.location.href='/login'; }
+    if(!user){ window.location.href='login'; throw new Error('Redirecting to login'); }
 
     document.getElementById('nav-auth').textContent='Sign out';
     document.getElementById('nav-auth').href='#';
@@ -104,9 +106,9 @@
     document.getElementById('nav-messages').style.display='inline';
     document.getElementById('nav-notif').style.display='inline';
     const {data:p}=await supabase.from('profiles').select('role').eq('id',user.id).single();
-    if(p?.role==='seller') document.getElementById('nav-profile').href='/seller';
+    if(p?.role==='seller') document.getElementById('nav-profile').href='seller';
 
-    unreadMessageCount(supabase,user.id).then((count)=>{
+    supabase.from('messages').select('id',{count:'exact',head:true}).or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).neq('sender_id',user.id).eq('is_read',false).then(({count})=>{
       if(count>0){const b=document.getElementById('msg-badge');b.textContent=count;b.style.display='inline-flex';}
     });
 
@@ -124,7 +126,7 @@
       await loadNotifications();
       const notifs=window._notifs||[];
       dd.innerHTML=notifs.length
-        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+escapeHtml(n.message)+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
+        ? notifs.map(n=>'<div class="notif-item'+(n.is_read?'':' unread')+'" onclick="window._openNotif(\''+n.id+'\',\''+(n.listing_id||'')+'\')">'+n.message+'<div style="font-size:10px;color:#aaa;margin-top:3px">'+new Date(n.created_at).toLocaleDateString('en-ZA')+'</div></div>').join('')
         : '<div class="notif-empty">No notifications yet 🔔</div>';
       dd.style.display='block';
     };
@@ -141,26 +143,24 @@
     loadNotifications();
 
     async function loadFavorites(){
-      const [{data:favs,error:favErr}, {data:fm}] = await Promise.all([
-        supabase.from('favorites').select('listing_id').eq('user_id',user.id),
-        supabase.from('settings').select('value').eq('key','free_mode').single()
-      ]);
+      const {data:favs,error:favErr}=await supabase.from('favorites').select('listing_id').eq('user_id',user.id);
       if(favErr){ document.getElementById('fav-grid').innerHTML='<p class="loading-msg">Could not load favorites: '+favErr.message+'</p>'; return; }
-      const freeModeOn = fm?.value === 'true';
       myFavorites=new Set((favs||[]).map(f=>f.listing_id));
       const ids=[...myFavorites];
       if(!ids.length){
-        document.getElementById('fav-grid').innerHTML='<p class="loading-msg">No favorites yet — tap the 🤍 on a listing to save it here 💜</p>';
+        document.getElementById('fav-grid').innerHTML='<p class="loading-msg">No favorites yet — tap the heart on a listing to save it here</p>';
         return;
       }
-      const {data:listings,error:listErr}=await supabase.from('listings').select('*,profiles(full_name,residence,university,is_blocked,subscription_paid_until,is_admin)').in('id',ids);
+      const {data:listings,error:listErr}=await supabase.from('listings').select('*,profiles(full_name,residence,is_blocked,subscription_paid_until,is_admin)').in('id',ids);
       if(listErr){ document.getElementById('fav-grid').innerHTML='<p class="loading-msg">Could not load favorites: '+listErr.message+'</p>'; return; }
+      const {data:freeModeRow} = await supabase.from('settings').select('value').eq('key','free_mode_active').limit(1);
+      const freeModeOn = freeModeRow?.[0]?.value==='true';
       const today=new Date().toISOString().slice(0,10);
       favListings=(listings||[]).filter(l=>{
         const p=l.profiles;
         if(!p) return false;
         if(p.is_blocked) return false;
-        if(!freeModeOn && !p.is_admin && (!p.subscription_paid_until || p.subscription_paid_until<today)) return false;
+        if(!p.is_admin && !freeModeOn && (!p.subscription_paid_until || p.subscription_paid_until<today)) return false;
         return true;
       });
       renderFavorites();
@@ -169,7 +169,7 @@
     function renderFavorites(){
       const g=document.getElementById('fav-grid');
       if(!favListings.length){
-        g.innerHTML='<p class="loading-msg">No favorites yet — tap the 🤍 on a listing to save it here 💜</p>';
+        g.innerHTML='<p class="loading-msg">No favorites yet — tap the heart on a listing to save it here</p>';
         return;
       }
       g.innerHTML=favListings.map(l=>{
@@ -177,9 +177,9 @@
         const e=CAT_EMOJI[l.category]||'🛍️';
         const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
         const db=l.discount_percent>0?'<div class="discount-tag">-'+l.discount_percent+'% OFF</div>':'';
-        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+l.title.replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
+        const img=l.image_url?'<img loading="lazy" src="'+l.image_url+'" alt="'+escapeHtml(l.title)+'" style="width:100%;height:100%;object-fit:cover"/>':`<span style="font-size:44px">${e}</span>`;
         const stock=l.quantity>5?'<div class="card-stock">'+l.quantity+' in stock</div>':l.quantity>0?'<div class="card-stock low">Only '+l.quantity+' left!</div>':'<div class="card-stock out">Out of stock</div>';
-        const heart='<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Remove favorite">❤️</button>';
+        const heart='<button class="fav-heart" onclick="event.stopPropagation();window._toggleFav(\''+l.id+'\')" aria-label="Remove favorite"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ef4444" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>';
         const condTag=l.condition?'<span class="condition-tag">'+escapeHtml(l.condition)+'</span>':'';
         const negTag=l.is_negotiable?'<span class="negotiable-tag">💬 Negotiable</span>':'';
         return '<div class="card" onclick="window.location.href=\'/?open='+l.id+'\'">'+
@@ -207,10 +207,10 @@
   </script>
   <nav class="bottom-nav">
     <a class="bottom-nav-item" href="/"><span class="bottom-nav-icon">🔍</span><span class="bottom-nav-label">Browse</span></a>
-    <a class="bottom-nav-item" href="/categories"><span class="bottom-nav-icon">🗂️</span><span class="bottom-nav-label">Categories</span></a>
-    <a class="bottom-nav-item" href="/messages"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-label">Messages</span></a>
-    <a class="bottom-nav-item active" href="/favorites"><span class="bottom-nav-icon">❤️</span><span class="bottom-nav-label">Favourites</span></a>
-    <a class="bottom-nav-item" href="/profile"><span class="bottom-nav-icon">👤</span><span class="bottom-nav-label">Profile</span></a>
+    <a class="bottom-nav-item" href="categories"><span class="bottom-nav-icon">🗂️</span><span class="bottom-nav-label">Categories</span></a>
+    <a class="bottom-nav-item" href="messages"><span class="bottom-nav-icon">💬</span><span class="bottom-nav-label">Messages</span></a>
+    <a class="bottom-nav-item active" href="favorites"><span class="bottom-nav-icon">❤️</span><span class="bottom-nav-label">Favourites</span></a>
+    <a class="bottom-nav-item" href="profile"><span class="bottom-nav-icon">👤</span><span class="bottom-nav-label">Profile</span></a>
   </nav>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
 </body>

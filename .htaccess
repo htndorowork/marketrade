@@ -1,0 +1,20 @@
+# Auto-generated: clean URLs (no .html) for Marketrade — Apache/mod_rewrite
+# (only relevant if the site is hosted on Apache, e.g. shared/cPanel hosting;
+# ignored otherwise, so it's harmless to leave in place)
+
+RewriteEngine On
+
+# 1) If someone requests a literal ...page.html URL, permanently redirect
+#    the browser to the clean version (keeps old links/bookmarks working
+#    and avoids duplicate-content URLs for search engines).
+RewriteCond %{THE_REQUEST} \s/+(index)\.html[\s?] [NC]
+RewriteRule ^ /? [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+([^.\s]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2) Serve the matching .html file for a clean URL, without changing what's
+#    shown in the address bar — this is what actually makes /login load.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^([^.]+)$ $1.html [L]
