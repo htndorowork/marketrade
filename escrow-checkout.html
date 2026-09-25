@@ -108,19 +108,22 @@
     const FN_BASE = 'https://spupfdclswjlpwiebwlq.supabase.co/functions/v1/';
     const params = new URLSearchParams(location.search);
     const listingId = params.get('listing');
+    const offerId = params.get('offer');
     const qty = Math.max(1, parseInt(params.get('qty')||'1',10));
 
-    let listing=null, session=null, deliveryMethod='in_person', selectedPoint=null;
+    let listing=null, session=null, deliveryMethod='in_person', selectedPoint=null, offer=null;
 
     function money(n){ return 'R'+Number(n).toFixed(2).replace(/\.00$/,''); }
     function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
     function renderTotals(){
-      const unit = listing.discount_percent>0 ? listing.price*(1-listing.discount_percent/100) : listing.price;
+      const unit = offer ? Number(offer.amount) : (listing.discount_percent>0 ? listing.price*(1-listing.discount_percent/100) : listing.price);
       const delivery = deliveryMethod==='pargo' ? (Number(listing.delivery_fee)||0) : 0;
       document.getElementById('row-unit').textContent = money(unit)+' × '+qty;
       document.getElementById('row-delivery').textContent = delivery>0 ? money(delivery) : 'Free';
       document.getElementById('row-total').textContent = money(unit*qty+delivery);
+      const unitLabel = document.querySelector('#row-unit').parentElement.firstElementChild;
+      if(unitLabel) unitLabel.textContent = offer ? 'Agreed price 🤝' : 'Item price';
     }
 
     document.querySelectorAll('input[name="method"]').forEach(r=>{
@@ -191,6 +194,7 @@
             delivery_method: deliveryMethod,
             pargo_point_id: selectedPoint?.id || null,
             pargo_point_name: selectedPoint?.name || null,
+            offer_id: offer ? offer.id : null,
             return_base: location.origin + '/'
           })
         });
@@ -213,6 +217,13 @@
       const {data:l, error} = await supabase.from('listings').select('*').eq('id',listingId).single();
       if(error || !l){ document.getElementById('loading').textContent='Item not found.'; return; }
       listing = l;
+
+      if(offerId){
+        const {data:o} = await supabase.from('offers').select('*').eq('id',offerId).single();
+        // Only trust it as a price override if it's actually an accepted offer
+        // made to this buyer for this listing — otherwise fall back to list price.
+        if(o && o.listing_id===listingId && o.buyer_id===session.user.id && o.status==='accepted') offer = o;
+      }
 
       const {data:profile} = await supabase.from('profiles').select('id_number').eq('id',session.user.id).single();
       if(!profile?.id_number){ document.getElementById('idnum-panel').style.display='block'; }

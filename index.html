@@ -231,6 +231,8 @@
         <div id="modal-signin-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;font-size:13px;font-weight:700;color:#1d4ed8">
           🔒 <a href="login" style="color:#2563eb;text-decoration:none">Sign in</a> to order this item
         </div>
+        <button class="btn-order" id="btn-make-offer" style="display:none;background:#fff;color:#111;border:2px solid #eee;margin-bottom:8px" onclick="openOfferModal()">🤝 Make an Offer</button>
+        <div id="modal-offer-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:700;color:#1d4ed8;margin-bottom:10px"></div>
         <button class="btn-order" id="btn-add-to-cart">🛒 Add to Cart</button>
         <button class="btn-order-cart" id="btn-order-now">Order Now</button>
         <button class="btn-order" id="btn-pay-securely" style="background:#fff;color:#2563eb;border:2px solid #2563eb;margin-top:8px" onclick="payEscrow()">🔒 Pay Securely Online (Escrow)</button>
@@ -242,6 +244,31 @@
         <div style="text-align:center;margin-top:12px">
           <a href="#" onclick="event.preventDefault();openReportModal()" style="font-size:12px;color:#aaa;font-weight:700;text-decoration:none">🚩 Report this listing</a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAKE AN OFFER MODAL -->
+  <div class="modal-overlay" id="offer-modal-overlay" onclick="closeOfferModal()">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+      <button class="modal-close" onclick="closeOfferModal()">✕</button>
+      <div class="modal-body">
+        <h2 class="modal-title" style="font-size:17px;margin-bottom:14px">Your offer</h2>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px">
+          <div id="offer-item-img" style="width:56px;height:56px;border-radius:10px;object-fit:cover;background:#f5f5f5;flex-shrink:0"></div>
+          <div style="min-width:0">
+            <div id="offer-item-title" style="font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+            <div id="offer-item-price" style="color:#2e7d32;font-weight:800;font-size:14px"></div>
+          </div>
+        </div>
+        <div id="offer-options"></div>
+        <div style="margin:10px 0">
+          <a href="#" id="offer-custom-link" onclick="event.preventDefault();showOfferCustomInput()" style="font-size:13.5px;font-weight:700;color:#2563eb;text-decoration:none">Offer a different amount</a>
+          <input type="number" min="1" step="1" id="offer-custom-input" placeholder="Enter your offer (R)" style="display:none;width:100%;margin-top:8px;padding:11px 12px;border:2px solid #eee;border-radius:10px;font-family:inherit;font-size:14px;box-sizing:border-box"/>
+        </div>
+        <p style="font-size:12px;color:#888;font-weight:600;margin:12px 0">Your offer is not a payment. Purchase details are arranged later with the seller.</p>
+        <div class="form-error" id="offer-error"></div>
+        <button class="btn-primary" id="offer-send-btn" onclick="sendOffer()">💬 Send offer</button>
       </div>
     </div>
   </div>
@@ -726,6 +753,7 @@
     let flatChipsExpanded=false; // whether the full subcategory chip grid is currently revealed (only after "Show all" is pressed)
 
     let all=[], cat='All', currentListing=null, galleryIdx=0, modalQty=1, currentUser=null, cart=[], renderLimit=24, lastFilteredList=[];
+    let currentOffer=null, offerListingPrice=0, selectedOfferAmount=0, offerCustomActive=false;
     // Declared up here (not just above render()) because render() is a hoisted
     // function declaration that can be — and is — invoked via doFilter() before
     // the interpreter reaches wherever this line sits textually. A `let` stays
@@ -1099,7 +1127,8 @@
 
     window._open=(id)=>{
       const l=all.find(x=>x.id===id);if(!l)return;
-      currentListing=l;modalQty=1;galleryIdx=0;
+      currentListing=l;modalQty=1;galleryIdx=0;currentOffer=null;
+      document.getElementById('modal-offer-note').style.display='none';
 
       // Increment view count once per browser session per listing
       let seenViews=JSON.parse(sessionStorage.getItem('sm_viewed_this_session')||'[]');
@@ -1175,6 +1204,10 @@
       } else {
         signInNote.style.display='none';
       }
+      // "Make an Offer" only makes sense for a negotiable listing that isn't
+      // your own, while you're signed in and it's in stock.
+      document.getElementById('btn-make-offer').style.display=
+        (currentUser && l.is_negotiable && currentUser.id!==l.seller_id && l.quantity>0) ? 'block' : 'none';
       document.getElementById('modal-overlay').style.display='flex';
       document.body.style.overflow='hidden';
 
@@ -1209,6 +1242,113 @@
         simSection.style.display='none';
       }
     };
+
+    // ===== MAKE AN OFFER =====
+    window.openOfferModal=()=>{
+      if(!currentUser){window.location.href='login';return;}
+      if(!currentListing)return;
+      const l=currentListing;
+      const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+      offerListingPrice=fp;
+      selectedOfferAmount=fp;
+      offerCustomActive=false;
+      document.getElementById('offer-error').textContent='';
+      const customInput=document.getElementById('offer-custom-input');
+      customInput.style.display='none';
+      customInput.value='';
+      const img=document.getElementById('offer-item-img');
+      img.style.backgroundImage=l.image_url?'url(\''+l.image_url+'\')':'none';
+      img.style.backgroundSize='cover';
+      img.style.backgroundPosition='center';
+      document.getElementById('offer-item-title').textContent=l.title;
+      document.getElementById('offer-item-price').textContent='R'+fp;
+      renderOfferOptions();
+      document.getElementById('offer-modal-overlay').style.display='flex';
+    };
+    window.closeOfferModal=()=>{document.getElementById('offer-modal-overlay').style.display='none';};
+
+    function renderOfferOptions(){
+      const fp=offerListingPrice;
+      const lower=Math.round(fp*0.9);
+      const higher=Math.round(fp*1.1);
+      const opts=[
+        {amount:lower,label:'R'+lower+' <span class="offer-option-sub">(10% lower)</span>'},
+        {amount:fp,label:'R'+fp},
+        {amount:higher,label:'R'+higher+' <span class="offer-option-sub">(10% higher)</span>'}
+      ];
+      document.getElementById('offer-options').innerHTML=opts.map(o=>
+        '<div class="offer-option'+((!offerCustomActive&&selectedOfferAmount===o.amount)?' active':'')+'" onclick="selectOfferAmount('+o.amount+')">'+
+        '<span>'+o.label+'</span><span class="offer-radio"></span></div>'
+      ).join('');
+    }
+    window.selectOfferAmount=(amt)=>{
+      selectedOfferAmount=amt;
+      offerCustomActive=false;
+      document.getElementById('offer-custom-input').style.display='none';
+      renderOfferOptions();
+    };
+    window.showOfferCustomInput=()=>{
+      offerCustomActive=true;
+      renderOfferOptions();
+      const input=document.getElementById('offer-custom-input');
+      input.style.display='block';
+      input.focus();
+    };
+    document.getElementById('offer-custom-input').addEventListener('input',e=>{
+      selectedOfferAmount=parseFloat(e.target.value)||0;
+    });
+    window.sendOffer=async()=>{
+      const err=document.getElementById('offer-error');
+      err.textContent='';
+      if(!currentUser){window.location.href='login';return;}
+      if(!currentListing)return;
+      const amount=offerCustomActive?parseFloat(document.getElementById('offer-custom-input').value):selectedOfferAmount;
+      if(!amount||amount<=0){err.textContent='❌ Enter a valid amount';return;}
+      const btn=document.getElementById('offer-send-btn');
+      btn.disabled=true;btn.textContent='Sending…';
+      try{
+        const {data:offerRow,error}=await supabase.from('offers').insert({
+          listing_id:currentListing.id,
+          buyer_id:currentUser.id,
+          seller_id:currentListing.seller_id,
+          sender_id:currentUser.id,
+          amount:amount
+        }).select().single();
+        if(error){err.textContent='❌ '+error.message;btn.disabled=false;btn.textContent='💬 Send offer';return;}
+        await supabase.from('messages').insert({
+          buyer_id:currentUser.id,
+          seller_id:currentListing.seller_id,
+          listing_id:currentListing.id,
+          sender_id:currentUser.id,
+          content:'💰 Offered R'+amount+' for "'+currentListing.title+'"',
+          offer_id:offerRow.id
+        });
+        closeOfferModal();
+        closeModal();
+        window.location.href='messages?seller='+currentListing.seller_id+'&listing='+currentListing.id;
+      }catch(e){
+        err.textContent='❌ '+(e?.message||'Something went wrong');
+        btn.disabled=false;btn.textContent='💬 Send offer';
+      }
+    };
+
+    // If we arrived via a "Buy at R X" link from an accepted-offer chat
+    // message (?open=<listing>&offer=<offerId>), re-check the offer here
+    // (never trust the URL alone) and show the agreed price on the modal.
+    // The real price enforcement happens server-side in place_order() /
+    // the tradesafe-checkout function — this is just what the buyer sees.
+    async function tryApplyOfferFromUrl(){
+      const offerIdParam=new URLSearchParams(location.search).get('offer');
+      if(!offerIdParam||!currentUser||!currentListing){currentOffer=null;return;}
+      const {data:o}=await supabase.from('offers').select('*').eq('id',offerIdParam).single();
+      if(o&&o.listing_id===currentListing.id&&o.buyer_id===currentUser.id&&o.status==='accepted'){
+        currentOffer=o;
+        document.getElementById('modal-price').innerHTML='<span style="font-size:22px;font-weight:900;color:#2e7d32">R'+o.amount+'</span>';
+        const note=document.getElementById('modal-offer-note');
+        note.textContent='🤝 You and the seller agreed on R'+o.amount+' for this item — this price applies to your order.';
+        note.style.display='block';
+      }
+    }
 
     // ===== REPORT LISTING =====
     window.openReportModal=()=>{
@@ -1272,7 +1412,7 @@
       const origTxt=btn.textContent;
       btn.textContent='Placing order...';btn.disabled=true;
       try{
-        await placeOrder([{listing:currentListing,qty:modalQty}]);
+        await placeOrder([{listing:currentListing,qty:modalQty}], currentOffer?currentOffer.id:null);
       } finally {
         btn.dataset.busy='0';
         btn.textContent=origTxt;
@@ -1283,7 +1423,7 @@
     window.payEscrow=()=>{
       if(!currentUser){window.location.href='login';return;}
       if(!currentListing)return;
-      window.location.href='escrow-checkout?listing='+currentListing.id+'&qty='+modalQty;
+      window.location.href='escrow-checkout?listing='+currentListing.id+'&qty='+modalQty+(currentOffer?'&offer='+currentOffer.id:'');
     };
 
     function addToCart(l,qty){
@@ -1426,21 +1566,22 @@
       }
     };
 
-    async function placeOrder(items){
+    async function placeOrder(items, offerId){
       if(!currentUser){window.location.href='login';return;}
       const info=await getBuyerContactInfo();
       if(!info)return;
       let sellers={};
       try{
         for(const {listing:l,qty} of items){
-          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:qty});
+          const {data,error}=await supabase.rpc('place_order',{p_listing_id:l.id,p_quantity:qty,p_offer_id:offerId||null});
           if(error){showToast('❌ Order failed: '+orderErrorMessage(error),'error');return;}
-          const fp=l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price;
+          const fp=data.unit_price!=null?data.unit_price:(l.discount_percent>0?Math.round(l.price*(1-l.discount_percent/100)):l.price);
           const sid=data.seller_id;
           if(!sellers[sid])sellers[sid]={name:data.seller_name||'Seller',wa:data.seller_whatsapp||'N/A',res:data.seller_residence||'',items:[]};
           sellers[sid].items.push((data.listing_title||l.title)+' ×'+qty+' (R'+(fp*qty)+')');
           l.quantity=Math.max(0,(l.quantity||0)-qty);
         }
+        currentOffer=null;
         closeModal();
         showToast('✅ Order placed! Contact details below.','success');
         showSellerContacts(sellers);
@@ -1969,7 +2110,7 @@
     };
 
     // Auto-open a listing if we arrived here via a store.html link (?open=<id>)
-    if(pendingOpenId && all.some(l=>l.id===pendingOpenId)) window._open(pendingOpenId);
+    if(pendingOpenId && all.some(l=>l.id===pendingOpenId)){ window._open(pendingOpenId); tryApplyOfferFromUrl(); }
 
     // Auto-select a category if we arrived here via categories.html (?cat=<name>)
     if(pendingCat){

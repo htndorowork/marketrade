@@ -67,6 +67,17 @@
     .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; scroll-margin: 60px; }
     .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
     .bubble.them { align-self: flex-start; background: #f5f5f5; color: #333; border-bottom-left-radius: 4px; }
+    .bubble.bubble-offer { background: #fff; border: 2px solid #eee; padding: 4px; }
+    .bubble.bubble-offer.me { background: #fff; }
+    .offer-card { min-width: 210px; padding: 10px 12px 8px; }
+    .offer-card-amount { font-weight: 900; font-size: 17px; color: #111; }
+    .offer-card-status { font-size: 12px; font-weight: 700; color: #888; margin-top: 2px; }
+    .offer-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .offer-act-btn { border: none; border-radius: 50px; padding: 7px 12px; font-size: 12px; font-weight: 800; font-family: inherit; cursor: pointer; text-decoration: none; display: inline-block; }
+    .offer-act-accept { background: #16a34a; color: #fff; }
+    .offer-act-counter { background: #eff6ff; color: #1d4ed8; }
+    .offer-act-decline { background: #fee2e2; color: #dc2626; }
+    .offer-act-buy { background: #2563eb; color: #fff; }
     .bubble.highlight { box-shadow: 0 0 0 3px #f59e0b; }
     .bubble-time { font-size: 10px; opacity: 0.75; margin-top: 4px; }
     .bubble-status { font-size: 10px; opacity: 0.9; margin-top: 4px; display: flex; align-items: center; gap: 5px; justify-content: flex-end; }
@@ -222,7 +233,7 @@
     let searchQuery = '';
     let showArchivedOnly = false;
     async function loadThreads(){
-      const {data} = await supabase.from('messages').select('*,listings(title)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false});
+      const {data} = await supabase.from('messages').select('*,listings(title),offers:offer_id(*)').or('buyer_id.eq.'+user.id+',seller_id.eq.'+user.id).order('created_at',{ascending:false});
       const msgs = data||[];
       const threadMap = {};
       msgs.forEach(m=>{
@@ -332,6 +343,91 @@
       return date.toLocaleDateString('en-ZA',{day:'numeric',month:'short',year: dOnly.getFullYear()!==today.getFullYear()?'numeric':undefined});
     }
 
+    function money(n){ return 'R'+Number(n).toFixed(2).replace(/\.00$/,''); }
+
+    function offerCard(m, mine){
+      const o = m.offers;
+      if(!o) return escapeHtml(m.content||'');
+      const iAmBuyer = activeThread.buyer_id===user.id;
+      const iSentThis = o.sender_id===user.id;
+      let statusLine, actions='';
+      if(o.status==='pending'){
+        statusLine = iSentThis ? 'Awaiting response…' : 'wants to know if you\'ll accept this price.';
+        if(!iSentThis){
+          actions = '<div class="offer-card-actions">'+
+            '<button class="offer-act-btn offer-act-accept" onclick="acceptOffer(\''+o.id+'\')">✅ Accept</button>'+
+            '<button class="offer-act-btn offer-act-counter" onclick="counterOffer(\''+o.id+'\')">↔️ Counter</button>'+
+            '<button class="offer-act-btn offer-act-decline" onclick="declineOffer(\''+o.id+'\')">✕ Decline</button>'+
+            '</div>';
+        }
+      } else if(o.status==='accepted'){
+        statusLine = '✅ Accepted';
+        if(iAmBuyer){
+          actions = '<div class="offer-card-actions"><a class="offer-act-btn offer-act-buy" href="/?open='+encodeURIComponent(activeThread.listing_id||'')+'&offer='+o.id+'">🛒 Buy at '+money(o.amount)+'</a></div>';
+        }
+      } else if(o.status==='declined'){
+        statusLine = '✕ Declined';
+      } else if(o.status==='countered'){
+        statusLine = 'Countered — see the offer below';
+      } else if(o.status==='completed'){
+        statusLine = '✅ Purchased at this price';
+      } else {
+        statusLine = o.status;
+      }
+      return '<div class="offer-card">'+
+        '<div class="offer-card-amount">🤝 '+money(o.amount)+'</div>'+
+        '<div class="offer-card-status">'+statusLine+'</div>'+
+        actions+
+        '</div>';
+    }
+
+    function findOfferById(offerId){
+      const m = (activeThread?.messages||[]).find(x=>x.offer_id===offerId);
+      return m ? m.offers : null;
+    }
+
+    window.acceptOffer=async(offerId)=>{
+      if(!confirm('Accept this offer? The buyer will then be able to purchase at this price.'))return;
+      const {error}=await supabase.from('offers').update({status:'accepted',responded_at:new Date().toISOString()}).eq('id',offerId);
+      if(error){alert('Could not accept: '+error.message);return;}
+      const o=findOfferById(offerId);
+      await supabase.from('messages').insert({
+        buyer_id:activeThread.buyer_id,seller_id:activeThread.seller_id,listing_id:activeThread.listing_id,
+        sender_id:user.id,content:'✅ Accepted the offer of '+money(o?.amount||0)+' — you can now buy at this price.'
+      });
+      await loadThreads();
+    };
+    window.declineOffer=async(offerId)=>{
+      if(!confirm('Decline this offer?'))return;
+      const {error}=await supabase.from('offers').update({status:'declined',responded_at:new Date().toISOString()}).eq('id',offerId);
+      if(error){alert('Could not decline: '+error.message);return;}
+      await supabase.from('messages').insert({
+        buyer_id:activeThread.buyer_id,seller_id:activeThread.seller_id,listing_id:activeThread.listing_id,
+        sender_id:user.id,content:'✕ Declined the offer.'
+      });
+      await loadThreads();
+    };
+    window.counterOffer=async(offerId)=>{
+      if(!activeThread.listing_id){alert('This conversation isn\'t tied to a listing, so a counter-offer isn\'t available here.');return;}
+      const existing=findOfferById(offerId);
+      const amtStr=prompt('Enter your counter-offer amount (R):',existing?Math.round(existing.amount):'');
+      if(amtStr===null)return;
+      const amt=parseFloat(amtStr);
+      if(!amt||amt<=0){alert('Enter a valid amount.');return;}
+      const {error:updErr}=await supabase.from('offers').update({status:'countered',responded_at:new Date().toISOString()}).eq('id',offerId);
+      if(updErr){alert('Could not send counter: '+updErr.message);return;}
+      const {data:newOffer,error}=await supabase.from('offers').insert({
+        listing_id:activeThread.listing_id,buyer_id:activeThread.buyer_id,seller_id:activeThread.seller_id,
+        sender_id:user.id,amount:amt
+      }).select().single();
+      if(error){alert('Could not send counter: '+error.message);return;}
+      await supabase.from('messages').insert({
+        buyer_id:activeThread.buyer_id,seller_id:activeThread.seller_id,listing_id:activeThread.listing_id,
+        sender_id:user.id,content:'💰 Countered with '+money(amt),offer_id:newOffer.id
+      });
+      await loadThreads();
+    };
+
     function renderMessages(){
       const box = document.getElementById('chat-messages');
       const sorted = [...activeThread.messages].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
@@ -341,10 +437,10 @@
         if(label !== lastDay){ html += '<div class="chat-date-divider">'+label+'</div>'; lastDay = label; }
         const mine = m.sender_id===user.id;
         const img = m.image_url ? '<img class="bubble-img" src="'+escapeHtml(m.image_url)+'" alt="Photo message" onclick="window.open(this.src,\'_blank\')"/>' : '';
-        const text = m.content ? escapeHtml(m.content) : '';
+        const text = m.offer_id ? offerCard(m, mine) : (m.content ? escapeHtml(m.content) : '');
         const status = mine ? '<div class="bubble-status">'+new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})+' <span class="'+(m.is_read?'bubble-tick-read':'')+'">'+(m.is_read?'✓✓':'✓')+'</span></div>' :
           '<div class="bubble-time">'+new Date(m.created_at).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})+'</div>';
-        html += '<div class="bubble '+(mine?'me':'them')+'" data-mid="'+m.id+'">'+img+text+status+'</div>';
+        html += '<div class="bubble '+(mine?'me':'them')+(m.offer_id?' bubble-offer':'')+'" data-mid="'+m.id+'">'+img+text+status+'</div>';
       });
       box.innerHTML = html;
       box.scrollTop = box.scrollHeight;
