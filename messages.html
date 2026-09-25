@@ -62,7 +62,7 @@
     .chat-search-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 7px 14px; font-family: inherit; font-size: 13px; -webkit-appearance: none; }
     .chat-search-row button { background: none; border: none; font-size: 15px; cursor: pointer; color: #888; flex-shrink: 0; }
     .chat-search-count { font-size: 11px; color: #aaa; font-weight: 700; flex-shrink: 0; }
-    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; }
+    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
     .chat-date-divider { text-align: center; font-size: 11.5px; font-weight: 800; color: #aaa; margin: 6px 0; }
     .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; scroll-margin: 60px; }
     .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
@@ -237,8 +237,8 @@
       const counterpartIds = [...new Set(threads.map(t=>t.buyer_id===user.id?t.seller_id:t.buyer_id))];
       let names={}, avatars={};
       if(counterpartIds.length){
-        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name,store_logo_url').in('id',counterpartIds);
-        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User'; avatars[p.id]=p.store_logo_url||null;});
+        const {data:profs} = await supabase.from('profiles').select('id,full_name,store_name,store_logo_url,avatar_url').in('id',counterpartIds);
+        (profs||[]).forEach(p=>{names[p.id]=p.store_name||p.full_name||'User'; avatars[p.id]=p.store_logo_url||p.avatar_url||null;});
       }
 
       window._threads = threads;
@@ -510,12 +510,13 @@
     const listingId = params.get('listing');
     await loadBlockState();
     if (toSeller && toSeller!==user.id) {
-      const {data:sellerProfile} = await supabase.from('profiles').select('full_name,store_name,store_logo_url').eq('id',toSeller).single();
+      const {data:sellerProfile} = await supabase.from('profiles').select('full_name,store_name,store_logo_url,avatar_url').eq('id',toSeller).single();
       activeThread = { buyer_id:user.id, seller_id:toSeller, listing_id:listingId||null, messages:[] };
       document.getElementById('msg-wrap').classList.add('chat-open');
       document.getElementById('chat-header-name').textContent = sellerProfile?.store_name||sellerProfile?.full_name||'Seller';
       const initial=(sellerProfile?.store_name||sellerProfile?.full_name||'U').charAt(0).toUpperCase();
-      document.getElementById('chat-avatar').innerHTML = sellerProfile?.store_logo_url ? '<img src="'+escapeHtml(sellerProfile.store_logo_url)+'" alt="" />' : escapeHtml(initial);
+      const sellerAvatar = sellerProfile?.store_logo_url||sellerProfile?.avatar_url;
+      document.getElementById('chat-avatar').innerHTML = sellerAvatar ? '<img src="'+escapeHtml(sellerAvatar)+'" alt="" />' : escapeHtml(initial);
       document.getElementById('chat-header-icons').style.display='flex';
       document.getElementById('chat-input-row').style.display='flex';
       document.getElementById('chat-messages').innerHTML = '<p class="loading-msg" style="margin:auto">Say hi 👋</p>';

@@ -70,12 +70,18 @@
 
     <div id="profile-content" style="display:none">
       <div class="profile-header-card">
-        <div class="profile-avatar" id="profile-avatar">🙂</div>
+        <div class="profile-avatar-wrap" style="position:relative;flex-shrink:0">
+          <div class="profile-avatar" id="profile-avatar">🙂</div>
+          <button type="button" onclick="document.getElementById('avatar-file-input').click()" title="Change profile picture"
+            style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:#2563eb;color:#fff;border:2px solid #fff;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">📷</button>
+          <input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+        </div>
         <div>
           <div class="profile-header-name" id="profile-name">My Profile</div>
           <div class="profile-header-meta" id="profile-meta"></div>
         </div>
       </div>
+      <div id="avatar-upload-status" style="font-size:12px;font-weight:700;margin:-10px 0 14px;display:none"></div>
 
       <!-- MENU -->
       <div id="profile-menu">
@@ -154,6 +160,7 @@
         </div>
 
         <div id="tab-edit" style="display:none">
+          <div id="complete-profile-banner" style="display:none;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:13px;padding:12px 14px;border-radius:12px;margin-bottom:14px">🎉 Welcome! Add your name and WhatsApp number below so buyers and sellers can reach you.</div>
           <div class="form-card">
             <h3 style="font-size:18px;font-weight:800;margin-bottom:16px">Edit Profile</h3>
             <div class="form-group"><label>Full Name *</label><input type="text" id="p-name" placeholder="Your name"/></div>
@@ -269,6 +276,62 @@
     // Escapes user-typed text before it goes into innerHTML.
     function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+    // ---- Profile picture ----
+    window._hasAvatar = false;
+    function renderAvatar(url, fallbackChar){
+      const el = document.getElementById('profile-avatar');
+      window._hasAvatar = !!url;
+      el.innerHTML = url ? '<img src="'+url+'" alt="Profile picture" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>' : '';
+      if(!url) el.textContent = fallbackChar;
+    }
+
+    // Square-crops to the shorter side, resizes to 400x400, re-encodes as JPEG.
+    function compressAvatar(file){
+      return new Promise((resolve,reject)=>{
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.onerror = reject;
+        img.onload = () => {
+          const SIZE = 400;
+          const side = Math.min(img.width, img.height);
+          const sx = (img.width-side)/2, sy = (img.height-side)/2;
+          const canvas = document.createElement('canvas');
+          canvas.width = SIZE; canvas.height = SIZE;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, sx, sy, side, side, 0, 0, SIZE, SIZE);
+          canvas.toBlob(blob=>{
+            if(!blob) return reject(new Error('Compression failed'));
+            resolve(new File([blob],'avatar.jpg',{type:'image/jpeg'}));
+          }, 'image/jpeg', 0.85);
+        };
+        img.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('avatar-file-input').addEventListener('change', async (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const status = document.getElementById('avatar-upload-status');
+      status.style.color='#2563eb'; status.textContent='Uploading photo...'; status.style.display='block';
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type)){ status.style.color='#dc2626'; status.textContent='\u274c Only JPG/PNG/WEBP'; return; }
+      if(file.size > 8*1024*1024){ status.style.color='#dc2626'; status.textContent='\u274c Max 8MB'; return; }
+      try{
+        const compressed = await compressAvatar(file);
+        const fname = currentUser.id+'/avatar-'+Date.now()+'.jpg';
+        const {error} = await supabase.storage.from('avatars').upload(fname, compressed);
+        if(error) throw error;
+        const {data:pub} = supabase.storage.from('avatars').getPublicUrl(fname);
+        const {error:updErr} = await supabase.from('profiles').update({avatar_url:pub.publicUrl}).eq('id',currentUser.id);
+        if(updErr) throw updErr;
+        renderAvatar(pub.publicUrl, '\ud83d\ude42');
+        status.style.display='none';
+      }catch(err){
+        status.style.color='#dc2626'; status.textContent='\u274c '+(err.message||'Upload failed');
+      }
+      e.target.value='';
+    });
+
     async function init(){
      try {
       const {data:{user}}=await supabase.auth.getUser();
@@ -293,7 +356,7 @@
       if(p){
         const displayName=p.full_name||'My Profile';
         document.getElementById('profile-name').textContent=displayName;
-        document.getElementById('profile-avatar').textContent=(p.full_name||'?').trim().charAt(0).toUpperCase()||'🙂';
+        renderAvatar(p.avatar_url,(p.full_name||'?').trim().charAt(0).toUpperCase()||'🙂');
         document.getElementById('profile-meta').textContent=[p.residence,user.email].filter(Boolean).join(' · ')||user.email;
         document.getElementById('p-name').value=p.full_name||'';
         document.getElementById('p-wa').value=p.whatsapp||'';
@@ -308,6 +371,13 @@
       loadFavoritesBadge();
       loadAlertsBadge();
       refreshMfaStatus();
+
+      // Landed here right after Google/Apple sign-in with no name/WhatsApp on
+      // file yet — jump straight to the edit form so they can finish up.
+      if(new URLSearchParams(location.search).get('complete')==='1'){
+        document.getElementById('complete-profile-banner').style.display='block';
+        showTab('edit');
+      }
      } catch (err) {
       console.error('Profile failed to load:', err);
       document.getElementById('auth-guard').style.display='none';
@@ -362,7 +432,7 @@
       const {error}=await supabase.from('profiles').update({full_name:name,whatsapp:wa,residence:res,role}).eq('id',currentUser.id);
       if(error){errEl.textContent='❌ '+error.message;return;}
       document.getElementById('profile-name').textContent=name;
-      document.getElementById('profile-avatar').textContent=name.trim().charAt(0).toUpperCase()||'🙂';
+      if(!window._hasAvatar) renderAvatar(null, name.trim().charAt(0).toUpperCase()||'🙂');
       if(role==='seller'){
         errEl.style.color='#2e7d32';errEl.textContent='✅ Saved! Taking you to your seller dashboard...';
         setTimeout(()=>window.location.href='seller',1200);

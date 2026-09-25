@@ -83,6 +83,15 @@
         </div>
         <div class="auth-error" id="login-error"></div>
         <button class="btn-primary" id="btn-login">Sign In 🚀</button>
+        <div class="oauth-divider"><span>or continue with</span></div>
+        <button type="button" class="oauth-btn" onclick="signInWithOAuth('google')">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.88-3c-1.08.72-2.45 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.26v3.09A11.998 11.998 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28V6.63H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.37l4.01-3.09z"/><path fill="#EA4335" d="M12 4.75c1.76 0 3.34.61 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.63l4.01 3.09C6.22 6.86 8.87 4.75 12 4.75z"/></svg>
+          Continue with Google
+        </button>
+        <button type="button" class="oauth-btn apple" onclick="signInWithOAuth('apple')">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.365 1.43c0 1.14-.463 2.15-1.213 2.9-.83.83-2.02 1.47-3.06 1.39-.13-1.09.42-2.24 1.2-2.99.83-.83 2.24-1.44 3.07-1.3zM20.6 17.14c-.53 1.22-.78 1.77-1.46 2.85-.95 1.5-2.29 3.37-3.95 3.39-1.47.02-1.85-.97-3.85-.96-2 .01-2.42.98-3.9.96-1.66-.02-2.93-1.71-3.88-3.2C1.03 16.63.2 12.44 1.9 9.6c1.02-1.71 2.83-2.79 4.79-2.82 1.5-.03 2.92 1.02 3.85 1.02.92 0 2.65-1.26 4.47-1.08.76.03 2.9.31 4.27 2.32-.11.07-2.55 1.5-2.52 4.46.03 3.53 3.08 4.71 3.11 4.72-.03.09-.49 1.68-1.62 3.32-.98 1.42-2 2.83-3.6 2.86z"/></svg>
+          Continue with Apple
+        </button>
         <p style="text-align:center;margin-top:12px"><a href="#" onclick="event.preventDefault();openForgotPw()" style="font-size:12.5px;color:#2563eb;font-weight:700;text-decoration:none">Forgot password?</a></p>
         <p class="auth-foot-link">Don't have an account? <a href="#" onclick="event.preventDefault();showTab('signup')">Sign Up</a></p>
       </div>
@@ -101,6 +110,16 @@
       <div id="signup-form" style="display:none">
         <h2 class="auth-title">Create Account 🎉</h2>
         <p class="auth-sub">Get started in seconds</p>
+        <button type="button" class="oauth-btn" onclick="signInWithOAuth('google')">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.88-3c-1.08.72-2.45 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.26v3.09A11.998 11.998 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28V6.63H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.37l4.01-3.09z"/><path fill="#EA4335" d="M12 4.75c1.76 0 3.34.61 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.63l4.01 3.09C6.22 6.86 8.87 4.75 12 4.75z"/></svg>
+          Continue with Google
+        </button>
+        <button type="button" class="oauth-btn apple" onclick="signInWithOAuth('apple')">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.365 1.43c0 1.14-.463 2.15-1.213 2.9-.83.83-2.02 1.47-3.06 1.39-.13-1.09.42-2.24 1.2-2.99.83-.83 2.24-1.44 3.07-1.3zM20.6 17.14c-.53 1.22-.78 1.77-1.46 2.85-.95 1.5-2.29 3.37-3.95 3.39-1.47.02-1.85-.97-3.85-.96-2 .01-2.42.98-3.9.96-1.66-.02-2.93-1.71-3.88-3.2C1.03 16.63.2 12.44 1.9 9.6c1.02-1.71 2.83-2.79 4.79-2.82 1.5-.03 2.92 1.02 3.85 1.02.92 0 2.65-1.26 4.47-1.08.76.03 2.9.31 4.27 2.32-.11.07-2.55 1.5-2.52 4.46.03 3.53 3.08 4.71 3.11 4.72-.03.09-.49 1.68-1.62 3.32-.98 1.42-2 2.83-3.6 2.86z"/></svg>
+          Continue with Apple
+        </button>
+        <p style="font-size:11.5px;color:#aaa;font-weight:600;text-align:center;margin:-4px 0 14px">We'll ask for a couple more details (WhatsApp, area) right after</p>
+        <div class="oauth-divider"><span>or sign up with email</span></div>
         <div id="referral-banner" style="display:none;background:#eff6ff;color:#2563eb;font-weight:700;font-size:12.5px;padding:10px 14px;border-radius:12px;margin-bottom:14px">🎁 You were invited by a friend — sign up to connect your accounts!</div>
         <div class="form-group"><label>I want to</label>
           <div class="role-selector">
@@ -409,6 +428,23 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
 
+    // Google/Apple sign-in. Supabase creates the auth.users row (and, via our
+    // DB trigger, an empty profiles row) automatically on first sign-in — the
+    // same account whether the person originally signed up this way or with
+    // email/password. oauth-callback.html finishes the job: it figures out
+    // whether this profile still needs a name/WhatsApp/area (which Google and
+    // Apple never give us) and routes accordingly.
+    window.signInWithOAuth = async (provider) => {
+      const nextParam = new URLSearchParams(location.search).get('next');
+      const redirectTo = location.origin + '/oauth-callback' + (nextParam ? '?next=' + encodeURIComponent(nextParam) : '');
+      const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
+      if (error) {
+        const err = document.getElementById(document.getElementById('signup-form').style.display==='none' ? 'login-error' : 'signup-error');
+        if (err) { err.style.color='#1d4ed8'; err.textContent = '❌ ' + error.message; }
+      }
+    };
+
+
     // Referral capture: ?ref=CODE in the URL, remembered even if the person
     // browses around before signing up.
     const refParam = new URLSearchParams(location.search).get('ref');
@@ -445,7 +481,8 @@
       }
       const {data:{user}}=await supabase.auth.getUser();
       const {data:p}=await supabase.from('profiles').select('role').eq('id',user.id).single();
-      window.location.href = p?.role==='seller' ? 'seller' : 'profile';
+      const nextParam = new URLSearchParams(location.search).get('next');
+      window.location.href = nextParam ? nextParam : (p?.role==='seller' ? 'seller' : 'profile');
     };
 
     // South African number: 0XXXXXXXXX (10 digits) or +27XXXXXXXXX (9 digits after +27)

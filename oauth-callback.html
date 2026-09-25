@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signing you in… — Marketrade</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <link rel="icon" href="icons/icon-192.png?v=4"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo"><span class="nav-logo-word">Market<span class="nav-logo-accent">rade</span></span> 🛍️</a>
+  </nav>
+  <main class="auth-main">
+    <div class="auth-card" style="text-align:center">
+      <div style="font-size:48px;margin-bottom:12px">🔐</div>
+      <h1 class="auth-title" id="title">Signing you in…</h1>
+      <p class="auth-sub" id="sub">One moment.</p>
+    </div>
+  </main>
+  <script>
+    const supabase = createClient('https://spupfdclswjlpwiebwlq.supabase.co','sb_publishable_EyDf6vx8F4-aI09u6lK0_w_F4gdi9PH');
+
+    (async function(){
+      const title = document.getElementById('title'), sub = document.getElementById('sub');
+      const nextParam = new URLSearchParams(location.search).get('next');
+
+      // supabase-js parses the auth tokens out of the URL automatically on
+      // load; getSession() just waits for that to finish.
+      const { data:{ session } } = await supabase.auth.getSession();
+      if(!session){
+        title.textContent='Could not sign you in';
+        sub.textContent='Something went wrong with that sign-in — please try again.';
+        setTimeout(()=>{ window.location.href='login'+(nextParam?('?next='+encodeURIComponent(nextParam)):''); }, 2000);
+        return;
+      }
+
+      const { data:profile } = await supabase.from('profiles').select('role,full_name,whatsapp').eq('id',session.user.id).single();
+      const needsProfile = !profile?.full_name?.trim() || !profile?.whatsapp?.trim();
+
+      if(needsProfile){
+        title.textContent='Almost there! 🎉';
+        sub.textContent='Just a couple more details and you\'re set.';
+        window.location.href = 'profile?complete=1'+(nextParam?('&next='+encodeURIComponent(nextParam)):'');
+        return;
+      }
+
+      title.textContent='Welcome back! 👋';
+      window.location.href = nextParam ? nextParam : (profile?.role==='seller' ? 'seller' : 'profile');
+    })();
+  </script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>

@@ -168,7 +168,12 @@
 
     <div id="seller-content" style="display:none">
       <div class="profile-header-card">
-        <div class="profile-avatar" id="seller-avatar">🏪</div>
+        <div style="position:relative;flex-shrink:0">
+          <div class="profile-avatar" id="seller-avatar">🏪</div>
+          <button type="button" onclick="document.getElementById('avatar-file-input').click()" title="Change profile picture"
+            style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:#2563eb;color:#fff;border:2px solid #fff;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">📷</button>
+          <input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/webp" style="display:none"/>
+        </div>
         <div>
           <div class="profile-header-name" id="seller-header-name">Dashboard</div>
           <div class="profile-header-meta" id="seller-header-meta"></div>
@@ -262,19 +267,43 @@
 
       <!-- ANALYTICS -->
       <div id="tab-analytics" style="display:none">
-        <div class="profile-section-label" style="margin-top:0">Revenue</div>
-        <div class="analytics-stat-grid" id="analytics-revenue-grid"><p class="loading-msg">Loading analytics... ⏳</p></div>
+        <div id="analytics-hero-wrap">
+          <div class="analytics-hero">
+            <div class="analytics-hero-label">Total Sales · All Time</div>
+            <div class="analytics-hero-value" id="an-hero-total">R0</div>
+            <div class="analytics-hero-sub" id="an-hero-orders">0 orders</div>
+          </div>
+          <div class="analytics-quad-grid">
+            <div class="analytics-quad-card c-purple"><div class="analytics-quad-label">Today</div><div class="analytics-quad-value" id="an-today-val">R0</div><div class="analytics-quad-sub" id="an-today-orders">0 orders</div></div>
+            <div class="analytics-quad-card c-blue"><div class="analytics-quad-label">This Week</div><div class="analytics-quad-value" id="an-week-val">R0</div><div class="analytics-quad-sub" id="an-week-orders">0 orders</div></div>
+            <div class="analytics-quad-card c-green"><div class="analytics-quad-label">This Month</div><div class="analytics-quad-value" id="an-month-val">R0</div><div class="analytics-quad-sub" id="an-month-orders">0 orders</div></div>
+            <div class="analytics-quad-card c-orange"><div class="analytics-quad-label">This Year</div><div class="analytics-quad-value" id="an-year-val">R0</div><div class="analytics-quad-sub" id="an-year-orders">0 orders</div></div>
+          </div>
+          <div class="analytics-summary-row">
+            <div class="analytics-summary-card"><div class="analytics-summary-value" id="an-items-sold">0</div><div class="analytics-summary-label">Items Sold</div></div>
+            <div class="analytics-summary-card"><div class="analytics-summary-value" id="an-avg-order">R0</div><div class="analytics-summary-label">Avg Order Value</div></div>
+          </div>
 
-        <div class="profile-section-label">Orders</div>
-        <div class="analytics-stat-grid" id="analytics-orders-grid"></div>
+          <div class="profile-section-label" style="margin-top:0">Sales Over Time</div>
+          <div class="analytics-range-tabs">
+            <button class="analytics-range-tab active" data-range="daily" onclick="window._setAnalyticsRange('daily')">Daily</button>
+            <button class="analytics-range-tab" data-range="weekly" onclick="window._setAnalyticsRange('weekly')">Weekly</button>
+            <button class="analytics-range-tab" data-range="monthly" onclick="window._setAnalyticsRange('monthly')">Monthly</button>
+            <button class="analytics-range-tab" data-range="yearly" onclick="window._setAnalyticsRange('yearly')">Yearly</button>
+          </div>
+          <div id="analytics-chart-wrap"></div>
 
-        <div class="profile-section-label">Last 7 Days (Revenue)</div>
-        <div class="analytics-chart-card">
-          <div class="analytics-bar-chart" id="analytics-chart"></div>
+          <div class="profile-section-label">Order Status</div>
+          <div class="analytics-order-status-grid">
+            <div><div class="analytics-order-status-value" id="an-status-pending">0</div><div class="analytics-order-status-label">Pending Payment</div></div>
+            <div><div class="analytics-order-status-value" id="an-status-escrow">0</div><div class="analytics-order-status-label">In Escrow</div></div>
+            <div><div class="analytics-order-status-value" id="an-status-completed">0</div><div class="analytics-order-status-label">Completed</div></div>
+            <div><div class="analytics-order-status-value" id="an-status-disputed">0</div><div class="analytics-order-status-label">Disputed</div></div>
+          </div>
+
+          <div class="profile-section-label">Top Listings</div>
+          <div id="analytics-top-listings"></div>
         </div>
-
-        <div class="profile-section-label">Top Listings</div>
-        <div class="analytics-top-card" id="analytics-top-listings"></div>
       </div>
 
       <!-- ORDERS -->
@@ -1265,7 +1294,7 @@
 
       if (p) {
         document.getElementById('seller-header-name').textContent = p.full_name||'Seller';
-        document.getElementById('seller-avatar').textContent = (p.full_name||p.store_name||'?').trim().charAt(0).toUpperCase()||'🏪';
+        renderAvatar(p.avatar_url, (p.full_name||p.store_name||'?').trim().charAt(0).toUpperCase()||'🏪');
         document.getElementById('seller-header-meta').textContent = [p.store_name,'Seller'].filter(Boolean).join(' · ');
         document.getElementById('p-name').value = p.full_name||'';
         document.getElementById('p-whatsapp').value = p.whatsapp||'';
@@ -1327,6 +1356,59 @@
       document.getElementById('load-error-guard').style.display = 'block';
      }
     }
+
+    // ---- Profile picture ----
+    window._hasAvatar = false;
+    function renderAvatar(url, fallbackChar){
+      const el = document.getElementById('seller-avatar');
+      window._hasAvatar = !!url;
+      el.innerHTML = url ? '<img src="'+url+'" alt="Profile picture" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>' : '';
+      if(!url) el.textContent = fallbackChar;
+    }
+
+    // Square-crops to the shorter side, resizes to 400x400, re-encodes as JPEG.
+    function compressAvatar(file){
+      return new Promise((resolve,reject)=>{
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.onerror = reject;
+        img.onload = () => {
+          const SIZE = 400;
+          const side = Math.min(img.width, img.height);
+          const sx = (img.width-side)/2, sy = (img.height-side)/2;
+          const canvas = document.createElement('canvas');
+          canvas.width = SIZE; canvas.height = SIZE;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, sx, sy, side, side, 0, 0, SIZE, SIZE);
+          canvas.toBlob(blob=>{
+            if(!blob) return reject(new Error('Compression failed'));
+            resolve(new File([blob],'avatar.jpg',{type:'image/jpeg'}));
+          }, 'image/jpeg', 0.85);
+        };
+        img.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('avatar-file-input').addEventListener('change', async (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type)){ alert('\u274c Only JPG/PNG/WEBP'); e.target.value=''; return; }
+      if(file.size > 8*1024*1024){ alert('\u274c Max 8MB'); e.target.value=''; return; }
+      try{
+        const compressed = await compressAvatar(file);
+        const fname = currentUser.id+'/avatar-'+Date.now()+'.jpg';
+        const {error} = await supabase.storage.from('avatars').upload(fname, compressed);
+        if(error) throw error;
+        const {data:pub} = supabase.storage.from('avatars').getPublicUrl(fname);
+        const {error:updErr} = await supabase.from('profiles').update({avatar_url:pub.publicUrl}).eq('id',currentUser.id);
+        if(updErr) throw updErr;
+        renderAvatar(pub.publicUrl, '\ud83c\udfea');
+      }catch(err){
+        alert('\u274c '+(err.message||'Upload failed'));
+      }
+      e.target.value='';
+    });
 
     // Reads the EXIF Orientation tag straight out of a JPEG's raw bytes (browsers
     // don't expose this as a simple property). Falls back to 1 (no rotation
@@ -1896,7 +1978,7 @@
       const {error} = await supabase.from('profiles').update(updatePayload).eq('id',currentUser.id);
       if (error) { err.textContent='❌ '+error.message; return; }
       document.getElementById('seller-header-name').textContent=name;
-      document.getElementById('seller-avatar').textContent=name.trim().charAt(0).toUpperCase()||'🏪';
+      if(!window._hasAvatar) renderAvatar(null, name.trim().charAt(0).toUpperCase()||'🏪');
       err.style.color='#2e7d32'; err.textContent='✅ Profile saved!';
       setTimeout(()=>err.textContent='',3000);
     }
@@ -2027,54 +2109,66 @@
     // using each order's listing price at query time — orders don't store
     // their own price snapshot. "Total Orders" below counts every order
     // regardless of status, since that reflects overall order activity.
+    let _analyticsOrders = null;
+    let _analyticsRange = 'daily';
+
     async function loadAnalytics(){
-      const revGrid = document.getElementById('analytics-revenue-grid');
-      const ordGrid = document.getElementById('analytics-orders-grid');
-      const chartEl = document.getElementById('analytics-chart');
       const topEl = document.getElementById('analytics-top-listings');
-      revGrid.innerHTML = '<p class="loading-msg">Loading analytics... ⏳</p>';
-      ordGrid.innerHTML = ''; chartEl.innerHTML=''; topEl.innerHTML='';
+      document.getElementById('analytics-chart-wrap').innerHTML = '<p class="loading-msg">Loading analytics... ⏳</p>';
+      topEl.innerHTML='';
 
       const {data,error} = await supabase.from('orders')
-        .select('quantity,status,created_at,listing_id,listings(title,price)')
+        .select('quantity,status,created_at,listing_id,payment_method,payment_status,escrow_status,dispute_status,total_amount,listings(title,price)')
         .eq('seller_id',currentUser.id);
 
-      if (error) { revGrid.innerHTML='<p class="loading-msg">Could not load analytics — try again.</p>'; return; }
-      if (!data?.length) {
-        revGrid.innerHTML='<p class="loading-msg">No orders yet — analytics will show up here once you make your first sale 📊</p>';
-        return;
-      }
+      if (error) { document.getElementById('analytics-chart-wrap').innerHTML='<p class="loading-msg">Could not load analytics — try again.</p>'; return; }
 
+      _analyticsOrders = data || [];
+      renderAnalyticsSummary(_analyticsOrders);
+      renderAnalyticsChart(_analyticsOrders, _analyticsRange);
+    }
+
+    // An order counts as a completed sale (contributes to revenue) once money has
+    // actually settled: offline orders marked 'completed', or escrow orders whose
+    // funds have been released to this seller's wallet.
+    function isSettledSale(o){
+      if (o.payment_method==='tradesafe') return o.escrow_status==='released';
+      return o.status==='completed';
+    }
+    function saleAmount(o){
+      return Number(o.total_amount ?? ((o.listings?.price||0) * (o.quantity||1)));
+    }
+
+    function renderAnalyticsSummary(data){
       const fmt = n => 'R'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
       const startOfDay = d => new Date(d.getFullYear(),d.getMonth(),d.getDate());
-      const dayKey = d => startOfDay(d).toISOString().slice(0,10);
       const now = new Date();
       const today0 = startOfDay(now);
       const startOfWeek = new Date(today0); startOfWeek.setDate(startOfWeek.getDate()-startOfWeek.getDay());
       const startOfMonth = new Date(now.getFullYear(),now.getMonth(),1);
       const startOfYear = new Date(now.getFullYear(),0,1);
-      const sevenDaysAgo = new Date(today0); sevenDaysAgo.setDate(sevenDaysAgo.getDate()-6);
 
-      let revToday=0, revWeek=0, revMonth=0, revYear=0, revAll=0;
-      let countAll=0, countCompleted=0, countConfirmed=0, countCancelled=0;
-      const dailyRevenue = {};
+      let revToday=0,revWeek=0,revMonth=0,revYear=0,revAll=0;
+      let ordToday=0,ordWeek=0,ordMonth=0,ordYear=0,ordAll=0;
+      let itemsSold=0;
+      let pending=0, inEscrow=0, completed=0, disputed=0;
       const listingStats = {};
 
-      data.forEach(o=>{
-        countAll++;
-        if (o.status==='completed') countCompleted++;
-        else if (o.status==='confirmed') countConfirmed++;
-        else if (o.status==='cancelled') countCancelled++;
-        if (o.status!=='completed') return;
+      (data||[]).forEach(o=>{
+        // Order-status buckets — every order lands in exactly one.
+        if (o.dispute_status==='open') disputed++;
+        else if (isSettledSale(o)) completed++;
+        else if (o.payment_method==='tradesafe' && o.escrow_status==='held') inEscrow++;
+        else pending++; // offline 'confirmed' orders, or tradesafe orders still awaiting payment
 
-        const amount = (o.listings?.price||0) * (o.quantity||1);
+        if (!isSettledSale(o)) return;
+        const amount = saleAmount(o);
         const created = new Date(o.created_at);
-        revAll += amount;
-        if (created>=startOfYear) revYear += amount;
-        if (created>=startOfMonth) revMonth += amount;
-        if (created>=startOfWeek) revWeek += amount;
-        if (created>=today0) revToday += amount;
-        if (created>=sevenDaysAgo) dailyRevenue[dayKey(created)] = (dailyRevenue[dayKey(created)]||0) + amount;
+        revAll+=amount; ordAll++; itemsSold += (o.quantity||1);
+        if (created>=startOfYear){ revYear+=amount; ordYear++; }
+        if (created>=startOfMonth){ revMonth+=amount; ordMonth++; }
+        if (created>=startOfWeek){ revWeek+=amount; ordWeek++; }
+        if (created>=today0){ revToday+=amount; ordToday++; }
 
         const lid = o.listing_id;
         if (!listingStats[lid]) listingStats[lid] = {title:o.listings?.title||'Listing', qty:0, revenue:0};
@@ -2082,27 +2176,90 @@
         listingStats[lid].revenue += amount;
       });
 
-      revGrid.innerHTML = [['Today',revToday],['This Week',revWeek],['This Month',revMonth],['This Year',revYear],['All Time',revAll]]
-        .map(([label,val])=>'<div class="analytics-stat-card"><div class="analytics-stat-value">'+fmt(val)+'</div><div class="analytics-stat-label">'+label+'</div></div>').join('');
+      document.getElementById('an-hero-total').textContent = fmt(revAll);
+      document.getElementById('an-hero-orders').textContent = ordAll+' order'+(ordAll===1?'':'s');
+      document.getElementById('an-today-val').textContent = fmt(revToday);
+      document.getElementById('an-today-orders').textContent = ordToday+' order'+(ordToday===1?'':'s');
+      document.getElementById('an-week-val').textContent = fmt(revWeek);
+      document.getElementById('an-week-orders').textContent = ordWeek+' order'+(ordWeek===1?'':'s');
+      document.getElementById('an-month-val').textContent = fmt(revMonth);
+      document.getElementById('an-month-orders').textContent = ordMonth+' order'+(ordMonth===1?'':'s');
+      document.getElementById('an-year-val').textContent = fmt(revYear);
+      document.getElementById('an-year-orders').textContent = ordYear+' order'+(ordYear===1?'':'s');
+      document.getElementById('an-items-sold').textContent = itemsSold;
+      document.getElementById('an-avg-order').textContent = fmt(ordAll ? revAll/ordAll : 0);
 
-      const avgOrder = countCompleted ? revAll/countCompleted : 0;
-      ordGrid.innerHTML = [['Total Orders',countAll],['Completed',countCompleted],['Pending',countConfirmed],['Cancelled',countCancelled],['Avg. Sale',fmt(avgOrder)]]
-        .map(([label,val])=>'<div class="analytics-stat-card"><div class="analytics-stat-value">'+val+'</div><div class="analytics-stat-label">'+label+'</div></div>').join('');
+      document.getElementById('an-status-pending').textContent = pending;
+      document.getElementById('an-status-escrow').textContent = inEscrow;
+      document.getElementById('an-status-completed').textContent = completed;
+      document.getElementById('an-status-disputed').textContent = disputed;
 
-      const days=[]; for(let i=6;i>=0;i--){ const d=new Date(today0); d.setDate(d.getDate()-i); days.push(d); }
-      const maxRev = Math.max(1, ...days.map(d=>dailyRevenue[dayKey(d)]||0));
-      chartEl.innerHTML = days.map(d=>{
-        const val = dailyRevenue[dayKey(d)]||0;
-        const h = Math.round((val/maxRev)*80)+4;
-        const lbl = d.toLocaleDateString(undefined,{weekday:'short'});
-        return '<div class="analytics-bar-col"><div class="analytics-bar" style="height:'+h+'px" title="'+fmt(val)+'"></div><div class="analytics-bar-label">'+lbl+'</div></div>';
-      }).join('');
-
+      const topEl = document.getElementById('analytics-top-listings');
       const top = Object.values(listingStats).sort((a,b)=>b.revenue-a.revenue).slice(0,5);
       topEl.innerHTML = top.length
-        ? top.map(t=>'<div class="analytics-top-row"><span class="analytics-top-title">'+escapeHtml(t.title)+'</span><span class="analytics-top-meta">'+t.qty+' sold · '+fmt(t.revenue)+'</span></div>').join('')
-        : '<p class="loading-msg">No completed sales yet.</p>';
+        ? '<div class="analytics-top-card">'+top.map(t=>'<div class="analytics-top-row"><span class="analytics-top-title">'+escapeHtml(t.title)+'</span><span class="analytics-top-meta">'+t.qty+' sold · '+fmt(t.revenue)+'</span></div>').join('')+'</div>'
+        : '<div class="analytics-top-empty">No sales yet — once you get your first order, your best sellers will show up here.</div>';
     }
+
+    window._setAnalyticsRange = (range) => {
+      _analyticsRange = range;
+      document.querySelectorAll('.analytics-range-tab').forEach(b=>b.classList.toggle('active', b.dataset.range===range));
+      renderAnalyticsChart(_analyticsOrders||[], range);
+    };
+
+    function renderAnalyticsChart(data, range){
+      const wrap = document.getElementById('analytics-chart-wrap');
+      const startOfDay = d => new Date(d.getFullYear(),d.getMonth(),d.getDate());
+      const now = new Date();
+      const today0 = startOfDay(now);
+
+      // Bucket key + label per range, and how far back to look.
+      let buckets = [];
+      let keyFn, labelFn;
+      if (range==='daily'){
+        for(let i=6;i>=0;i--){ const d=new Date(today0); d.setDate(d.getDate()-i); buckets.push(d); }
+        keyFn = d => startOfDay(d).toISOString().slice(0,10);
+        labelFn = d => d.toLocaleDateString(undefined,{weekday:'short'});
+      } else if (range==='weekly'){
+        for(let i=7;i>=0;i--){ const d=new Date(today0); d.setDate(d.getDate()-d.getDay()-i*7); buckets.push(d); }
+        keyFn = d => { const w=new Date(d); w.setDate(w.getDate()-w.getDay()); return w.toISOString().slice(0,10); };
+        labelFn = d => 'Wk '+d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+      } else if (range==='monthly'){
+        for(let i=11;i>=0;i--){ const d=new Date(now.getFullYear(),now.getMonth()-i,1); buckets.push(d); }
+        keyFn = d => d.getFullYear()+'-'+d.getMonth();
+        labelFn = d => d.toLocaleDateString(undefined,{month:'short'});
+      } else {
+        for(let i=4;i>=0;i--){ buckets.push(new Date(now.getFullYear()-i,0,1)); }
+        keyFn = d => String(d.getFullYear());
+        labelFn = d => String(d.getFullYear());
+      }
+
+      const totals = {};
+      (data||[]).forEach(o=>{
+        if (!isSettledSale(o)) return;
+        const k = keyFn(new Date(o.created_at));
+        totals[k] = (totals[k]||0) + saleAmount(o);
+      });
+
+      const hasAny = buckets.some(d => totals[keyFn(d)] > 0);
+      if (!hasAny){
+        wrap.innerHTML = '<div class="analytics-chart-empty">'+
+          '<div class="analytics-chart-empty-title">📊 No sales in this range yet</div>'+
+          '<div class="analytics-chart-empty-sub">Once you get an order, it\'ll show up here</div></div>';
+        return;
+      }
+
+      const fmt = n => 'R'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
+      const maxVal = Math.max(1, ...buckets.map(d=>totals[keyFn(d)]||0));
+      wrap.innerHTML = '<div class="analytics-chart-card"><div class="analytics-bar-chart">'+
+        buckets.map(d=>{
+          const val = totals[keyFn(d)]||0;
+          const h = Math.round((val/maxVal)*80)+4;
+          return '<div class="analytics-bar-col"><div class="analytics-bar" style="height:'+h+'px" title="'+fmt(val)+'"></div><div class="analytics-bar-label">'+labelFn(d)+'</div></div>';
+        }).join('')+
+      '</div></div>';
+    }
+
 
     async function loadCompletedOrders() {
       const c = document.getElementById('orders-completed-container');
