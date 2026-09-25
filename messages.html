@@ -26,27 +26,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
   <style>
-    .msg-wrap { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr; gap: 16px; height: calc(100vh - 90px); height: calc(100dvh - 90px); }
+    .msg-wrap { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 320px 1fr; gap: 16px; height: calc(100vh - 90px); height: calc(100dvh - 90px); box-sizing: border-box; overflow-x: hidden; }
     @media (max-width: 700px) {
-      .msg-wrap { grid-template-columns: 1fr; height: calc(100vh - 128px); height: calc(100dvh - 128px); }
+      .msg-wrap { grid-template-columns: 1fr; height: calc(100vh - 128px); height: calc(100dvh - 128px); padding: 0; }
       .msg-wrap .chat-panel { display: none; }
       .msg-wrap.chat-open .chat-panel { display: flex; }
       .msg-wrap.chat-open .thread-list { display: none; }
+      .thread-list, .chat-panel { border-radius: 0; border-left: none; border-right: none; }
     }
     .chat-back-btn { display: none; background: none; border: none; cursor: pointer; font-size: 18px; font-weight: 900; color: #2563eb; padding: 0 10px 0 0; font-family: inherit; flex-shrink: 0; }
     @media (max-width: 700px) { .chat-back-btn { display: inline-block; } }
-    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .thread-item { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+    .thread-list { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; overflow: hidden; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; }
+    .thread-list-title { text-align: center; padding: 16px 16px 4px; font-weight: 900; font-size: 17px; color: #111; }
+    .thread-list-title span.accent { color: #2563eb; }
+    .thread-item { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 0; }
     .thread-item:hover, .thread-item.active { background: #eff6ff; }
-    .thread-name { font-weight: 800; font-size: 13.5px; color: #111; }
-    .thread-preview { font-size: 12px; color: #888; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; margin-left: 6px; }
-    .thread-list-bar { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; position: sticky; top: 0; background: #fff; z-index: 1; }
+    .thread-avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; color: #fff; flex-shrink: 0; overflow: hidden; }
+    .thread-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .thread-info { flex: 1; min-width: 0; }
+    .thread-name-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .thread-name { font-weight: 800; font-size: 14px; color: #111; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-preview { font-size: 12.5px; color: #888; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-unread { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 50px; flex-shrink: 0; }
+    .thread-list-bar { padding: 8px 12px 10px; border-bottom: 1px solid #f5f5f5; position: sticky; top: 0; background: #fff; z-index: 1; }
     .thread-list-bar-row { display: flex; align-items: center; gap: 10px; }
-    .thread-list-bar-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 8px 14px; font-family: inherit; font-size: 13.5px; -webkit-appearance: none; box-sizing: border-box; }
-    .archive-toggle { background: none; border: none; font-size: 11.5px; font-weight: 800; color: #888; cursor: pointer; padding: 6px 4px; font-family: inherit; white-space: nowrap; }
+    .thread-list-bar-row input { flex: 1; min-width: 0; border: 2px solid #f0f0f0; border-radius: 50px; padding: 8px 14px; font-family: inherit; font-size: 13.5px; -webkit-appearance: none; box-sizing: border-box; }
+    .archive-toggle { background: none; border: none; font-size: 11.5px; font-weight: 800; color: #888; cursor: pointer; padding: 6px 4px; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
     .archive-toggle.active { color: #2563eb; }
-    .chat-panel { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; display: flex; flex-direction: column; height: 100%; min-height: 0; }
+    .chat-panel { background: #fff; border: 2px solid #f0f0f0; border-radius: 16px; display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; overflow-x: hidden; }
     .chat-header { padding: 10px 14px; border-bottom: 2px solid #f5f5f5; display: flex; align-items: center; gap: 10px; }
     .chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: #eef1fb; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #2563eb; overflow: hidden; flex-shrink: 0; }
     .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -62,14 +69,14 @@
     .chat-search-row input { flex: 1; border: 2px solid #f0f0f0; border-radius: 50px; padding: 7px 14px; font-family: inherit; font-size: 13px; -webkit-appearance: none; }
     .chat-search-row button { background: none; border: none; font-size: 15px; cursor: pointer; color: #888; flex-shrink: 0; }
     .chat-search-count { font-size: 11px; color: #aaa; font-weight: 700; flex-shrink: 0; }
-    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; min-width: 0; }
     .chat-date-divider { text-align: center; font-size: 11.5px; font-weight: 800; color: #aaa; margin: 6px 0; }
-    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; scroll-margin: 60px; }
+    .bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.4; scroll-margin: 60px; word-break: break-word; overflow-wrap: anywhere; box-sizing: border-box; }
     .bubble.me { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
     .bubble.them { align-self: flex-start; background: #f5f5f5; color: #333; border-bottom-left-radius: 4px; }
     .bubble.bubble-offer { background: #fff; border: 2px solid #eee; padding: 4px; }
     .bubble.bubble-offer.me { background: #fff; }
-    .offer-card { min-width: 210px; padding: 10px 12px 8px; }
+    .offer-card { min-width: 0; width: min(210px, 60vw); max-width: 100%; padding: 10px 12px 8px; box-sizing: border-box; }
     .offer-card-amount { font-weight: 900; font-size: 17px; color: #111; }
     .offer-card-status { font-size: 12px; font-weight: 700; color: #888; margin-top: 2px; }
     .offer-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
@@ -107,13 +114,14 @@
   <div class="msg-wrap" id="msg-wrap">
     <h1 class="sr-only">Messages — Marketrade</h1>
     <div class="thread-list" id="thread-list">
+      <div class="thread-list-title">Market<span class="accent">rade</span> 💬</div>
       <div class="thread-list-bar">
         <div class="thread-list-bar-row">
-          <input type="text" id="thread-search" placeholder="🔍 Search conversations..." oninput="window.filterThreads(this.value)"/>
+          <input type="text" id="thread-search" placeholder="🔍 Search people and messages..." oninput="window.filterThreads(this.value)"/>
           <button type="button" class="archive-toggle" id="archive-toggle-btn" onclick="window.toggleArchivedView()">🗄️ Archived</button>
         </div>
       </div>
-      <div id="thread-list-items"><p class="loading-msg">Loading conversations... ⏳</p></div>
+      <div id="thread-list-items" style="flex:1; overflow-y:auto; min-height:0"><p class="loading-msg">Loading conversations... ⏳</p></div>
     </div>
     <div class="chat-panel" id="chat-panel">
       <div class="chat-header" id="chat-header">
@@ -188,6 +196,29 @@
     function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     let blockState={}; // counterpart_id -> {is_blocked, is_muted, muted_until, is_archived}
     let onlineUsers = new Set();
+
+    // A person's real display name if we have one; otherwise a short, stable
+    // "User xxxx" tag derived from their id so different people with no name
+    // set don't all read as the same identical "User".
+    function dispName(id){
+      const known = (window._names||{})[id];
+      if(known) return known;
+      return 'User '+String(id||'').replace(/-/g,'').slice(0,4).toUpperCase();
+    }
+    const AVATAR_COLORS = ['#2563eb','#16a34a','#dc2626','#d97706','#7c3aed','#0891b2','#db2777','#65a30d'];
+    function avatarColor(id){
+      let h=0; const s=String(id||'');
+      for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
+      return AVATAR_COLORS[h%AVATAR_COLORS.length];
+    }
+    function lastMessagePreview(t){
+      const m = t.messages[0];
+      if(!m) return '';
+      const mine = m.sender_id===user.id ? 'You: ' : '';
+      if(m.offer_id) return mine+'🤝 Made an offer';
+      if(m.image_url) return mine+'📷 Photo';
+      return mine+(m.content||'');
+    }
 
     const {data:{user}} = await supabase.auth.getUser();
     if(!user){ window.location.href='login'; throw new Error('Redirecting to login'); }
@@ -284,7 +315,7 @@
         const archived = !!blockState[counterpartId]?.is_archived;
         if(showArchivedOnly !== archived) return false;
         if(!q) return true;
-        return (names[counterpartId]||'User').toLowerCase().includes(q);
+        return dispName(counterpartId).toLowerCase().includes(q);
       });
       const btn = document.getElementById('archive-toggle-btn');
       btn.classList.toggle('active', showArchivedOnly);
@@ -300,8 +331,19 @@
         const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
         const unread = t.messages.filter(m=>m.sender_id!==user.id && !m.is_read).length;
         const isPinned = pinned.has(pinKey(t));
+        const name = dispName(counterpartId);
+        const avatarUrl = window._avatars?.[counterpartId];
+        const avatarHtml = avatarUrl ? '<img src="'+escapeHtml(avatarUrl)+'" alt="" />' : escapeHtml(name.charAt(0).toUpperCase());
+        const preview = escapeHtml(lastMessagePreview(t));
         return '<div class="thread-item" data-idx="'+i+'" onclick="openThread('+i+')">'+
-          '<div class="thread-name">'+(isPinned?'📌 ':'')+escapeHtml(names[counterpartId]||'User')+(unread?'<span class="thread-unread">'+unread+'</span>':'')+'</div>'+
+          '<div class="thread-avatar" style="background:'+avatarColor(counterpartId)+'">'+avatarHtml+'</div>'+
+          '<div class="thread-info">'+
+            '<div class="thread-name-row">'+
+              '<span class="thread-name">'+(isPinned?'📌 ':'')+escapeHtml(name)+'</span>'+
+              (unread?'<span class="thread-unread">'+unread+'</span>':'')+
+            '</div>'+
+            '<div class="thread-preview">'+preview+'</div>'+
+          '</div>'+
           '</div>';
       }).join('');
     }
@@ -315,10 +357,13 @@
       document.querySelectorAll('.thread-item').forEach(el=>el.classList.remove('active'));
       document.querySelector('.thread-item[data-idx="'+idx+'"]')?.classList.add('active');
       const counterpartId = t.buyer_id===user.id?t.seller_id:t.buyer_id;
-      document.getElementById('chat-header-name').textContent = window._names[counterpartId]||'User';
+      const name = dispName(counterpartId);
+      document.getElementById('chat-header-name').textContent = name;
       const avatarUrl = window._avatars?.[counterpartId];
-      const initial = (window._names[counterpartId]||'U').charAt(0).toUpperCase();
+      const initial = name.charAt(0).toUpperCase();
       document.getElementById('chat-avatar').innerHTML = avatarUrl ? '<img src="'+escapeHtml(avatarUrl)+'" alt="" />' : escapeHtml(initial);
+      document.getElementById('chat-avatar').style.background = avatarUrl ? 'transparent' : avatarColor(counterpartId);
+      document.getElementById('chat-avatar').style.color = '#fff';
       document.getElementById('chat-header-icons').style.display='flex';
       document.getElementById('chat-input-row').style.display='flex';
       closeChatSearch();
