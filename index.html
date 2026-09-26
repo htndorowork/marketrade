@@ -231,11 +231,10 @@
         <div id="modal-signin-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;font-size:13px;font-weight:700;color:#1d4ed8">
           🔒 <a href="login" style="color:#2563eb;text-decoration:none">Sign in</a> to order this item
         </div>
-        <button class="btn-order" id="btn-make-offer" style="display:none;background:#fff;color:#111;border:2px solid #eee;margin-bottom:8px" onclick="openOfferModal()">💬 Send Offer</button>
         <div id="modal-offer-note" style="display:none;background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:700;color:#1d4ed8;margin-bottom:10px"></div>
         <button class="btn-order" id="btn-add-to-cart">🛒 Add to Cart</button>
         <button class="btn-order-cart" id="btn-order-now">Order Now</button>
-        <button class="btn-order" id="btn-pay-securely" style="background:#fff;color:#2563eb;border:2px solid #2563eb;margin-top:8px" onclick="payEscrow()">🔒 Pay Securely Online (Escrow)</button>
+        <button class="btn-order" id="btn-make-offer" style="display:none;background:#fff;color:#111;border:2px solid #eee;margin-top:8px" onclick="openOfferModal()">💬 Send Offer</button>
         <button class="btn-order" id="btn-restock-alert" style="display:none;background:#fff;color:#2563eb;border:2px solid #2563eb" onclick="requestRestockAlert()">🔔 Notify me when back in stock</button>
         <div id="modal-similar-section" style="display:none;margin-top:18px">
           <div style="font-size:13px;font-weight:800;color:#888;margin-bottom:8px">You might also like</div>
@@ -1180,18 +1179,15 @@
       document.getElementById('modal-stock-note').textContent=l.quantity>0?l.quantity+' available':'Out of stock';
       document.getElementById('btn-add-to-cart').disabled=l.quantity<=0;
       document.getElementById('btn-order-now').disabled=l.quantity<=0;
-      document.getElementById('btn-pay-securely').disabled=l.quantity<=0;
       const restockBtn=document.getElementById('btn-restock-alert');
       if(l.quantity<=0){
         document.getElementById('btn-add-to-cart').style.display='none';
         document.getElementById('btn-order-now').style.display='none';
-        document.getElementById('btn-pay-securely').style.display='none';
         restockBtn.style.display='block';
         checkRestockAlertState(l.id);
       } else {
         document.getElementById('btn-add-to-cart').style.display='block';
         document.getElementById('btn-order-now').style.display='block';
-        document.getElementById('btn-pay-securely').style.display='block';
         restockBtn.style.display='none';
       }
       // Show sign in notice if not logged in
@@ -1200,7 +1196,6 @@
         signInNote.style.display='block';
         document.getElementById('btn-add-to-cart').disabled=true;
         document.getElementById('btn-order-now').disabled=true;
-        document.getElementById('btn-pay-securely').disabled=true;
       } else {
         signInNote.style.display='none';
       }
@@ -1403,22 +1398,12 @@
       closeModal();
     };
 
-    document.getElementById('btn-order-now').onclick=async()=>{
+    document.getElementById('btn-order-now').onclick=()=>{
       if(!currentUser){window.location.href='login';return;}
       if(!currentListing)return;
-      const btn=document.getElementById('btn-order-now');
-      if(btn.dataset.busy==='1')return; // guard against double-clicks
-      btn.dataset.busy='1';
-      const origTxt=btn.textContent;
-      btn.textContent='Placing order...';btn.disabled=true;
-      try{
-        await placeOrder([{listing:currentListing,qty:modalQty}], currentOffer?currentOffer.id:null);
-      } finally {
-        btn.dataset.busy='0';
-        btn.textContent=origTxt;
-        btn.disabled = currentListing ? currentListing.quantity<=0 : false;
-      }
+      window.payEscrow();
     };
+
 
     window.payEscrow=()=>{
       if(!currentUser){window.location.href='login';return;}

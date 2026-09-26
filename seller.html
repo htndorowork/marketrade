@@ -321,10 +321,19 @@
 
       <!-- WALLET (funds released from secure escrow orders) -->
       <div id="tab-wallet" style="display:none">
-        <div class="form-card" style="text-align:center;margin-bottom:16px">
-          <div style="font-size:12px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px">Available balance</div>
-          <div style="font-size:34px;font-weight:900;color:#111;margin:6px 0" id="wallet-balance">R0</div>
-          <button class="btn-primary" style="padding:11px 26px;border-radius:50px" onclick="openWithdrawForm()">💸 Withdraw to bank</button>
+        <div style="display:flex;gap:10px;margin-bottom:16px">
+          <div class="form-card" style="flex:1;text-align:left;background:#eff6ff;border-color:#eff6ff;padding:16px">
+            <div style="font-size:11px;font-weight:800;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px">Available</div>
+            <div style="font-size:26px;font-weight:900;color:#111;margin-top:4px" id="wallet-balance">R0</div>
+          </div>
+          <div class="form-card" style="flex:1;text-align:left;padding:16px">
+            <div style="font-size:11px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px">In escrow</div>
+            <div style="font-size:26px;font-weight:900;color:#111;margin-top:4px" id="wallet-escrow">R0</div>
+          </div>
+        </div>
+        <p style="font-size:12.5px;color:#888;font-weight:600;margin:-6px 0 16px">"In escrow" is money buyers have paid that's still held by TradeSafe — it moves to "Available" once you confirm the Collection PIN (or 24h after Pargo delivery with no dispute).</p>
+        <div style="text-align:center;margin-bottom:16px">
+          <button class="btn-primary" style="padding:11px 26px;border-radius:50px;width:100%" onclick="openWithdrawForm()">Withdraw available balance</button>
         </div>
         <div id="withdraw-form" style="display:none" class="form-card">
           <div class="profile-section-label" style="margin-top:0">Request a withdrawal</div>
@@ -335,9 +344,8 @@
           <div id="wd-err" style="color:#dc2626;font-weight:700;font-size:13px;margin:6px 0;display:none"></div>
           <button class="btn-sm btn-toggle" onclick="submitWithdrawal()">Submit request</button>
         </div>
-        <div class="profile-section-label">Withdrawal history</div>
+        <div class="profile-section-label" style="text-transform:uppercase;letter-spacing:0.5px;font-size:12px;color:#aaa">Transaction history</div>
         <div id="withdrawals-container"><p class="loading-msg">Loading... ⏳</p></div>
-        <div class="profile-section-label">Wallet activity</div>
         <div id="wallet-tx-container"><p class="loading-msg">Loading... ⏳</p></div>
       </div>
 
@@ -2455,6 +2463,10 @@
       document.getElementById('wallet-balance').textContent = 'R'+bal.toFixed(2).replace(/\.00$/,'');
       const badge = document.getElementById('wallet-badge');
       if(bal>0){ badge.textContent='R'+bal.toFixed(0); badge.style.display='inline-block'; } else badge.style.display='none';
+
+      const {data:heldOrders} = await supabase.from('orders').select('total_amount').eq('seller_id',currentUser.id).eq('escrow_status','held');
+      const heldTotal = (heldOrders||[]).reduce((s,o)=>s+Number(o.total_amount||0),0);
+      document.getElementById('wallet-escrow').textContent = 'R'+heldTotal.toFixed(2).replace(/\.00$/,'');
 
       const {data:withdrawals} = await supabase.from('withdrawal_requests').select('*').eq('seller_id',currentUser.id).order('created_at',{ascending:false});
       const wc = document.getElementById('withdrawals-container');

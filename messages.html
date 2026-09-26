@@ -114,7 +114,6 @@
       <div class="thread-list-bar">
         <div class="thread-list-bar-row">
           <input type="text" id="thread-search" placeholder="🔍 Search people and messages..." oninput="window.filterThreads(this.value)"/>
-          <button type="button" class="archive-toggle" id="archive-toggle-btn" onclick="window.toggleArchivedView()">🗄️ Archived</button>
         </div>
       </div>
       <div id="thread-list-items" style="flex:1; overflow-y:auto; min-height:0"><p class="loading-msg">Loading conversations... ⏳</p></div>
@@ -313,10 +312,6 @@
         if(!q) return true;
         return dispName(counterpartId).toLowerCase().includes(q);
       });
-      const btn = document.getElementById('archive-toggle-btn');
-      btn.classList.toggle('active', showArchivedOnly);
-      btn.textContent = showArchivedOnly ? '← Back' : '🗄️ Archived';
-
       if(!withIdx.length){ list.innerHTML='<p class="loading-msg">'+(showArchivedOnly?'No archived conversations':(q?'No conversations match "'+searchQuery.trim()+'"':'No conversations yet'))+'</p>'; return; }
       withIdx.sort((a,b)=>{
         const ap = pinned.has(pinKey(a.t)), bp = pinned.has(pinKey(b.t));

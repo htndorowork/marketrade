@@ -88,9 +88,12 @@
 
     // Saves the profile row (and any referral link) collected during sign-up — this
     // can only succeed now, once verifyOtp has given us a real, authenticated session.
+    // Returns true if it actually saved a name, false if there was nothing to save
+    // (e.g. the code was entered in a different browser/device than the one that
+    // signed up, so the pending profile never made it here).
     async function finishPendingProfile() {
       const raw = localStorage.getItem('mt_pending_profile');
-      if (!raw) return;
+      if (!raw) return false;
       try {
         const { payload, refCode } = JSON.parse(raw);
         await supabase.from('profiles').upsert(payload);
@@ -100,6 +103,7 @@
             await supabase.from('referrals').insert({ referrer_id: referrer.id, referred_id: payload.id });
           }
         }
+        return true;
       } finally {
         localStorage.removeItem('mt_pending_profile');
       }
@@ -114,10 +118,21 @@
       const { error } = await supabase.auth.verifyOtp({ email, token, type: 'signup' });
       btn.textContent = 'Verify Code'; btn.disabled = false;
       if (error) { err.textContent = '❌ ' + error.message; return; }
-      await finishPendingProfile();
+      const saved = await finishPendingProfile();
       err.style.color = '#2e7d32';
       err.textContent = '✅ Verified! Taking you in...';
-      setTimeout(() => location.href = '/', 1000);
+      if (saved) {
+        setTimeout(() => location.href = '/', 1000);
+        return;
+      }
+      // The sign-up details never made it here (localStorage from another browser/
+      // device, cleared cache, etc.) — check whether this account still has no name
+      // saved anywhere, and if so send them to finish their profile instead of
+      // leaving it blank forever.
+      const { data: { user } } = await supabase.auth.getUser();
+      const { data: profile } = await supabase.from('profiles').select('full_name,whatsapp').eq('id', user.id).single();
+      const needsProfile = !profile?.full_name?.trim() || !profile?.whatsapp?.trim();
+      setTimeout(() => location.href = needsProfile ? 'profile?complete=1' : '/', 1000);
     }
     document.getElementById('btn-verify').onclick = verifyCode;
     boxes[boxes.length - 1].addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyCode(); });
